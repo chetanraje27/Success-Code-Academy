@@ -239,7 +239,7 @@ export default function CoursesClient() {
           color: inherit;
           display: block;
           width: 100%;
-          max-width: 585px;
+          max-width: calc(50% - 15px);
         }
 
         /* Ambient background glow decoration */
@@ -363,6 +363,7 @@ export default function CoursesClient() {
           overflow: visible; /* Allows ribbon fold to extend behind card border */
           transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
           min-height: 400px;
+          height: 100%;
           position: relative;
           box-sizing: border-box;
           background-image: repeating-linear-gradient(
@@ -471,7 +472,7 @@ export default function CoursesClient() {
         .course-action-wrap {
           display: flex;
           justify-content: flex-end;
-          margin-top: 10px;
+          margin-top: auto;
         }
 
         .course-know-more-link {
@@ -613,6 +614,9 @@ export default function CoursesClient() {
           .courses-list-stack {
             gap: 24px;
             max-width: 600px;
+          }
+          .course-card-anchor-link {
+            max-width: 100%;
           }
         }
 

@@ -44,7 +44,7 @@ const blogItems: BlogItem[] = [
     date: "18 JUL 2026",
     author: "TOI DESK",
     readTime: "4 min read",
-    image: "/images/shravani_toi.png",
+    image: "/images/Shravani2.png",
     slug: "shravani-kudale-toi-feature",
     externalUrl: "https://timesofindia.indiatimes.com/life-style/parenting/moments/stayed-away-from-phone-and-social-media-for-a-year-highest-ranked-female-candidate-shravani-kudale-shares-what-got-her-air-5-in-neet/articleshow/132477313.cms"
   },

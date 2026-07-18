@@ -12,7 +12,8 @@ const getUploadDir = (req: Request) => {
   if (req.query.type === 'banner') folder = 'banners';
   else if (req.query.type === 'star') folder = 'stars';
   
-  const dir = path.join(__dirname, '../../../client/public/images', folder);
+  // Use process.cwd() which points to the server root, making it robust against compiled vs src directories
+  const dir = path.join(process.cwd(), '../client/public/images', folder);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }

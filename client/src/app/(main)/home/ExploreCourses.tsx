@@ -7,33 +7,25 @@ const courses = [
   {
     name: "NEET 11th - 12th",
     icon: <FaDna />,
-    description: "Build strong conceptual clarity in Physics, Chemistry & Biology to ace board exams and NEET UG.",
-    color: "#5e9cc3ff", // Premium Green
-    bg: "#e6fcf5",    // Light Green
+    description: "Conceptual clarity in Physics, Chemistry & Biology for NEET UG.",
+    color: "#5e9cc3ff",
+    bg: "#e6fcf5",
     href: "/courses",
   },
-  // {
-  //   name: "NEET 12th",
-  //   icon: <FaBookOpen />,
-  //   description: "Start early in Class 8-10 to develop analytical thinking, logical reasoning, and core science temperament.",
-  //   color: "#1c7ed6", // Premium Blue
-  //   bg: "#e7f5ff",    // Light Blue
-  //   href: "/courses",
-  // },
   {
     name: "NEET Repeaters",
     icon: <FaArrowsRotate />,
-    description: "Intensive 1-year program for droppers, focusing on speed, accuracy, and thorough revision.",
-    color: "#5e9cc3ff", // Premium Purple
-    bg: "#f3f0ff",    // Light Purple
+    description: "Intensive 1-year program focused on speed, accuracy & revision.",
+    color: "#5e9cc3ff",
+    bg: "#f3f0ff",
     href: "/courses",
   },
   {
     name: "Test Series",
     icon: <FaClipboardCheck />,
-    description: "National-level offline mock test series simulating the exact NEET exam environment with analytics.",
-    color: "#5e9cc3ff", // Premium Amber/Orange
-    bg: "#fff9db",    // Light Yellow/Amber
+    description: "Offline mock tests simulating the real NEET exam environment.",
+    color: "#5e9cc3ff",
+    bg: "#fff9db",
     href: "/courses",
   },
 ];
@@ -127,7 +119,7 @@ export default function ExploreCourses() {
           grid-template-columns: repeat(3, 1fr);
           gap: 24px;
           width: 100%;
-          max-width: 1080px;
+          max-width: 960px;
           margin: 0 auto;
         }
         
@@ -155,8 +147,6 @@ export default function ExploreCourses() {
           background-size: 60px 60px;
           background-color: var(--bg-surface); /* White base background */
           width: 100%;
-          max-width: 300px;
-          margin: 0 auto;
           box-shadow: rgba(149, 157, 165, 0.04) 0px 10px 20px -5px;
           transition: all 0.5s ease-in-out;
           height: 100%;

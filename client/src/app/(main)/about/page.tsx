@@ -67,17 +67,248 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 2. IMPACT SECTION — Pinned Whiteboard Achievements Dashboard (Direct Image) */}
+      {/* 2. IMPACT SECTION — Pinned Whiteboard Achievements Dashboard */}
       <section className="impact-section container">
-        <div className="whiteboard-image-container">
-          <Image 
-            src="/images/neet-achievements.jpg" 
-            alt="Our NEET Achievements" 
-            width={1200}
-            height={680}
-            className="whiteboard-direct-image"
-            unoptimized={true}
-          />
+        <div className="whiteboard-outer-frame">
+          <div className="whiteboard-inner-board">
+            
+            {/* Header with Title Laurels */}
+            <div className="whiteboard-header">
+              <svg className="title-laurel laurel-left" viewBox="0 0 60 20" width="50" height="18">
+                <path d="M50,15 C30,12 15,5 5,12" fill="none" stroke="#1d4ed8" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M5,12 C7,9 13,8 11,13 C9,18 6,15 5,12 Z" fill="#1d4ed8" />
+                <path d="M14,9 C16,6 22,6 20,10 C18,14 15,12 14,9 Z" fill="#1d4ed8" />
+                <path d="M24,8 C26,5 32,6 30,10 C28,14 25,12 24,8 Z" fill="#1d4ed8" />
+                <path d="M34,9 C36,6 42,7 40,11 C38,15 35,13 34,9 Z" fill="#1d4ed8" />
+              </svg>
+              
+              <h2 className="whiteboard-title">Our NEET Achievements</h2>
+              
+              <svg className="title-laurel laurel-right" viewBox="0 0 60 20" width="50" height="18" style={{ transform: 'scaleX(-1)' }}>
+                <path d="M50,15 C30,12 15,5 5,12" fill="none" stroke="#1d4ed8" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M5,12 C7,9 13,8 11,13 C9,18 6,15 5,12 Z" fill="#1d4ed8" />
+                <path d="M14,9 C16,6 22,6 20,10 C18,14 15,12 14,9 Z" fill="#1d4ed8" />
+                <path d="M24,8 C26,5 32,6 30,10 C28,14 25,12 24,8 Z" fill="#1d4ed8" />
+                <path d="M34,9 C36,6 42,7 40,11 C38,15 35,13 34,9 Z" fill="#1d4ed8" />
+              </svg>
+            </div>
+            
+            {/* Center Header Star */}
+            <div className="header-star">★</div>
+
+            {/* Pinned Board Rows */}
+            <div className="whiteboard-rows-container">
+              
+              {/* Row 1 — Centered Rank Cards */}
+              <div className="whiteboard-row whiteboard-top-row">
+                
+                {/* Card 1 — AIR 5 (NEET 2026) */}
+                <div className="pinned-paper-card rank-paper-card rank-card-left">
+                  {/* Blue 3D Pushpin */}
+                  <div className="pushpin-container blue-pin">
+                    <svg className="pushpin-svg" viewBox="0 0 24 30" width="24" height="30">
+                      <ellipse cx="12" cy="26" rx="5" ry="2" fill="rgba(0,0,0,0.18)" />
+                      <path d="M12,18 L12,25" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" />
+                      <path d="M6,17 L18,17 L15,13 L19,10 L19,8 C19,6 16.5,5 12,5 C7.5,5 5,6 5,8 L5,10 L9,13 Z" fill="#2563eb" />
+                      <ellipse cx="12" cy="7" rx="7" ry="2.5" fill="#3b82f6" />
+                      <circle cx="10" cy="6" r="1.2" fill="#ffffff" opacity="0.8" />
+                    </svg>
+                  </div>
+
+                  {/* Content */}
+                  <div className="card-top-header">
+                    <span className="star-mini">★</span>
+                    <div className="exam-year-pill">NEET 2026</div>
+                    <span className="star-mini">★</span>
+                  </div>
+
+                  <div className="rank-label">AIR</div>
+
+                  <div className="rank-display-wreath">
+                    {/* Left Laurel Wreath Branch */}
+                    <svg className="medal-wreath wreath-left" viewBox="0 0 40 80" width="30" height="60">
+                      <path d="M30,70 C10,55 10,25 25,5" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M23,62 C16,58 10,50 17,46 C24,42 26,52 23,62 Z" fill="#2563eb" />
+                      <path d="M18,48 C10,44 5,34 13,31 C21,28 23,38 18,48 Z" fill="#2563eb" />
+                      <path d="M15,33 C7,29 3,18 11,16 C19,14 20,24 15,33 Z" fill="#2563eb" />
+                      <path d="M16,18 C10,14 7,4 15,3 C23,2 22,12 16,18 Z" fill="#2563eb" />
+                      <path d="M20,6 C16,2 14,-4 21,-5 C28,-6 26,3 20,6 Z" fill="#2563eb" />
+                    </svg>
+
+                    <span className="rank-huge-number">5</span>
+
+                    {/* Right Laurel Wreath Branch */}
+                    <svg className="medal-wreath wreath-right" viewBox="0 0 40 80" width="30" height="60" style={{ transform: 'scaleX(-1)' }}>
+                      <path d="M30,70 C10,55 10,25 25,5" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M23,62 C16,58 10,50 17,46 C24,42 26,52 23,62 Z" fill="#2563eb" />
+                      <path d="M18,48 C10,44 5,34 13,31 C21,28 23,38 18,48 Z" fill="#2563eb" />
+                      <path d="M15,33 C7,29 3,18 11,16 C19,14 20,24 15,33 Z" fill="#2563eb" />
+                      <path d="M16,18 C10,14 7,4 15,3 C23,2 22,12 16,18 Z" fill="#2563eb" />
+                      <path d="M20,6 C16,2 14,-4 21,-5 C28,-6 26,3 20,6 Z" fill="#2563eb" />
+                    </svg>
+                  </div>
+
+                  <div className="card-bottom-decor">
+                    <div className="decor-line"></div>
+                    <span className="decor-star">★</span>
+                    <div className="decor-line"></div>
+                  </div>
+                </div>
+
+                {/* Card 2 — AIR 26 (NEET 2025) */}
+                <div className="pinned-paper-card rank-paper-card rank-card-right">
+                  {/* Blue 3D Pushpin */}
+                  <div className="pushpin-container blue-pin">
+                    <svg className="pushpin-svg" viewBox="0 0 24 30" width="24" height="30">
+                      <ellipse cx="12" cy="26" rx="5" ry="2" fill="rgba(0,0,0,0.18)" />
+                      <path d="M12,18 L12,25" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" />
+                      <path d="M6,17 L18,17 L15,13 L19,10 L19,8 C19,6 16.5,5 12,5 C7.5,5 5,6 5,8 L5,10 L9,13 Z" fill="#2563eb" />
+                      <ellipse cx="12" cy="7" rx="7" ry="2.5" fill="#3b82f6" />
+                      <circle cx="10" cy="6" r="1.2" fill="#ffffff" opacity="0.8" />
+                    </svg>
+                  </div>
+
+                  {/* Content */}
+                  <div className="card-top-header">
+                    <span className="star-mini">★</span>
+                    <div className="exam-year-pill">NEET 2025</div>
+                    <span className="star-mini">★</span>
+                  </div>
+
+                  <div className="rank-label">AIR</div>
+
+                  <div className="rank-display-wreath">
+                    {/* Left Laurel Wreath Branch */}
+                    <svg className="medal-wreath wreath-left" viewBox="0 0 40 80" width="30" height="60">
+                      <path d="M30,70 C10,55 10,25 25,5" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M23,62 C16,58 10,50 17,46 C24,42 26,52 23,62 Z" fill="#2563eb" />
+                      <path d="M18,48 C10,44 5,34 13,31 C21,28 23,38 18,48 Z" fill="#2563eb" />
+                      <path d="M15,33 C7,29 3,18 11,16 C19,14 20,24 15,33 Z" fill="#2563eb" />
+                      <path d="M16,18 C10,14 7,4 15,3 C23,2 22,12 16,18 Z" fill="#2563eb" />
+                      <path d="M20,6 C16,2 14,-4 21,-5 C28,-6 26,3 20,6 Z" fill="#2563eb" />
+                    </svg>
+
+                    <span className="rank-huge-number">26</span>
+
+                    {/* Right Laurel Wreath Branch */}
+                    <svg className="medal-wreath wreath-right" viewBox="0 0 40 80" width="30" height="60" style={{ transform: 'scaleX(-1)' }}>
+                      <path d="M30,70 C10,55 10,25 25,5" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M23,62 C16,58 10,50 17,46 C24,42 26,52 23,62 Z" fill="#2563eb" />
+                      <path d="M18,48 C10,44 5,34 13,31 C21,28 23,38 18,48 Z" fill="#2563eb" />
+                      <path d="M15,33 C7,29 3,18 11,16 C19,14 20,24 15,33 Z" fill="#2563eb" />
+                      <path d="M16,18 C10,14 7,4 15,3 C23,2 22,12 16,18 Z" fill="#2563eb" />
+                      <path d="M20,6 C16,2 14,-4 21,-5 C28,-6 26,3 20,6 Z" fill="#2563eb" />
+                    </svg>
+                  </div>
+
+                  <div className="card-bottom-decor">
+                    <div className="decor-line"></div>
+                    <span className="decor-star">★</span>
+                    <div className="decor-line"></div>
+                  </div>
+                </div>
+
+              </div>
+              
+              {/* Row 2 — Centered Stats Cards */}
+              <div className="whiteboard-row whiteboard-bottom-row">
+                
+                {/* 36+ selections */}
+                <div className="pinned-paper-card stat-paper-card note-1">
+                  {/* White 3D Pushpin */}
+                  <div className="pushpin-container white-pin">
+                    <svg className="pushpin-svg" viewBox="0 0 24 30" width="24" height="30">
+                      <ellipse cx="12" cy="26" rx="5" ry="2" fill="rgba(0,0,0,0.15)" />
+                      <path d="M12,18 L12,25" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M6,17 L18,17 L15,13 L19,10 L19,8 C19,6 16.5,5 12,5 C7.5,5 5,6 5,8 L5,10 L9,13 Z" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.8" />
+                      <ellipse cx="12" cy="7" rx="7" ry="2.5" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="0.8" />
+                      <circle cx="10" cy="6" r="1.2" fill="#ffffff" />
+                    </svg>
+                  </div>
+                  
+                  <div className="stat-circle-icon green-icon">
+                    <FiUsers />
+                  </div>
+                  
+                  <span className="stat-value green-text">36+</span>
+
+                  <div className="card-bottom-decor green-decor">
+                    <div className="decor-line"></div>
+                    <span className="decor-star">★</span>
+                    <div className="decor-line"></div>
+                  </div>
+
+                  <span className="stat-title-label">Selections in NEET 2025</span>
+                </div>
+
+                {/* Government Colleges Card */}
+                <div className="pinned-paper-card stat-paper-card note-2 purple-theme">
+                  {/* White 3D Pushpin */}
+                  <div className="pushpin-container white-pin">
+                    <svg className="pushpin-svg" viewBox="0 0 24 30" width="24" height="30">
+                      <ellipse cx="12" cy="26" rx="5" ry="2" fill="rgba(0,0,0,0.15)" />
+                      <path d="M12,18 L12,25" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M6,17 L18,17 L15,13 L19,10 L19,8 C19,6 16.5,5 12,5 C7.5,5 5,6 5,8 L5,10 L9,13 Z" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.8" />
+                      <ellipse cx="12" cy="7" rx="7" ry="2.5" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="0.8" />
+                      <circle cx="10" cy="6" r="1.2" fill="#ffffff" />
+                    </svg>
+                  </div>
+
+                  <div className="stat-circle-icon purple-icon">
+                    <FiBookOpen />
+                  </div>
+
+                  <span className="stat-title-bold purple-text text-center">Admissions in<br/>Top Government Colleges</span>
+
+                  <div className="card-bottom-decor purple-decor">
+                    <div className="decor-line"></div>
+                    <span className="decor-star">★</span>
+                    <div className="decor-line"></div>
+                  </div>
+
+                  <span className="stat-sub-detail">AIIMS & State Government Medical Colleges</span>
+                </div>
+
+                {/* Selection Ratio Card */}
+                <div className="pinned-paper-card stat-paper-card note-3 orange-theme">
+                  {/* White 3D Pushpin */}
+                  <div className="pushpin-container white-pin">
+                    <svg className="pushpin-svg" viewBox="0 0 24 30" width="24" height="30">
+                      <ellipse cx="12" cy="26" rx="5" ry="2" fill="rgba(0,0,0,0.15)" />
+                      <path d="M12,18 L12,25" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M6,17 L18,17 L15,13 L19,10 L19,8 C19,6 16.5,5 12,5 C7.5,5 5,6 5,8 L5,10 L9,13 Z" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.8" />
+                      <ellipse cx="12" cy="7" rx="7" ry="2.5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.8" />
+                      <circle cx="10" cy="6" r="1.2" fill="#ffffff" />
+                    </svg>
+                  </div>
+
+                  <div className="stat-circle-icon orange-icon">
+                    <FiAward />
+                  </div>
+
+                  <span className="stat-title-bold orange-text text-center">Top Selection Ratio</span>
+
+                  <div className="card-bottom-decor orange-decor">
+                    <div className="decor-line"></div>
+                    <span className="decor-star">★</span>
+                    <div className="decor-line"></div>
+                  </div>
+
+                  {/* 5 Stars */}
+                  <div className="orange-stars-row">
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -408,28 +639,302 @@ export default function AboutPage() {
         .impact-section {
           position: relative;
           z-index: 20;
-          margin-top: -60px;
-          margin-bottom: 80px;
+          margin-top: 40px; /* Positive margin to prevent overlap with Hero */
+          margin-bottom: 40px; /* Reduced margin */
         }
 
-        .whiteboard-image-container {
-          position: relative;
-          width: 100%;
-          max-width: 1000px;
-          margin: 0 auto;
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-          background: #ffffff;
+        /* Whiteboard Outer Frame */
+        .whiteboard-outer-frame {
+          background: #eef3f9;
           padding: 8px;
+          border-radius: 28px;
+          box-shadow: 0 15px 45px rgba(0,0,0,0.06);
         }
 
-        .whiteboard-direct-image {
+        /* Whiteboard Inner Board */
+        .whiteboard-inner-board {
+          position: relative;
+          background: #eef3f9;
+          border: 4px double #84a9e5;
+          outline: 14px solid #d9e6f7;
+          border-radius: 20px;
+          padding: 16px 24px 16px; /* Decreased padding height-wise */
+          text-align: center;
+          overflow: hidden;
+          box-shadow: inset 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Header Title with Laurels */
+        .whiteboard-header {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-bottom: 8px; /* Decreased margin */
+        }
+
+        .whiteboard-title {
+          font-size: 1.8rem; /* Decreased title size */
+          font-weight: 800;
+          color: #0f172a;
+          letter-spacing: -0.5px;
+          margin: 0;
+        }
+
+        .title-laurel {
+          color: #2563eb;
+          flex-shrink: 0;
+          height: 14px;
+        }
+
+        /* Center Header Star */
+        .header-star {
+          font-size: 0.8rem;
+          color: #2563eb;
+          margin-top: -8px; /* Decreased margin top */
+          margin-bottom: 10px; /* Decreased margin bottom */
+          text-align: center;
+        }
+
+        /* Whiteboard Rows Layout */
+        .whiteboard-rows-container {
+          display: flex;
+          flex-direction: column;
+          gap: 16px; /* Decreased gap from 24px */
+          align-items: center;
           width: 100%;
-          height: auto;
-          object-fit: contain;
-          display: block;
-          border-radius: 18px;
+        }
+
+        .whiteboard-row {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          width: 100%;
+        }
+
+        .whiteboard-top-row {
+          gap: 28px; /* Decreased gap */
+        }
+
+        .whiteboard-bottom-row {
+          gap: 20px; /* Decreased gap */
+        }
+
+        /* Pinned Card Base */
+        .pinned-paper-card {
+          position: relative;
+          background-color: #ffffff;
+          background-image: linear-gradient(rgba(37, 99, 235, 0.05) 1.5px, transparent 1.5px);
+          background-size: 100% 20px;
+          border-radius: 4px;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+          box-shadow: 
+            0 10px 25px rgba(0,0,0,0.06), 
+            0 3px 6px rgba(0,0,0,0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pinned-paper-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 14px; /* Moved left to accommodate smaller card width */
+          width: 1px;
+          background: rgba(239, 68, 68, 0.25);
+          z-index: 1;
+        }
+        .pinned-paper-card:hover {
+          transform: scale(1.03) rotate(0deg) !important;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+          z-index: 10;
+        }
+
+        /* Card Rotations for Pinned Feel */
+        .rank-card-left { transform: rotate(-1.5deg); }
+        .rank-card-right { transform: rotate(1deg); }
+        
+        .note-1 { transform: rotate(-1deg); }
+        .note-2 { transform: rotate(0.8deg); }
+        .note-3 { transform: rotate(-0.5deg); }
+
+        /* Pushpin container */
+        .pushpin-container {
+          position: absolute;
+          top: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10;
+          filter: drop-shadow(0 2.5px 3px rgba(0,0,0,0.18));
+        }
+
+        /* Rank Cards Layout */
+        .rank-paper-card {
+          width: 220px; /* Decreased width from 240px */
+          height: 190px; /* Decreased height from 230px */
+          padding: 16px 12px 12px; /* Decreased padding */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .card-top-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 2px;
+        }
+
+        .exam-year-pill {
+          border: 1.5px solid #2563eb;
+          color: #2563eb;
+          font-size: 0.7rem; /* Decreased size */
+          font-weight: 800;
+          border-radius: 100px;
+          padding: 2px 12px;
+          line-height: 1;
+        }
+
+        .star-mini {
+          color: #2563eb;
+          font-size: 0.7rem;
+        }
+
+        .rank-label {
+          font-size: 1.15rem; /* Decreased from 1.45rem */
+          font-weight: 800;
+          color: #0f172a;
+          letter-spacing: 0.5px;
+          margin-top: 2px;
+        }
+
+        .rank-display-wreath {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin: 0;
+        }
+
+        .medal-wreath {
+          color: #2563eb;
+          flex-shrink: 0;
+          width: 24px;  /* Decreased SVG width via CSS */
+          height: 48px; /* Decreased SVG height via CSS */
+        }
+
+        .rank-huge-number {
+          font-size: 3.8rem; /* Decreased rank number from 4.4rem */
+          font-weight: 900;
+          color: #2563eb;
+          line-height: 0.95;
+          font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        /* Star & line card decorator */
+        .card-bottom-decor {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          gap: 12px;
+          margin-top: 2px;
+        }
+
+        .decor-line {
+          height: 1.2px;
+          flex-grow: 1;
+          background: #93c5fd;
+        }
+
+        .decor-star {
+          color: #2563eb;
+          font-size: 0.75rem;
+        }
+
+        /* Stats Paper Card Layout */
+        .stat-paper-card {
+          width: 220px; /* Decreased width from 240px */
+          height: 170px; /* Decreased height from 210px */
+          padding: 12px 12px 10px; /* Decreased padding */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          text-align: center;
+        }
+
+        .stat-circle-icon {
+          width: 32px; /* Decreased from 38px */
+          height: 32px; /* Decreased from 38px */
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px; /* Decreased from 18px */
+          margin-bottom: 0px;
+        }
+
+        .green-icon {
+          background: rgba(16, 185, 129, 0.06);
+          color: #10b981;
+          border: 1.5px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .purple-icon {
+          background: rgba(139, 92, 246, 0.06);
+          color: #8b5cf6;
+          border: 1.5px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .orange-icon {
+          background: rgba(249, 115, 22, 0.06);
+          color: #f97316;
+          border: 1.5px solid rgba(249, 115, 22, 0.15);
+        }
+
+        .stat-value {
+          font-size: 1.7rem; /* Decreased from 2.0rem */
+          font-weight: 900;
+          line-height: 1;
+          margin-bottom: 2px;
+        }
+
+        .green-text { color: #10b981; }
+        .purple-text { color: #8b5cf6; }
+        .orange-text { color: #f97316; }
+
+        .green-decor .decor-line { background: #a7f3d0; }
+        .purple-decor .decor-line { background: #ddd6fe; }
+        .orange-decor .decor-line { background: #ffedd5; }
+        
+        .green-decor .decor-star { color: #10b981; }
+        .purple-decor .decor-star { color: #8b5cf6; }
+        .orange-decor .decor-star { color: #f97316; }
+
+        .stat-title-label {
+          font-size: 0.82rem; /* Decreased from 0.95rem */
+          font-weight: 800;
+          color: #1e293b;
+        }
+
+        .stat-title-bold {
+          font-size: 0.82rem; /* Decreased from 0.95rem */
+          font-weight: 800;
+          line-height: 1.35;
+        }
+
+        .stat-sub-detail {
+          font-size: 0.65rem; /* Decreased from 0.72rem */
+          color: #64748b;
+          font-weight: 600;
+          line-height: 1.3;
+        }
+
+        .orange-stars-row {
+          display: flex;
+          gap: 4px;
+          color: #fb923c;
+          font-size: 0.75rem; /* Decreased from 0.85rem */
         }
 
         /* =========================================
@@ -690,6 +1195,9 @@ export default function AboutPage() {
         @media (max-width: 1024px) {
           .hero-container { flex-direction: column; }
           .hero-image-wrapper { position: relative; right: 0; width: 100%; height: 400px; margin-top: 40px; }
+          .whiteboard-row { flex-direction: column; align-items: center; gap: 32px; }
+          .rank-paper-card { max-width: 320px; margin: 0 auto; }
+          .stat-paper-card { max-width: 320px; margin: 0 auto; width: 100%; }
           .story-section { flex-direction: column; gap: 40px; }
           .story-quote-card { bottom: 20px; right: 20px; }
           .philosophy-grid { grid-template-columns: 1fr; }
@@ -699,7 +1207,11 @@ export default function AboutPage() {
         @media (max-width: 768px) {
           .hero-title { font-size: 2.5rem; }
           .hero-pills { flex-direction: column; }
-          .whiteboard-image-container { border-radius: 12px; padding: 4px; }
+          .whiteboard-inner-board { padding: 24px 16px; outline: 10px solid #d9e6f7; }
+          .whiteboard-title { font-size: 1.6rem; }
+          .title-laurel { width: 35px; height: 14px; }
+          .rank-huge-number { font-size: 4.2rem; }
+          .pinned-paper-card { transform: none !important; }
           .infra-grid-4 { grid-template-columns: 1fr; }
           .footer-dots { display: none; }
         }

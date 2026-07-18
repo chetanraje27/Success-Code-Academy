@@ -48,8 +48,8 @@ export default function HomeClient() {
   /* ── State for dynamic content ── */
   const [announcements, setAnnouncements] = useState<any[]>([{ text: "Welcome to Success Code Academy!" }]);
   const [slides, setSlides] = useState<any[]>([
-    { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" },
-    { image: "/images/neet.png", alt: "NEET Achievements" }
+    { image: "/images/neet.png", alt: "NEET Achievements" },
+    { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
   ]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -72,8 +72,7 @@ export default function HomeClient() {
           // Filter only HOME banners
           const homeBanners = bannerData.data.filter((b: any) => b.type === 'HOME');
           if (homeBanners.length > 0) {
-            const updatedBanners = [...homeBanners];
-            updatedBanners.splice(1, 0, { image: "/images/neet.png", alt: "NEET Achievements" });
+            const updatedBanners = [{ image: "/images/neet.png", alt: "NEET Achievements" }, ...homeBanners];
             setSlides(updatedBanners);
           }
         }

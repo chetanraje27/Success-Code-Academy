@@ -495,14 +495,13 @@ export default function AcademyInsights() {
           grid-template-columns: repeat(4, 1fr);
           gap: 16px;
           width: 100%;
-          max-width: 1060px;
-          margin: 24px auto 0 auto;
+          margin-top: 24px;
         }
 
         .apple-video-card {
           position: relative;
           aspect-ratio: 0.87;
-          width: 245;
+          width: 100%;
           border-radius: 20px;
           overflow: hidden;
           cursor: pointer;

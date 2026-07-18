@@ -5,6 +5,7 @@ import { FaStar } from "react-icons/fa6";
 
   // Hardcoded default fallback data
   const defaultToppers = [
+    { id: 0, name: "Shravani Kadale", score: "705/720", rank: "AIR —", course: "NEET Freshers Batch", year: "NEET UG 2026", image: "/images/Sharavani_Kudale.jpg", color: "#1c7ed6" },
     { id: 1, name: "Siddhi Badhe", score: "665/720", rank: "AIR 26", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SiddhiBadhe.png", color: "#0ca678" },
     { id: 2, name: "Samruddhi Lokhande", score: "602/720", rank: "AIR 1204", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SamruddhiLokhande.png", color: "#097969" },
     { id: 3, name: "Mahesh Bhosale", score: "550/720", rank: "AIR 6000", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/MaheshBhosale.png", color: "#d9480f" },

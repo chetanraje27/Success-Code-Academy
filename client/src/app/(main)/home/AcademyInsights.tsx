@@ -6,7 +6,9 @@ import Image from "next/image";
 import {
   FaPlay,
   FaXmark,
-  FaClock
+  FaClock,
+  FaChevronLeft,
+  FaChevronRight
 } from "react-icons/fa6";
 
 interface BlogItem {
@@ -19,6 +21,7 @@ interface BlogItem {
   readTime: string;
   image: string;
   slug: string;
+  externalUrl?: string;
 }
 
 interface VideoItem {
@@ -34,26 +37,40 @@ interface VideoItem {
 
 const blogItems: BlogItem[] = [
   {
+    id: 0,
+    category: "TOI Feature",
+    title: '"Stayed away from phone and social media for a year": Highest ranked female candidate Shravani Kudale shares what got her AIR 5 in NEET',
+    excerpt: "Shravani Kudale stays away from phone and social media for NEET preparation and gets AIR 5.",
+    date: "18 JUL 2026",
+    author: "TOI DESK",
+    readTime: "4 min read",
+    image: "/images/shravani_toi.png",
+    slug: "shravani-kudale-toi-feature",
+    externalUrl: "https://timesofindia.indiatimes.com/life-style/parenting/moments/stayed-away-from-phone-and-social-media-for-a-year-highest-ranked-female-candidate-shravani-kudale-shares-what-got-her-air-5-in-neet/articleshow/132477313.cms"
+  },
+  {
     id: 1,
-    category: "Why Choose Us",
-    title: "Why Top Doctors Recommend Our NEET Classroom Batches",
-    excerpt: "Our core academic team explains the benefits of the custom classroom mentorship and doubt clearance system.",
-    date: "28 MAY 2026",
-    author: "DR. S. PATIL",
-    readTime: "6 min read",
-    image: "/images/blogs/doctors_recommend.png",
-    slug: "why-doctors-recommend-sca"
+    category: "Sakal Feature",
+    title: "NEET Exam Result : बारामतीची सिद्धी मुलींमधून राज्यात पहिली; नीट परीक्षेत 665 गुण; ऑल इंडिया रँक 26",
+    excerpt: "बारामती येथील सिद्धीने 'नीट' परीक्षेत तब्बल 665 गुण मिळवीत मुलींमधून संपूर्ण देशात तिसरा क्रमांक पटकावला.",
+    date: "17 JUL 2026",
+    author: "SAKAL DESK",
+    readTime: "3 min read",
+    image: "/images/siddhi_sakal.png",
+    slug: "siddhi-badhe-sakal-feature",
+    externalUrl: "https://www.esakal.com/pune/neet-exam-result-baramati-siddhi-badhe-tops-state-among-girls-with-neet-score-of-665-all-india-rank-26-success-motivation-pjp78"
   },
   {
     id: 2,
-    category: "Success Stories",
-    title: "How Anushka Scored 675/720 in NEET UG 2025",
-    excerpt: "Anushka explains how mock test correction booklets helped raise her physics score.",
-    date: "10 JUN 2026",
-    author: "ANUSHKA J.",
-    readTime: "9 min read",
-    image: "/images/blogs/study_desk.png",
-    slug: "anushka-neet-score-breakdown"
+    category: "HT Feature",
+    title: "No phone, no social media for a year: How Maharashtra's NEET topper Shravani Kudale secured AIR 5",
+    excerpt: "Maharashtra's NEET 2026 topper Shravani Kudale from Pune district scored 710 out of 720.",
+    date: "17 JUL 2026",
+    author: "HT DESK",
+    readTime: "5 min read",
+    image: "/images/shravani_ht.png",
+    slug: "shravani-kudale-ht-feature",
+    externalUrl: "https://www.hindustantimes.com/education/exam-results/stayed-away-from-mobile-phones-says-maharashtra-neet-topper-shravani-kudale-101784295153769.html"
   },
   {
     id: 3,
@@ -124,6 +141,15 @@ const videoItems: VideoItem[] = [
 
 export default function AcademyInsights() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [blogStartIndex, setBlogStartIndex] = useState(0);
+
+  const handlePrevBlog = () => {
+    setBlogStartIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextBlog = () => {
+    setBlogStartIndex((prev) => Math.min(blogItems.length - 3, prev + 1));
+  };
 
 
   return (
@@ -134,42 +160,82 @@ export default function AcademyInsights() {
         <div className="insights-sub-section">
           <div className="section-header">
             <div className="header-text">
-              <h2 className="main-heading">Academic Insights & Articles</h2>
+              <h2 className="main-heading">Success Code Achievers in the News</h2>
               <p className="subtitle">
-                Expert prep strategies, ranker guides, and syllabus analysis from our premium medical faculty.
+                Read about the incredible achievements and stories of Success Code Academy toppers featured in top national news publications.
               </p>
             </div>
-            <div className="header-right-action">
-              <Link href="/blogs" className="view-all-link">
-                View All Blogs <span className="arrow-right-sym">→</span>
-              </Link>
+            <div className="carousel-controls">
+              <button 
+                onClick={handlePrevBlog} 
+                disabled={blogStartIndex === 0}
+                className="control-btn"
+                aria-label="Previous articles"
+              >
+                <FaChevronLeft />
+              </button>
+              <button 
+                onClick={handleNextBlog} 
+                disabled={blogStartIndex >= blogItems.length - 3}
+                className="control-btn"
+                aria-label="Next articles"
+              >
+                <FaChevronRight />
+              </button>
             </div>
           </div>
 
-          <div className="cards-grid-layout">
-            {blogItems.slice(0, 3).map((blog) => (
-              <div key={blog.id} className="card-item-wrapper">
-                <Link href={`/blogs/${blog.slug}`} className="blog-card-link">
-                  <article className="blog-cover-card">
-                    <div className="blog-image-overlay" />
-                    <Image
-                      src={blog.image}
-                      alt={blog.title}
-                      fill
-                      unoptimized
-                      sizes="400px"
-                      className="blog-bg-img"
-                    />
-                    <div className="blog-card-content">
-                      <span className="blog-meta-text">
-                        {blog.date} | BY {blog.author}
-                      </span>
-                      <h3 className="blog-card-title-text">{blog.title}</h3>
-                    </div>
-                  </article>
-                </Link>
-              </div>
-            ))}
+          <div className="blog-slider-container">
+            <div 
+              className="cards-grid-layout"
+              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / 3 + 6.66px)), 0, 0)` } as React.CSSProperties}
+            >
+              {blogItems.map((blog) => (
+                <div key={blog.id} className="card-item-wrapper">
+                  {blog.externalUrl ? (
+                    <a href={blog.externalUrl} target="_blank" rel="noopener noreferrer" className="blog-card-link">
+                      <article className="blog-cover-card">
+                        <div className="blog-image-overlay" />
+                        <Image
+                          src={blog.image}
+                          alt={blog.title}
+                          fill
+                          unoptimized
+                          sizes="400px"
+                          className="blog-bg-img"
+                        />
+                        <div className="blog-card-content">
+                          <span className="blog-meta-text">
+                            {blog.date} | BY {blog.author}
+                          </span>
+                          <h3 className="blog-card-title-text">{blog.title}</h3>
+                        </div>
+                      </article>
+                    </a>
+                  ) : (
+                    <Link href={`/blogs/${blog.slug}`} className="blog-card-link">
+                      <article className="blog-cover-card">
+                        <div className="blog-image-overlay" />
+                        <Image
+                          src={blog.image}
+                          alt={blog.title}
+                          fill
+                          unoptimized
+                          sizes="400px"
+                          className="blog-bg-img"
+                        />
+                        <div className="blog-card-content">
+                          <span className="blog-meta-text">
+                            {blog.date} | BY {blog.author}
+                          </span>
+                          <h3 className="blog-card-title-text">{blog.title}</h3>
+                        </div>
+                      </article>
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -351,46 +417,57 @@ export default function AcademyInsights() {
           margin: 0;
         }
 
-        .view-all-link {
-          font-size: 0.82rem;
-          font-weight: 750;
-          color: var(--accent-secondary);
+        .carousel-controls {
           display: flex;
           align-items: center;
-          gap: 4px;
-          background: var(--bg-surface);
-          padding: 6px 14px;
-          border-radius: 99px;
+          gap: 8px;
+        }
+
+        .control-btn {
+          width: 38px;
+          height: 38px;
           border: 1px solid var(--bg-surface-border);
+          border-radius: 50%;
+          background: var(--bg-surface);
+          color: var(--text-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
           box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-          transition: all 0.25s ease;
         }
 
-        .view-all-link:hover {
+        .control-btn:hover:not(:disabled) {
           background: var(--accent-secondary);
-          color: var(--bg-surface);
+          color: #ffffff;
           border-color: var(--accent-secondary);
+          transform: scale(1.05);
         }
 
-        .arrow-right-sym {
-          transition: transform 0.2s ease;
+        .control-btn:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
         }
 
-        .view-all-link:hover .arrow-right-sym {
-          transform: translateX(4px);
+        .blog-slider-container {
+          width: 100%;
+          overflow: hidden;
+          padding: 8px 0;
         }
 
-        /* 3-column Grid for Blogs */
+        /* 3-column Flex Slider for Blogs */
         .cards-grid-layout {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          display: flex;
           gap: 20px;
           width: 100%;
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .card-item-wrapper {
-          width: 100%;
+          flex: 0 0 calc(33.333% - 13.33px);
           display: flex;
+          box-sizing: border-box;
         }
 
         /* ============ Cover-Image Blog Cards ============ */
@@ -742,8 +819,13 @@ export default function AcademyInsights() {
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
           .cards-grid-layout {
-            grid-template-columns: repeat(2, 1fr);
+            transform: none !important;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 24px;
+          }
+          .card-item-wrapper {
+            flex: 0 0 calc(50% - 12px);
           }
           .main-heading {
             font-size: 1.85rem;
@@ -791,6 +873,7 @@ export default function AcademyInsights() {
             padding-right: 24px;
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
+            transform: none !important;
           }
           .cards-grid-layout::-webkit-scrollbar {
             display: none; /* Chrome/Safari */

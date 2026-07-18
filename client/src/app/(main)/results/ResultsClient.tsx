@@ -316,74 +316,18 @@ export default function ResultsClient() {
           {selectedYear === 2026 && (
             <div className="toppers-highlight-section">
               <h3 className="toppers-headline">NEET UG 2026 Top Achiever</h3>
-              <div className="topper-2026-wrapper">
+              <div className="topper-2026-wrapper" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95, y: 30 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="topper-2026-theme-card"
+                  style={{ width: '100%', maxWidth: '900px' }}
                 >
-                  <div className="topper-2026-image-section">
-                    {/* Theme Decorators */}
-                    <div className="card-top-bg-decorator" style={{ width: '250px', height: '180px', top: '-40px', left: '-40px' }}></div>
-                    <div className="card-top-right-dots" style={{ transform: 'scale(1.2)', top: '30px', right: '30px', opacity: 0.3 }}>
-                      {Array.from({ length: 5 }).map((_, r) => (
-                        <div key={r} className="dots-row" style={{ display: "flex", gap: "6px", marginBottom: "6px" }}>
-                          {Array.from({ length: 8 }).map((_, c) => (
-                            <span key={c} className="dot-node" style={{ width: '5px', height: '5px' }}></span>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-
-                    <Image
-                      src="/images/results/2026/ShravaniKudale_.png"
-                      alt="Shravani Kudale - NEET UG 2026"
-                      fill
-                      unoptimized
-                      className="topper-2026-img"
-                    />
-                  </div>
-
-                  <div className="gold-separator-bar topper-2026-separator"></div>
-
-                  <div className="topper-2026-info-section">
-                    <h2 className="topper-2026-name">Shravani Kudale</h2>
-
-                    {/* Reusing existing theme separator */}
-                    <div className="custom-dotted-separator" style={{ margin: '24px 0 32px' }}>
-                      <span className="dot-line-left"></span>
-                      <span className="center-solid-blue-indicator"></span>
-                      <span className="dot-line-right"></span>
-                    </div>
-
-                    <ul className="topper-2026-achievements">
-                      <motion.li
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        <span className="achieve-icon">🌟</span>
-                        <div><strong>AIR 5</strong> (All India Rank)</div>
-                      </motion.li>
-                      <motion.li
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 }}
-                      >
-                        <span className="achieve-icon">👑</span>
-                        <div><strong>AIR 1</strong> Among Girls</div>
-                      </motion.li>
-                      <motion.li
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        <span className="achieve-icon">🥇</span>
-                        <div><strong>Maharashtra</strong> State Rank 1</div>
-                      </motion.li>
-                    </ul>
-                  </div>
+                  <img
+                    src="/2026.png"
+                    alt="NEET UG 2026 Toppers"
+                    style={{ width: "100%", height: "auto", borderRadius: "20px", display: "block", boxShadow: "0 12px 35px rgba(15, 23, 42, 0.15)" }}
+                  />
                 </motion.div>
               </div>
             </div>

@@ -239,6 +239,7 @@ export default function CoursesClient() {
           color: inherit;
           display: block;
           width: 100%;
+          max-width: 585px;
         }
 
         /* Ambient background glow decoration */
@@ -344,8 +345,9 @@ export default function CoursesClient() {
         }
 
         .courses-list-stack {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
           gap: 30px;
           max-width: 1200px;
           margin: 0 auto;
@@ -609,7 +611,6 @@ export default function CoursesClient() {
         /* ─── Responsive Styles ─── */
         @media (max-width: 1024px) {
           .courses-list-stack {
-            grid-template-columns: 1fr;
             gap: 24px;
             max-width: 600px;
           }

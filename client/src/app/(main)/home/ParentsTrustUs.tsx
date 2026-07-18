@@ -22,7 +22,7 @@ const statsData: StatItem[] = [
     value: "4.9",
     label: "Google Rating",
     description: "Based on 350+ reviews from parents & alumni",
-    color: "#ea4335" // Red
+    color: "#3b82f6" // Blue
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const statsData: StatItem[] = [
     value: "98%",
     label: "Parent Satisfaction",
     description: "Highly rated classroom care and responsiveness",
-    color: "#ec4899" // Pink
+    color: "#3b82f6" // Blue
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const statsData: StatItem[] = [
     value: "8+",
     label: "Years of Excellence",
     description: "Consistently delivering premium medical training",
-    color: "#f59e0b" // Amber
+    color: "#3b82f6" // Blue
   },
   {
     id: 4,
@@ -58,7 +58,7 @@ const statsData: StatItem[] = [
     value: "93%",
     label: "Selection Rate",
     description: "Sustained performance in NEET qualifiers annually",
-    color: "#10b981" // Emerald Green
+    color: "#3b82f6" // Blue
   }
 ];
 

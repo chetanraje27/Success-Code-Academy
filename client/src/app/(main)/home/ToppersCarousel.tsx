@@ -18,12 +18,21 @@ export default function ToppersCarousel() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/stars`)
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success' && data.data.length > 0) {
-          setStars(data.data);
+        if (data.status === 'success' && data.data && data.data.length > 0) {
+          setStars((data.data || []).filter((item: any) => item?.name));
+        } else {
+          setStars(defaultToppers);
         }
       })
-      .catch(err => console.error("Failed to load stars:", err));
+      .catch(err => {
+        console.error("Failed to load stars:", err);
+        setStars(defaultToppers);
+      });
   }, []);
+
+  if (stars.length === 0) {
+    return null;
+  }
 
   const duplicatedToppers = [...stars, ...stars];
 

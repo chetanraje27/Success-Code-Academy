@@ -92,28 +92,29 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
 }
 
 export default function ResultsClient() {
-  const [heroSlides, setHeroSlides] = useState<any[]>([
-    { image: "/images/Results_Hero.png", alt: "SCA Results" }
-  ]);
+  const [heroSlides, setHeroSlides] = useState<any[]>([]);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success' && data.data.length > 0) {
-          const resultBanners = data.data.filter((b: any) => b.type === 'RESULTS');
-          if (resultBanners.length > 0) {
-            setHeroSlides(resultBanners);
-          }
+        if (data.status === 'success') {
+          const resultBanners = (data.data || []).filter((b: any) => b?.type === 'RESULTS' && b?.image);
+          setHeroSlides(resultBanners);
+        } else {
+          setHeroSlides([]);
         }
       })
-      .catch(err => console.error("Failed to fetch result banners", err));
+      .catch(err => {
+        console.error("Failed to fetch result banners", err);
+        setHeroSlides([]);
+      });
   }, []);
 
   const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const currentHeroSlide = slideTuple[0];
   const slideDirection = slideTuple[1];
-  const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
   const videoStories = [
@@ -125,6 +126,7 @@ export default function ResultsClient() {
   ];
 
   const setHeroSlide = (newSlide: number) => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const direction = newSlide > current ? 1 : -1;
@@ -133,6 +135,7 @@ export default function ResultsClient() {
   };
 
   const handlePrevSlide = () => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const prevSlide = (current - 1 + heroSlides.length) % heroSlides.length;
@@ -141,6 +144,7 @@ export default function ResultsClient() {
   };
 
   const handleNextSlide = () => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const nextSlide = (current + 1) % heroSlides.length;
@@ -149,6 +153,7 @@ export default function ResultsClient() {
   };
 
   useEffect(() => {
+    if (heroSlides.length <= 1) return;
     const t = setInterval(() => {
       setSlideTuple((prev) => {
         const current = prev[0];
@@ -188,65 +193,67 @@ export default function ResultsClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER (Image-based slider like Home page)
           ══════════════════════════════════════════ */}
-      <section className="results-hero-section">
-        <div className="results-banner-wrap">
-          <AnimatePresence initial={false} custom={slideDirection}>
-            <motion.div
-              key={currentHeroSlide}
-              custom={slideDirection}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.25 }
-              }}
-              className="results-banner-slide"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-            >
-              <Image
-                src={heroSlides[currentHeroSlide].image}
-                alt={heroSlides[currentHeroSlide].alt}
-                fill
-                priority
-                unoptimized
-                className="results-banner-img"
-                style={{ objectFit: "contain" }}
-              />
-              <div className="results-banner-overlay" />
-            </motion.div>
-          </AnimatePresence>
+      {heroSlides.length > 0 && (
+        <section className="results-hero-section">
+          <div className="results-banner-wrap">
+            <AnimatePresence initial={false} custom={slideDirection}>
+              <motion.div
+                key={currentHeroSlide}
+                custom={slideDirection}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.25 }
+                }}
+                className="results-banner-slide"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              >
+                <Image
+                  src={heroSlides[currentHeroSlide].image}
+                  alt={heroSlides[currentHeroSlide].alt || "SCA Results Banner"}
+                  fill
+                  priority
+                  unoptimized
+                  className="results-banner-img"
+                  style={{ objectFit: "contain" }}
+                />
+                <div className="results-banner-overlay" />
+              </motion.div>
+            </AnimatePresence>
 
-          {/* Navigation buttons */}
-          <button
-            onClick={handlePrevSlide}
-            className="slider-nav-btn slider-prev-btn"
-            aria-label="Previous banner"
-          >
-            <FaChevronLeft />
-          </button>
-          <button
-            onClick={handleNextSlide}
-            className="slider-nav-btn slider-next-btn"
-            aria-label="Next banner"
-          >
-            <FaChevronRight />
-          </button>
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="results-banner-dots">
-          {heroSlides.map((_, idx) => (
+            {/* Navigation buttons */}
             <button
-              key={idx}
-              onClick={() => setHeroSlide(idx)}
-              className={`results-banner-dot ${currentHeroSlide === idx ? "active" : ""}`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      </section>
+              onClick={handlePrevSlide}
+              className="slider-nav-btn slider-prev-btn"
+              aria-label="Previous banner"
+            >
+              <FaChevronLeft />
+            </button>
+            <button
+              onClick={handleNextSlide}
+              className="slider-nav-btn slider-next-btn"
+              aria-label="Next banner"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+
+          {/* Pagination Dots */}
+          <div className="results-banner-dots">
+            {heroSlides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setHeroSlide(idx)}
+                className={`results-banner-dot ${currentHeroSlide === idx ? "active" : ""}`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════
           SECTION HEADING
@@ -265,6 +272,12 @@ export default function ResultsClient() {
           <div className="controls-inner-card">
             {/* Year filter selector tabs */}
             <div className="tabs-container">
+              <button
+                onClick={() => setSelectedYear(2026)}
+                className={`tab-btn ${selectedYear === 2026 ? "active" : ""}`}
+              >
+                NEET UG 2026
+              </button>
               <button
                 onClick={() => setSelectedYear(2025)}
                 className={`tab-btn ${selectedYear === 2025 ? "active" : ""}`}
@@ -299,6 +312,83 @@ export default function ResultsClient() {
           ══════════════════════════════════════════ */}
       <section className="grid-section">
         <div className="container">
+          {/* Featured Toppers for 2026 */}
+          {selectedYear === 2026 && (
+            <div className="toppers-highlight-section">
+              <h3 className="toppers-headline">NEET UG 2026 Top Achiever</h3>
+              <div className="topper-2026-wrapper">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="topper-2026-theme-card"
+                >
+                  <div className="topper-2026-image-section">
+                    {/* Theme Decorators */}
+                    <div className="card-top-bg-decorator" style={{ width: '250px', height: '180px', top: '-40px', left: '-40px' }}></div>
+                    <div className="card-top-right-dots" style={{ transform: 'scale(1.2)', top: '30px', right: '30px', opacity: 0.3 }}>
+                      {Array.from({ length: 5 }).map((_, r) => (
+                        <div key={r} className="dots-row" style={{ display: "flex", gap: "6px", marginBottom: "6px" }}>
+                          {Array.from({ length: 8 }).map((_, c) => (
+                            <span key={c} className="dot-node" style={{ width: '5px', height: '5px' }}></span>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+
+                    <Image
+                      src="/images/results/2026/ShravaniKudale_.png"
+                      alt="Shravani Kudale - NEET UG 2026"
+                      fill
+                      unoptimized
+                      className="topper-2026-img"
+                    />
+                  </div>
+
+                  <div className="gold-separator-bar topper-2026-separator"></div>
+
+                  <div className="topper-2026-info-section">
+                    <h2 className="topper-2026-name">Shravani Kudale</h2>
+
+                    {/* Reusing existing theme separator */}
+                    <div className="custom-dotted-separator" style={{ margin: '24px 0 32px' }}>
+                      <span className="dot-line-left"></span>
+                      <span className="center-solid-blue-indicator"></span>
+                      <span className="dot-line-right"></span>
+                    </div>
+
+                    <ul className="topper-2026-achievements">
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <span className="achieve-icon">🌟</span>
+                        <div><strong>AIR 5</strong> (All India Rank)</div>
+                      </motion.li>
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <span className="achieve-icon">👑</span>
+                        <div><strong>AIR 1</strong> Among Girls</div>
+                      </motion.li>
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                      >
+                        <span className="achieve-icon">🥇</span>
+                        <div><strong>Maharashtra</strong> State Rank 1</div>
+                      </motion.li>
+                    </ul>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          )}
+
           {/* Featured Toppers for 2025 */}
           {selectedYear === 2025 && (
             <div className="toppers-highlight-section">
@@ -2143,6 +2233,131 @@ export default function ResultsClient() {
             width: 14px;
             height: 14px;
           }
+        }
+
+        /* ── Topper 2026 Custom Theme Card ── */
+        .topper-2026-wrapper {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 40px;
+          width: 100%;
+          padding: 0 16px;
+          box-sizing: border-box;
+        }
+        .topper-2026-theme-card {
+          display: flex;
+          flex-direction: column;
+          background-color: #ffffff;
+          border: 4px solid #0e3e8c;
+          border-radius: 28px;
+          overflow: hidden;
+          width: 100%;
+          max-width: 900px;
+          box-shadow: 0 12px 35px rgba(15, 23, 42, 0.15);
+          transition: all 0.3s ease;
+        }
+        .topper-2026-theme-card:hover {
+          box-shadow: 0 18px 45px rgba(14, 62, 140, 0.25);
+          transform: translateY(-5px);
+        }
+        @media (min-width: 768px) {
+          .topper-2026-theme-card {
+            flex-direction: row;
+          }
+        }
+        .topper-2026-theme-card .topper-2026-image-section {
+          position: relative;
+          width: 100%;
+          height: 400px;
+          background-color: #dbebff;
+          overflow: hidden;
+        }
+        @media (min-width: 768px) {
+          .topper-2026-theme-card .topper-2026-image-section {
+            width: 45%;
+            height: auto;
+            min-height: 450px;
+          }
+        }
+        .topper-2026-theme-card .topper-2026-img {
+          object-fit: contain;
+          object-position: bottom;
+          z-index: 2;
+        }
+        .topper-2026-theme-card .topper-2026-separator {
+          width: 100%;
+          height: 6px;
+        }
+        @media (min-width: 768px) {
+          .topper-2026-theme-card .topper-2026-separator {
+            width: 6px;
+            height: auto;
+          }
+        }
+        .topper-2026-theme-card .topper-2026-info-section {
+          padding: 40px 30px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          background: #ffffff;
+          position: relative;
+        }
+        @media (min-width: 768px) {
+          .topper-2026-theme-card .topper-2026-info-section {
+            width: 55%;
+            padding: 50px 40px;
+          }
+        }
+        .topper-2026-theme-card .topper-2026-name {
+          font-size: clamp(2rem, 4vw, 2.75rem);
+          font-weight: 800;
+          margin: 0;
+          color: #0e3e8c;
+          letter-spacing: -0.02em;
+          text-align: center;
+        }
+        .topper-2026-theme-card .topper-2026-achievements {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          width: 100%;
+        }
+        .topper-2026-theme-card .topper-2026-achievements li {
+          display: flex;
+          align-items: center;
+          font-size: 1.15rem;
+          background: rgba(14, 62, 140, 0.04);
+          padding: 16px 20px;
+          border-radius: 16px;
+          border: 1px solid rgba(14, 62, 140, 0.1);
+          color: var(--text-primary);
+          transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .topper-2026-theme-card .topper-2026-achievements li:hover {
+          transform: translateX(5px);
+          background: rgba(14, 62, 140, 0.08);
+        }
+        .topper-2026-theme-card .achieve-icon {
+          font-size: 1.6rem;
+          margin-right: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          background: #dbebff;
+          border-radius: 50%;
+          border: 1px solid rgba(14, 62, 140, 0.1);
+        }
+        .topper-2026-theme-card .topper-2026-achievements strong {
+          color: #0e3e8c;
+          font-size: 1.25rem;
+          margin-right: 4px;
         }
       `}</style>
     </div>

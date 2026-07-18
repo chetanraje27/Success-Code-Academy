@@ -3,7 +3,7 @@
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function WhatsAppWidget() {
-  const phoneNumber = "919876543210"; // With country code, no +
+  const phoneNumber = "918600470850"; // With country code, no +
   const message = encodeURIComponent("Hi! I'm interested in learning more about Success Code Academy programs.");
 
   return (

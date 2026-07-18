@@ -45,7 +45,6 @@ export default function HomeClient() {
     });
   };
 
-  /* ── State for dynamic content ── */
   const [announcements, setAnnouncements] = useState<any[]>([{ text: "Welcome to Success Code Academy!" }]);
   const [slides, setSlides] = useState<any[]>([
     { image: "/images/neet.png", alt: "NEET Achievements" },
@@ -64,17 +63,25 @@ export default function HomeClient() {
         const notifData = await notifRes.json();
         const bannerData = await bannerRes.json();
 
-        if (notifData.status === 'success' && notifData.data.length > 0) {
-          setAnnouncements(notifData.data);
+        const nextAnnouncements = notifData.status === 'success' 
+          ? (notifData.data || []).filter((item: any) => item?.text) 
+          : [];
+        const homeBanners = bannerData.status === 'success'
+          ? (bannerData.data || []).filter((b: any) => b?.type === 'HOME' && b?.image)
+          : [];
+
+        const nextSlides = homeBanners.length > 0 
+          ? [{ image: "/images/neet.png", alt: "NEET Achievements" }, ...homeBanners]
+          : [
+              { image: "/images/neet.png", alt: "NEET Achievements" },
+              { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
+            ];
+
+        if (nextAnnouncements.length > 0) {
+          setAnnouncements(nextAnnouncements);
         }
-        
-        if (bannerData.status === 'success' && bannerData.data.length > 0) {
-          // Filter only HOME banners
-          const homeBanners = bannerData.data.filter((b: any) => b.type === 'HOME');
-          if (homeBanners.length > 0) {
-            const updatedBanners = [{ image: "/images/neet.png", alt: "NEET Achievements" }, ...homeBanners];
-            setSlides(updatedBanners);
-          }
+        if (nextSlides.length > 0) {
+          setSlides(nextSlides);
         }
       } catch (err) {
         console.error("Failed to load content:", err);
@@ -108,99 +115,103 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 1: FLOATING NOTIFICATION BAR
           ══════════════════════════════════════════ */}
-      <div className="notif-bar-wrap">
-        <div className="notif-bar">
-          <div className="notif-inner">
-            <div className="notif-left">
-              <span className="notif-icon">📢</span>
-              <span className="notif-label">Latest Updates</span>
-            </div>
-            <div className="notif-ticker" ref={tickerRef}>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={announceIdx}
-                  ref={textRef}
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`notif-text ${shouldScroll ? "scroll-active" : ""}`}
-                >
-                  {announcements[announceIdx] ? highlightText(announcements[announceIdx].text) : ''}
-                </motion.span>
-              </AnimatePresence>
-            </div>
-            <div className="notif-right">
-              <Button href="/contact" variant="primary" size="sm">Apply Now</Button>
+      {announcements.length > 0 && (
+        <div className="notif-bar-wrap">
+          <div className="notif-bar">
+            <div className="notif-inner">
+              <div className="notif-left">
+                <span className="notif-icon">📢</span>
+                <span className="notif-label">Latest Updates</span>
+              </div>
+              <div className="notif-ticker" ref={tickerRef}>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={announceIdx}
+                    ref={textRef}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={`notif-text ${shouldScroll ? "scroll-active" : ""}`}
+                  >
+                    {announcements[announceIdx] ? highlightText(announcements[announceIdx].text) : ''}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+              <div className="notif-right">
+                <Button href="/contact" variant="primary" size="sm">Apply Now</Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ══════════════════════════════════════════
           SECTION 2: HERO POSTER BANNER SLIDER
           ══════════════════════════════════════════ */}
-      <section className="hero-slider-section">
-        <div
-          className="hero-banner-wrap"
-          onMouseEnter={() => setIsSliderHovered(true)}
-          onMouseLeave={() => setIsSliderHovered(false)}
-        >
-          <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
-            <FaChevronLeft />
-          </button>
-          <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
-            <FaChevronRight />
-          </button>
+      {slides.length > 0 && (
+        <section className="hero-slider-section">
+          <div
+            className="hero-banner-wrap"
+            onMouseEnter={() => setIsSliderHovered(true)}
+            onMouseLeave={() => setIsSliderHovered(false)}
+          >
+            <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
+              <FaChevronLeft />
+            </button>
+            <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
+              <FaChevronRight />
+            </button>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide}
-              className="banner-slide"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}
-              initial={{
-                opacity: 0,
-                scale: 1.03
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.98
-              }}
-              transition={{
-                duration: 0.55,
-                ease: [0.22, 1, 0.36, 1]
-              }}
-            >
-              <Image
-                src={slides[currentSlide].image}
-                alt={slides[currentSlide].alt || slides[currentSlide].altText || "SCA Banner"}
-                fill
-                priority
-                unoptimized
-                className="banner-img"
-                style={{ objectFit: "fill" }}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                className="banner-slide"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}
+                initial={{
+                  opacity: 0,
+                  scale: 1.03
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.98
+                }}
+                transition={{
+                  duration: 0.55,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+              >
+                <Image
+                  src={slides[currentSlide].image}
+                  alt={slides[currentSlide].alt || slides[currentSlide].altText || "SCA Banner"}
+                  fill
+                  priority
+                  unoptimized
+                  className="banner-img"
+                  style={{ objectFit: "fill" }}
+                />
+
+                <div className="banner-overlay" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="banner-dots">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                className={`banner-dot ${currentSlide === idx ? "active" : ""}`}
+                aria-label={`Go to slide ${idx + 1}`}
               />
-
-              <div className="banner-overlay" />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className="banner-dots">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              className={`banner-dot ${currentSlide === idx ? "active" : ""}`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════
           SECTION 3: EXPLORE COURSES

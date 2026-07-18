@@ -130,9 +130,23 @@ export default function AboutPage() {
               <li><FaCheckCircle className="check-icon blue-check" /><span>Preparing independent learners for life, not just exams.</span></li>
             </ul>
             <div className="phil-illustration">
-              <div className="illustration-placeholder blue-placeholder">
-                Illustration Placeholder
-              </div>
+              <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="100" r="70" stroke="#dbeafe" strokeWidth="2" strokeDasharray="6 6" />
+                <circle cx="150" cy="100" r="50" stroke="#93c5fd" strokeWidth="1.5" />
+                <circle cx="90" cy="65" r="4" fill="#3b82f6" />
+                <circle cx="210" cy="120" r="5" fill="#60a5fa" />
+                <path d="M120 40L122 45L127 46L123 50L124 55L120 52L116 55L117 50L113 46L118 45Z" fill="#3b82f6" opacity="0.6"/>
+                <path d="M180 150L181.5 153.5L185 154.2L182.2 157L183 160.5L180 158.4L177 160.5L177.8 157L175 154.2L178.5 153.5Z" fill="#2563eb" opacity="0.8"/>
+                <g transform="translate(125, 75)">
+                  <circle cx="25" cy="25" r="30" fill="#eff6ff" filter="blur(4px)" />
+                  <path d="M25 5C15.6 5 8 12.6 8 22C8 27.8 11 33 15.5 35.8L15.5 41C15.5 42.1 16.4 43 17.5 43L32.5 43C33.6 43 34.5 42.1 34.5 41L34.5 35.8C39 33 42 27.8 42 22C42 12.6 34.4 5 25 5ZM28 38L22 38L22 35L28 35L28 38ZM30.8 32L19.2 32C18.2 29.8 17 27.2 17 22C17 17.6 20.6 14 25 14C29.4 14 33 17.6 33 22C33 27.2 31.8 29.8 30.8 32Z" fill="#2563eb"/>
+                  <line x1="25" y1="0" x2="25" y2="4" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="8" y1="8" x2="11" y2="11" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="0" y1="22" x2="4" y2="22" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="42" y1="8" x2="39" y2="11" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="50" y1="22" x2="46" y2="22" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round"/>
+                </g>
+              </svg>
             </div>
           </div>
 
@@ -149,9 +163,19 @@ export default function AboutPage() {
               <li><FaCheckCircle className="check-icon green-check" /><span>A friendly, disciplined, and motivating environment.</span></li>
             </ul>
             <div className="phil-illustration">
-              <div className="illustration-placeholder green-placeholder">
-                Illustration Placeholder
-              </div>
+              <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="100" r="70" stroke="#dcfce7" strokeWidth="2" strokeDasharray="6 6" />
+                <circle cx="150" cy="100" r="50" stroke="#86efac" strokeWidth="1.5" />
+                <circle cx="95" cy="75" r="4.5" fill="#10b981" />
+                <circle cx="195" cy="140" r="4" fill="#34d399" />
+                <path d="M110 50L111.5 53.5L115 54.2L112.2 57L113 60.5L110 58.4L107 60.5L107.8 57L105 54.2L108.5 53.5Z" fill="#10b981" opacity="0.7"/>
+                <path d="M190 60L192 65L197 66L193 70L194 75L190 72L186 75L187 70L183 66L188 65Z" fill="#059669" opacity="0.6"/>
+                <g transform="translate(125, 75)">
+                  <circle cx="25" cy="25" r="30" fill="#f0fdf4" filter="blur(4px)" />
+                  <path d="M25 2C15 2 7 10 7 20C7 32 25 46 25 46C25 46 43 32 43 20C43 10 35 2 25 2ZM25 29C20 29 16 25 16 20C16 15 20 11 25 11C30 11 34 15 34 20C34 25 30 29 25 29Z" fill="#10b981"/>
+                  <path d="M22 17L25 14L28 17M25 15V24" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </g>
+              </svg>
             </div>
           </div>
 
@@ -558,23 +582,11 @@ export default function AboutPage() {
 
         .phil-illustration {
           position: absolute;
-          bottom: 20px;
-          right: 20px;
-          opacity: 0.8;
+          bottom: 10px;
+          right: 10px;
+          opacity: 0.65;
           z-index: 0;
-        }
-
-        .illustration-placeholder {
-          width: 250px;
-          height: 200px;
-          border: 2px dashed rgba(0,0,0,0.1);
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          text-align: center;
-          color: rgba(0,0,0,0.2);
+          pointer-events: none;
         }
 
         /* =========================================

@@ -92,22 +92,23 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
 }
 
 export default function ResultsClient() {
-  const [heroSlides, setHeroSlides] = useState<any[]>([
-    { image: "/images/Results_Hero.png", alt: "SCA Results" }
-  ]);
+  const [heroSlides, setHeroSlides] = useState<any[]>([]);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success' && data.data.length > 0) {
-          const resultBanners = data.data.filter((b: any) => b.type === 'RESULTS');
-          if (resultBanners.length > 0) {
-            setHeroSlides(resultBanners);
-          }
+        if (data.status === 'success') {
+          const resultBanners = (data.data || []).filter((b: any) => b?.type === 'RESULTS' && b?.image);
+          setHeroSlides(resultBanners);
+        } else {
+          setHeroSlides([]);
         }
       })
-      .catch(err => console.error("Failed to fetch result banners", err));
+      .catch(err => {
+        console.error("Failed to fetch result banners", err);
+        setHeroSlides([]);
+      });
   }, []);
 
   const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
@@ -125,6 +126,7 @@ export default function ResultsClient() {
   ];
 
   const setHeroSlide = (newSlide: number) => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const direction = newSlide > current ? 1 : -1;
@@ -133,6 +135,7 @@ export default function ResultsClient() {
   };
 
   const handlePrevSlide = () => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const prevSlide = (current - 1 + heroSlides.length) % heroSlides.length;
@@ -141,6 +144,7 @@ export default function ResultsClient() {
   };
 
   const handleNextSlide = () => {
+    if (heroSlides.length === 0) return;
     setSlideTuple((prev) => {
       const current = prev[0];
       const nextSlide = (current + 1) % heroSlides.length;
@@ -149,6 +153,7 @@ export default function ResultsClient() {
   };
 
   useEffect(() => {
+    if (heroSlides.length <= 1) return;
     const t = setInterval(() => {
       setSlideTuple((prev) => {
         const current = prev[0];
@@ -188,65 +193,67 @@ export default function ResultsClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER (Image-based slider like Home page)
           ══════════════════════════════════════════ */}
-      <section className="results-hero-section">
-        <div className="results-banner-wrap">
-          <AnimatePresence initial={false} custom={slideDirection}>
-            <motion.div
-              key={currentHeroSlide}
-              custom={slideDirection}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.25 }
-              }}
-              className="results-banner-slide"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-            >
-              <Image
-                src={heroSlides[currentHeroSlide].image}
-                alt={heroSlides[currentHeroSlide].alt}
-                fill
-                priority
-                unoptimized
-                className="results-banner-img"
-                style={{ objectFit: "contain" }}
-              />
-              <div className="results-banner-overlay" />
-            </motion.div>
-          </AnimatePresence>
+      {heroSlides.length > 0 && (
+        <section className="results-hero-section">
+          <div className="results-banner-wrap">
+            <AnimatePresence initial={false} custom={slideDirection}>
+              <motion.div
+                key={currentHeroSlide}
+                custom={slideDirection}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.25 }
+                }}
+                className="results-banner-slide"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+              >
+                <Image
+                  src={heroSlides[currentHeroSlide].image}
+                  alt={heroSlides[currentHeroSlide].alt || "SCA Results Banner"}
+                  fill
+                  priority
+                  unoptimized
+                  className="results-banner-img"
+                  style={{ objectFit: "contain" }}
+                />
+                <div className="results-banner-overlay" />
+              </motion.div>
+            </AnimatePresence>
 
-          {/* Navigation buttons */}
-          <button
-            onClick={handlePrevSlide}
-            className="slider-nav-btn slider-prev-btn"
-            aria-label="Previous banner"
-          >
-            <FaChevronLeft />
-          </button>
-          <button
-            onClick={handleNextSlide}
-            className="slider-nav-btn slider-next-btn"
-            aria-label="Next banner"
-          >
-            <FaChevronRight />
-          </button>
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="results-banner-dots">
-          {heroSlides.map((_, idx) => (
+            {/* Navigation buttons */}
             <button
-              key={idx}
-              onClick={() => setHeroSlide(idx)}
-              className={`results-banner-dot ${currentHeroSlide === idx ? "active" : ""}`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      </section>
+              onClick={handlePrevSlide}
+              className="slider-nav-btn slider-prev-btn"
+              aria-label="Previous banner"
+            >
+              <FaChevronLeft />
+            </button>
+            <button
+              onClick={handleNextSlide}
+              className="slider-nav-btn slider-next-btn"
+              aria-label="Next banner"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+
+          {/* Pagination Dots */}
+          <div className="results-banner-dots">
+            {heroSlides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setHeroSlide(idx)}
+                className={`results-banner-dot ${currentHeroSlide === idx ? "active" : ""}`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════
           SECTION HEADING

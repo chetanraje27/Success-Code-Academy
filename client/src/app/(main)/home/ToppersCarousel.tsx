@@ -3,26 +3,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
 
-  // Hardcoded default fallback data
-  const defaultToppers = [
-    { id: 1, name: "Siddhi Badhe", score: "665/720", rank: "AIR 26", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SiddhiBadhe.png", color: "#0ca678" },
-    { id: 2, name: "Samruddhi Lokhande", score: "602/720", rank: "AIR 1204", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SamruddhiLokhande.png", color: "#097969" },
-    { id: 3, name: "Mahesh Bhosale", score: "550/720", rank: "AIR 6000", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/MaheshBhosale.png", color: "#d9480f" },
-  ];
-
 export default function ToppersCarousel() {
-  const [stars, setStars] = React.useState<any[]>(defaultToppers);
+  const [stars, setStars] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/stars`)
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success' && data.data.length > 0) {
-          setStars(data.data);
+        if (data.status === 'success') {
+          setStars((data.data || []).filter((item: any) => item?.name));
+        } else {
+          setStars([]);
         }
       })
-      .catch(err => console.error("Failed to load stars:", err));
+      .catch(err => {
+        console.error("Failed to load stars:", err);
+        setStars([]);
+      });
   }, []);
+
+  if (stars.length === 0) {
+    return null;
+  }
 
   const duplicatedToppers = [...stars, ...stars];
 

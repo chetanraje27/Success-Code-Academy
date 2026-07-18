@@ -4,31 +4,21 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
+import { createClient } from '@supabase/supabase-js';
 
-// --- File Upload Setup (Option B: Local Disk) ---
-const getUploadDir = (req: Request) => {
-  let folder = 'uploads';
-  if (req.query.type === 'banner') folder = 'banners';
-  else if (req.query.type === 'star') folder = 'stars';
-  
-  // Use process.cwd() which points to the server root, making it robust against compiled vs src directories
-  const dir = path.join(process.cwd(), '../client/public/images', folder);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  return dir;
-};
+// --- Supabase Setup ---
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 
-const storage = multer.diskStorage({
-  destination: (req, _file, cb) => {
-    cb(null, getUploadDir(req));
-  },
-  filename: (_req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
+let supabase: ReturnType<typeof createClient>;
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} else {
+  console.warn("Supabase credentials missing. File uploads to storage will fail.");
+}
+
+// --- File Upload Setup (Supabase Storage) ---
+const storage = multer.memoryStorage();
 
 export const upload = multer({
   storage,
@@ -40,17 +30,42 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) {
     throw new AppError('No image file provided.', 400);
   }
-  
+
+  if (!supabase) {
+    throw new AppError('Storage is not configured on the server.', 500);
+  }
+
   let folder = 'uploads';
   if (req.query.type === 'banner') folder = 'banners';
   else if (req.query.type === 'star') folder = 'stars';
 
-  // Return the public URL for the image (since it's served by Next.js from public/images/)
-  const imageUrl = `/images/${folder}/${req.file.filename}`;
-  
+  // Generate unique filename
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  const ext = path.extname(req.file.originalname);
+  const filename = `${folder}/${uniqueSuffix}${ext}`;
+
+  // Upload to Supabase Storage bucket named 'images'
+  const { data, error } = await supabase.storage
+    .from('images')
+    .upload(filename, req.file.buffer, {
+      contentType: req.file.mimetype,
+      upsert: false
+    });
+
+  if (error) {
+    throw new AppError(`Failed to upload image: ${error.message}`, 500);
+  }
+
+  // Get public URL
+  const { data: publicUrlData } = supabase.storage
+    .from('images')
+    .getPublicUrl(filename);
+
   res.status(200).json({
     status: 'success',
-    data: { url: imageUrl },
+    data: {
+      url: publicUrlData.publicUrl,
+    },
   });
 });
 

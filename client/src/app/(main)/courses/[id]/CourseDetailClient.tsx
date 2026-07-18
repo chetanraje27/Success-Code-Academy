@@ -290,9 +290,11 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
       <div className="container">
         {/* Back Link Button */}
         <div className="back-btn-wrap">
-          <Link href="/courses" className="back-btn">
-            <FaArrowLeft className="back-icon" />
-            <span>Back to Courses</span>
+          <Link href="/courses" legacyBehavior>
+            <a className="back-btn">
+              <FaArrowLeft className="back-icon" />
+              <span>Back to Courses</span>
+            </a>
           </Link>
         </div>
 
@@ -603,15 +605,21 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: #64748b;
+          color: #1d4ed8;
+          background: #eff6ff;
+          padding: 8px 20px 8px 16px;
+          border-radius: 100px;
           text-decoration: none;
           font-weight: 700;
           font-family: 'Outfit', sans-serif;
           font-size: 0.95rem;
-          transition: color 0.2s ease;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(29, 78, 216, 0.1);
         }
         .back-btn:hover {
+          background: #dbeafe;
           color: #1e40af;
+          transform: translateX(-4px);
         }
         .back-icon {
           font-size: 0.88rem;

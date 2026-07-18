@@ -289,7 +289,22 @@ export default function ExploreCourses() {
           .container { padding: 0 16px; }
         }
         @media (max-width: 640px) {
-          .explore-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          .explore-grid { 
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 12px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+          }
+          .explore-grid::-webkit-scrollbar {
+            display: none;
+          }
+          .explore-card-parent {
+            flex: 0 0 70%;
+            scroll-snap-align: center;
+          }
           .explore-card { 
             min-height: auto; 
             padding-top: 32px; 
@@ -315,13 +330,14 @@ export default function ExploreCourses() {
             margin-bottom: 4px;
           }
           .course-desc-text {
-            font-size: 0.7rem;
-            line-height: 1.3;
+            display: none;
           }
           .see-more {
-            margin-top: 0.75rem;
-            font-size: 0.6rem;
+            margin-top: 4px;
+            font-size: 0.52rem;
             padding: 4px 8px;
+            white-space: nowrap;
+            gap: 2px;
           }
         }
       `}</style>

@@ -549,30 +549,30 @@ export default function ParentsTrustUs() {
           .stats-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 0;
             width: 100%;
             overflow: hidden;
           }
           .stats-row {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             width: max-content;
-            margin: 0 -24px;
-            padding: 8px 0;
+            margin: 0;
+            padding: 6px 0;
             box-sizing: border-box;
-            -ms-overflow-style: none;  /* IE/Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
           }
           .stats-row::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            display: none;
           }
           
           /* Auto Scrolling Marquee Animations */
           .stats-row-1 {
-            animation: marquee-right 12s linear infinite;
+            animation: marquee-right 14s linear infinite;
           }
           .stats-row-2 {
-            animation: marquee-left 12s linear infinite;
+            animation: marquee-left 14s linear infinite;
           }
           
           /* Pause marquee on active/touch */
@@ -581,20 +581,23 @@ export default function ParentsTrustUs() {
           }
 
           .stat-card-motion {
-            flex: 0 0 135px !important; /* Smaller cards for mobile view */
-            width: 135px !important;
+            flex: 0 0 130px !important;
+            width: 130px !important;
+            height: 145px !important;
           }
           .stat-card {
             flex-direction: column !important;
             align-items: center !important;
-            padding: 12px 6px !important;
+            padding: 10px 6px !important;
             border-radius: 12px !important;
+            height: 100% !important;
+            justify-content: center !important;
           }
           .stat-infographic-wrapper {
-            margin-bottom: 4px !important;
-            transform: scale(0.6) !important;
-            margin-top: -14px !important;
-            margin-bottom: -10px !important;
+            margin-bottom: 0 !important;
+            transform: scale(0.55) !important;
+            margin-top: -16px !important;
+            margin-bottom: -12px !important;
             flex-shrink: 0;
           }
           .stat-card-text-wrapper {
@@ -603,12 +606,13 @@ export default function ParentsTrustUs() {
             width: 100%;
           }
           .stat-value {
-            font-size: 1.15rem !important;
+            font-size: 1.1rem !important;
             margin-bottom: 1px !important;
           }
           .stat-label {
-            font-size: 0.72rem !important;
+            font-size: 0.7rem !important;
             margin-bottom: 0 !important;
+            line-height: 1.2 !important;
           }
           .stat-desc {
             display: none !important;

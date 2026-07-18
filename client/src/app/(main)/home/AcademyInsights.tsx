@@ -15,6 +15,7 @@ interface BlogItem {
   id: number;
   category: string;
   title: string;
+  shortTitle?: string;
   excerpt: string;
   date: string;
   author: string;
@@ -40,6 +41,7 @@ const blogItems: BlogItem[] = [
     id: 0,
     category: "TOI Feature",
     title: '"Stayed away from phone and social media for a year": Highest ranked female candidate Shravani Kudale shares what got her AIR 5 in NEET',
+    shortTitle: '"No phone for a year": Shravani Kudale secures AIR 5',
     excerpt: "Shravani Kudale stays away from phone and social media for NEET preparation and gets AIR 5.",
     date: "18 JUL 2026",
     author: "TOI DESK",
@@ -52,6 +54,7 @@ const blogItems: BlogItem[] = [
     id: 1,
     category: "Sakal Feature",
     title: "NEET Exam Result : बारामतीची सिद्धी मुलींमधून राज्यात पहिली; नीट परीक्षेत 665 गुण; ऑल इंडिया रँक 26",
+    shortTitle: "NEET Result: बारामतीची सिद्धी राज्यात पहिली",
     excerpt: "बारामती येथील सिद्धीने 'नीट' परीक्षेत तब्बल 665 गुण मिळवीत मुलींमधून संपूर्ण देशात तिसरा क्रमांक पटकावला.",
     date: "17 JUL 2026",
     author: "SAKAL DESK",
@@ -64,11 +67,12 @@ const blogItems: BlogItem[] = [
     id: 2,
     category: "HT Feature",
     title: "No phone, no social media for a year: How Maharashtra's NEET topper Shravani Kudale secured AIR 5",
+    shortTitle: "Maharashtra's NEET Topper Shravani Kudale (AIR 5)",
     excerpt: "Maharashtra's NEET 2026 topper Shravani Kudale from Pune district scored 710 out of 720.",
     date: "17 JUL 2026",
     author: "HT DESK",
     readTime: "5 min read",
-    image: "/images/shravani_ht.png",
+    image: "/images/Hindutan1.png",
     slug: "shravani-kudale-ht-feature",
     externalUrl: "https://www.hindustantimes.com/education/exam-results/stayed-away-from-mobile-phones-says-maharashtra-neet-topper-shravani-kudale-101784295153769.html"
   },
@@ -76,6 +80,7 @@ const blogItems: BlogItem[] = [
     id: 3,
     category: "Campus Life",
     title: "Interactive Classrooms & Late-Night Doubt Desks at SCA",
+    shortTitle: "Interactive Classrooms & Doubt Support",
     excerpt: "A look at how our subject expert mentors resolve individual student doubts post-lectures.",
     date: "18 JUN 2026",
     author: "PROF. K. JADHAV",
@@ -87,6 +92,7 @@ const blogItems: BlogItem[] = [
     id: 4,
     category: "Academic Edge",
     title: "Analyzing the SCA NEET Offline Mock Test Edge",
+    shortTitle: "SCA NEET Mock Test Advantage",
     excerpt: "Discover how our All India Test Series simulates exact NTA pressures.",
     date: "22 MAY 2026",
     author: "MOCK DEPT",
@@ -104,7 +110,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Take a virtual tour of our state-of-the-art digital classrooms, advanced study cabins, and library resource center.",
     date: "June 15, 2026",
     duration: "4:02",
-    image: "/images/blogs/campus_tour.png",
+    image: "/images/infra.png",
     videoUrl: "/videos/SCA_Campus_Tour.mp4"
   },
   {
@@ -114,7 +120,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Siddhi shares her study schedule, organic chemistry notes, and biology charts that led her to secure a seat at AIIMS Delhi.",
     date: "May 12, 2026",
     duration: "0:58",
-    image: "/images/results/2025/SiddhiBadhe.png",
+    image: "/images/HoneSiddhi.png",
     videoUrl: "/videos/Siddhi_Journey_Video.mp4"
   },
   {
@@ -134,14 +140,35 @@ const videoItems: VideoItem[] = [
     excerpt: "Her formula flashcard strategy, mock test timing practices, and advice for fellow repeaters.",
     date: "June 08, 2026",
     duration: "7:45",
-    image: "/images/results/2025/SamruddhiLokhande.png",
+    image: "/images/HomeSamruddhi.png",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    id: 5,
+    category: "Study Tips",
+    title: "Mastering Physics Numericals",
+    excerpt: "Expert faculty breaks down the approach to solve complex physics problems quickly.",
+    date: "July 10, 2026",
+    duration: "12:15",
+    image: "/images/blogs/classroom_doubts.png",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    id: 6,
+    category: "Motivation",
+    title: "Never Give Up - Director's Message",
+    excerpt: "An inspiring talk by our founder on staying focused and motivated during tough times.",
+    date: "August 01, 2026",
+    duration: "5:30",
+    image: "/images/upcoming_batches_hero.png",
+    videoUrl: "/videos/SCA_Campus_Tour.mp4"
   }
 ];
 
 export default function AcademyInsights() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [blogStartIndex, setBlogStartIndex] = useState(0);
+  const [videoStartIndex, setVideoStartIndex] = useState(0);
 
   const handlePrevBlog = () => {
     setBlogStartIndex((prev) => Math.max(0, prev - 1));
@@ -149,6 +176,14 @@ export default function AcademyInsights() {
 
   const handleNextBlog = () => {
     setBlogStartIndex((prev) => Math.min(blogItems.length - 3, prev + 1));
+  };
+
+  const handlePrevVideo = () => {
+    setVideoStartIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextVideo = () => {
+    setVideoStartIndex((prev) => Math.min(videoItems.length - 4, prev + 1));
   };
 
 
@@ -208,7 +243,8 @@ export default function AcademyInsights() {
                           <span className="blog-meta-text">
                             {blog.date} | BY {blog.author}
                           </span>
-                          <h3 className="blog-card-title-text">{blog.title}</h3>
+                          <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
+                          <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
                         </div>
                       </article>
                     </a>
@@ -228,7 +264,8 @@ export default function AcademyInsights() {
                           <span className="blog-meta-text">
                             {blog.date} | BY {blog.author}
                           </span>
-                          <h3 className="blog-card-title-text">{blog.title}</h3>
+                          <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
+                          <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
                         </div>
                       </article>
                     </Link>
@@ -251,16 +288,34 @@ export default function AcademyInsights() {
                 Watch classroom campus tours, NEET ranker preparation interviews, and annual felicitation ceremonies.
               </p>
             </div>
-            <div className="header-right-action">
-              <Link href="/gallery" className="view-all-link">
-                View All Videos <span className="arrow-right-sym">→</span>
-              </Link>
+            <div className="carousel-controls">
+              <button 
+                onClick={handlePrevVideo} 
+                disabled={videoStartIndex === 0}
+                className="control-btn"
+                aria-label="Previous videos"
+              >
+                <FaChevronLeft />
+              </button>
+              <button 
+                onClick={handleNextVideo} 
+                disabled={videoStartIndex >= videoItems.length - 4}
+                className="control-btn"
+                aria-label="Next videos"
+              >
+                <FaChevronRight />
+              </button>
             </div>
           </div>
 
-          {/* 3-Column Vertical Apple-Style Card Grid */}
-          <div className="apple-grid-layout">
+          {/* 4-Column Flex Slider for Videos */}
+          <div className="blog-slider-container">
+            <div 
+              className="video-cards-grid-layout"
+              style={{ transform: `translate3d(calc(-${videoStartIndex} * (25% + 4px)), 0, 0)` } as React.CSSProperties}
+            >
             {videoItems.map((video) => (
+              <div key={video.id} className="video-card-item-wrapper">
               <div
                 key={video.id}
                 className="apple-video-card"
@@ -301,7 +356,9 @@ export default function AcademyInsights() {
                   </div>
                 </div>
               </div>
+              </div>
             ))}
+            </div>
           </div>
         </div>
       </div>
@@ -552,6 +609,20 @@ export default function AcademyInsights() {
           text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
+        .mobile-title {
+          display: none;
+        }
+
+        @media (max-width: 640px) {
+          .desktop-title {
+            display: none;
+          }
+          .mobile-title {
+            display: block;
+            font-size: 0.9rem;
+          }
+        }
+
         /* ============ SECTION 2: VIDEOS APPLE-STYLE GRID (THEME-MATCHED LIGHT BG + GRID) ============ */
         .video-section-premium-wrap {
           background-color: var(--bg-surface);
@@ -565,6 +636,19 @@ export default function AcademyInsights() {
           position: relative;
           border-top: 1px solid var(--bg-surface-border);
           border-bottom: 1px solid var(--bg-surface-border);
+        }
+
+        .video-cards-grid-layout {
+          display: flex;
+          gap: 16px;
+          width: 100%;
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .video-card-item-wrapper {
+          flex: 0 0 calc(25% - 12px);
+          display: flex;
+          box-sizing: border-box;
         }
 
         .apple-grid-layout {
@@ -830,9 +914,12 @@ export default function AcademyInsights() {
           .main-heading {
             font-size: 1.85rem;
           }
-          .apple-grid-layout {
+          .apple-grid-layout, .video-cards-grid-layout {
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
+            transform: none !important;
+            flex-wrap: wrap;
+            justify-content: center;
           }
         }
 
@@ -860,61 +947,100 @@ export default function AcademyInsights() {
           .video-section-premium-wrap {
             padding: 40px 0;
           }
+
+          /* Allow the slider containers to scroll on mobile */
+          .blog-slider-container {
+            overflow: visible;
+          }
+
+          /* Articles: horizontal touch-scroll */
           .cards-grid-layout {
             display: flex;
+            flex-wrap: nowrap;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             gap: 16px;
-            padding: 10px 4px;
+            padding: 10px 24px;
             margin: 0 -24px;
-            padding-left: 24px;
-            padding-right: 24px;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
             transform: none !important;
+            justify-content: flex-start !important;
           }
           .cards-grid-layout::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            display: none;
           }
           .card-item-wrapper {
-            flex: 0 0 80%; /* 80% width so the next card is partially visible */
+            flex: 0 0 80%;
             scroll-snap-align: start;
           }
           .blog-cover-card {
             aspect-ratio: 16 / 12;
           }
-          .apple-grid-layout {
+          .desktop-title {
+            display: none !important;
+          }
+          .mobile-title {
+            display: block !important;
+            font-size: 0.82rem !important;
+            line-height: 1.25 !important;
+          }
+
+          /* Videos: horizontal touch-scroll */
+          .video-cards-grid-layout {
             display: flex;
+            flex-wrap: nowrap;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             gap: 12px;
-            padding: 20px 48px;
+            padding: 10px 24px;
             margin: 0 -24px;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            transform: none !important;
+            justify-content: flex-start !important;
           }
-          .apple-grid-layout::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+          .video-cards-grid-layout::-webkit-scrollbar {
+            display: none;
+          }
+          .video-card-item-wrapper {
+            flex: 0 0 72%;
+            scroll-snap-align: start;
           }
           .apple-video-card {
-            flex: 0 0 76%;
-            scroll-snap-align: center;
-            aspect-ratio: 3 / 4;
-            transition: all 0.3s ease;
+            aspect-ratio: 1.25;
+            width: 100%;
           }
-          .apple-video-card:nth-child(odd) {
-            transform: rotate(-1.5deg) scale(0.96);
+          .apple-card-content {
+            padding: 12px !important;
           }
-          .apple-video-card:nth-child(even) {
-            transform: rotate(1.5deg) scale(0.96);
+          .apple-card-title {
+            font-size: 0.76rem !important;
+            line-height: 1.25 !important;
           }
-          .apple-video-card:active {
-            transform: rotate(0deg) scale(1.02);
+          .apple-card-category {
+            font-size: 0.55rem !important;
           }
+          .apple-duration-badge {
+            font-size: 0.55rem !important;
+          }
+          .apple-play-btn-wrap {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          .apple-play-icon {
+            font-size: 0.55rem !important;
+          }
+
+          /* Hide desktop carousel arrow controls on mobile */
+          .carousel-controls {
+            display: none;
+          }
+
           .apple-play-pulse {
             animation: ringPulseLight 1.8s infinite linear;
             opacity: 1;

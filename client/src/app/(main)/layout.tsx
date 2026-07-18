@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import "../globals.css";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
+import CookieConsent from "@/components/layout/CookieConsent";
+
+
+export const metadata: Metadata = {
+  title: "Success Code Academy | Premier Educational Institution",
+  description:
+    "Success Code Academy is a premier educational institution dedicated to academic excellence, holistic development, and shaping tomorrow's leaders since 2000. Explore our programs in Science, Arts, Commerce, and more.",
+  keywords:
+    "education, academy, college, school, science, arts, commerce, courses, Mumbai, India, success code academy",
+  openGraph: {
+    title: "Success Code Academy | Premier Educational Institution",
+    description:
+      "Premier educational institution dedicated to academic excellence and shaping tomorrow's leaders.",
+    type: "website",
+    locale: "en_IN",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <>
+      <Header />
+      <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>{children}</main>
+      <Footer />
+      <WhatsAppWidget />
+      <CookieConsent />
+    </>
+  );
+}

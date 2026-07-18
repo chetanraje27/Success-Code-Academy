@@ -1,0 +1,887 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+export default function AdmissionsClient() {
+  const [formData, setFormData] = useState({
+    studentName: "",
+    studentPhone: "",
+    parentPhone: "",
+    studentClass: "11th",
+    schoolName: "",
+    city: "",
+    preferredCourse: "",
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          setIsAuthenticated(true);
+          setFormData(prev => ({
+            ...prev,
+            studentName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+            studentPhone: user.mobileNumber || prev.studentPhone,
+          }));
+        } catch (e) {
+          setIsAuthenticated(false);
+        }
+      } else {
+        setIsAuthenticated(false);
+        setFormData(prev => ({ ...prev, studentName: "", studentPhone: "" }));
+      }
+    };
+
+    checkAuth();
+    window.addEventListener("auth-changed", checkAuth);
+    return () => window.removeEventListener("auth-changed", checkAuth);
+  }, []);
+
+  const handleAuthInterceptor = (e: React.MouseEvent | React.FocusEvent) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.dispatchEvent(new Event("open-signin-modal"));
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/scholarships/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit registration");
+      }
+
+      setSubmitStatus("success");
+      // Reset form
+      setFormData({
+        studentName: "",
+        studentPhone: "",
+        parentPhone: "",
+        studentClass: "11th",
+        schoolName: "",
+        city: "",
+        preferredCourse: "",
+      });
+    } catch (err: any) {
+      setErrorMessage(err.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="admissions-page-container">
+      {/* Background visual elements */}
+      <div className="bg-pattern-dots-left">
+        <svg viewBox="0 0 100 100" width="80" height="80" fill="#cbd5e1" opacity="0.3">
+          <circle cx="10" cy="10" r="3" /><circle cx="30" cy="10" r="3" /><circle cx="50" cy="10" r="3" /><circle cx="70" cy="10" r="3" /><circle cx="90" cy="10" r="3" />
+          <circle cx="10" cy="30" r="3" /><circle cx="30" cy="30" r="3" /><circle cx="50" cy="30" r="3" /><circle cx="70" cy="30" r="3" /><circle cx="90" cy="30" r="3" />
+          <circle cx="10" cy="50" r="3" /><circle cx="30" cy="50" r="3" /><circle cx="50" cy="50" r="3" /><circle cx="70" cy="50" r="3" /><circle cx="90" cy="50" r="3" />
+          <circle cx="10" cy="70" r="3" /><circle cx="30" cy="70" r="3" /><circle cx="50" cy="70" r="3" /><circle cx="70" cy="70" r="3" /><circle cx="90" cy="70" r="3" />
+          <circle cx="10" cy="90" r="3" /><circle cx="30" cy="90" r="3" /><circle cx="50" cy="90" r="3" /><circle cx="70" cy="90" r="3" /><circle cx="90" cy="90" r="3" />
+        </svg>
+      </div>
+
+      <div className="bg-pattern-circles-right">
+        <svg viewBox="0 0 200 200" width="240" height="240" stroke="#0257d0" strokeWidth="1.5" fill="none" opacity="0.08">
+          <circle cx="200" cy="0" r="80" />
+          <circle cx="200" cy="0" r="120" />
+          <circle cx="200" cy="0" r="160" />
+          <circle cx="200" cy="0" r="200" />
+        </svg>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          HERO BANNER — Scholarship Poster Section
+          ══════════════════════════════════════════ */}
+      <div className="admissions-hero-banner">
+        <div className="admissions-hero-container">
+          <motion.div
+            className="admissions-poster-wrapper"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="poster-img-container">
+              <Image
+                src="/images/ScholorshipHero.png"
+                alt="NEET Admissions & Scholarship Test Hero Banner"
+                width={800}
+                height={500}
+                className="admissions-poster-img"
+                priority
+                unoptimized
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          MAIN GRID SECTION (Details on Left, Form on Right)
+          ══════════════════════════════════════════ */}
+      <div className="scholarship-grid-container">
+        
+        {/* Left Side: Poster Details */}
+        <div className="scholarship-left-details">
+          <div className="poster-header">
+            <div className="poster-header-icon">
+              <svg viewBox="0 0 100 100" width="70" height="70" fill="none">
+                <path d="M15 45 L50 25 L85 45 L50 65 Z" fill="#0257d0" />
+                <path d="M30 53 L30 75 C30 80 70 80 70 75 L70 53" fill="none" stroke="#0257d0" strokeWidth="4" />
+                <path d="M85 45 L85 65 L80 65" fill="none" stroke="#0257d0" strokeWidth="3" />
+                <polygon points="50,34 52,39 58,39 53,43 55,48 50,45 45,48 47,43 42,39 48,39" fill="#ffffff" />
+              </svg>
+            </div>
+            
+            <h1 className="poster-main-title">
+              Register for<br />
+              <span className="blue-title-highlight">Success Code Scholarship Exam</span>
+            </h1>
+            
+            <div className="poster-badge-pill">
+              For NEET Freshers
+            </div>
+            
+            <p className="poster-intro-text">
+              This scholarship assessment helps us understand your foundational strength in Physics, Chemistry, and Biology, along with your analytical thinking and concept application. This enables us to provide the right guidance for your NEET journey from the very beginning.
+            </p>
+            
+            <div className="poster-star-divider">
+              <div className="divider-line"></div>
+              <svg className="star-svg" viewBox="0 0 24 24" width="16" height="16" fill="#0257d0">
+                <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+              </svg>
+              <div className="divider-line"></div>
+            </div>
+          </div>
+          
+          <div className="poster-features-list">
+            <div className="poster-feature-item">
+              <div className="feature-icon-circle">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+              </div>
+              <div className="feature-text-block">
+                <h4 className="feature-title">Foundation Assessment</h4>
+                <p className="feature-description">Evaluate basics in Physics, Chemistry &amp; Biology</p>
+              </div>
+            </div>
+            
+            <div className="poster-feature-item">
+              <div className="feature-icon-circle">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                  <path d="M3 18 L10 10 L16 12 L21 5" />
+                  <polyline points="17 5 21 5 21 9" />
+                </svg>
+              </div>
+              <div className="feature-text-block">
+                <h4 className="feature-title">Performance Analysis</h4>
+                <p className="feature-description">Understand strengths and improvement areas</p>
+              </div>
+            </div>
+            
+            <div className="poster-feature-item">
+              <div className="feature-icon-circle">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+              <div className="feature-text-block">
+                <h4 className="feature-title">Personalized Guidance</h4>
+                <p className="feature-description">Get the right academic direction from the start</p>
+              </div>
+            </div>
+            
+            <div className="poster-feature-item">
+              <div className="feature-icon-circle">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                  <line x1="4" y1="22" x2="4" y2="15" />
+                </svg>
+              </div>
+              <div className="feature-text-block">
+                <h4 className="feature-title">NEET Preparation Roadmap</h4>
+                <p className="feature-description">Build a clear roadmap for the NEET journey</p>
+              </div>
+            </div>
+            
+            <div className="poster-feature-card-boxed">
+              <div className="feature-icon-circle-dark">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="M9 11l2 2 4-4" />
+                </svg>
+              </div>
+              <div className="feature-text-block">
+                <h4 className="feature-title-blue">Scholarship Opportunity</h4>
+                <p className="feature-description-blue">Eligible students may receive scholarship benefits based on performance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Registration Form Card */}
+        <div className="scholarship-right-form">
+          <div className="registration-form-card">
+            
+            <div className="form-card-header">
+              <div className="form-header-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+              <h3 className="form-card-title">Fill in your details to<br />Register for the Scholarship Exam</h3>
+              <div className="title-underline"></div>
+            </div>
+
+            {submitStatus === "success" ? (
+              <motion.div 
+                className="success-feedback-container"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
+                <div className="success-checkmark-badge">
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#22c55e" strokeWidth="3">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                </div>
+                <h4>Registration Complete!</h4>
+                <p>Thank you for registering for the Success Code Scholarship Exam. Our advisors will contact you shortly with test venue and timing details.</p>
+                <button onClick={() => setSubmitStatus("idle")} className="register-submit-btn">
+                  Register another student
+                </button>
+              </motion.div>
+            ) : (
+              <form 
+                onSubmit={handleFormSubmit} 
+                className="register-exam-form"
+                onClickCapture={handleAuthInterceptor}
+                onFocusCapture={handleAuthInterceptor}
+              >
+                
+                <div className="form-input-group">
+                  <label className="form-label">Full Name (Student)</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <input 
+                      type="text" 
+                      name="studentName" 
+                      placeholder="Enter student full name" 
+                      required 
+                      value={formData.studentName}
+                      onChange={handleInputChange}
+                      readOnly={isAuthenticated}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">Mobile Number (Student)</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <input 
+                      type="tel" 
+                      name="studentPhone" 
+                      placeholder="Enter student mobile number" 
+                      required 
+                      pattern="[0-9]{10}"
+                      value={formData.studentPhone}
+                      onChange={handleInputChange}
+                      readOnly={isAuthenticated}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">Parent / Guardian Mobile Number</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <input 
+                      type="tel" 
+                      name="parentPhone" 
+                      placeholder="Enter parent / guardian mobile number" 
+                      required 
+                      pattern="[0-9]{10}"
+                      value={formData.parentPhone}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">Class</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                    <select 
+                      name="studentClass"
+                      value={formData.studentClass}
+                      onChange={handleInputChange}
+                    >
+                      <option value="11th">11th</option>
+                      <option value="12th">12th</option>
+                      <option value="10th Pass">10th Pass</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">School / College Name</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 22H2M20 22V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14M10 12h4" />
+                    </svg>
+                    <input 
+                      type="text" 
+                      name="schoolName" 
+                      placeholder="Enter school or college name" 
+                      required
+                      value={formData.schoolName}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">City</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <input 
+                      type="text" 
+                      name="city" 
+                      placeholder="Enter your city" 
+                      required
+                      value={formData.city}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">Preferred Course / Batch</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                    <input 
+                      type="text" 
+                      name="preferredCourse" 
+                      placeholder="Enter preferred course or batch" 
+                      required
+                      value={formData.preferredCourse}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="form-error-message">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <button type="submit" className="register-submit-btn" disabled={isSubmitting}>
+                  {isSubmitting ? "Registering..." : "Register for Scholarship Exam →"}
+                </button>
+
+              </form>
+            )}
+
+            <div className="form-card-footer">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <span>Your information is safe and secure with us.</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      {/* Styled JSX Styles */}
+      <style jsx global>{`
+        .admissions-page-container {
+          min-height: 100vh;
+          background: radial-gradient(circle at 50% 50%, #f1f7fe 0%, #ffffff 100%);
+          position: relative;
+          padding-top: 80px; /* Offset header height */
+          overflow: hidden;
+        }
+
+        /* Ambient background graphics */
+        .bg-pattern-dots-left {
+          position: absolute;
+          top: 180px;
+          left: 40px;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .bg-pattern-circles-right {
+          position: absolute;
+          top: 140px;
+          right: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        /* ════════════════════════════════
+           HERO BANNER — Admissions Poster Section
+           ════════════════════════════════ */
+        .admissions-hero-banner {
+          position: relative;
+          background: #ffffff;
+          width: 100%;
+        }
+        .admissions-hero-container {
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .admissions-poster-wrapper {
+          width: 100% !important;
+          border-radius: 0 !important;
+          overflow: hidden;
+          box-shadow: none !important;
+          border: none !important;
+          background: #f8fafc;
+        }
+        .poster-img-container {
+          position: relative;
+          width: 100%;
+          display: block;
+        }
+        :global(.admissions-poster-img) {
+          width: 100% !important;
+          height: auto !important;
+          display: block !important;
+        }
+
+        /* ════════════════════════════════
+           SCHOLARSHIP GRID LAYOUT
+           ════════════════════════════════ */
+        .scholarship-grid-container {
+          display: grid;
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: 50px;
+          width: 100%;
+          max-width: 1200px;
+          margin: 60px auto 100px;
+          padding: 0 24px;
+          box-sizing: border-box;
+          position: relative;
+          z-index: 10;
+        }
+
+        /* ════════════════════════════════
+           LEFT SIDE DETAILS
+           ════════════════════════════════ */
+        .scholarship-left-details {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+          box-sizing: border-box;
+          font-family: 'Outfit', sans-serif !important;
+        }
+        .poster-header {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+        }
+        .poster-header-icon {
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .poster-main-title {
+          font-size: clamp(2rem, 3.5vw, 2.5rem);
+          font-weight: 850;
+          color: #0f172a;
+          line-height: 1.25;
+          margin: 0 0 16px;
+          letter-spacing: -0.03em;
+        }
+        .blue-title-highlight {
+          color: #0257d0;
+        }
+        .poster-badge-pill {
+          display: inline-block;
+          background: #0257d0;
+          color: #ffffff;
+          font-size: 0.88rem;
+          font-weight: 800;
+          padding: 6px 16px;
+          border-radius: 8px;
+          margin-bottom: 24px;
+          letter-spacing: -0.01em;
+        }
+        .poster-intro-text {
+          font-size: 1rem;
+          color: #475569;
+          line-height: 1.6;
+          margin: 0 0 32px;
+        }
+        .poster-star-divider {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          gap: 16px;
+          margin-bottom: 36px;
+        }
+        .divider-line {
+          flex-grow: 1;
+          height: 1.5px;
+          background: #e2e8f0;
+        }
+        .star-svg {
+          flex-shrink: 0;
+        }
+        .poster-features-list {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          width: 100%;
+        }
+        .poster-feature-item {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          width: 100%;
+        }
+        .feature-icon-circle {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #eff6ff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .feature-icon-circle-dark {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #0257d0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .feature-text-block {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          text-align: left;
+        }
+        .feature-title {
+          font-size: 1.15rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0;
+        }
+        .feature-description {
+          font-size: 0.95rem;
+          color: #64748b;
+          margin: 0;
+        }
+        .poster-feature-card-boxed {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          background: #eff6ff;
+          border: 1.5px solid #dbeafe;
+          border-radius: 16px;
+          padding: 18px 24px;
+          width: 100%;
+          box-sizing: border-box;
+          margin-top: 8px;
+        }
+        .feature-title-blue {
+          font-size: 1.15rem;
+          font-weight: 800;
+          color: #0257d0;
+          margin: 0;
+        }
+        .feature-description-blue {
+          font-size: 0.95rem;
+          color: #1d4ed8;
+          margin: 0;
+        }
+
+        /* ════════════════════════════════
+           RIGHT SIDE FORM CARD
+           ════════════════════════════════ */
+        .scholarship-right-form {
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .registration-form-card {
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 24px;
+          padding: 40px;
+          box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
+          box-sizing: border-box;
+          width: 100%;
+        }
+        .form-card-header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          margin-bottom: 30px;
+          width: 100%;
+        }
+        .form-header-icon {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: #eff6ff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 16px;
+        }
+        .form-card-title {
+          font-size: 1.25rem;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.4;
+          margin: 0;
+          font-family: 'Outfit', sans-serif;
+        }
+        .title-underline {
+          width: 60px;
+          height: 3px;
+          background: #0257d0;
+          margin-top: 14px;
+          border-radius: 99px;
+        }
+        .register-exam-form {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        .form-input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 20px;
+          text-align: left;
+        }
+        .form-label {
+          font-size: 0.88rem;
+          font-weight: 750;
+          color: #1e293b;
+          font-family: 'Outfit', sans-serif;
+        }
+        .input-with-icon {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+        }
+        .input-icon {
+          position: absolute;
+          left: 16px;
+          pointer-events: none;
+        }
+        .input-with-icon input, 
+        .input-with-icon select {
+          width: 100%;
+          padding: 12px 16px 12px 48px;
+          border: 1.5px solid #cbd5e1;
+          border-radius: 10px;
+          font-size: 0.95rem;
+          color: #0f172a;
+          background: #ffffff;
+          outline: none;
+          transition: all 0.2s ease;
+          box-sizing: border-box;
+          font-family: 'Outfit', sans-serif;
+        }
+        .input-with-icon input:focus, 
+        .input-with-icon select:focus {
+          border-color: #0257d0;
+          box-shadow: 0 0 0 3px rgba(2, 87, 208, 0.1);
+        }
+        .register-submit-btn {
+          width: 100%;
+          background: #0257d0;
+          color: #ffffff;
+          border: none;
+          border-radius: 10px;
+          padding: 16px 24px;
+          font-size: 1.05rem;
+          font-weight: 800;
+          cursor: pointer;
+          font-family: 'Outfit', sans-serif;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 10px;
+          box-shadow: 0 4px 12px rgba(2, 87, 208, 0.15);
+        }
+        .register-submit-btn:hover {
+          background: #1d4ed8;
+          box-shadow: 0 6px 20px rgba(2, 87, 208, 0.25);
+        }
+        .register-submit-btn:active {
+          transform: translateY(0);
+        }
+        .form-card-footer {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 20px;
+          color: #64748b;
+          font-size: 0.8rem;
+          font-weight: 600;
+          width: 100%;
+        }
+        .form-error-message {
+          color: #dc2626;
+          background: #fef2f2;
+          border: 1px solid #fee2e2;
+          border-radius: 10px;
+          padding: 12px 16px;
+          font-size: 0.88rem;
+          font-weight: 700;
+          margin-bottom: 20px;
+          text-align: left;
+          font-family: 'Outfit', sans-serif;
+          box-shadow: 0 2px 6px rgba(220, 38, 38, 0.05);
+        }
+
+        /* Success screen feedback style */
+        .success-feedback-container {
+          text-align: center;
+          padding: 30px 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+        }
+        .success-checkmark-badge {
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: #f0fdf4;
+          border: 1px solid rgba(34, 197, 94, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 8px 20px rgba(34, 197, 94, 0.1);
+        }
+        .success-feedback-container h4 {
+          font-size: 1.4rem;
+          font-weight: 800;
+          color: #1e1b4b;
+          margin: 0;
+          font-family: 'Outfit', sans-serif;
+        }
+        .success-feedback-container p {
+          font-size: 0.95rem;
+          color: #64748b;
+          line-height: 1.55;
+          margin: 0 0 10px;
+          font-family: 'Outfit', sans-serif;
+        }
+
+        /* ─── Responsive Styles ─── */
+        @media (max-width: 992px) {
+          .scholarship-grid-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin: 40px auto 60px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .admissions-page-container {
+            padding-top: 72px !important;
+          }
+          .admissions-hero-banner {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .admissions-poster-wrapper {
+            border-radius: 0 !important;
+          }
+          .registration-form-card {
+            padding: 32px 20px;
+          }
+          .bg-pattern-dots-left,
+          .bg-pattern-circles-right {
+            display: none;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}

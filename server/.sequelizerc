@@ -1,0 +1,16 @@
+/**
+ * Sequelize CLI configuration.
+ *
+ * This plain JS file tells `npx sequelize-cli` where to find the
+ * database config, migrations, and seeders.  It is separate from
+ * the TypeScript application config because the CLI cannot run TS
+ * files directly.
+ */
+
+const path = require('path');
+
+module.exports = {
+  config: path.resolve(__dirname, 'sequelize.config.js'),
+  'migrations-path': path.resolve(__dirname, 'src', 'database', 'migrations'),
+  'seeders-path': path.resolve(__dirname, 'src', 'database', 'seeders'),
+};

@@ -1,0 +1,10 @@
+# .vercelignore
+# Ignore files that shouldn't trigger a new deployment when changed
+
+README.md
+*.md
+.gitignore
+.vscode/
+.github/
+docs/
+tests/

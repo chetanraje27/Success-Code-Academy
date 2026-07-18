@@ -6,16 +6,16 @@ import multer from 'multer';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 
-// --- Supabase Setup ---
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
-
-let supabase: ReturnType<typeof createClient>;
-if (supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
-} else {
-  console.warn("Supabase credentials missing. File uploads to storage will fail.");
-}
+let supabase: ReturnType<typeof createClient> | null = null;
+const getSupabase = () => {
+  if (supabase) return supabase;
+  const supabaseUrl = process.env.SUPABASE_URL || '';
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
+  if (supabaseUrl && supabaseKey) {
+    supabase = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabase;
+};
 
 // --- File Upload Setup (Supabase Storage) ---
 const storage = multer.memoryStorage();
@@ -31,7 +31,8 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
     throw new AppError('No image file provided.', 400);
   }
 
-  if (!supabase) {
+  const client = getSupabase();
+  if (!client) {
     throw new AppError('Storage is not configured on the server.', 500);
   }
 
@@ -45,7 +46,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   const filename = `${folder}/${uniqueSuffix}${ext}`;
 
   // Upload to Supabase Storage bucket named 'images'
-  const { data, error } = await supabase.storage
+  const { data, error } = await client.storage
     .from('images')
     .upload(filename, req.file.buffer, {
       contentType: req.file.mimetype,
@@ -53,11 +54,12 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
     });
 
   if (error) {
+    console.error("Supabase storage upload error:", error);
     throw new AppError(`Failed to upload image: ${error.message}`, 500);
   }
 
   // Get public URL
-  const { data: publicUrlData } = supabase.storage
+  const { data: publicUrlData } = client.storage
     .from('images')
     .getPublicUrl(filename);
 

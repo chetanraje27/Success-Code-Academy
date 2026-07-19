@@ -321,11 +321,22 @@ export default function HomeClient() {
           color: #ffffff; /* White high contrast text */
           white-space: nowrap;
           position: absolute;
-          will-change: transform;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start; /* align left on desktop default */
           will-change: transform;
         }
         .notif-text.scroll-active {
           position: relative;
+          display: inline-flex;
+          left: auto;
+          right: auto;
+          top: auto;
+          bottom: auto;
           padding-left: 100%;
           animation: notif-marquee-scroll 18s linear infinite;
         }
@@ -534,11 +545,11 @@ export default function HomeClient() {
             width: 100%;
           }
           .notif-text {
-            position: relative !important;
-            text-align: center;
-            font-size: 0.60rem !important;
-            white-space: nowrap !important;
-            flex-shrink: 0 !important;
+            justify-content: center;
+            font-size: 0.78rem !important;
+          }
+          .notif-text.scroll-active {
+            justify-content: flex-start;
           }
           .notif-bar-wrap {
             padding-top: 64px !important; /* Fits flush below 64px scrolled mobile header */

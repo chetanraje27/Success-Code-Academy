@@ -136,13 +136,32 @@ export default function WhySCA() {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentMobileSlide, setCurrentMobileSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
       setCurrentMobileSlide((prev) => (prev + 1) % 4);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
+    } else if (isRightSwipe) {
+      setCurrentMobileSlide((prev) => (prev - 1 + 4) % 4);
+    }
+  };
 
   return (
     <section className="why-sca-section" ref={containerRef}>
@@ -189,29 +208,29 @@ export default function WhySCA() {
         <div className="ecosystem-container">
 
           {/* Responsive SVG Connecting Lines (Desktop only) */}
-          <svg className="ecosystem-svg-lines" viewBox="0 0 1000 600" fill="none">
+          <svg className="ecosystem-svg-lines" viewBox="0 0 1150 600" fill="none">
             {/* Left lines (4 paths, color-coded to capsules) */}
-            <path d="M 320 75 C 400 75, 420 200, 440 220" stroke="#0ca678" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 320 225 C 380 225, 390 240, 410 260" stroke="#f08c00" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 320 375 C 380 375, 390 360, 410 340" stroke="#1c7ed6" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 320 525 C 400 525, 420 400, 440 380" stroke="#7048e8" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 300 75 C 380 75, 450 200, 495 220" stroke="#0ca678" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 300 225 C 360 225, 410 240, 465 260" stroke="#f08c00" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 300 375 C 360 375, 410 360, 465 340" stroke="#1c7ed6" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 300 525 C 380 525, 450 400, 495 380" stroke="#7048e8" strokeWidth="2" strokeDasharray="5 5" />
 
             {/* Right lines (4 paths, color-coded to capsules) */}
-            <path d="M 680 75 C 600 75, 580 200, 560 220" stroke="#e03131" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 680 225 C 620 225, 590 240, 590 260" stroke="#097969" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 680 375 C 620 375, 590 360, 590 340" stroke="#1c7ed6" strokeWidth="2" strokeDasharray="5 5" />
-            <path d="M 680 525 C 600 525, 580 400, 560 380" stroke="#d9480f" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 850 75 C 770 75, 700 200, 655 220" stroke="#e03131" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 850 225 C 790 225, 740 240, 685 260" stroke="#097969" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 850 375 C 790 375, 740 360, 685 340" stroke="#1c7ed6" strokeWidth="2" strokeDasharray="5 5" />
+            <path d="M 850 525 C 770 525, 700 400, 655 380" stroke="#d9480f" strokeWidth="2" strokeDasharray="5 5" />
 
             {/* Glowing contact points on centerpiece boundary */}
-            <circle cx="440" cy="220" r="4.5" fill="#0ca678" className="glow-dot" />
-            <circle cx="410" cy="260" r="4.5" fill="#f08c00" className="glow-dot" />
-            <circle cx="410" cy="340" r="4.5" fill="#1c7ed6" className="glow-dot" />
-            <circle cx="440" cy="380" r="4.5" fill="#7048e8" className="glow-dot" />
+            <circle cx="495" cy="220" r="4.5" fill="#0ca678" className="glow-dot" />
+            <circle cx="465" cy="260" r="4.5" fill="#f08c00" className="glow-dot" />
+            <circle cx="465" cy="340" r="4.5" fill="#1c7ed6" className="glow-dot" />
+            <circle cx="495" cy="380" r="4.5" fill="#7048e8" className="glow-dot" />
 
-            <circle cx="560" cy="220" r="4.5" fill="#e03131" className="glow-dot" />
-            <circle cx="590" cy="260" r="4.5" fill="#097969" className="glow-dot" />
-            <circle cx="590" cy="340" r="4.5" fill="#1c7ed6" className="glow-dot" />
-            <circle cx="560" cy="380" r="4.5" fill="#d9480f" className="glow-dot" />
+            <circle cx="655" cy="220" r="4.5" fill="#e03131" className="glow-dot" />
+            <circle cx="685" cy="260" r="4.5" fill="#097969" className="glow-dot" />
+            <circle cx="685" cy="340" r="4.5" fill="#1c7ed6" className="glow-dot" />
+            <circle cx="655" cy="380" r="4.5" fill="#d9480f" className="glow-dot" />
           </svg>
 
           {/* Left Columns - Capsules (Icon Left) */}
@@ -240,7 +259,7 @@ export default function WhySCA() {
           {/* Glowing Hexagon Centerpiece */}
           <div className="ecosystem-center">
             <div className="hexagon-inner">
-              <div className="logo-icon-wrap" style={{ width: '180px', height: '90px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
+              <div className="logo-icon-wrap" style={{ width: '220px', height: '110px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
                 <img
                   src="/images/Success Code Academy Logo.png"
                   alt="Success Code Academy Logo"
@@ -288,7 +307,12 @@ export default function WhySCA() {
         </div>
 
         {/* Mobile Carousel Slider */}
-        <div className="mobile-ecosystem-carousel">
+        <div 
+          className="mobile-ecosystem-carousel"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <div 
             className="mobile-carousel-track" 
             style={{ transform: `translateX(-${currentMobileSlide * 100}%)` }}
@@ -416,7 +440,7 @@ export default function WhySCA() {
 
         /* Ecosystem main layout container (fixed width to match SVG coordinate layout) */
         .ecosystem-container {
-          width: 1000px;
+          width: 1150px;
           max-width: 100%;
           margin: 0 auto 30px;
           position: relative;
@@ -424,7 +448,7 @@ export default function WhySCA() {
         }
         .left-column {
           position: absolute;
-          left: 40px;
+          left: 20px;
           top: 0;
           width: 280px;
           height: 100%;
@@ -437,7 +461,7 @@ export default function WhySCA() {
         }
         .right-column {
           position: absolute;
-          right: 40px;
+          right: 20px;
           top: 0;
           width: 280px;
           height: 100%;
@@ -556,10 +580,10 @@ export default function WhySCA() {
         }        /* Hexagon centerpiece centerpiece */
         .ecosystem-center {
           position: absolute;
-          left: 390px; /* Centered in 1000px container: (1000 - 220) / 2 */
-          top: 180px; /* Centered vertically in 600px container: (600 - 240) / 2 */
-          width: 220px;
-          height: 240px;
+          left: 445px; /* Centered in 1150px container: (1150 - 260) / 2 */
+          top: 160px; /* Centered vertically in 600px container: (600 - 280) / 2 */
+          width: 260px;
+          height: 280px;
           display: flex;
           align-items: center;
           justify-content: center;

@@ -163,7 +163,7 @@ export default function ExploreCourses() {
           background-position:
             -100px 100px,
             -100px 100px;
-          transform: rotate3d(0.5, 1, 0, 18deg);
+          transform: rotate3d(0.15, 0.3, 0, 4deg);
           box-shadow: 
             0 18px 30px -8px rgba(15, 23, 42, 0.06),
             0 8px 16px -8px var(--card-color);
@@ -190,12 +190,12 @@ export default function ExploreCourses() {
           font-weight: 800;
           margin: 0 0 8px 0;
           transition: all 0.5s ease-in-out;
-          transform: translate3d(0px, 0px, 50px);
+          transform: translate3d(0px, 0px, 15px);
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
         
         .explore-card:hover .course-title-text {
-          transform: translate3d(0px, 0px, 60px);
+          transform: translate3d(0px, 0px, 20px);
         }
 
         .course-desc-text {
@@ -205,11 +205,11 @@ export default function ExploreCourses() {
           line-height: 1.4;
           margin: 0;
           transition: all 0.5s ease-in-out;
-          transform: translate3d(0px, 0px, 30px);
+          transform: translate3d(0px, 0px, 10px);
         }
         
         .explore-card:hover .course-desc-text {
-          transform: translate3d(0px, 0px, 60px);
+          transform: translate3d(0px, 0px, 15px);
         }
         
         .see-more {
@@ -227,7 +227,7 @@ export default function ExploreCourses() {
           padding: 6px 12px;
           border-radius: 99px;
           transition: all 0.5s ease-in-out;
-          transform: translate3d(0px, 0px, 20px);
+          transform: translate3d(0px, 0px, 10px);
           box-shadow: 0 3px 8px rgba(0,0,0,0.04);
         }
 
@@ -238,7 +238,7 @@ export default function ExploreCourses() {
         }
         
         .explore-card:hover .see-more {
-          transform: translate3d(0px, 0px, 60px);
+          transform: translate3d(0px, 0px, 15px);
         }
 
         .see-more .arrow-icon {
@@ -264,7 +264,7 @@ export default function ExploreCourses() {
           align-items: center;
           justify-content: center;
           color: var(--card-color);
-          transform: translate3d(0px, 0px, 80px);
+          transform: translate3d(0px, 0px, 20px);
           box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px -4px;
           transition: all 0.5s ease-in-out;
           z-index: 10;
@@ -276,7 +276,7 @@ export default function ExploreCourses() {
         }
         
         .explore-card:hover .icon-box {
-          transform: translate3d(0px, 0px, 90px) rotate(8deg);
+          transform: translate3d(0px, 0px, 25px) rotate(4deg);
           box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 16px -5px;
         }
         

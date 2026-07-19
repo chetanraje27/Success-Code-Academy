@@ -5,7 +5,7 @@ import { FaStar } from "react-icons/fa6";
 
   // Hardcoded default fallback data
   const defaultToppers = [
-    { id: 0, name: "Shravani Kadale", score: "710/720", rank: "AIR 5", course: "NEET Freshers Batch", year: "NEET UG 2026", image: "/images/Sharavani_Kudale.jpg", color: "#1c7ed6" },
+    { id: 0, name: "Shravani Kadale", score: "710/720", rank: "AIR 5", course: "NEET Freshers Batch", year: "NEET UG 2026", image: "/images/results/2026/ShravaniKudale_.png", color: "#1c7ed6" },
     { id: 1, name: "Siddhi Badhe", score: "665/720", rank: "AIR 26", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SiddhiBadhe.png", color: "#0ca678" },
     { id: 2, name: "Samruddhi Lokhande", score: "602/720", rank: "AIR 1204", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SamruddhiLokhande.png", color: "#097969" },
     { id: 3, name: "Aprupa Patil", score: "550/720", rank: "AIR 1610", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/AprupaPatil.png", color: "#1c7ed6" },
@@ -98,7 +98,7 @@ export default function ToppersCarousel() {
                         {/* Rank Row displayed above the NEET score */}
                         <div className="rank-row">
                           <span className="rank-label-text">Rank</span>
-                          <span className="rank-value-text" style={{ color: t.color }}>
+                          <span className="rank-value-text">
                             <FaStar className="star-icon" /> {t.rank}
                           </span>
                         </div>
@@ -152,7 +152,7 @@ export default function ToppersCarousel() {
                         {/* Rank Row displayed above the NEET score */}
                         <div className="rank-row">
                           <span className="rank-label-text">Rank</span>
-                          <span className="rank-value-text" style={{ color: t.color }}>
+                          <span className="rank-value-text">
                             <FaStar className="star-icon" /> {t.rank}
                           </span>
                         </div>
@@ -322,7 +322,7 @@ export default function ToppersCarousel() {
           position: relative;
           width: 100%;
           height: 160px;
-          background: radial-gradient(circle at center, #6ea8d6 0%, #1a4f7a 100%);
+          background: #e2eefa;
           overflow: hidden;
         }
 
@@ -410,21 +410,27 @@ export default function ToppersCarousel() {
         }
 
         .rank-value-text {
-          font-size: 0.85rem;
-          font-weight: 850;
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 1.15rem;
+          font-weight: 800;
           display: flex;
           align-items: center;
           gap: 3px;
+          color: #334A7D;
+          text-transform: uppercase;
         }
 
         .star-icon {
-          font-size: 0.68rem;
+          font-size: 0.78rem;
+          color: #ffb300;
         }
 
         .score-value-text {
-          font-size: 1rem;
-          font-weight: 900;
-          color: var(--topper-accent);
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 1.25rem;
+          font-weight: 800;
+          color: #334A7D;
+          text-transform: uppercase;
         }
 
         @keyframes float-marquee {

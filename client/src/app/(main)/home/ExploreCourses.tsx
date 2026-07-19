@@ -8,7 +8,7 @@ const courses = [
     name: "NEET 11th - 12th",
     icon: <FaDna />,
     description: "Conceptual clarity in Physics, Chemistry & Biology for NEET UG.",
-    color: "#5e9cc3ff",
+    color: "#e2eefa",
     bg: "#e6fcf5",
     href: "/courses",
   },
@@ -16,7 +16,7 @@ const courses = [
     name: "NEET Repeaters",
     icon: <FaArrowsRotate />,
     description: "Intensive 1-year program focused on speed, accuracy & revision.",
-    color: "#5e9cc3ff",
+    color: "#e2eefa",
     bg: "#f3f0ff",
     href: "/courses",
   },
@@ -24,7 +24,7 @@ const courses = [
     name: "Test Series",
     icon: <FaClipboardCheck />,
     description: "Offline mock tests simulating the real NEET exam environment.",
-    color: "#5e9cc3ff",
+    color: "#e2eefa",
     bg: "#fff9db",
     href: "/courses",
   },
@@ -185,13 +185,12 @@ export default function ExploreCourses() {
 
         .course-title-text {
           display: inline-block;
-          color: #ffffff;
+          color: #0f172a;
           font-size: 1.1rem;
           font-weight: 800;
           margin: 0 0 8px 0;
           transition: all 0.5s ease-in-out;
           transform: translate3d(0px, 0px, 15px);
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
         
         .explore-card:hover .course-title-text {
@@ -201,7 +200,7 @@ export default function ExploreCourses() {
         .course-desc-text {
           font-size: 0.8rem;
           font-weight: 600;
-          color: rgba(255, 255, 255, 0.9);
+          color: #1e293b;
           line-height: 1.4;
           margin: 0;
           transition: all 0.5s ease-in-out;
@@ -222,8 +221,8 @@ export default function ExploreCourses() {
           font-weight: 900;
           font-size: 0.7rem;
           text-transform: uppercase;
-          color: var(--card-color);
-          background: #ffffff;
+          color: #ffffff;
+          background: #2c757b;
           padding: 6px 12px;
           border-radius: 99px;
           transition: all 0.5s ease-in-out;
@@ -232,8 +231,8 @@ export default function ExploreCourses() {
         }
 
         .see-more:hover {
-          background: #ffffff;
-          color: var(--card-color);
+          background: #1d5054;
+          color: #ffffff;
           box-shadow: 0 5px 11px rgba(0,0,0,0.1);
         }
         
@@ -257,13 +256,13 @@ export default function ExploreCourses() {
           height: 38px;
           width: 38px;
           background: #ffffff; /* White background for the icon box */
-          border: 2px solid var(--card-color);
+          border: 2px solid #2c757b;
           border-radius: 10px;
           padding: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--card-color);
+          color: #2c757b;
           transform: translate3d(0px, 0px, 20px);
           box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px -4px;
           transition: all 0.5s ease-in-out;

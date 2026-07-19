@@ -303,13 +303,6 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
 
           {/* LEFT SIDE: Course Overview & Syllabus details */}
           <div className="detail-left-content">
-            <div className="course-type-pill">
-              <span className="pill-user-icon">
-                <FaBookOpen />
-              </span>
-              <span>{course.type}</span>
-            </div>
-
             <h1 className="course-title-header">{course.title}</h1>
             <p className="course-subtitle-desc">{course.description}</p>
 
@@ -318,14 +311,8 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
             {/* What's in the Course Section (mockup vertical layout with SVG graphics) */}
             <div className="whats-in-course-section">
               <div className="whats-in-course-header-row">
-                <div className="stethoscope-logo">
-                  <img src="/images/crops/stethoscope.png" alt="Stethoscope" className="stethoscope-img" />
-                </div>
                 <div className="header-text-block">
                   <h2 className="whats-in-course-title">NEET Course Offerings &amp; Why Choose Us</h2>
-                  <p className="whats-in-course-subtitle">
-                    Our mission is to provide every NEET aspirant with personalized guidance, concept-driven learning, and continuous mentorship to maximize their chances of securing admission into India's top medical colleges.
-                  </p>
                 </div>
               </div>
 

@@ -960,7 +960,10 @@ export default function AboutPage() {
            ========================================= */
         @media (max-width: 1024px) {
           .hero-container { flex-direction: column; }
-          .hero-image-wrapper { position: relative; right: 0; width: 100%; height: 400px; margin-top: 40px; }
+          .hero-content { flex: 0 0 100%; max-width: 100%; width: 100%; text-align: center; }
+          .eyebrow { justify-content: center; }
+          .hero-pills { justify-content: center; }
+          .hero-image-wrapper { position: relative; flex: none; right: 0; width: 100%; height: 400px; margin-top: 40px; }
           .whiteboard-row { flex-direction: column; align-items: center; gap: 32px; }
           .rank-paper-card { max-width: 320px; margin: 0 auto; }
           .stat-paper-card { max-width: 320px; margin: 0 auto; width: 100%; }
@@ -973,6 +976,66 @@ export default function AboutPage() {
         @media (max-width: 768px) {
           .hero-title { font-size: 2.5rem; }
           .hero-pills { flex-direction: column; }
+          .hero-image-wrapper { flex: none; height: 260px; margin-top: 24px; }
+          
+          /* NEET Achievers image responsive styling */
+          .about-achievement-image-wrap {
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+          }
+          .about-achievement-image-wrap img {
+            width: 100% !important;
+            min-width: auto !important;
+            height: auto !important;
+            border-radius: 12px !important;
+          }
+
+          /* Our Story layout for mobile */
+          .story-img-wrapper {
+            height: 300px;
+            border-radius: 16px 40px 16px 40px;
+          }
+          .story-quote-card {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            margin: -40px 20px 0 20px;
+            padding: 24px;
+            z-index: 10;
+          }
+          .quote-text {
+            font-size: 1.1rem;
+          }
+
+          /* Philosophy and Mentorship cards adjustments */
+          .philosophy-card {
+            padding: 24px 20px;
+            min-height: auto;
+            border-radius: 16px;
+          }
+          .phil-header {
+            margin-bottom: 24px;
+          }
+          .phil-title {
+            font-size: 1.35rem;
+          }
+          .phil-list li {
+            font-size: 0.92rem;
+            margin-bottom: 12px;
+            gap: 10px;
+          }
+          .check-icon {
+            font-size: 16px;
+            margin-top: 3px;
+          }
+          .phil-illustration {
+            opacity: 0.3;
+            transform: scale(0.75);
+            transform-origin: bottom right;
+          }
+
           .whiteboard-inner-board { padding: 24px 16px; outline: 10px solid #d9e6f7; }
           .whiteboard-title { font-size: 1.6rem; }
           .title-laurel { width: 35px; height: 14px; }

@@ -262,13 +262,13 @@ export default function ParentsTrustUs() {
           <div className="stats-row-container row-2-container">
             <div className="stats-track stats-track-left">
               <div className="stats-group">
-                {[...statsData.slice(3, 5), ...statsData.slice(3, 5)].map((stat, i) => (
+                {statsData.slice(3, 5).map((stat, i) => (
                   <motion.div
-                    key={`row2-orig-${stat.id}-${i}`}
+                    key={`row2-orig-${stat.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: (i % 2 + 3) * 0.08 }}
+                    transition={{ duration: 0.4, delay: (i + 3) * 0.08 }}
                     className="stat-card-motion"
                   >
                     <div 
@@ -293,9 +293,9 @@ export default function ParentsTrustUs() {
                 ))}
               </div>
               <div className="stats-group marquee-duplicate" aria-hidden="true">
-                {[...statsData.slice(3, 5), ...statsData.slice(3, 5)].map((stat, i) => (
+                {statsData.slice(3, 5).map((stat) => (
                   <div
-                    key={`row2-dup-${stat.id}-${i}`}
+                    key={`row2-dup-${stat.id}`}
                     className="stat-card-motion"
                   >
                     <div 

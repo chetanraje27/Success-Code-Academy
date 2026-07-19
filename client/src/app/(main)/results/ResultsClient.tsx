@@ -339,7 +339,7 @@ export default function ResultsClient() {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 100vw, 500px"
-                      className="topper-banner-img"
+                      className="topper-banner-img object-fill"
                     />
                   </div>
                 </motion.div>
@@ -357,7 +357,7 @@ export default function ResultsClient() {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 100vw, 500px"
-                      className="topper-banner-img"
+                      className="topper-banner-img object-fill"
                     />
                   </div>
                 </motion.div>
@@ -1347,6 +1347,9 @@ export default function ResultsClient() {
           object-fit: cover !important;
           object-position: center;
           transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .topper-banner-img.object-fill {
+          object-fit: fill !important;
         }
 
         /* Responsive Breakpoints */

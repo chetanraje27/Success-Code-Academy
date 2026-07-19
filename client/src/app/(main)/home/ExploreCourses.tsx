@@ -289,54 +289,56 @@ export default function ExploreCourses() {
         }
         @media (max-width: 640px) {
           .explore-grid { 
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 12px;
-            padding-bottom: 12px;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-          }
-          .explore-grid::-webkit-scrollbar {
-            display: none;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 8px !important;
+            width: 100% !important;
+            padding-bottom: 0 !important;
           }
           .explore-card-parent {
-            flex: 0 0 70%;
-            scroll-snap-align: center;
+            width: 100% !important;
+            flex: none !important;
+            scroll-snap-align: none !important;
           }
           .explore-card { 
-            min-height: auto; 
-            padding-top: 32px; 
-            border-radius: 12px;
+            min-height: 125px !important; 
+            padding-top: 26px !important; 
+            border-radius: 12px !important;
+            height: 100% !important;
           }
           .icon-box {
-            top: 6px;
-            right: 12px;
-            height: 30px;
-            width: 30px;
-            border-radius: 6px;
-            padding: 4px;
+            top: 5px !important;
+            right: 8px !important;
+            height: 22px !important;
+            width: 22px !important;
+            border-radius: 6px !important;
+            padding: 3px !important;
           }
           .course-icon {
-            font-size: 0.85rem;
+            font-size: 0.65rem !important;
           }
           .content-box {
-            padding: 14px 10px 10px 10px;
-            border-radius: 0 0 10px 10px;
+            padding: 12px 10px 8px 10px !important;
+            border-radius: 0 0 10px 10px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
           .course-title-text {
-            font-size: 0.9rem;
-            margin-bottom: 4px;
+            font-size: 0.7rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 4px !important;
+            line-height: 1.2 !important;
           }
           .course-desc-text {
-            display: none;
+            display: none !important;
           }
           .see-more {
-            margin-top: 4px;
-            font-size: 0.52rem;
-            padding: 4px 8px;
-            white-space: nowrap;
-            gap: 2px;
+            margin-top: 4px !important;
+            font-size: 0.52rem !important;
+            padding: 4px 8px !important;
+            white-space: nowrap !important;
+            gap: 2px !important;
+            border-radius: 99px !important;
           }
         }
       `}</style>

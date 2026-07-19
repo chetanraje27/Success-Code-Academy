@@ -195,175 +195,131 @@ export default function ParentsTrustUs() {
 
         <div className="stats-grid">
           {/* Row 1 */}
-          <div className="stats-row stats-row-1">
-            {/* Original Set */}
-            {statsData.slice(0, 3).map((stat, i) => (
-              <motion.div
-                key={`row1-orig-${stat.id}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="stat-card-motion"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <StatCardCounter value={stat.value} />
+          <div className="stats-row-container row-1-container">
+            <div className="stats-track stats-track-right">
+              <div className="stats-group">
+                {statsData.slice(0, 3).map((stat, i) => (
+                  <motion.div
+                    key={`row1-orig-${stat.id}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.08 }}
+                    className="stat-card-motion"
+                  >
+                    <div 
+                      className="stat-card"
+                      style={{ 
+                        "--accent-color": stat.color, 
+                        "--accent-glow": stat.color + "12" 
+                      } as React.CSSProperties}
+                    >
+                      <div className="stat-infographic-wrapper">
+                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
+                      </div>
+                      <div className="stat-card-text-wrapper">
+                        <div className="stat-value">
+                          <StatCardCounter value={stat.value} />
+                        </div>
+                        <div className="stat-label">{stat.label}</div>
+                        <div className="stat-desc">{stat.description}</div>
+                      </div>
                     </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-            {/* Duplicate Set for Marquee */}
-            {statsData.slice(0, 3).map((stat, i) => (
-              <div
-                key={`row1-dup-${stat.id}`}
-                className="stat-card-motion marquee-duplicate"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <span>{stat.value}</span>
-                    </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
-                  </div>
-                </div>
+                  </motion.div>
+                ))}
               </div>
-            ))}
+              <div className="stats-group marquee-duplicate" aria-hidden="true">
+                {statsData.slice(0, 3).map((stat) => (
+                  <div
+                    key={`row1-dup-${stat.id}`}
+                    className="stat-card-motion"
+                  >
+                    <div 
+                      className="stat-card"
+                      style={{ 
+                        "--accent-color": stat.color, 
+                        "--accent-glow": stat.color + "12" 
+                      } as React.CSSProperties}
+                    >
+                      <div className="stat-infographic-wrapper">
+                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
+                      </div>
+                      <div className="stat-card-text-wrapper">
+                        <div className="stat-value">
+                          <span>{stat.value}</span>
+                        </div>
+                        <div className="stat-label">{stat.label}</div>
+                        <div className="stat-desc">{stat.description}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Row 2 */}
-          <div className="stats-row stats-row-2">
-            {/* Original Set */}
-            {statsData.slice(3, 5).map((stat, i) => (
-              <motion.div
-                key={`row2-orig-${stat.id}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: (i + 3) * 0.08 }}
-                className="stat-card-motion"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <StatCardCounter value={stat.value} />
+          <div className="stats-row-container row-2-container">
+            <div className="stats-track stats-track-left">
+              <div className="stats-group">
+                {[...statsData.slice(3, 5), ...statsData.slice(3, 5)].map((stat, i) => (
+                  <motion.div
+                    key={`row2-orig-${stat.id}-${i}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: (i % 2 + 3) * 0.08 }}
+                    className="stat-card-motion"
+                  >
+                    <div 
+                      className="stat-card"
+                      style={{ 
+                        "--accent-color": stat.color, 
+                        "--accent-glow": stat.color + "12" 
+                      } as React.CSSProperties}
+                    >
+                      <div className="stat-infographic-wrapper">
+                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
+                      </div>
+                      <div className="stat-card-text-wrapper">
+                        <div className="stat-value">
+                          <StatCardCounter value={stat.value} />
+                        </div>
+                        <div className="stat-label">{stat.label}</div>
+                        <div className="stat-desc">{stat.description}</div>
+                      </div>
                     </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-            {/* Duplicate Set 1 for Marquee */}
-            {statsData.slice(3, 5).map((stat, i) => (
-              <div
-                key={`row2-dup1-${stat.id}`}
-                className="stat-card-motion marquee-duplicate"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <span>{stat.value}</span>
-                    </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
-                  </div>
-                </div>
+                  </motion.div>
+                ))}
               </div>
-            ))}
-            {/* Duplicate Set 2 for Marquee */}
-            {statsData.slice(3, 5).map((stat, i) => (
-              <div
-                key={`row2-dup2-${stat.id}`}
-                className="stat-card-motion marquee-duplicate"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <span>{stat.value}</span>
+              <div className="stats-group marquee-duplicate" aria-hidden="true">
+                {[...statsData.slice(3, 5), ...statsData.slice(3, 5)].map((stat, i) => (
+                  <div
+                    key={`row2-dup-${stat.id}-${i}`}
+                    className="stat-card-motion"
+                  >
+                    <div 
+                      className="stat-card"
+                      style={{ 
+                        "--accent-color": stat.color, 
+                        "--accent-glow": stat.color + "12" 
+                      } as React.CSSProperties}
+                    >
+                      <div className="stat-infographic-wrapper">
+                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
+                      </div>
+                      <div className="stat-card-text-wrapper">
+                        <div className="stat-value">
+                          <span>{stat.value}</span>
+                        </div>
+                        <div className="stat-label">{stat.label}</div>
+                        <div className="stat-desc">{stat.description}</div>
+                      </div>
                     </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-            {/* Duplicate Set 3 for Marquee */}
-            {statsData.slice(3, 5).map((stat, i) => (
-              <div
-                key={`row2-dup3-${stat.id}`}
-                className="stat-card-motion marquee-duplicate"
-              >
-                <div 
-                  className="stat-card"
-                  style={{ 
-                    "--accent-color": stat.color, 
-                    "--accent-glow": stat.color + "12" 
-                  } as React.CSSProperties}
-                >
-                  <div className="stat-infographic-wrapper">
-                    <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                  </div>
-                  <div className="stat-card-text-wrapper">
-                    <div className="stat-value">
-                      <span>{stat.value}</span>
-                    </div>
-                    <div className="stat-label">{stat.label}</div>
-                    <div className="stat-desc">{stat.description}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
@@ -493,6 +449,15 @@ export default function ParentsTrustUs() {
         .marquee-duplicate {
           display: none !important;
         }
+        .stats-row-container {
+          display: contents;
+        }
+        .stats-track {
+          display: contents;
+        }
+        .stats-group {
+          display: contents;
+        }
         @media (max-width: 1200px) {
           .stats-grid {
             grid-template-columns: repeat(3, 1fr);
@@ -543,74 +508,76 @@ export default function ParentsTrustUs() {
           }
         }
         @media (max-width: 640px) {
+          .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+            width: 100% !important;
+            overflow: hidden !important;
+          }
+          .stats-row-container {
+            display: block !important;
+            width: 100% !important;
+            overflow: hidden !important;
+          }
+          .stats-track {
+            display: flex !important;
+            width: max-content !important;
+            will-change: transform;
+          }
+          .stats-group {
+            display: flex !important;
+            gap: 12px !important;
+            padding-right: 12px !important;
+            flex-shrink: 0 !important;
+          }
           .marquee-duplicate {
             display: flex !important;
           }
-          .stats-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            width: 100%;
-            overflow: hidden;
+          
+          .stats-track-left {
+            animation: marquee-left 18s linear infinite !important;
           }
-          .stats-row {
-            display: flex;
-            gap: 10px;
-            width: max-content;
-            margin: 0;
-            padding: 6px 0;
-            box-sizing: border-box;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          .stats-row::-webkit-scrollbar {
-            display: none;
+          .stats-track-right {
+            animation: marquee-right 18s linear infinite !important;
           }
           
-          /* Auto Scrolling Marquee Animations */
-          .stats-row-1 {
-            animation: marquee-right 14s linear infinite;
-          }
-          .stats-row-2 {
-            animation: marquee-left 14s linear infinite;
-          }
-          
-          /* Pause marquee on active/touch */
-          .stats-row:active {
-            animation-play-state: paused;
+          .stats-track:hover {
+            animation-play-state: paused !important;
           }
 
           .stat-card-motion {
-            flex: 0 0 130px !important;
-            width: 130px !important;
-            height: 145px !important;
+            flex: 0 0 140px !important;
+            width: 140px !important;
+            height: 155px !important;
           }
           .stat-card {
             flex-direction: column !important;
             align-items: center !important;
-            padding: 10px 6px !important;
-            border-radius: 12px !important;
+            padding: 12px 8px !important;
+            border-radius: 16px !important;
             height: 100% !important;
             justify-content: center !important;
+            box-sizing: border-box !important;
           }
           .stat-infographic-wrapper {
             margin-bottom: 0 !important;
-            transform: scale(0.55) !important;
-            margin-top: -16px !important;
-            margin-bottom: -12px !important;
-            flex-shrink: 0;
+            transform: scale(0.6) !important;
+            margin-top: -12px !important;
+            margin-bottom: -10px !important;
+            flex-shrink: 0 !important;
           }
           .stat-card-text-wrapper {
             align-items: center !important;
             text-align: center !important;
-            width: 100%;
+            width: 100% !important;
           }
           .stat-value {
-            font-size: 1.1rem !important;
-            margin-bottom: 1px !important;
+            font-size: 1.15rem !important;
+            margin-bottom: 2px !important;
           }
           .stat-label {
-            font-size: 0.7rem !important;
+            font-size: 0.72rem !important;
             margin-bottom: 0 !important;
             line-height: 1.2 !important;
           }

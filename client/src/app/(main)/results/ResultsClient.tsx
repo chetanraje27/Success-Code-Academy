@@ -323,46 +323,20 @@ export default function ResultsClient() {
         <div className="container">
           {/* Featured Toppers for 2026 */}
           {selectedYear === 2026 && (
-            <div className="toppers-highlight-section">
-              <h3 className="toppers-headline">NEET UG 2026 Top Achievers</h3>
-              <div className="toppers-cards-container">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="topper-banner-card"
-                >
-                  <div className="topper-banner-img-wrap">
-                    <Image
-                      src="/images/SharavaniKudale_HeroResult.png"
-                      alt="Sharavani Kudale - NEET UG 2026 Topper"
-                      fill
-                      unoptimized
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="topper-banner-img object-fill"
-                    />
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15 }}
-                  className="topper-banner-card"
-                >
-                  <div className="topper-banner-img-wrap">
-                    <Image
-                      src="/images/TanishkaAdrsulresult.png"
-                      alt="Tanishka Adsul - NEET UG 2026 Topper"
-                      fill
-                      unoptimized
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="topper-banner-img object-fill"
-                    />
-                  </div>
-                </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="toppers-highlight-section"
+            >
+              <div className="toppers-banner-wrap-2026" style={{ maxWidth: "700px", margin: "0 auto", borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
+                <img
+                  src="/images/NeetUG2026AchiversShravani.png"
+                  alt="NEET UG 2026 Achievers"
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Featured Toppers for 2025 */}
@@ -411,6 +385,9 @@ export default function ResultsClient() {
             </div>
           )}
 
+          {selectedYear === 2026 && (
+            <h3 className="toppers-headline other-selections-title">Other Successful Selections</h3>
+          )}
           {selectedYear === 2025 && (
             <h3 className="toppers-headline other-selections-title">Other Successful Selections</h3>
           )}

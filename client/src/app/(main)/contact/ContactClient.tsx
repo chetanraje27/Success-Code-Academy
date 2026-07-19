@@ -171,7 +171,7 @@ export default function ContactClient() {
                 {/* Address Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="detail-icon-svg"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <img src="/images/location.png" alt="Location" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Address</h4>
@@ -183,8 +183,8 @@ export default function ContactClient() {
 
                 {/* Phone Item */}
                 <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-green">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="detail-icon-svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <div className="detail-icon-box contact-bg-blue">
+                    <img src="/images/phone-ringing.png" alt="Phone" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Phone</h4>
@@ -196,8 +196,8 @@ export default function ContactClient() {
 
                 {/* Email Item */}
                 <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-purple">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="detail-icon-svg"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <div className="detail-icon-box contact-bg-blue">
+                    <img src="/images/email.png" alt="Email" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Email</h4>
@@ -209,8 +209,8 @@ export default function ContactClient() {
 
                 {/* Working Hours Item */}
                 <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-orange">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="detail-icon-svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <div className="detail-icon-box contact-bg-blue">
+                    <img src="/images/clock (1).png" alt="Working Hours" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Working Hours</h4>

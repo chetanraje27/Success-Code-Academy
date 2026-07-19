@@ -92,7 +92,12 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
 }
 
 export default function ResultsClient() {
-  const [heroSlides, setHeroSlides] = useState<any[]>([]);
+  const defaultBanners = useMemo(() => [
+    { image: "/images/Resulltfinal.png", alt: "SCA Results Banner 1" },
+    { image: "/images/TanishkaAdsulResulthero.png", alt: "SCA Results Banner 2" }
+  ], []);
+
+  const [heroSlides, setHeroSlides] = useState<any[]>(defaultBanners);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
@@ -100,16 +105,20 @@ export default function ResultsClient() {
       .then(data => {
         if (data.status === 'success') {
           const resultBanners = (data.data || []).filter((b: any) => b?.type === 'RESULTS' && b?.image);
-          setHeroSlides(resultBanners);
+          if (resultBanners.length > 0) {
+            setHeroSlides(resultBanners);
+          } else {
+            setHeroSlides(defaultBanners);
+          }
         } else {
-          setHeroSlides([]);
+          setHeroSlides(defaultBanners);
         }
       })
       .catch(err => {
         console.error("Failed to fetch result banners", err);
-        setHeroSlides([]);
+        setHeroSlides(defaultBanners);
       });
-  }, []);
+  }, [defaultBanners]);
 
   const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const currentHeroSlide = slideTuple[0];
@@ -315,19 +324,42 @@ export default function ResultsClient() {
           {/* Featured Toppers for 2026 */}
           {selectedYear === 2026 && (
             <div className="toppers-highlight-section">
-              <h3 className="toppers-headline">NEET UG 2026 Top Achiever</h3>
-              <div className="topper-2026-wrapper" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <h3 className="toppers-headline">NEET UG 2026 Top Achievers</h3>
+              <div className="toppers-cards-container">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: 30 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  style={{ width: '100%', maxWidth: '900px' }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="topper-banner-card"
                 >
-                  <img
-                    src="/2026.png"
-                    alt="NEET UG 2026 Toppers"
-                    style={{ width: "100%", height: "auto", borderRadius: "20px", display: "block", boxShadow: "0 12px 35px rgba(15, 23, 42, 0.15)" }}
-                  />
+                  <div className="topper-banner-img-wrap">
+                    <Image
+                      src="/images/SharavaniKudale_HeroResult.png"
+                      alt="Sharavani Kudale - NEET UG 2026 Topper"
+                      fill
+                      unoptimized
+                      sizes="(max-width: 768px) 100vw, 500px"
+                      className="topper-banner-img"
+                    />
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.15 }}
+                  className="topper-banner-card"
+                >
+                  <div className="topper-banner-img-wrap">
+                    <Image
+                      src="/images/TanishkaAdrsulresult.png"
+                      alt="Tanishka Adsul - NEET UG 2026 Topper"
+                      fill
+                      unoptimized
+                      sizes="(max-width: 768px) 100vw, 500px"
+                      className="topper-banner-img"
+                    />
+                  </div>
                 </motion.div>
               </div>
             </div>
@@ -1339,27 +1371,35 @@ export default function ResultsClient() {
           .tabs-container {
             display: flex !important;
             flex-direction: row !important;
-            justify-content: space-between !important;
-            gap: 4px !important;
+            justify-content: flex-start !important;
+            gap: 8px !important;
             width: 100% !important;
             background: var(--bg-surface-hover);
-            padding: 4px !important;
+            padding: 6px !important;
             border-radius: 30px !important;
             box-sizing: border-box !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            white-space: nowrap !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+          }
+          .tabs-container::-webkit-scrollbar {
+            display: none !important;
           }
           .tab-btn {
-            font-size: 0.68rem !important;
-            padding: 8px 2px !important;
+            font-size: 0.8rem !important;
+            padding: 8px 16px !important;
             border-radius: 20px !important;
             text-align: center !important;
-            flex: 1 1 0% !important;
-            width: 0 !important;
+            flex: 0 0 auto !important;
+            width: auto !important;
             box-sizing: border-box !important;
-            display: flex !important;
+            display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             white-space: nowrap !important;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
           }
         }
 

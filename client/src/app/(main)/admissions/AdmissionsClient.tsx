@@ -525,10 +525,16 @@ export default function AdmissionsClient() {
           width: 100%;
           max-width: 1200px;
           margin: 60px auto 100px;
-          padding: 0 24px;
+          padding: 48px;
           box-sizing: border-box;
           position: relative;
           z-index: 10;
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 28px;
+          box-shadow: 
+            0 20px 40px -15px rgba(15, 23, 42, 0.08),
+            0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         /* ════════════════════════════════
@@ -541,6 +547,8 @@ export default function AdmissionsClient() {
           width: 100%;
           box-sizing: border-box;
           font-family: 'Outfit', sans-serif !important;
+          padding-right: 40px;
+          border-right: 1.5px solid #edf2f9;
         }
         .poster-header {
           display: flex;
@@ -678,11 +686,11 @@ export default function AdmissionsClient() {
           box-sizing: border-box;
         }
         .registration-form-card {
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 24px;
-          padding: 40px;
-          box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          padding: 0;
+          box-shadow: none;
           box-sizing: border-box;
           width: 100%;
         }
@@ -859,6 +867,14 @@ export default function AdmissionsClient() {
             grid-template-columns: 1fr;
             gap: 40px;
             margin: 40px auto 60px;
+            padding: 32px 24px;
+            border-radius: 20px;
+          }
+          .scholarship-left-details {
+            border-right: none;
+            padding-right: 0;
+            border-bottom: 1.5px solid #edf2f9;
+            padding-bottom: 32px;
           }
         }
 
@@ -874,7 +890,7 @@ export default function AdmissionsClient() {
             border-radius: 0 !important;
           }
           .registration-form-card {
-            padding: 32px 20px;
+            padding: 0;
           }
           .bg-pattern-dots-left,
           .bg-pattern-circles-right {

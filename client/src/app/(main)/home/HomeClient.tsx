@@ -47,7 +47,7 @@ export default function HomeClient() {
 
   const [announcements, setAnnouncements] = useState<any[]>([{ text: "Welcome to Success Code Academy!" }]);
   const [slides, setSlides] = useState<any[]>([
-    { image: "/images/neet.png", alt: "NEET Achievements" },
+    { image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" },
     { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
   ]);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,18 +62,18 @@ export default function HomeClient() {
         
         const notifData = await notifRes.json();
         const bannerData = await bannerRes.json();
-
+ 
         const nextAnnouncements = notifData.status === 'success' 
           ? (notifData.data || []).filter((item: any) => item?.text) 
           : [];
         const homeBanners = bannerData.status === 'success'
           ? (bannerData.data || []).filter((b: any) => b?.type === 'HOME' && b?.image)
           : [];
-
+ 
         const nextSlides = homeBanners.length > 0 
-          ? [{ image: "/images/neet.png", alt: "NEET Achievements" }, ...homeBanners]
+          ? [{ image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" }, ...homeBanners]
           : [
-              { image: "/images/neet.png", alt: "NEET Achievements" },
+              { image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" },
               { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
             ];
 

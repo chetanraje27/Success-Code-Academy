@@ -250,7 +250,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const payload = {
         courseTitle: course.title,
@@ -348,9 +348,6 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
             <div className="syllabus-download-card">
               <div className="download-text-wrap">
                 <h4 className="download-title">Download Course Syllabus</h4>
-                <p className="download-description">
-                  Get the comprehensive chapter weightage, topic-wise schedule, mock pattern timeline, and detailed preparation roadmap in PDF format.
-                </p>
               </div>
               <a
                 href="/documents/Syllabus_neet_2026.pdf"
@@ -409,8 +406,8 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
                   </motion.div>
                 </AnimatePresence>
               ) : (
-                <form 
-                  onSubmit={handleSubmit} 
+                <form
+                  onSubmit={handleSubmit}
                   className="premium-register-form"
                   onClickCapture={handleAuthInterceptor}
                   onFocusCapture={handleAuthInterceptor}

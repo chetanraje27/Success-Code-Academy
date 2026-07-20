@@ -24,7 +24,7 @@ export default function AboutPage() {
               <div className="eyebrow-line"></div>
             </div>
             <h1 className="hero-title">
-              Empowering Dreams.<br />Building Future Doctors.
+              Empowering Dreams.<br className="desktop-br" />Building Future Doctors.
             </h1>
             <p className="hero-desc">
               Since 2018, Success Code Academy has been shaping the future of NEET aspirants from Baramati and beyond with quality education, mentorship, and unwavering support.
@@ -974,42 +974,75 @@ export default function AboutPage() {
         }
 
         @media (max-width: 768px) {
-          .hero-title { font-size: 2.5rem; }
-          .hero-pills { flex-direction: column; }
-          .hero-image-wrapper { flex: none; height: 260px; margin-top: 24px; }
-          
-          /* NEET Achievers image responsive styling */
-          .about-achievement-image-wrap {
-            overflow: hidden;
+          .desktop-br { display: none; }
+          .hero-section { padding-top: 100px; padding-bottom: 30px; }
+          .hero-content { text-align: center; }
+          .hero-title { font-size: 2.1rem; line-height: 1.25; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
+          .hero-desc { font-size: 0.95rem; line-height: 1.6; color: #475569; margin: 0 auto 24px; max-width: 100%; text-align: center; }
+          .hero-pills { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
+          .hero-pill { flex: 1 1 130px; max-width: 220px; padding: 10px 14px 10px 10px; gap: 10px; border-radius: 30px; }
+          .hero-image-wrapper { 
+            position: relative;
+            flex: none;
             width: 100%;
-            display: flex;
-            justify-content: center;
+            max-width: 540px;
+            height: 340px !important; /* Increased map height for mobile view */
+            margin: 24px auto 0;
+          }
+          .hero-image-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+          }
+          .hero-img {
+            object-fit: contain !important;
+            object-position: center !important;
+          }
+          
+          /* NEET Achievers image single frame styling */
+          .impact-section { margin-top: 30px; margin-bottom: 40px; padding: 0 16px; }
+          .about-achievement-image-wrap {
+            overflow: hidden !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            border-radius: 16px !important;
+            padding: 0 !important;
+            background: transparent !important;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08) !important;
           }
           .about-achievement-image-wrap img {
+            min-width: 100% !important;
+            max-width: 100% !important;
             width: 100% !important;
-            min-width: auto !important;
             height: auto !important;
-            border-radius: 12px !important;
+            border-radius: 16px !important;
+            display: block !important;
+            object-fit: contain !important;
           }
 
-          /* Our Story layout for mobile */
+          /* Our Story layout for mobile - Only image, quote card removed */
+          .story-section { gap: 32px; margin-bottom: 60px; }
+          .story-content { text-align: center; }
+          .story-text p { font-size: 0.95rem; line-height: 1.65; margin-bottom: 14px; text-align: left; }
+          .story-image-container { width: 100%; position: relative; margin-top: 10px; }
           .story-img-wrapper {
-            height: 300px;
-            border-radius: 16px 40px 16px 40px;
+            position: relative;
+            height: 260px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
           }
           .story-quote-card {
-            position: relative;
-            bottom: auto;
-            right: auto;
-            margin: -40px 20px 0 20px;
-            padding: 24px;
-            z-index: 10;
-          }
-          .quote-text {
-            font-size: 1.1rem;
+            display: none !important; /* Removed quote card for mobile view */
           }
 
           /* Philosophy and Mentorship cards adjustments */
+          .philosophy-section { margin-bottom: 60px; }
           .philosophy-card {
             padding: 24px 20px;
             min-height: auto;
@@ -1036,13 +1069,19 @@ export default function AboutPage() {
             transform-origin: bottom right;
           }
 
-          .whiteboard-inner-board { padding: 24px 16px; outline: 10px solid #d9e6f7; }
-          .whiteboard-title { font-size: 1.6rem; }
-          .title-laurel { width: 35px; height: 14px; }
-          .rank-huge-number { font-size: 4.2rem; }
-          .pinned-paper-card { transform: none !important; }
-          .infra-grid-4 { grid-template-columns: 1fr; }
+          .infra-section { margin-bottom: 60px; }
+          .infra-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          .infra-img-box { height: 140px; }
+          .infra-info-box { padding: 12px; gap: 10px; }
+          .infra-box-icon { width: 32px; height: 32px; font-size: 14px; }
+          .infra-box-text { font-size: 0.78rem; }
           .footer-dots { display: none; }
+        }
+        @media (max-width: 480px) {
+          .hero-title { font-size: 1.85rem; }
+          .hero-image-wrapper { height: 280px !important; }
+          .infra-grid-4 { grid-template-columns: 1fr; }
+          .story-img-wrapper { height: 220px; }
         }
       `}</style>
     </main>

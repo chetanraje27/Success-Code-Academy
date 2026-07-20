@@ -16,6 +16,25 @@ import {
   FaChevronRight, FaChevronLeft
 } from "react-icons/fa6";
 
+function BannerImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority
+        unoptimized
+        className="banner-img"
+        style={{ objectFit: "fill", opacity: loaded ? 1 : 0, transition: "opacity 0.3s ease" }}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  );
+}
+
 export default function HomeClient() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
@@ -45,11 +64,8 @@ export default function HomeClient() {
     });
   };
 
-  const [announcements, setAnnouncements] = useState<any[]>([{ text: "Welcome to Success Code Academy!" }]);
-  const [slides, setSlides] = useState<any[]>([
-    { image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" },
-    { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
-  ]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [slides, setSlides] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -59,30 +75,19 @@ export default function HomeClient() {
           fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/notifications`),
           fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
         ]);
-        
+
         const notifData = await notifRes.json();
         const bannerData = await bannerRes.json();
- 
-        const nextAnnouncements = notifData.status === 'success' 
-          ? (notifData.data || []).filter((item: any) => item?.text) 
+
+        const nextAnnouncements = notifData.status === 'success'
+          ? (notifData.data || []).filter((item: any) => item?.text)
           : [];
         const homeBanners = bannerData.status === 'success'
           ? (bannerData.data || []).filter((b: any) => b?.type === 'HOME' && b?.image)
           : [];
- 
-        const nextSlides = homeBanners.length > 0 
-          ? [{ image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" }, ...homeBanners]
-          : [
-              { image: "/images/ShravaniKudaleHero.png", alt: "NEET Achievements" },
-              { image: "/images/banners/HeroPoster1.png", alt: "SCA Banner" }
-            ];
 
-        if (nextAnnouncements.length > 0) {
-          setAnnouncements(nextAnnouncements);
-        }
-        if (nextSlides.length > 0) {
-          setSlides(nextSlides);
-        }
+        setAnnouncements(nextAnnouncements);
+        setSlides(homeBanners);
       } catch (err) {
         console.error("Failed to load content:", err);
       } finally {
@@ -115,7 +120,21 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 1: FLOATING NOTIFICATION BAR
           ══════════════════════════════════════════ */}
-      {announcements.length > 0 && (
+      {isLoading ? (
+        <div className="notif-bar-wrap">
+          <div className="notif-bar">
+            <div className="notif-inner">
+              <div className="notif-left">
+                <span className="notif-icon">📢</span>
+                <span className="notif-label">Latest Updates</span>
+              </div>
+              <div className="notif-ticker">
+                <div className="skeleton-pulse" style={{ width: "60%", height: "16px", borderRadius: "4px", backgroundColor: "rgba(255,255,255,0.15)" }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : announcements.length > 0 ? (
         <div className="notif-bar-wrap">
           <div className="notif-bar">
             <div className="notif-inner">
@@ -144,62 +163,62 @@ export default function HomeClient() {
             </div>
           </div>
         </div>
+      ) : (
+        <div className="notif-bar-wrap">
+          <div className="notif-bar">
+            <div className="notif-inner" style={{ justifyContent: "center" }}>
+              <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem", fontWeight: 600 }}>No latest updates at this time.</span>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ══════════════════════════════════════════
           SECTION 2: HERO POSTER BANNER SLIDER
           ══════════════════════════════════════════ */}
-      {slides.length > 0 && (
-        <section className="hero-slider-section">
-          <div
-            className="hero-banner-wrap"
-            onMouseEnter={() => setIsSliderHovered(true)}
-            onMouseLeave={() => setIsSliderHovered(false)}
-          >
-            <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
-              <FaChevronLeft />
-            </button>
-            <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
-              <FaChevronRight />
-            </button>
+      <section className="hero-slider-section">
+        <div
+          className="hero-banner-wrap"
+          onMouseEnter={() => setIsSliderHovered(true)}
+          onMouseLeave={() => setIsSliderHovered(false)}
+        >
+          {isLoading ? (
+            <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
+          ) : slides.length > 0 ? (
+            <>
+              <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
+                <FaChevronLeft />
+              </button>
+              <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
+                <FaChevronRight />
+              </button>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                className="banner-slide"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}
-                initial={{
-                  opacity: 0,
-                  scale: 1.03
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.98
-                }}
-                transition={{
-                  duration: 0.55,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
-              >
-                <Image
-                  src={slides[currentSlide].image}
-                  alt={slides[currentSlide].alt || slides[currentSlide].altText || "SCA Banner"}
-                  fill
-                  priority
-                  unoptimized
-                  className="banner-img"
-                  style={{ objectFit: "fill" }}
-                />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  className="banner-slide"
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}
+                  initial={{ opacity: 0, scale: 1.03 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <BannerImage
+                    src={slides[currentSlide].image}
+                    alt={slides[currentSlide].alt || slides[currentSlide].altText || "SCA Banner"}
+                  />
+                  <div className="banner-overlay" />
+                </motion.div>
+              </AnimatePresence>
+            </>
+          ) : (
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f8fbff", color: "#64748b", fontWeight: 600 }}>
+              No banners available
+            </div>
+          )}
+        </div>
 
-                <div className="banner-overlay" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
+        {!isLoading && slides.length > 0 && (
           <div className="banner-dots">
             {slides.map((_, idx) => (
               <button
@@ -210,8 +229,8 @@ export default function HomeClient() {
               />
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       {/* ══════════════════════════════════════════
           SECTION 3: EXPLORE COURSES
@@ -252,9 +271,14 @@ export default function HomeClient() {
           ══════════════════════════════════════════ */}
       <FAQAccordion />
 
-
-
       <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        .skeleton-pulse {
+          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
         .home-container {
           background-color: var(--bg-base);
           background-image: 

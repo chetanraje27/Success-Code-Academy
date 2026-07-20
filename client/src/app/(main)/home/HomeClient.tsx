@@ -297,12 +297,13 @@ export default function HomeClient() {
           display: flex;
           align-items: center;
           height: 42px;
-          background: #0b1329; /* Premium deep dark background */
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+          border-bottom: 1px solid rgba(64, 181, 193, 0.3);
           border-radius: 0;
           padding: 0 24px;
           width: 100%;
           box-sizing: border-box;
+          box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
         }
         .notif-inner {
           display: flex;
@@ -325,11 +326,12 @@ export default function HomeClient() {
           font-weight: 800;
           letter-spacing: 0.07em;
           text-transform: uppercase;
-          color: var(--accent-primary);
+          color: #ffffff;
           white-space: nowrap;
-          background: rgba(64, 181, 193, 0.12);
+          background: linear-gradient(90deg, #40b5c1 0%, #2563eb 100%);
           padding: 4px 10px;
           border-radius: 99px;
+          box-shadow: 0 2px 6px rgba(64, 181, 193, 0.25);
         }
         .notif-ticker {
           flex: 1;

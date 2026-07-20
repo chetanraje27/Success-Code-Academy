@@ -135,15 +135,14 @@ export default function AdmissionsClient() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="poster-img-container">
-              <Image
-                src="/images/banners/ScholorshipHero.png"
-                alt="NEET Admissions & Scholarship Test Hero Banner"
-                width={800}
-                height={500}
-                className="admissions-poster-img"
-                priority
-                unoptimized
-              />
+              <picture className="admissions-poster-picture">
+                <source media="(max-width: 768px)" srcSet="/images/banners/ScholorshipHeroMobile.png" />
+                <img
+                  src="/images/banners/ScholorshipHero.png"
+                  alt="NEET Admissions & Scholarship Test Hero Banner"
+                  className="admissions-poster-img"
+                />
+              </picture>
             </div>
           </motion.div>
         </div>
@@ -878,6 +877,38 @@ export default function AdmissionsClient() {
           }
         }
 
+        .poster-img-container {
+          position: relative;
+          width: 100%;
+          display: block;
+        }
+        .admissions-poster-picture {
+          width: 100%;
+          display: block;
+        }
+        :global(.admissions-poster-img) {
+          width: 100% !important;
+          height: auto !important;
+          display: block !important;
+        }
+
+        /* ─── Responsive Styles ─── */
+        @media (max-width: 992px) {
+          .scholarship-grid-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin: 40px auto 60px;
+            padding: 32px 24px;
+            border-radius: 20px;
+          }
+          .scholarship-left-details {
+            border-right: none;
+            padding-right: 0;
+            border-bottom: 1.5px solid #edf2f9;
+            padding-bottom: 32px;
+          }
+        }
+
         @media (max-width: 768px) {
           .admissions-page-container {
             padding-top: 72px !important;
@@ -885,9 +916,23 @@ export default function AdmissionsClient() {
           .admissions-hero-banner {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
+            width: 100% !important;
           }
           .admissions-poster-wrapper {
             border-radius: 0 !important;
+            width: 100% !important;
+          }
+          .poster-img-container {
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+          }
+          :global(.admissions-poster-img) {
+            width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
+            display: block !important;
           }
           .registration-form-card {
             padding: 0;

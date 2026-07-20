@@ -14,27 +14,27 @@ const faqData: FAQItem[] = [
   {
     id: 1,
     question: "What courses are offered at Success Code Academy?",
-    answer: "We offer comprehensive classroom preparation courses for NEET (Repeaters, 2-Year, 1-Year), JEE (Main & Advanced), and Foundation Batches for Class 9 & 10 students."
+    answer: "We offer specialized offline classroom programs for NEET UG preparation, including NEET 11th & 12th Two-Year Integrated Course, NEET Repeaters (Dropper Batch), and All India NEET Test Series."
   },
   {
     id: 2,
     question: "Where are the SCA campuses located?",
-    answer: "Our main campuses are located in Latur, Maharashtra, equipped with digital classrooms, separate doubt desks, and a library resource center."
+    answer: "Our main campus is located in Baramati, Maharashtra, equipped with digital classrooms, separate doubt resolution desks, study cabins, and library resource centers."
   },
   {
     id: 3,
-    question: "How do I apply for the SCA-SAT Scholarship Test?",
-    answer: "You can register online through our website's contact form, or visit any of our Latur offices directly. Registration for SCA-SAT is completely free."
+    question: "How do I apply for the Success Code Scholarship Test (SCST)?",
+    answer: "You can register online through our website's Admissions page or visit our Baramati campus directly. Registration for SCST is 100% free and offers up to 100% tuition fee waivers."
   },
   {
     id: 4,
-    question: "Do you offer personal doubt solving desk facilities?",
-    answer: "Yes, we run dedicated doubt resolution desks staffed by subject matter experts immediately after lectures and during self-study hours until late evening."
+    question: "Do you offer personal doubt-solving desk facilities?",
+    answer: "Yes, we run dedicated 1-on-1 doubt resolution desks staffed by experienced subject mentors immediately after lectures and during evening self-study sessions."
   },
   {
     id: 5,
-    question: "How are student results and test performances tracked?",
-    answer: "We conduct weekly OMR simulated NEET tests. Detailed performance booklets, question correction guides, and subject-wise score analytics are shared with both students and parents."
+    question: "How are student test performances and results tracked?",
+    answer: "We conduct regular weekly OMR simulated NEET mock tests under real exam conditions. Detailed error analysis booklets, rank lists, and subject-wise score reports are shared with students and parents."
   }
 ];
 

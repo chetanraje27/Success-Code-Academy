@@ -130,8 +130,8 @@ const videoItems: VideoItem[] = [
     excerpt: "Hear from our top rankers about their daily revision habits, NCERT reading tricks, and how they managed exam-day stress.",
     date: "June 02, 2026",
     duration: "2:21",
-    image: "images/banners/Award_Cere_Cover.png",
-    videoUrl: "videos/Award_Ceremony.mp4"
+    image: "/videos/Cover/Award_Cere_Cover.png",
+    videoUrl: "/videos/Award_Ceremony.mp4"
   },
   {
     id: 4,
@@ -201,16 +201,16 @@ export default function AcademyInsights() {
               </p>
             </div>
             <div className="carousel-controls">
-              <button 
-                onClick={handlePrevBlog} 
+              <button
+                onClick={handlePrevBlog}
                 disabled={blogStartIndex === 0}
                 className="control-btn"
                 aria-label="Previous articles"
               >
                 <FaChevronLeft />
               </button>
-              <button 
-                onClick={handleNextBlog} 
+              <button
+                onClick={handleNextBlog}
                 disabled={blogStartIndex >= blogItems.length - 3}
                 className="control-btn"
                 aria-label="Next articles"
@@ -221,7 +221,7 @@ export default function AcademyInsights() {
           </div>
 
           <div className="blog-slider-container">
-            <div 
+            <div
               className="cards-grid-layout"
               style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / 3 + 6.66px)), 0, 0)` } as React.CSSProperties}
             >
@@ -289,16 +289,16 @@ export default function AcademyInsights() {
               </p>
             </div>
             <div className="carousel-controls">
-              <button 
-                onClick={handlePrevVideo} 
+              <button
+                onClick={handlePrevVideo}
                 disabled={videoStartIndex === 0}
                 className="control-btn"
                 aria-label="Previous videos"
               >
                 <FaChevronLeft />
               </button>
-              <button 
-                onClick={handleNextVideo} 
+              <button
+                onClick={handleNextVideo}
                 disabled={videoStartIndex >= videoItems.length - 4}
                 className="control-btn"
                 aria-label="Next videos"
@@ -310,54 +310,54 @@ export default function AcademyInsights() {
 
           {/* 4-Column Flex Slider for Videos */}
           <div className="blog-slider-container">
-            <div 
+            <div
               className="video-cards-grid-layout"
               style={{ transform: `translate3d(calc(-${videoStartIndex} * (25% + 4px)), 0, 0)` } as React.CSSProperties}
             >
-            {videoItems.map((video) => (
-              <div key={video.id} className="video-card-item-wrapper">
-              <div
-                key={video.id}
-                className="apple-video-card"
-                onClick={() => setActiveVideo(video.videoUrl)}
-              >
-                {/* Full Card Cover Image */}
-                <Image
-                  src={video.image}
-                  alt={video.title}
-                  fill
-                  unoptimized
-                  sizes="400px"
-                  className="apple-card-bg-img"
-                />
+              {videoItems.map((video) => (
+                <div key={video.id} className="video-card-item-wrapper">
+                  <div
+                    key={video.id}
+                    className="apple-video-card"
+                    onClick={() => setActiveVideo(video.videoUrl)}
+                  >
+                    {/* Full Card Cover Image */}
+                    <Image
+                      src={video.image}
+                      alt={video.title}
+                      fill
+                      unoptimized
+                      sizes="400px"
+                      className="apple-card-bg-img"
+                    />
 
-                {/* Top and bottom gradient overlays for text legibility */}
-                <div className="apple-card-gradient-overlay" />
+                    {/* Top and bottom gradient overlays for text legibility */}
+                    <div className="apple-card-gradient-overlay" />
 
-                {/* Content Overlay */}
-                <div className="apple-card-content">
-                  {/* Play Button Icon absolute centered */}
-                  <div className="apple-play-btn-wrap">
-                    <div className="apple-play-pulse"></div>
-                    <div className="apple-play-btn-circle">
-                      <FaPlay className="apple-play-icon" />
-                    </div>
-                  </div>
+                    {/* Content Overlay */}
+                    <div className="apple-card-content">
+                      {/* Play Button Icon absolute centered */}
+                      <div className="apple-play-btn-wrap">
+                        <div className="apple-play-pulse"></div>
+                        <div className="apple-play-btn-circle">
+                          <FaPlay className="apple-play-icon" />
+                        </div>
+                      </div>
 
-                  {/* Bottom Text and Duration row */}
-                  <div className="apple-card-bottom-info">
-                    <div className="apple-card-meta-row">
-                      <span className="apple-card-category">{video.category}</span>
-                      <div className="apple-duration-badge">
-                        <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+                      {/* Bottom Text and Duration row */}
+                      <div className="apple-card-bottom-info">
+                        <div className="apple-card-meta-row">
+                          <span className="apple-card-category">{video.category}</span>
+                          <div className="apple-duration-badge">
+                            <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+                          </div>
+                        </div>
+                        <h3 className="apple-card-title">{video.title}</h3>
                       </div>
                     </div>
-                    <h3 className="apple-card-title">{video.title}</h3>
                   </div>
                 </div>
-              </div>
-              </div>
-            ))}
+              ))}
             </div>
           </div>
         </div>

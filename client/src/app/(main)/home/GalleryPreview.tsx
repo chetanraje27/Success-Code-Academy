@@ -23,7 +23,7 @@ const galleryData: GalleryItem[] = [
   },
   {
     id: 2,
-    image: "/images/banners/contact_hero.png",
+    image: "/images/ui/contact_hero.png",
     title: "SCA Classroom Environment",
     tag: "Campus Life",
     size: "medium"
@@ -82,7 +82,7 @@ export default function GalleryPreview() {
               className={`gallery-card ${item.size}`}
             >
               <img src={item.image} alt={item.title} className="gallery-img" />
-              
+
               {/* Hover overlay details */}
               <div className="gallery-overlay">
                 <span className="card-tag">{item.tag}</span>

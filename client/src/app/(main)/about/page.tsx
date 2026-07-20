@@ -53,7 +53,7 @@ export default function AboutPage() {
           <div className="hero-image-wrapper">
             <div className="hero-image-inner">
               <Image
-                src="/images/map.png"
+                src="/images/about/map.png"
                 alt="Impact Map"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -71,7 +71,7 @@ export default function AboutPage() {
       <section className="impact-section container">
         <div className="about-achievement-image-wrap" style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '0 auto', maxWidth: '1000px' }}>
           <img
-            src="/images/About1.png"
+            src="/images/about/About1.png"
             alt="NEET Achievements Dashboard"
             style={{ width: '100%', height: 'auto', borderRadius: '24px', boxShadow: '0 12px 35px rgba(15, 23, 42, 0.12)', display: 'block' }}
           />

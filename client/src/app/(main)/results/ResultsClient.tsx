@@ -350,7 +350,7 @@ export default function ResultsClient() {
             >
               <div className="toppers-banner-wrap-2026" style={{ maxWidth: "700px", margin: "0 auto", borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
                 <img
-                  src="/images/NeetUG2026AchiversShravani.png"
+                  src="/images/results/heroes/NeetUG2026AchiversShravani.png"
                   alt="NEET UG 2026 Achievers"
                   style={{ width: "100%", height: "auto", display: "block" }}
                 />

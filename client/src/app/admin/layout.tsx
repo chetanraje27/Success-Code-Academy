@@ -72,7 +72,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
-          <Image src="/images/logo1.png" alt="Logo" width={45} height={45} className="admin-logo" />
+          <Image src="/images/ui/logo1.png" alt="Logo" width={45} height={45} className="admin-logo" />
           {isSidebarOpen && <h2>Admin Portal</h2>}
         </div>
 

@@ -136,7 +136,7 @@ export default function AdmissionsClient() {
           >
             <div className="poster-img-container">
               <Image
-                src="/images/ScholorshipHero.png"
+                src="/images/banners/ScholorshipHero.png"
                 alt="NEET Admissions & Scholarship Test Hero Banner"
                 width={800}
                 height={500}

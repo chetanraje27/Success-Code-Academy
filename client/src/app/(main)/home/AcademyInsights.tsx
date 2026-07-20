@@ -46,7 +46,7 @@ const blogItems: BlogItem[] = [
     date: "18 JUL 2026",
     author: "TOI DESK",
     readTime: "4 min read",
-    image: "/images/Shravani2.png",
+    image: "/images/results/heroes/Shravani2.png",
     slug: "shravani-kudale-toi-feature",
     externalUrl: "https://timesofindia.indiatimes.com/life-style/parenting/moments/stayed-away-from-phone-and-social-media-for-a-year-highest-ranked-female-candidate-shravani-kudale-shares-what-got-her-air-5-in-neet/articleshow/132477313.cms"
   },
@@ -59,7 +59,7 @@ const blogItems: BlogItem[] = [
     date: "17 JUL 2026",
     author: "SAKAL DESK",
     readTime: "3 min read",
-    image: "/images/siddhi_sakal.png",
+    image: "/images/press/siddhi_sakal.png",
     slug: "siddhi-badhe-sakal-feature",
     externalUrl: "https://www.esakal.com/pune/neet-exam-result-baramati-siddhi-badhe-tops-state-among-girls-with-neet-score-of-665-all-india-rank-26-success-motivation-pjp78"
   },
@@ -72,7 +72,7 @@ const blogItems: BlogItem[] = [
     date: "17 JUL 2026",
     author: "HT DESK",
     readTime: "5 min read",
-    image: "/images/Hindutan1.png",
+    image: "/images/press/Hindutan1.png",
     slug: "shravani-kudale-ht-feature",
     externalUrl: "https://www.hindustantimes.com/education/exam-results/stayed-away-from-mobile-phones-says-maharashtra-neet-topper-shravani-kudale-101784295153769.html"
   },
@@ -110,7 +110,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Take a virtual tour of our state-of-the-art digital classrooms, advanced study cabins, and library resource center.",
     date: "June 15, 2026",
     duration: "4:02",
-    image: "/images/infra.png",
+    image: "/images/about/infra.png",
     videoUrl: "/videos/SCA_Campus_Tour.mp4"
   },
   {
@@ -120,7 +120,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Siddhi shares her study schedule, organic chemistry notes, and biology charts that led her to secure a seat at AIIMS Delhi.",
     date: "May 12, 2026",
     duration: "0:58",
-    image: "/images/HoneSiddhi.png",
+    image: "/images/results/heroes/HoneSiddhi.png",
     videoUrl: "/videos/Siddhi_Journey_Video.mp4"
   },
   {
@@ -130,7 +130,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Hear from our top rankers about their daily revision habits, NCERT reading tricks, and how they managed exam-day stress.",
     date: "June 02, 2026",
     duration: "2:21",
-    image: "images/Award_Cere_Cover.png",
+    image: "images/banners/Award_Cere_Cover.png",
     videoUrl: "videos/Award_Ceremony.mp4"
   },
   {
@@ -140,7 +140,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Her formula flashcard strategy, mock test timing practices, and advice for fellow repeaters.",
     date: "June 08, 2026",
     duration: "7:45",
-    image: "/images/HomeSamruddhi.png",
+    image: "/images/results/heroes/HomeSamruddhi.png",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
@@ -160,7 +160,7 @@ const videoItems: VideoItem[] = [
     excerpt: "An inspiring talk by our founder on staying focused and motivated during tough times.",
     date: "August 01, 2026",
     duration: "5:30",
-    image: "/images/upcoming_batches_hero.png",
+    image: "/images/banners/upcoming_batches_hero.png",
     videoUrl: "/videos/SCA_Campus_Tour.mp4"
   }
 ];

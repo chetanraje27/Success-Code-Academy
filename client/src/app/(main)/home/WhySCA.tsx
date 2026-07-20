@@ -261,7 +261,7 @@ export default function WhySCA() {
             <div className="hexagon-inner">
               <div className="logo-icon-wrap" style={{ width: '220px', height: '110px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
                 <img
-                  src="/images/Success Code Academy Logo.png"
+                  src="/images/ui/Success Code Academy Logo.png"
                   alt="Success Code Academy Logo"
                   style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />

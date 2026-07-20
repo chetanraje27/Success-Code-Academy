@@ -16,21 +16,21 @@ interface GalleryItem {
 const galleryData: GalleryItem[] = [
   {
     id: 1,
-    image: "/images/Toppers.jpg",
+    image: "/images/results/Toppers.jpg",
     title: "NEET Rankers Felicitation",
     tag: "Celebrations",
     size: "large"
   },
   {
     id: 2,
-    image: "/images/contact_hero.png",
+    image: "/images/ui/contact_hero.png",
     title: "SCA Classroom Environment",
     tag: "Campus Life",
     size: "medium"
   },
   {
     id: 3,
-    image: "/images/student_banner.png",
+    image: "/images/banners/student_banner.png",
     title: "SCA Front Desk Desk & Reception",
     tag: "Infrastructure",
     size: "small"
@@ -82,7 +82,7 @@ export default function GalleryPreview() {
               className={`gallery-card ${item.size}`}
             >
               <img src={item.image} alt={item.title} className="gallery-img" />
-              
+
               {/* Hover overlay details */}
               <div className="gallery-overlay">
                 <span className="card-tag">{item.tag}</span>

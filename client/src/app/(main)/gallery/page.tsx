@@ -67,7 +67,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Celebrate the outstanding achievements of our NEET aspirants with speeches from parents, instructors, and scholarship distributions.",
     date: "June 02, 2026",
     duration: "2:21",
-    image: "/images/Award_Cere_Cover.png",
+    image: "/images/banners/Award_Cere_Cover.png",
     videoUrl: "/videos/Award_Ceremony.mp4",
     timestamp: 1780358400,
     views: "1.9K"
@@ -91,7 +91,7 @@ const videoItems: VideoItem[] = [
     excerpt: "A comprehensive guide on key topics, error books tracking, and fast problem solving strategies by our senior faculty team.",
     date: "July 01, 2026",
     duration: "15:30",
-    image: "/images/target_batch_banner.jpg",
+    image: "/images/banners/target_batch_banner.jpg",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     timestamp: 1782864000,
     views: "8.4K"
@@ -103,7 +103,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Deep-dive lecture on electrophilic addition and visual mnemonic shortcuts to master high-weightage chapters easily.",
     date: "June 25, 2026",
     duration: "22:15",
-    image: "/images/upcoming_batches_hero.png",
+    image: "/images/banners/upcoming_batches_hero.png",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     timestamp: 1782345600,
     views: "4.1K"
@@ -115,7 +115,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Discover how to retain complex plant taxonomies and biochemical loops using our standard retention methodologies.",
     date: "May 29, 2026",
     duration: "12:40",
-    image: "/images/student_banner.png",
+    image: "/images/banners/student_banner.png",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     timestamp: 1780099200,
     views: "6.7K"

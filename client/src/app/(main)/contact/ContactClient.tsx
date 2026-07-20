@@ -139,7 +139,7 @@ export default function ContactClient() {
           >
             <div className="poster-img-container">
               <Image
-                src="/images/ContactPoster.png"
+                src="/images/banners/ContactPoster.png"
                 alt="Contact Success Code Academy Poster"
                 width={800}
                 height={500}
@@ -171,7 +171,7 @@ export default function ContactClient() {
                 {/* Address Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/location.png" alt="Location" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <img src="/images/ui/location.png" alt="Location" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Address</h4>
@@ -184,7 +184,7 @@ export default function ContactClient() {
                 {/* Phone Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/phone-ringing.png" alt="Phone" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <img src="/images/ui/phone-ringing.png" alt="Phone" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Phone</h4>
@@ -197,7 +197,7 @@ export default function ContactClient() {
                 {/* Email Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/email.png" alt="Email" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <img src="/images/ui/email.png" alt="Email" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Email</h4>
@@ -210,7 +210,7 @@ export default function ContactClient() {
                 {/* Working Hours Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/clock (1).png" alt="Working Hours" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <img src="/images/ui/clock (1).png" alt="Working Hours" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Working Hours</h4>

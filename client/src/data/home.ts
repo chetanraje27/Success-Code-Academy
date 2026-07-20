@@ -41,7 +41,7 @@ export interface NavLink {
 export const siteConfig = {
   name: "Success Code Academy",
   logo: {
-    src: "/images/logo2.png",
+    src: "/images/ui/logo2.png",
     width: 872,
     height: 908,
   },

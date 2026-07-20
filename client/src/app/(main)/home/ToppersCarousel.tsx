@@ -3,18 +3,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
 
-  // Hardcoded default fallback data
-  const defaultToppers = [
-    { id: 0, name: "Shravani Kadale", score: "710/720", rank: "AIR 5", course: "NEET Freshers Batch", year: "NEET UG 2026", image: "/images/results/2026/ShravaniKudale_.png", color: "#1c7ed6" },
-    { id: 1, name: "Siddhi Badhe", score: "665/720", rank: "AIR 26", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SiddhiBadhe.png", color: "#0ca678" },
-    { id: 2, name: "Samruddhi Lokhande", score: "602/720", rank: "AIR 1204", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SamruddhiLokhande.png", color: "#097969" },
-    { id: 3, name: "Aprupa Patil", score: "550/720", rank: "AIR 1610", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/AprupaPatil.png", color: "#1c7ed6" },
-    { id: 4, name: "Darshana Dhoka", score: "550/720", rank: "AIR 1980", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/DarshanaDhoka.png", color: "#7048e8" },
-    { id: 5, name: "Mahesh Bhosale", score: "550/720", rank: "AIR 6000", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/MaheshBhosale.png", color: "#d9480f" },
-  ];
+function TopperImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = React.useState(false);
+  return (
+    <>
+      {!loaded && <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        unoptimized
+        sizes="240px"
+        className="topper-cover-img"
+        style={{ opacity: loaded ? 1 : 0, transition: "opacity 0.3s ease" }}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  );
+}
 
 export default function ToppersCarousel() {
-  const [stars, setStars] = React.useState<any[]>(defaultToppers);
+  const [stars, setStars] = React.useState<any[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/stars`)
@@ -23,18 +33,17 @@ export default function ToppersCarousel() {
         if (data.status === 'success' && data.data && data.data.length > 0) {
           setStars((data.data || []).filter((item: any) => item?.name));
         } else {
-          setStars(defaultToppers);
+          setStars([]);
         }
       })
       .catch(err => {
         console.error("Failed to load stars:", err);
-        setStars(defaultToppers);
+        setStars([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
-
-  if (stars.length === 0) {
-    return null;
-  }
 
   const duplicatedToppers = [...stars, ...stars];
 
@@ -59,119 +68,136 @@ export default function ToppersCarousel() {
 
         {/* Infinite Floating Marquee Ticker */}
         <div className="marquee-container">
-          <div className="marquee-track">
-            <div className="marquee-group">
-              {stars.map((t, idx) => (
-                <div
-                  key={`${t.id}-a-${idx}`}
-                  className="marquee-item"
-                >
-                  <div
-                    className="clean-topper-card"
-                    style={{
-                      "--topper-accent": t.color,
-                    } as React.CSSProperties}
-                  >
-                    {/* Large Photo Area for Maximum Visibility (No Rank Badge Overlay) */}
-                    <div className="topper-photo-wrap">
-                      <Image
-                        src={t.image}
-                        alt={t.name}
-                        fill
-                        unoptimized
-                        sizes="240px"
-                        className="topper-cover-img"
-                      />
-
-                      {/* Floating Year Badge */}
-                      <div className="year-indicator">{t.year}</div>
-                    </div>
-
-                    {/* Details Body */}
-                    <div className="topper-body">
-                      <div>
-                        <h3 className="topper-name-text">{t.name}</h3>
-                        <span className="topper-batch-text">{t.course}</span>
-                      </div>
-
-                      <div className="score-box">
-                        {/* Rank Row displayed above the NEET score */}
-                        <div className="rank-row">
-                          <span className="rank-label-text">Rank</span>
-                          <span className="rank-value-text">
-                            <FaStar className="star-icon" /> {t.rank}
-                          </span>
-                        </div>
-
-                        <div className="score-row">
-                          <span className="score-label-text">NEET Score</span>
-                          <span className="score-value-text">{t.score}</span>
+          {isLoading ? (
+            <div className="marquee-track" style={{ animationPlayState: 'paused' }}>
+              <div className="marquee-group">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="marquee-item">
+                    <div className="clean-topper-card skeleton-pulse" style={{ borderColor: 'transparent', boxShadow: 'none' }}>
+                      <div className="topper-photo-wrap" style={{ backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
+                      <div className="topper-body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ height: '14px', width: '70%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
+                        <div style={{ height: '10px', width: '50%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
+                        <div className="score-box" style={{ marginTop: 'auto', gap: '8px', borderTopColor: "rgba(203, 213, 225, 0.2)" }}>
+                          <div style={{ height: '14px', width: '100%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
+                          <div style={{ height: '14px', width: '100%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-
-            <div className="marquee-group" aria-hidden="true">
-              {stars.map((t, idx) => (
-                <div
-                  key={`${t.id}-b-${idx}`}
-                  className="marquee-item"
-                >
+          ) : stars.length > 0 ? (
+            <div className="marquee-track">
+              <div className="marquee-group">
+                {stars.map((t, idx) => (
                   <div
-                    className="clean-topper-card"
-                    style={{
-                      "--topper-accent": t.color,
-                    } as React.CSSProperties}
+                    key={`${t.id}-a-${idx}`}
+                    className="marquee-item"
                   >
-                    {/* Large Photo Area for Maximum Visibility (No Rank Badge Overlay) */}
-                    <div className="topper-photo-wrap">
-                      <Image
-                        src={t.image}
-                        alt={t.name}
-                        fill
-                        unoptimized
-                        sizes="240px"
-                        className="topper-cover-img"
-                      />
-
-                      {/* Floating Year Badge */}
-                      <div className="year-indicator">{t.year}</div>
-                    </div>
-
-                    {/* Details Body */}
-                    <div className="topper-body">
-                      <div>
-                        <h3 className="topper-name-text">{t.name}</h3>
-                        <span className="topper-batch-text">{t.course}</span>
+                    <div
+                      className="clean-topper-card"
+                      style={{
+                        "--topper-accent": t.color,
+                      } as React.CSSProperties}
+                    >
+                      {/* Large Photo Area for Maximum Visibility (No Rank Badge Overlay) */}
+                      <div className="topper-photo-wrap">
+                        <TopperImage src={t.image} alt={t.name} />
+                        {/* Floating Year Badge */}
+                        <div className="year-indicator">{t.year}</div>
                       </div>
 
-                      <div className="score-box">
-                        {/* Rank Row displayed above the NEET score */}
-                        <div className="rank-row">
-                          <span className="rank-label-text">Rank</span>
-                          <span className="rank-value-text">
-                            <FaStar className="star-icon" /> {t.rank}
-                          </span>
+                      {/* Details Body */}
+                      <div className="topper-body">
+                        <div>
+                          <h3 className="topper-name-text">{t.name}</h3>
+                          <span className="topper-batch-text">{t.course}</span>
                         </div>
 
-                        <div className="score-row">
-                          <span className="score-label-text">NEET Score</span>
-                          <span className="score-value-text">{t.score}</span>
+                        <div className="score-box">
+                          {/* Rank Row displayed above the NEET score */}
+                          <div className="rank-row">
+                            <span className="rank-label-text">Rank</span>
+                            <span className="rank-value-text">
+                              <FaStar className="star-icon" /> {t.rank}
+                            </span>
+                          </div>
+
+                          <div className="score-row">
+                            <span className="score-label-text">NEET Score</span>
+                            <span className="score-value-text">{t.score}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              <div className="marquee-group" aria-hidden="true">
+                {stars.map((t, idx) => (
+                  <div
+                    key={`${t.id}-b-${idx}`}
+                    className="marquee-item"
+                  >
+                    <div
+                      className="clean-topper-card"
+                      style={{
+                        "--topper-accent": t.color,
+                      } as React.CSSProperties}
+                    >
+                      {/* Large Photo Area for Maximum Visibility (No Rank Badge Overlay) */}
+                      <div className="topper-photo-wrap">
+                        <TopperImage src={t.image} alt={t.name} />
+                        {/* Floating Year Badge */}
+                        <div className="year-indicator">{t.year}</div>
+                      </div>
+
+                      {/* Details Body */}
+                      <div className="topper-body">
+                        <div>
+                          <h3 className="topper-name-text">{t.name}</h3>
+                          <span className="topper-batch-text">{t.course}</span>
+                        </div>
+
+                        <div className="score-box">
+                          {/* Rank Row displayed above the NEET score */}
+                          <div className="rank-row">
+                            <span className="rank-label-text">Rank</span>
+                            <span className="rank-value-text">
+                              <FaStar className="star-icon" /> {t.rank}
+                            </span>
+                          </div>
+
+                          <div className="score-row">
+                            <span className="score-label-text">NEET Score</span>
+                            <span className="score-value-text">{t.score}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+              Results will be updated soon.
+            </div>
+          )}
         </div>
       </div>
 
       <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        .skeleton-pulse {
+          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
         .toppers-section {
           padding: 40px 0;
           background: var(--bg-surface);

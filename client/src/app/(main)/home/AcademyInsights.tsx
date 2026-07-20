@@ -46,7 +46,7 @@ const blogItems: BlogItem[] = [
     date: "18 JUL 2026",
     author: "TOI DESK",
     readTime: "4 min read",
-    image: "/images/Shravani2.png",
+    image: "/images/results/heroes/Shravani2.png",
     slug: "shravani-kudale-toi-feature",
     externalUrl: "https://timesofindia.indiatimes.com/life-style/parenting/moments/stayed-away-from-phone-and-social-media-for-a-year-highest-ranked-female-candidate-shravani-kudale-shares-what-got-her-air-5-in-neet/articleshow/132477313.cms"
   },
@@ -59,7 +59,7 @@ const blogItems: BlogItem[] = [
     date: "17 JUL 2026",
     author: "SAKAL DESK",
     readTime: "3 min read",
-    image: "/images/siddhi_sakal.png",
+    image: "/images/press/siddhi_sakal.png",
     slug: "siddhi-badhe-sakal-feature",
     externalUrl: "https://www.esakal.com/pune/neet-exam-result-baramati-siddhi-badhe-tops-state-among-girls-with-neet-score-of-665-all-india-rank-26-success-motivation-pjp78"
   },
@@ -72,7 +72,7 @@ const blogItems: BlogItem[] = [
     date: "17 JUL 2026",
     author: "HT DESK",
     readTime: "5 min read",
-    image: "/images/Hindutan1.png",
+    image: "/images/press/Hindutan1.png",
     slug: "shravani-kudale-ht-feature",
     externalUrl: "https://www.hindustantimes.com/education/exam-results/stayed-away-from-mobile-phones-says-maharashtra-neet-topper-shravani-kudale-101784295153769.html"
   },
@@ -110,7 +110,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Take a virtual tour of our state-of-the-art digital classrooms, advanced study cabins, and library resource center.",
     date: "June 15, 2026",
     duration: "4:02",
-    image: "/images/infra.png",
+    image: "/images/about/infra.png",
     videoUrl: "/videos/SCA_Campus_Tour.mp4"
   },
   {
@@ -120,7 +120,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Siddhi shares her study schedule, organic chemistry notes, and biology charts that led her to secure a seat at AIIMS Delhi.",
     date: "May 12, 2026",
     duration: "0:58",
-    image: "/images/HoneSiddhi.png",
+    image: "/images/results/heroes/HoneSiddhi.png",
     videoUrl: "/videos/Siddhi_Journey_Video.mp4"
   },
   {
@@ -130,8 +130,8 @@ const videoItems: VideoItem[] = [
     excerpt: "Hear from our top rankers about their daily revision habits, NCERT reading tricks, and how they managed exam-day stress.",
     date: "June 02, 2026",
     duration: "2:21",
-    image: "images/Award_Cere_Cover.png",
-    videoUrl: "videos/Award_Ceremony.mp4"
+    image: "/videos/Cover/Award_Cere_Cover.png",
+    videoUrl: "/videos/Award_Ceremony.mp4"
   },
   {
     id: 4,
@@ -140,7 +140,7 @@ const videoItems: VideoItem[] = [
     excerpt: "Her formula flashcard strategy, mock test timing practices, and advice for fellow repeaters.",
     date: "June 08, 2026",
     duration: "7:45",
-    image: "/images/HomeSamruddhi.png",
+    image: "/images/results/heroes/HomeSamruddhi.png",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
@@ -160,7 +160,7 @@ const videoItems: VideoItem[] = [
     excerpt: "An inspiring talk by our founder on staying focused and motivated during tough times.",
     date: "August 01, 2026",
     duration: "5:30",
-    image: "/images/upcoming_batches_hero.png",
+    image: "/images/banners/upcoming_batches_hero.png",
     videoUrl: "/videos/SCA_Campus_Tour.mp4"
   }
 ];
@@ -201,16 +201,16 @@ export default function AcademyInsights() {
               </p>
             </div>
             <div className="carousel-controls">
-              <button 
-                onClick={handlePrevBlog} 
+              <button
+                onClick={handlePrevBlog}
                 disabled={blogStartIndex === 0}
                 className="control-btn"
                 aria-label="Previous articles"
               >
                 <FaChevronLeft />
               </button>
-              <button 
-                onClick={handleNextBlog} 
+              <button
+                onClick={handleNextBlog}
                 disabled={blogStartIndex >= blogItems.length - 3}
                 className="control-btn"
                 aria-label="Next articles"
@@ -221,7 +221,7 @@ export default function AcademyInsights() {
           </div>
 
           <div className="blog-slider-container">
-            <div 
+            <div
               className="cards-grid-layout"
               style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / 3 + 6.66px)), 0, 0)` } as React.CSSProperties}
             >
@@ -289,16 +289,16 @@ export default function AcademyInsights() {
               </p>
             </div>
             <div className="carousel-controls">
-              <button 
-                onClick={handlePrevVideo} 
+              <button
+                onClick={handlePrevVideo}
                 disabled={videoStartIndex === 0}
                 className="control-btn"
                 aria-label="Previous videos"
               >
                 <FaChevronLeft />
               </button>
-              <button 
-                onClick={handleNextVideo} 
+              <button
+                onClick={handleNextVideo}
                 disabled={videoStartIndex >= videoItems.length - 4}
                 className="control-btn"
                 aria-label="Next videos"
@@ -310,54 +310,54 @@ export default function AcademyInsights() {
 
           {/* 4-Column Flex Slider for Videos */}
           <div className="blog-slider-container">
-            <div 
+            <div
               className="video-cards-grid-layout"
               style={{ transform: `translate3d(calc(-${videoStartIndex} * (25% + 4px)), 0, 0)` } as React.CSSProperties}
             >
-            {videoItems.map((video) => (
-              <div key={video.id} className="video-card-item-wrapper">
-              <div
-                key={video.id}
-                className="apple-video-card"
-                onClick={() => setActiveVideo(video.videoUrl)}
-              >
-                {/* Full Card Cover Image */}
-                <Image
-                  src={video.image}
-                  alt={video.title}
-                  fill
-                  unoptimized
-                  sizes="400px"
-                  className="apple-card-bg-img"
-                />
+              {videoItems.map((video) => (
+                <div key={video.id} className="video-card-item-wrapper">
+                  <div
+                    key={video.id}
+                    className="apple-video-card"
+                    onClick={() => setActiveVideo(video.videoUrl)}
+                  >
+                    {/* Full Card Cover Image */}
+                    <Image
+                      src={video.image}
+                      alt={video.title}
+                      fill
+                      unoptimized
+                      sizes="400px"
+                      className="apple-card-bg-img"
+                    />
 
-                {/* Top and bottom gradient overlays for text legibility */}
-                <div className="apple-card-gradient-overlay" />
+                    {/* Top and bottom gradient overlays for text legibility */}
+                    <div className="apple-card-gradient-overlay" />
 
-                {/* Content Overlay */}
-                <div className="apple-card-content">
-                  {/* Play Button Icon absolute centered */}
-                  <div className="apple-play-btn-wrap">
-                    <div className="apple-play-pulse"></div>
-                    <div className="apple-play-btn-circle">
-                      <FaPlay className="apple-play-icon" />
-                    </div>
-                  </div>
+                    {/* Content Overlay */}
+                    <div className="apple-card-content">
+                      {/* Play Button Icon absolute centered */}
+                      <div className="apple-play-btn-wrap">
+                        <div className="apple-play-pulse"></div>
+                        <div className="apple-play-btn-circle">
+                          <FaPlay className="apple-play-icon" />
+                        </div>
+                      </div>
 
-                  {/* Bottom Text and Duration row */}
-                  <div className="apple-card-bottom-info">
-                    <div className="apple-card-meta-row">
-                      <span className="apple-card-category">{video.category}</span>
-                      <div className="apple-duration-badge">
-                        <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+                      {/* Bottom Text and Duration row */}
+                      <div className="apple-card-bottom-info">
+                        <div className="apple-card-meta-row">
+                          <span className="apple-card-category">{video.category}</span>
+                          <div className="apple-duration-badge">
+                            <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+                          </div>
+                        </div>
+                        <h3 className="apple-card-title">{video.title}</h3>
                       </div>
                     </div>
-                    <h3 className="apple-card-title">{video.title}</h3>
                   </div>
                 </div>
-              </div>
-              </div>
-            ))}
+              ))}
             </div>
           </div>
         </div>

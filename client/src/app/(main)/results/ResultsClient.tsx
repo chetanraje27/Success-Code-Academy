@@ -91,13 +91,28 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
   );
 }
 
-export default function ResultsClient() {
-  const defaultBanners = useMemo(() => [
-    { image: "/images/Resulltfinal.png", alt: "SCA Results Banner 1" },
-    { image: "/images/TanishkaAdsulResulthero.png", alt: "SCA Results Banner 2" }
-  ], []);
+function BannerImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority
+        unoptimized
+        className="results-banner-img"
+        style={{ objectFit: "contain", opacity: loaded ? 1 : 0, transition: "opacity 0.3s ease" }}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  );
+}
 
-  const [heroSlides, setHeroSlides] = useState<any[]>(defaultBanners);
+export default function ResultsClient() {
+  const [heroSlides, setHeroSlides] = useState<any[]>([]);
+  const [isBannersLoading, setIsBannersLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
@@ -105,20 +120,19 @@ export default function ResultsClient() {
       .then(data => {
         if (data.status === 'success') {
           const resultBanners = (data.data || []).filter((b: any) => b?.type === 'RESULTS' && b?.image);
-          if (resultBanners.length > 0) {
-            setHeroSlides(resultBanners);
-          } else {
-            setHeroSlides(defaultBanners);
-          }
+          setHeroSlides(resultBanners);
         } else {
-          setHeroSlides(defaultBanners);
+          setHeroSlides([]);
         }
       })
       .catch(err => {
         console.error("Failed to fetch result banners", err);
-        setHeroSlides(defaultBanners);
+        setHeroSlides([]);
+      })
+      .finally(() => {
+        setIsBannersLoading(false);
       });
-  }, [defaultBanners]);
+  }, []);
 
   const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const currentHeroSlide = slideTuple[0];
@@ -202,55 +216,60 @@ export default function ResultsClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER (Image-based slider like Home page)
           ══════════════════════════════════════════ */}
-      {heroSlides.length > 0 && (
-        <section className="results-hero-section">
-          <div className="results-banner-wrap">
-            <AnimatePresence initial={false} custom={slideDirection}>
-              <motion.div
-                key={currentHeroSlide}
-                custom={slideDirection}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.25 }
-                }}
-                className="results-banner-slide"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+      <section className="results-hero-section">
+        <div className="results-banner-wrap">
+          {isBannersLoading ? (
+            <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
+          ) : heroSlides.length > 0 ? (
+            <>
+              <AnimatePresence initial={false} custom={slideDirection}>
+                <motion.div
+                  key={currentHeroSlide}
+                  custom={slideDirection}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.25 }
+                  }}
+                  className="results-banner-slide"
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                >
+                  <BannerImage 
+                    src={heroSlides[currentHeroSlide].image} 
+                    alt={heroSlides[currentHeroSlide].alt || "SCA Results Banner"} 
+                  />
+                  <div className="results-banner-overlay" />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation buttons */}
+              <button
+                onClick={handlePrevSlide}
+                className="slider-nav-btn slider-prev-btn"
+                aria-label="Previous banner"
               >
-                <Image
-                  src={heroSlides[currentHeroSlide].image}
-                  alt={heroSlides[currentHeroSlide].alt || "SCA Results Banner"}
-                  fill
-                  priority
-                  unoptimized
-                  className="results-banner-img"
-                  style={{ objectFit: "contain" }}
-                />
-                <div className="results-banner-overlay" />
-              </motion.div>
-            </AnimatePresence>
+                <FaChevronLeft />
+              </button>
+              <button
+                onClick={handleNextSlide}
+                className="slider-nav-btn slider-next-btn"
+                aria-label="Next banner"
+              >
+                <FaChevronRight />
+              </button>
+            </>
+          ) : (
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f8fbff", color: "#64748b", fontWeight: 600 }}>
+              No banners available
+            </div>
+          )}
+        </div>
 
-            {/* Navigation buttons */}
-            <button
-              onClick={handlePrevSlide}
-              className="slider-nav-btn slider-prev-btn"
-              aria-label="Previous banner"
-            >
-              <FaChevronLeft />
-            </button>
-            <button
-              onClick={handleNextSlide}
-              className="slider-nav-btn slider-next-btn"
-              aria-label="Next banner"
-            >
-              <FaChevronRight />
-            </button>
-          </div>
-
-          {/* Pagination Dots */}
+        {/* Pagination Dots */}
+        {!isBannersLoading && heroSlides.length > 0 && (
           <div className="results-banner-dots">
             {heroSlides.map((_, idx) => (
               <button
@@ -261,8 +280,8 @@ export default function ResultsClient() {
               />
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       {/* ══════════════════════════════════════════
           SECTION HEADING
@@ -331,7 +350,7 @@ export default function ResultsClient() {
             >
               <div className="toppers-banner-wrap-2026" style={{ maxWidth: "700px", margin: "0 auto", borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
                 <img
-                  src="/images/NeetUG2026AchiversShravani.png"
+                  src="/images/results/heroes/NeetUG2026AchiversShravani.png"
                   alt="NEET UG 2026 Achievers"
                   style={{ width: "100%", height: "auto", display: "block" }}
                 />
@@ -615,6 +634,13 @@ export default function ResultsClient() {
           STYLES (styled-jsx Native Styling)
           ══════════════════════════════════════════ */}
       <style jsx global>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        .skeleton-pulse {
+          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
         .results-page-container {
           min-height: 100vh;
           background-color: var(--bg-base);

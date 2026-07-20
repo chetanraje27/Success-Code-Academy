@@ -152,3 +152,18 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
+
+/* Ensure all paragraphs, list items, and descriptive texts use the default sans font (Inter) matching the About page */
+p, 
+li, 
+.desc, 
+.description, 
+.hero-desc, 
+.detail-item-text,
+.detail-link,
+.contact-info-subtitle-desc,
+.about-desc,
+.course-desc,
+.admission-desc {
+  font-family: var(--font-sans) !important;
+}

@@ -942,42 +942,48 @@ export default function AcademyInsights() {
 
         @media (max-width: 640px) {
           .insights-outer-section {
-            padding: 40px 0 0 0;
+            padding: 30px 0 0 0;
           }
           .video-section-premium-wrap {
-            padding: 40px 0;
+            padding: 30px 0;
           }
 
-          /* Allow the slider containers to scroll on mobile */
+          .insights-premium-container {
+            padding: 0 20px !important;
+          }
+
+          /* Allow the slider containers to scroll on mobile within container boundary */
           .blog-slider-container {
-            overflow: visible;
+            overflow: hidden;
+            width: 100%;
           }
 
-          /* Articles: horizontal touch-scroll */
+          /* Articles: horizontal touch-scroll with left-side body space */
           .cards-grid-layout {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            gap: 16px;
-            padding: 10px 24px;
-            margin: 0 -24px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory !important;
+            scroll-padding-left: 20px !important;
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+            gap: 16px !important;
+            padding: 10px 20px 16px 20px !important;
+            margin: 0 -20px !important;
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
             transform: none !important;
             justify-content: flex-start !important;
           }
           .cards-grid-layout::-webkit-scrollbar {
-            display: none;
+            display: none !important;
           }
           .card-item-wrapper {
-            flex: 0 0 80%;
-            scroll-snap-align: start;
+            flex: 0 0 82% !important;
+            scroll-snap-align: start !important;
           }
           .blog-cover-card {
-            aspect-ratio: 16 / 12;
+            aspect-ratio: 16 / 12 !important;
           }
           .desktop-title {
             display: none !important;
@@ -988,32 +994,33 @@ export default function AcademyInsights() {
             line-height: 1.25 !important;
           }
 
-          /* Videos: horizontal touch-scroll */
+          /* Videos: horizontal touch-scroll with left-side body space */
           .video-cards-grid-layout {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            gap: 12px;
-            padding: 10px 24px;
-            margin: 0 -24px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory !important;
+            scroll-padding-left: 20px !important;
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+            gap: 14px !important;
+            padding: 10px 20px 16px 20px !important;
+            margin: 0 -20px !important;
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
             transform: none !important;
             justify-content: flex-start !important;
           }
           .video-cards-grid-layout::-webkit-scrollbar {
-            display: none;
+            display: none !important;
           }
           .video-card-item-wrapper {
-            flex: 0 0 72%;
-            scroll-snap-align: start;
+            flex: 0 0 74% !important;
+            scroll-snap-align: start !important;
           }
           .apple-video-card {
-            aspect-ratio: 1.25;
-            width: 100%;
+            aspect-ratio: 1.25 !important;
+            width: 100% !important;
           }
           .apple-card-content {
             padding: 12px !important;
@@ -1038,18 +1045,18 @@ export default function AcademyInsights() {
 
           /* Hide desktop carousel arrow controls on mobile */
           .carousel-controls {
-            display: none;
+            display: none !important;
           }
 
           .apple-play-pulse {
-            animation: ringPulseLight 1.8s infinite linear;
-            opacity: 1;
+            animation: ringPulseLight 1.8s infinite linear !important;
+            opacity: 1 !important;
           }
           .main-heading {
-            font-size: 1.55rem;
+            font-size: 1.55rem !important;
           }
           .subtitle {
-            font-size: 0.9rem;
+            font-size: 0.9rem !important;
           }
         }
       `}</style>

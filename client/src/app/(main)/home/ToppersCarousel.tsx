@@ -22,8 +22,16 @@ function TopperImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+const DEFAULT_STARS = [
+  { id: "1", name: "Mahesh Bhosale", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "-", score: "550/720", image: "https://placehold.co/300x320/e2e8f0/1e293b?text=Mahesh+Bhosale", color: "#0257d0" },
+  { id: "2", name: "Samruddhi Lokhande", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1204", score: "602/720", image: "https://placehold.co/300x320/e2e8f0/1e293b?text=Samruddhi+Lokhande", color: "#0257d0" },
+  { id: "3", name: "Aprupa Patil", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1610", score: "547/720", image: "https://placehold.co/300x320/e2e8f0/1e293b?text=Aprupa+Patil", color: "#0257d0" },
+  { id: "4", name: "Darshana Dhoka", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1980", score: "533/720", image: "https://placehold.co/300x320/e2e8f0/1e293b?text=Darshana+Dhoka", color: "#0257d0" },
+  { id: "5", name: "Piyush Kale", year: "NEET UG 2024", course: "NEET FRESHERS BATCH", rank: "AIR 2840", score: "681/720", image: "https://placehold.co/300x320/e2e8f0/1e293b?text=Piyush+Kale", color: "#0257d0" },
+];
+
 export default function ToppersCarousel() {
-  const [stars, setStars] = React.useState<any[]>([]);
+  const [stars, setStars] = React.useState<any[]>(DEFAULT_STARS);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -33,12 +41,12 @@ export default function ToppersCarousel() {
         if (data.status === 'success' && data.data && data.data.length > 0) {
           setStars((data.data || []).filter((item: any) => item?.name));
         } else {
-          setStars([]);
+          setStars(DEFAULT_STARS);
         }
       })
       .catch(err => {
         console.error("Failed to load stars:", err);
-        setStars([]);
+        setStars(DEFAULT_STARS);
       })
       .finally(() => {
         setIsLoading(false);

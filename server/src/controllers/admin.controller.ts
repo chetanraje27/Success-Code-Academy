@@ -176,6 +176,59 @@ export const deleteStarStudent = asyncHandler(async (req: Request, res: Response
   res.status(204).json({ status: 'success', data: null });
 });
 
+// --- Articles & Blog Posts ---
+export const getArticles = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: [] });
+});
+
+export const createArticle = asyncHandler(async (req: Request, res: Response) => {
+  res.status(201).json({ status: 'success', data: req.body });
+});
+
+export const deleteArticle = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: null });
+});
+
+// --- Video Uploads ---
+export const getVideos = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: [] });
+});
+
+export const createVideo = asyncHandler(async (req: Request, res: Response) => {
+  res.status(201).json({ status: 'success', data: req.body });
+});
+
+export const deleteVideo = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: null });
+});
+
+// --- Courses CMS ---
+export const getCourses = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: [] });
+});
+
+export const createCourse = asyncHandler(async (req: Request, res: Response) => {
+  res.status(201).json({ status: 'success', data: req.body });
+});
+
+// --- Scholarships CMS ---
+export const getScholarships = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: [] });
+});
+
+export const createScholarship = asyncHandler(async (req: Request, res: Response) => {
+  res.status(201).json({ status: 'success', data: req.body });
+});
+
+// --- Results CMS ---
+export const getResults = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json({ status: 'success', data: [] });
+});
+
+export const createResult = asyncHandler(async (req: Request, res: Response) => {
+  res.status(201).json({ status: 'success', data: req.body });
+});
+
 // --- Database Viewer Endpoints ---
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await User.findAll({ order: [['createdAt', 'DESC']] });

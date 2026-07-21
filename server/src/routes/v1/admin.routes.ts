@@ -33,6 +33,28 @@ router.post('/stars', adminController.createStarStudent);
 router.put('/stars/:id', adminController.updateStarStudent);
 router.delete('/stars/:id', adminController.deleteStarStudent);
 
+// Articles & Blog Posts
+router.get('/articles', adminController.getArticles);
+router.post('/articles', adminController.createArticle);
+router.delete('/articles/:id', adminController.deleteArticle);
+
+// Video Uploads
+router.get('/videos', adminController.getVideos);
+router.post('/videos', adminController.createVideo);
+router.delete('/videos/:id', adminController.deleteVideo);
+
+// Courses Management
+router.get('/courses', adminController.getCourses);
+router.post('/courses', adminController.createCourse);
+
+// Scholarships Management
+router.get('/scholarships', adminController.getScholarships);
+router.post('/scholarships', adminController.createScholarship);
+
+// Results Management
+router.get('/results', adminController.getResults);
+router.post('/results', adminController.createResult);
+
 // Database Viewers
 router.get('/database/users', adminController.getUsers);
 router.get('/database/course-forms', adminController.getCourseForms);

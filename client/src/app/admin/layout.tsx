@@ -50,14 +50,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const menuItems = [
-    { name: "Dashboard", path: "/admin" },
-    { name: "Banner Management", path: "/admin/banners" },
-    { name: "Notifications", path: "/admin/notifications" },
-    { name: "Meet Our Stars", path: "/admin/content/stars" },
-    { type: "header", name: "DATABASE" },
-    { name: "Student Accounts", path: "/admin/database/students" },
-    { name: "Course Forms", path: "/admin/database/course-forms" },
-    { name: "Scholarship Forms", path: "/admin/database/scholarship-forms" },
+    { type: "header", name: "OVERVIEW & CMS" },
+    { name: "Dashboard", path: "/admin", icon: <FaChartPie /> },
+    { name: "Home Page", path: "/admin/home", icon: <FaImages /> },
+    { name: "About Page", path: "/admin/about", icon: <FaFileSignature /> },
+    { name: "Courses", path: "/admin/courses", icon: <FaUserGraduate /> },
+    { name: "Scholarships", path: "/admin/scholarships", icon: <FaWpforms /> },
+    { name: "Results", path: "/admin/results", icon: <FaStar /> },
+    { type: "header", name: "DATABASE & LEADS" },
+    { name: "Student Accounts", path: "/admin/database/students", icon: <FaDatabase /> },
+    { name: "Course Forms", path: "/admin/database/course-forms", icon: <FaWpforms /> },
+    { name: "Scholarship Forms", path: "/admin/database/scholarship-forms", icon: <FaFileSignature /> },
   ];
 
   const handleLogout = () => {
@@ -84,7 +87,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             const isActive = pathname === item.path || (item.path !== '/admin' && pathname.startsWith(item.path!));
             return (
-              <Link key={index} href={item.path!} className={`admin-nav-item ${isActive ? 'active' : ''}`}>
+              <Link key={index} href={item.path!} className={`admin-nav-item ${isActive ? 'active' : ''}`} title={!isSidebarOpen ? item.name : undefined}>
+                <span className="admin-nav-icon">{item.icon}</span>
                 {isSidebarOpen && <span className="admin-nav-text">{item.name}</span>}
               </Link>
             );
@@ -113,7 +117,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
         .admin-layout {
           display: flex;
           height: 100vh;
@@ -140,7 +144,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 20px;
+          padding: 16px 20px;
           border-bottom: 1px solid #e2e8f0;
           white-space: nowrap;
           overflow: hidden;
@@ -165,14 +169,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           padding: 16px 12px;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
         }
 
         .nav-header {
           font-size: 0.75rem;
           font-weight: 800;
           color: #94a3b8;
-          margin: 16px 0 8px 12px;
+          margin: 16px 0 6px 12px;
           letter-spacing: 0.08em;
           text-transform: uppercase;
         }
@@ -180,7 +184,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .nav-divider {
           height: 1px;
           background: #e2e8f0;
-          margin: 16px 0;
+          margin: 12px 0;
         }
 
         .admin-nav-item {
@@ -189,32 +193,50 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           align-items: center !important;
           justify-content: flex-start !important;
           gap: 12px !important;
-          padding: 12px 14px !important;
+          padding: 10px 14px !important;
           border-radius: 8px !important;
           color: #475569 !important;
           text-decoration: none !important;
-          transition: all 0.2s !important;
+          transition: all 0.2s ease !important;
           white-space: nowrap !important;
+          font-size: 0.9rem !important;
           font-weight: 500 !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
         }
 
         .admin-nav-item:hover {
-          background: #f8fafc !important;
+          background: #f1f5f9 !important;
           color: #0f172a !important;
         }
         
         .admin-nav-item.active {
           background: #eff6ff !important;
-          color: #2563eb !important;
+          color: #0257d0 !important;
           font-weight: 600 !important;
         }
 
         .admin-nav-icon {
-          font-size: 0.9rem !important;
+          font-size: 1rem !important;
           min-width: 24px !important;
+          width: 24px !important;
+          height: 24px !important;
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
+          flex-shrink: 0 !important;
+        }
+
+        .admin-nav-icon svg {
+          display: inline-block !important;
+          width: 1em !important;
+          height: 1em !important;
+        }
+
+        .admin-nav-text {
+          flex: 1 !important;
+          font-size: 0.9rem !important;
+          line-height: 1.2 !important;
         }
 
         .admin-main {
@@ -242,6 +264,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           color: #475569;
           cursor: pointer;
           padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 6px;
+        }
+
+        .toggle-sidebar-btn:hover {
+          background: #f1f5f9;
         }
 
         .topbar-right {
@@ -253,6 +283,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-greeting {
           font-weight: 500;
           color: #1e293b;
+          font-size: 0.9rem;
         }
 
         .logout-btn {

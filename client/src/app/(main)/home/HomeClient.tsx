@@ -35,6 +35,14 @@ function BannerImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+const DEFAULT_HERO_POSTERS = [
+  { id: "1", title: "NEET Admissions Open 2026-27", image: "/images/banners/HeroPoster1.png", link: "/courses" },
+  { id: "2", title: "NEET Repeater Achievers Batch", image: "/images/banners/HeroPoster2.png", link: "/courses" },
+  { id: "3", title: "Class 11 & 12 Foundation Program", image: "/images/banners/HeroPoster3.png", link: "/courses" },
+  { id: "4", title: "Grand NEET Mock Test Series", image: "/images/banners/HeroPoster4.png", link: "/admissions" },
+  { id: "5", title: "Success Code Scholarship Test 2026", image: "/images/banners/ScholorshipHero.png", link: "/scholarships" },
+];
+
 export default function HomeClient() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
@@ -65,7 +73,7 @@ export default function HomeClient() {
   };
 
   const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [slides, setSlides] = useState<any[]>([]);
+  const [slides, setSlides] = useState<any[]>(DEFAULT_HERO_POSTERS);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -83,13 +91,18 @@ export default function HomeClient() {
           ? (notifData.data || []).filter((item: any) => item?.text)
           : [];
         const homeBanners = bannerData.status === 'success'
-          ? (bannerData.data || []).filter((b: any) => b?.type === 'HOME' && b?.image)
+          ? (bannerData.data || []).filter((b: any) => (b?.type === 'HOME' || b?.type === undefined) && b?.image)
           : [];
 
         setAnnouncements(nextAnnouncements);
-        setSlides(homeBanners);
+        if (homeBanners.length > 0) {
+          setSlides(homeBanners);
+        } else {
+          setSlides(DEFAULT_HERO_POSTERS);
+        }
       } catch (err) {
         console.error("Failed to load content:", err);
+        setSlides(DEFAULT_HERO_POSTERS);
       } finally {
         setIsLoading(false);
       }
@@ -100,7 +113,7 @@ export default function HomeClient() {
   /* ── Slider auto-play ── */
   useEffect(() => {
     if (isSliderHovered || slides.length <= 1) return;
-    const t = setInterval(() => setCurrentSlide(p => (p + 1) % slides.length), 3000);
+    const t = setInterval(() => setCurrentSlide(p => (p + 1) % slides.length), 3500);
     return () => clearInterval(t);
   }, [slides.length, isSliderHovered]);
 
@@ -203,11 +216,16 @@ export default function HomeClient() {
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <BannerImage
-                    src={slides[currentSlide].image}
-                    alt={slides[currentSlide].alt || slides[currentSlide].altText || "SCA Banner"}
-                  />
-                  <div className="banner-overlay" />
+                  <a
+                    href={slides[currentSlide]?.link || slides[currentSlide]?.targetUrl || "/courses"}
+                    style={{ display: "block", width: "100%", height: "100%", cursor: "pointer", position: "relative" }}
+                    title={`Click to view details for ${slides[currentSlide]?.title || 'Poster'}`}
+                  >
+                    <BannerImage
+                      src={slides[currentSlide]?.image}
+                      alt={slides[currentSlide]?.title || slides[currentSlide]?.altText || "SCA Banner"}
+                    />
+                  </a>
                 </motion.div>
               </AnimatePresence>
             </>

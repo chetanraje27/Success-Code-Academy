@@ -10,13 +10,12 @@ import WhySCA from "./WhySCA";
 import AcademyInsights from "./AcademyInsights";
 import ParentsTrustUs from "./ParentsTrustUs";
 
-import ScholarshipTest from "./ScholarshipTest";
 import FAQAccordion from "./FAQAccordion";
 import {
   FaChevronRight, FaChevronLeft
 } from "react-icons/fa6";
 
-function BannerImage({ src, alt }: { src: string; alt: string }) {
+function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   return (
     <>
@@ -25,10 +24,10 @@ function BannerImage({ src, alt }: { src: string; alt: string }) {
         src={src}
         alt={alt}
         fill
-        priority
-        unoptimized
+        priority={priority}
+        sizes="(max-width: 1200px) 100vw, 1200px"
         className="banner-img"
-        style={{ objectFit: "fill", opacity: loaded ? 1 : 0, transition: "opacity 0.3s ease" }}
+        style={{ objectFit: "fill", transition: "opacity 0.3s ease" }}
         onLoad={() => setLoaded(true)}
       />
     </>
@@ -224,6 +223,7 @@ export default function HomeClient() {
                     <BannerImage
                       src={slides[currentSlide]?.image}
                       alt={slides[currentSlide]?.title || slides[currentSlide]?.altText || "SCA Banner"}
+                      priority={currentSlide === 0}
                     />
                   </a>
                 </motion.div>
@@ -274,13 +274,6 @@ export default function HomeClient() {
           SECTION 7: PARENTS TRUST US
           ══════════════════════════════════════════ */}
       <ParentsTrustUs />
-
-
-
-      {/* ══════════════════════════════════════════
-          SECTION 9: SCHOLARSHIP TEST
-          ══════════════════════════════════════════ */}
-      <ScholarshipTest />
 
 
 

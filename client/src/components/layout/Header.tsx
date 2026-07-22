@@ -71,8 +71,7 @@ export default function Header() {
               width={siteConfig.logo.width}
               height={siteConfig.logo.height}
               className="logo-image"
-              preload
-              unoptimized
+              priority
             />
           </Link>
 
@@ -271,7 +270,6 @@ export default function Header() {
               width={65}
               height={68}
               className="logo-image"
-              unoptimized
             />
           </Link>
           <button 

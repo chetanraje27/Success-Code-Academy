@@ -235,7 +235,6 @@ export default function AcademyInsights() {
                           src={blog.image}
                           alt={blog.title}
                           fill
-                          unoptimized
                           sizes="400px"
                           className="blog-bg-img"
                         />
@@ -256,7 +255,6 @@ export default function AcademyInsights() {
                           src={blog.image}
                           alt={blog.title}
                           fill
-                          unoptimized
                           sizes="400px"
                           className="blog-bg-img"
                         />
@@ -326,7 +324,6 @@ export default function AcademyInsights() {
                       src={video.image}
                       alt={video.title}
                       fill
-                      unoptimized
                       sizes="400px"
                       className="apple-card-bg-img"
                     />

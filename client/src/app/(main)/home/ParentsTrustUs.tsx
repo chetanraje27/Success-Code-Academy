@@ -1,139 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { FaStar, FaHeart, FaAward, FaUserGraduate, FaBullseye } from "react-icons/fa6";
+import { FaBullseye, FaHeart, FaUsers, FaAward } from "react-icons/fa6";
+import { FiStar } from "react-icons/fi";
 
-interface StatItem {
-  id: number;
-  icon: React.ReactNode;
-  percentage: number;
-  value: string;
-  label: string;
-  description: string;
-  color: string;
-}
-
-const statsData: StatItem[] = [
-  {
-    id: 1,
-    icon: <FaStar />,
-    percentage: 98,
-    value: "4.9",
-    label: "Google Rating",
-    description: "Based on 350+ reviews from parents & alumni",
-    color: "#3b82f6" // Blue
-  },
-  {
-    id: 2,
-    icon: <FaHeart />,
-    percentage: 98,
-    value: "98%",
-    label: "Parent Satisfaction",
-    description: "Highly rated classroom care and responsiveness",
-    color: "#3b82f6" // Blue
-  },
-  {
-    id: 3,
-    icon: <FaAward />,
-    percentage: 85,
-    value: "8+",
-    label: "Years of Excellence",
-    description: "Consistently delivering premium medical training",
-    color: "#3b82f6" // Blue
-  },
-  {
-    id: 4,
-    icon: <FaUserGraduate />,
-    percentage: 100,
-    value: "1500+",
-    label: "Students Enrolled",
-    description: "Classroom medical aspirants mentored till date",
-    color: "#3b82f6" // Blue
-  },
-  {
-    id: 5,
-    icon: <FaBullseye />,
-    percentage: 93,
-    value: "93%",
-    label: "Selection Rate",
-    description: "Sustained performance in NEET qualifiers annually",
-    color: "#3b82f6" // Blue
-  }
-];
-
-/* ── Custom Infographic: Radial Progress Ring with Glowing Center Icon ── */
-function ProgressRing({ percentage, color, icon }: { percentage: number; color: string; icon: React.ReactNode }) {
-  const radius = 34;
-  const strokeWidth = 4.5;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
-  return (
-    <div className="progress-ring-container" style={{ "--ring-color": color } as React.CSSProperties}>
-      <svg width="84" height="84" viewBox="0 0 84 84" className="progress-ring-svg">
-        {/* Background track circle */}
-        <circle
-          cx="42"
-          cy="42"
-          r={radius}
-          stroke="#f1f5f9"
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-        {/* Animated progress circle */}
-        <circle
-          cx="42"
-          cy="42"
-          r={radius}
-          stroke={color}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          transform="rotate(-90 42 42)"
-          className="progress-ring-circle"
-        />
-      </svg>
-      {/* Centered Glowing Icon */}
-      <div className="progress-center-icon" style={{ color: color, background: color + "0a" }}>
-        {icon}
-      </div>
-      <style jsx>{`
-        .progress-ring-container {
-          position: relative;
-          width: 84px;
-          height: 84px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .progress-ring-svg {
-          width: 84px;
-          height: 84px;
-        }
-        .progress-ring-circle {
-          transition: stroke-dashoffset 1s ease-in-out;
-        }
-        .progress-center-icon {
-          position: absolute;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.25rem;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
-        }
-      `}</style>
-    </div>
-  );
-}
-
-function StatCardCounter({ value, duration = 1500 }: { value: string; duration?: number }) {
+function StatCounter({ value, duration = 1500 }: { value: string; duration?: number }) {
   const [count, setCount] = useState(0);
   const numericPart = parseFloat(value.replace(/[^0-9.]/g, ""));
   const suffix = value.replace(/[0-9.]/g, "");
@@ -152,7 +23,7 @@ function StatCardCounter({ value, duration = 1500 }: { value: string; duration?:
           const totalFrames = 60;
           const frameDuration = duration / totalFrames;
           let frame = 0;
-          
+
           const timer = setInterval(() => {
             frame++;
             const progress = frame / totalFrames;
@@ -179,145 +50,111 @@ function StatCardCounter({ value, duration = 1500 }: { value: string; duration?:
     };
   }, [numericPart, duration, hasAnimated, value]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  return <span ref={ref}>{hasAnimated ? count : 0}{suffix}</span>;
 }
 
 export default function ParentsTrustUs() {
   return (
     <section className="parents-trust-section">
       <div className="container">
+        {/* Section Header */}
         <div className="section-header">
-          <h2 className="section-title">Parents Trust Us, Students Succeed</h2>
+          <h2 className="section-title">Parents trust us, students succeed.</h2>
           <p className="section-subtitle">
             Numbers that speak for our commitment to student care, academic rigor, and mentorship excellence.
           </p>
         </div>
 
-        <div className="stats-grid">
-          {/* Row 1 */}
-          <div className="stats-row-container row-1-container">
-            <div className="stats-track stats-track-right">
-              <div className="stats-group">
-                {statsData.slice(0, 3).map((stat, i) => (
-                  <motion.div
-                    key={`row1-orig-${stat.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.08 }}
-                    className="stat-card-motion"
-                  >
-                    <div 
-                      className="stat-card"
-                      style={{ 
-                        "--accent-color": stat.color, 
-                        "--accent-glow": stat.color + "12" 
-                      } as React.CSSProperties}
-                    >
-                      <div className="stat-infographic-wrapper">
-                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                      </div>
-                      <div className="stat-card-text-wrapper">
-                        <div className="stat-value">
-                          <StatCardCounter value={stat.value} />
-                        </div>
-                        <div className="stat-label">{stat.label}</div>
-                        <div className="stat-desc">{stat.description}</div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+        {/* Structured Grid matching the screenshot */}
+        <div className="trust-grid-wrapper">
+          {/* Top Row: Featured 93% Selection Rate + 4.9 Google Rating */}
+          <div className="trust-row top-row">
+            {/* Card 1: 93% Selection Rate (Featured Light Teal Card) */}
+            <div className="trust-card featured-teal-card">
+              <div className="card-top-head">
+                <div className="card-icon-box teal-icon-box">
+                  <FaBullseye className="card-icon" />
+                </div>
+                <div className="card-number teal-number">
+                  <StatCounter value="93%" />
+                </div>
               </div>
-              <div className="stats-group marquee-duplicate" aria-hidden="true">
-                {statsData.slice(0, 3).map((stat) => (
-                  <div
-                    key={`row1-dup-${stat.id}`}
-                    className="stat-card-motion"
-                  >
-                    <div 
-                      className="stat-card"
-                      style={{ 
-                        "--accent-color": stat.color, 
-                        "--accent-glow": stat.color + "12" 
-                      } as React.CSSProperties}
-                    >
-                      <div className="stat-infographic-wrapper">
-                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                      </div>
-                      <div className="stat-card-text-wrapper">
-                        <div className="stat-value">
-                          <span>{stat.value}</span>
-                        </div>
-                        <div className="stat-label">{stat.label}</div>
-                        <div className="stat-desc">{stat.description}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="card-body">
+                <h3 className="card-title">Selection Rate</h3>
+                <p className="card-desc">Sustained performance in NEET qualifiers annually.</p>
+              </div>
+              {/* Subtle background arc shape */}
+              <div className="arc-shape-wrap" aria-hidden="true">
+                <svg viewBox="0 0 100 100" className="arc-svg">
+                  <path d="M 0 100 A 100 100 0 0 1 100 0" stroke="#b2ece4" strokeWidth="12" fill="none" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Card 2: 4.9 Google Rating */}
+            <div className="trust-card standard-white-card">
+              <div className="card-top-head">
+                <div className="card-icon-box yellow-icon-box">
+                  <FiStar className="card-icon" />
+                </div>
+                <div className="card-number dark-number">
+                  <StatCounter value="4.9" />
+                </div>
+              </div>
+              <div className="card-body">
+                <h3 className="card-title">Google Rating</h3>
+                <p className="card-desc">Based on 350+ reviews from parents & alumni.</p>
               </div>
             </div>
           </div>
 
-          {/* Row 2 */}
-          <div className="stats-row-container row-2-container">
-            <div className="stats-track stats-track-left">
-              <div className="stats-group">
-                {statsData.slice(3, 5).map((stat, i) => (
-                  <motion.div
-                    key={`row2-orig-${stat.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: (i + 3) * 0.08 }}
-                    className="stat-card-motion"
-                  >
-                    <div 
-                      className="stat-card"
-                      style={{ 
-                        "--accent-color": stat.color, 
-                        "--accent-glow": stat.color + "12" 
-                      } as React.CSSProperties}
-                    >
-                      <div className="stat-infographic-wrapper">
-                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                      </div>
-                      <div className="stat-card-text-wrapper">
-                        <div className="stat-value">
-                          <StatCardCounter value={stat.value} />
-                        </div>
-                        <div className="stat-label">{stat.label}</div>
-                        <div className="stat-desc">{stat.description}</div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+          {/* Bottom Row: Satisfaction + Students + Excellence */}
+          <div className="trust-row bottom-row">
+            {/* Card 3: 98% Satisfaction */}
+            <div className="trust-card standard-white-card">
+              <div className="card-top-head">
+                <div className="card-icon-box blue-icon-box">
+                  <FaHeart className="card-icon" />
+                </div>
+                <div className="card-number dark-number">
+                  <StatCounter value="98%" />
+                </div>
               </div>
-              <div className="stats-group marquee-duplicate" aria-hidden="true">
-                {statsData.slice(3, 5).map((stat) => (
-                  <div
-                    key={`row2-dup-${stat.id}`}
-                    className="stat-card-motion"
-                  >
-                    <div 
-                      className="stat-card"
-                      style={{ 
-                        "--accent-color": stat.color, 
-                        "--accent-glow": stat.color + "12" 
-                      } as React.CSSProperties}
-                    >
-                      <div className="stat-infographic-wrapper">
-                        <ProgressRing percentage={stat.percentage} color={stat.color} icon={stat.icon} />
-                      </div>
-                      <div className="stat-card-text-wrapper">
-                        <div className="stat-value">
-                          <span>{stat.value}</span>
-                        </div>
-                        <div className="stat-label">{stat.label}</div>
-                        <div className="stat-desc">{stat.description}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="card-body">
+                <h3 className="card-title">Satisfaction</h3>
+                <p className="card-desc">Highly rated classroom care and responsiveness.</p>
+              </div>
+            </div>
+
+            {/* Card 4: 1500+ Students */}
+            <div className="trust-card standard-white-card">
+              <div className="card-top-head">
+                <div className="card-icon-box purple-icon-box">
+                  <FaUsers className="card-icon" />
+                </div>
+                <div className="card-number dark-number">
+                  <StatCounter value="1500+" />
+                </div>
+              </div>
+              <div className="card-body">
+                <h3 className="card-title">Students</h3>
+                <p className="card-desc">Classroom medical aspirants mentored till date.</p>
+              </div>
+            </div>
+
+            {/* Card 5: 8+ Excellence */}
+            <div className="trust-card standard-white-card">
+              <div className="card-top-head">
+                <div className="card-icon-box lightblue-icon-box">
+                  <FaAward className="card-icon" />
+                </div>
+                <div className="card-number dark-number">
+                  <StatCounter value="8+" />
+                </div>
+              </div>
+              <div className="card-body">
+                <h3 className="card-title">Excellence</h3>
+                <p className="card-desc">Consistently delivering premium medical training.</p>
               </div>
             </div>
           </div>
@@ -326,280 +163,287 @@ export default function ParentsTrustUs() {
 
       <style jsx>{`
         .parents-trust-section {
-          padding: 35px 0;
-          background: var(--bg-surface);
+          padding: 50px 0;
+          background: #ffffff;
           width: 100%;
           position: relative;
         }
+
         .container {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1140px;
           margin: 0 auto;
           padding: 0 24px;
           box-sizing: border-box;
-          position: relative;
-          z-index: 2;
         }
+
+        /* Section Header */
         .section-header {
-          text-align: center;
-          margin-bottom: 32px;
+          text-align: left;
+          margin-bottom: 36px;
         }
-        .small-label {
-          display: inline-block;
-          font-size: 0.72rem;
-          font-weight: 800;
-          color: var(--accent-secondary);
-          letter-spacing: 0.06em;
-          margin-bottom: 8px;
-          background: rgba(30, 64, 175, 0.08);
-          padding: 3px 10px;
-          border-radius: 99px;
-          text-transform: uppercase;
-        }
+
         .section-title {
-          font-size: 1.95rem;
+          font-size: 2.2rem;
           font-weight: 800;
-          color: var(--text-primary);
-          letter-spacing: -0.02em;
-          margin: 0 0 8px;
+          color: #1e293b;
+          letter-spacing: -0.025em;
+          margin: 0 0 10px 0;
+          line-height: 1.2;
         }
+
         .section-subtitle {
-          font-size: 0.92rem;
-          color: var(--text-secondary);
-          max-width: 640px;
-          margin: 0 auto;
+          font-size: 1.05rem;
+          color: #64748b;
+          margin: 0;
           line-height: 1.5;
+          font-weight: 400;
         }
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 16px;
-          width: 100%;
-        }
-        .stats-row {
-          display: contents;
-        }
-        .stat-card-motion {
-          width: 100%;
-          height: 100%;
-        }
-        .stat-card {
-          background: var(--bg-surface);
-          border: 1px solid var(--bg-surface-border);
-          border-radius: 20px;
-          padding: 20px 16px;
-          text-align: center;
-          box-shadow: 
-            0 1px 3px rgba(0,0,0,0.01),
-            0 10px 20px -8px rgba(15, 23, 42, 0.03);
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+        /* Trust Grid Structure */
+        .trust-grid-wrapper {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          height: 100%;
+          gap: 20px;
+          width: 100%;
+        }
+
+        .trust-row {
+          display: grid;
+          gap: 20px;
+          width: 100%;
+        }
+
+        .top-row {
+          grid-template-columns: 1.5fr 1fr;
+        }
+
+        .bottom-row {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Card Common Styles */
+        .trust-card {
+          border-radius: 18px;
+          padding: 28px 24px;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-height: 170px;
           box-sizing: border-box;
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
-        .stat-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 
-            0 10px 15px -3px rgba(30, 64, 175, 0.01),
-            0 24px 48px -4px var(--accent-glow),
-            0 12px 18px -4px rgba(30, 64, 175, 0.01);
-          border-color: var(--accent-color);
+
+        .trust-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
         }
-        .stat-infographic-wrapper {
+
+        /* Featured Light Teal Card */
+        .featured-teal-card {
+          background-color: #eef8f6;
+          border: 1.5px solid #d1ebe6;
+        }
+
+        /* Standard White Card */
+        .standard-white-card {
+          background-color: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+        }
+
+        /* Card Top Head (Icon + Number) */
+        .card-top-head {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 18px;
+        }
+
+        /* Icon Boxes */
+        .card-icon-box {
+          width: 44px;
+          height: 44px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 12px;
-          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          flex-shrink: 0;
         }
-        .stat-card:hover .stat-infographic-wrapper {
-          transform: scale(1.05);
+
+        .card-icon {
+          font-size: 1.35rem;
         }
-        .stat-card:hover :global(.progress-center-icon) {
-          transform: scale(1.1) rotate(6deg);
-          box-shadow: 0 4px 10px var(--accent-glow);
+
+        .teal-icon-box {
+          background-color: #d7f2ef;
+          color: #0e8585;
         }
-        .stat-value {
-          font-size: 1.7rem;
-          font-weight: 900;
-          color: var(--text-primary);
-          line-height: 1.1;
-          margin-bottom: 6px;
-          letter-spacing: -0.03em;
+
+        .yellow-icon-box {
+          background-color: #fef3c7;
+          color: #d97706;
         }
-        .stat-label {
-          font-size: 0.92rem;
+
+        .blue-icon-box {
+          background-color: #e0f2fe;
+          color: #0284c7;
+        }
+
+        .purple-icon-box {
+          background-color: #e0e7ff;
+          color: #4338ca;
+        }
+
+        .lightblue-icon-box {
+          background-color: #e0f2fe;
+          color: #0284c7;
+        }
+
+        /* Numbers */
+        .card-number {
+          font-size: 2.2rem;
           font-weight: 800;
-          color: var(--text-primary);
-          margin-bottom: 4px;
+          line-height: 1;
+          letter-spacing: -0.02em;
         }
-        .stat-desc {
-          font-size: 0.74rem;
-          color: var(--text-muted);
-          line-height: 1.4;
+
+        .teal-number {
+          color: #0b6969;
         }
-        .stat-card-text-wrapper {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+
+        .dark-number {
+          color: #1e293b;
+        }
+
+        /* Card Body */
+        .card-body {
+          position: relative;
+          z-index: 2;
+        }
+
+        .card-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 0 0 6px 0;
+          line-height: 1.3;
+        }
+
+        .card-desc {
+          font-size: 0.88rem;
+          color: #64748b;
+          line-height: 1.45;
+          margin: 0;
+          font-weight: 400;
+        }
+
+        /* Background Arc Shape on Featured Card */
+        .arc-shape-wrap {
+          position: absolute;
+          bottom: -20px;
+          right: -20px;
+          width: 140px;
+          height: 140px;
+          pointer-events: none;
+          z-index: 1;
+          opacity: 0.75;
+        }
+
+        .arc-svg {
           width: 100%;
+          height: 100%;
         }
-        .marquee-duplicate {
-          display: none !important;
-        }
-        .stats-row-container {
-          display: contents;
-        }
-        .stats-track {
-          display: contents;
-        }
-        .stats-group {
-          display: contents;
-        }
-        @media (max-width: 1200px) {
-          .stats-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-          }
-        }
-        @media (max-width: 768px) {
-          .parents-trust-section { padding: 30px 0; }
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px 12px;
-          }
+
+        /* Responsive Styles for iPad, Tablet, and Mobile */
+        @media (max-width: 992px) {
           .section-title {
-            font-size: 1.6rem;
+            font-size: 1.95rem;
           }
           .section-subtitle {
-            font-size: 0.88rem;
+            font-size: 0.98rem;
           }
-          .stat-card {
-            flex-direction: column !important;
-            align-items: center !important;
-            padding: 16px 12px !important;
-            border-radius: 16px !important;
-            height: auto !important;
+          .top-row {
+            grid-template-columns: 1.3fr 1fr;
           }
-          .stat-infographic-wrapper {
-            margin-bottom: 8px !important;
-            transform: scale(0.8) !important;
-            margin-top: -6px !important;
-            margin-bottom: -4px !important;
-            flex-shrink: 0;
+          .bottom-row {
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
           }
-          .stat-card-text-wrapper {
-            align-items: center !important;
-            text-align: center !important;
-            width: 100%;
+          .trust-card {
+            padding: 24px 20px;
+            min-height: 155px;
           }
-          .stat-value {
-            font-size: 1.4rem !important;
-            margin-bottom: 2px !important;
-          }
-          .stat-label {
-            font-size: 0.82rem !important;
-            margin-bottom: 0 !important;
-          }
-          .stat-desc {
-            display: none !important;
+          .card-number {
+            font-size: 1.95rem;
           }
         }
-        @media (max-width: 640px) {
-          .stats-grid {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 12px !important;
-            width: 100% !important;
-            overflow: hidden !important;
-          }
-          .stats-row-container {
-            display: block !important;
-            width: 100% !important;
-            overflow: hidden !important;
-          }
-          .stats-track {
-            display: flex !important;
-            width: max-content !important;
-            will-change: transform;
-          }
-          .stats-group {
-            display: flex !important;
-            gap: 12px !important;
-            padding-right: 12px !important;
-            flex-shrink: 0 !important;
-          }
-          .marquee-duplicate {
-            display: flex !important;
-          }
-          
-          .stats-track-left {
-            animation: marquee-left 18s linear infinite !important;
-          }
-          .stats-track-right {
-            animation: marquee-right 18s linear infinite !important;
-          }
-          
-          .stats-track:hover {
-            animation-play-state: paused !important;
-          }
 
-          .stat-card-motion {
-            flex: 0 0 140px !important;
-            width: 140px !important;
-            height: 155px !important;
+        @media (max-width: 768px) {
+          .parents-trust-section {
+            padding: 36px 0;
           }
-          .stat-card {
-            flex-direction: column !important;
-            align-items: center !important;
-            padding: 12px 8px !important;
-            border-radius: 16px !important;
-            height: 100% !important;
-            justify-content: center !important;
-            box-sizing: border-box !important;
+          .container {
+            padding: 0 16px;
           }
-          .stat-infographic-wrapper {
-            margin-bottom: 0 !important;
-            transform: scale(0.6) !important;
-            margin-top: -12px !important;
-            margin-bottom: -10px !important;
-            flex-shrink: 0 !important;
+          .section-header {
+            margin-bottom: 24px;
           }
-          .stat-card-text-wrapper {
-            align-items: center !important;
-            text-align: center !important;
-            width: 100% !important;
+          .section-title {
+            font-size: 1.65rem;
+            margin-bottom: 8px;
           }
-          .stat-value {
-            font-size: 1.15rem !important;
-            margin-bottom: 2px !important;
+          .section-subtitle {
+            font-size: 0.9rem;
           }
-          .stat-label {
-            font-size: 0.72rem !important;
-            margin-bottom: 0 !important;
-            line-height: 1.2 !important;
+          .trust-grid-wrapper {
+            gap: 14px;
           }
-          .stat-desc {
-            display: none !important;
+          .top-row {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+          .bottom-row {
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+          }
+          .trust-card {
+            padding: 20px 18px;
+            border-radius: 16px;
+            min-height: 140px;
+          }
+          .card-top-head {
+            margin-bottom: 12px;
+            gap: 12px;
+          }
+          .card-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+          }
+          .card-icon {
+            font-size: 1.15rem;
+          }
+          .card-number {
+            font-size: 1.75rem;
+          }
+          .card-title {
+            font-size: 1rem;
+            margin-bottom: 4px;
+          }
+          .card-desc {
+            font-size: 0.82rem;
           }
         }
-        
-        @keyframes marquee-left {
-          0% {
-            transform: translate3d(0, 0, 0);
+
+        @media (max-width: 480px) {
+          .bottom-row {
+            grid-template-columns: 1fr;
           }
-          100% {
-            transform: translate3d(-50%, 0, 0);
-          }
-        }
-        @keyframes marquee-right {
-          0% {
-            transform: translate3d(-50%, 0, 0);
-          }
-          100% {
-            transform: translate3d(0, 0, 0);
+          .trust-card {
+            padding: 18px 16px;
           }
         }
       `}</style>

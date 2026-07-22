@@ -400,67 +400,92 @@ export default function ParentsTrustUs() {
         }
         @media (max-width: 640px) {
           .parents-trust-section {
-            padding: 36px 0;
+            padding: 30px 0;
           }
           .container {
-            padding: 0 16px;
+            padding: 0 12px;
           }
           .section-header {
-            margin-bottom: 24px;
+            margin-bottom: 18px;
           }
           .section-title {
-            font-size: 1.65rem;
-            margin-bottom: 8px;
+            font-size: 1.45rem;
+            margin-bottom: 6px;
           }
           .section-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.82rem;
           }
           .trust-grid-wrapper {
-            gap: 14px;
+            gap: 8px;
           }
           .top-row {
-            grid-template-columns: 1fr;
-            gap: 14px;
+            grid-template-columns: 1.35fr 1fr !important;
+            gap: 8px !important;
           }
           .bottom-row {
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 8px !important;
           }
           .trust-card {
-            padding: 20px 18px;
-            border-radius: 16px;
-            min-height: 140px;
+            padding: 12px 10px;
+            border-radius: 12px;
+            min-height: 110px;
           }
           .card-top-head {
-            margin-bottom: 12px;
-            gap: 12px;
+            margin-bottom: 8px;
+            gap: 6px;
           }
           .card-icon-box {
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
           }
           .card-icon {
-            font-size: 1.15rem;
+            font-size: 0.9rem;
           }
           .card-number {
-            font-size: 1.75rem;
+            font-size: 1.35rem;
           }
           .card-title {
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            line-height: 1.2;
           }
           .card-desc {
-            font-size: 0.82rem;
+            font-size: 0.65rem;
+            line-height: 1.25;
           }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 400px) {
+          .container {
+            padding: 0 8px;
+          }
+          .trust-grid-wrapper {
+            gap: 6px;
+          }
+          .top-row {
+            grid-template-columns: 1.3fr 1fr !important;
+            gap: 6px !important;
+          }
           .bottom-row {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 6px !important;
           }
           .trust-card {
-            padding: 18px 16px;
+            padding: 10px 8px;
+            min-height: 100px;
+          }
+          .card-number {
+            font-size: 1.2rem;
+          }
+          .card-title {
+            font-size: 0.72rem;
+          }
+          .card-desc {
+            font-size: 0.58rem;
+            line-height: 1.2;
           }
         }
       `}</style>

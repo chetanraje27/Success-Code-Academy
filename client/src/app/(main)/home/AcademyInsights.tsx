@@ -1042,12 +1042,15 @@ export default function AcademyInsights() {
             display: none !important;
           }
           .video-card-item-wrapper {
-            flex: 0 0 74% !important;
+            flex: 0 0 54% !important;
+            max-width: 210px !important;
             scroll-snap-align: start !important;
           }
           .apple-video-card {
-            aspect-ratio: 1.25 !important;
+            aspect-ratio: 0.85 !important;
+            height: 220px !important;
             width: 100% !important;
+            border-radius: 14px !important;
           }
           .apple-card-content {
             padding: 12px !important;

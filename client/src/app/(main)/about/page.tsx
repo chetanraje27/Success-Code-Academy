@@ -956,99 +956,125 @@ export default function AboutPage() {
         }
 
         /* =========================================
-           RESPONSIVE STYLES
+           RESPONSIVE STYLES FOR TABLET & MOBILE
            ========================================= */
-        /* iPad & Tablet View (641px to 1024px) */
-        @media (max-width: 1024px) and (min-width: 641px) {
-          .hero-section { padding-top: 120px; padding-bottom: 40px; }
-          .hero-container { flex-direction: column; align-items: center; }
-          .hero-content { flex: 0 0 100%; max-width: 760px; width: 100%; text-align: center; }
-          .eyebrow { justify-content: center; }
-          .hero-title { font-size: 2.7rem; line-height: 1.2; margin-bottom: 18px; font-weight: 800; }
-          .hero-desc { font-size: 1.05rem; line-height: 1.65; margin: 0 auto 28px; max-width: 680px; text-align: center; }
-          .hero-pills { display: flex; flex-direction: row; justify-content: center; gap: 20px; width: 100%; }
-          .hero-pill { flex: 0 0 auto; min-width: 200px; padding: 12px 24px; border-radius: 40px; box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06); }
-          .hero-image-wrapper { 
-            position: relative;
-            flex: none;
-            width: 100%;
-            max-width: 820px;
-            height: 500px !important;
-            margin: 28px auto 0;
-          }
-          .hero-image-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-          }
-          .hero-img {
-            object-fit: contain !important;
-            object-position: center !important;
-          }
 
-          /* Impact Section / Achievements Banner */
-          .impact-section { margin-top: 36px; margin-bottom: 50px; }
-          .about-achievement-image-wrap {
+        @media (max-width: 1024px) {
+          .desktop-br { display: none !important; }
+          .hero-section {
+            padding-top: 100px !important;
+            padding-bottom: 24px !important;
+          }
+          .hero-container {
+            flex-direction: column !important;
+            align-items: center !important;
             width: 100% !important;
-            max-width: 880px !important;
+          }
+          .hero-content {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            text-align: center !important;
+          }
+          .eyebrow {
+            justify-content: center !important;
+          }
+          .hero-title {
+            font-size: 2.1rem !important;
+            line-height: 1.22 !important;
+            margin-bottom: 14px !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.02em !important;
+          }
+          .hero-desc {
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            color: #475569 !important;
+            margin: 0 auto 20px !important;
+            max-width: 100% !important;
+            text-align: center !important;
+          }
+          .hero-pills {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+            width: 100% !important;
+            max-width: 440px !important;
             margin: 0 auto !important;
           }
-
-          /* Our Story Image & Quote Card */
-          .story-section { flex-direction: column; gap: 40px; margin-bottom: 80px; }
-          .story-content { text-align: center; }
-          .story-text p { font-size: 1.05rem; text-align: left; }
-          .story-image-container { width: 100%; position: relative; margin-top: 10px; }
-          .story-img-wrapper {
-            height: 380px !important;
-            width: 100%;
-            border-radius: 24px !important;
+          .hero-pill {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            padding: 10px 12px !important;
+            gap: 10px !important;
+            border-radius: 16px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04) !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
-          .story-quote-card {
-            position: absolute;
-            bottom: -20px;
-            right: 20px;
-            padding: 24px 28px;
-            border-radius: 16px;
+          .pill-icon {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 13px !important;
+            flex-shrink: 0 !important;
+          }
+          .pill-text {
+            text-align: left !important;
+          }
+          .pill-label {
+            font-size: 0.62rem !important;
+            font-weight: 700 !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            display: block !important;
+            line-height: 1.1 !important;
+          }
+          .pill-value {
+            font-size: 1.05rem !important;
+            font-weight: 800 !important;
+            color: #2563eb !important;
+            line-height: 1.1 !important;
+          }
+          .pill-sub {
+            font-size: 0.6rem !important;
+            color: #94a3b8 !important;
             display: block !important;
           }
-
-          .philosophy-grid { grid-template-columns: 1fr; }
-          .infra-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-          .infra-img-box { height: 160px; }
-        }
-
-        /* Mobile View (<= 640px) */
-        @media (max-width: 640px) {
-          .desktop-br { display: none; }
-          .hero-section { padding-top: 100px; padding-bottom: 30px; }
-          .hero-content { text-align: center; }
-          .hero-title { font-size: 2.0rem; line-height: 1.25; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
-          .hero-desc { font-size: 0.95rem; line-height: 1.6; color: #475569; margin: 0 auto 24px; max-width: 100%; text-align: center; }
-          .hero-pills { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
-          .hero-pill { flex: 1 1 130px; max-width: 220px; padding: 10px 14px 10px 10px; gap: 10px; border-radius: 30px; }
-          .hero-image-wrapper { 
-            position: relative;
-            flex: none;
-            width: 100%;
-            max-width: 540px;
-            height: 340px !important;
-            margin: 24px auto 0;
+          .hero-image-wrapper {
+            position: relative !important;
+            flex: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 280px !important;
+            margin: 18px auto 0 !important;
+            background: #ffffff !important;
+            border-radius: 20px !important;
+            padding: 8px !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05) !important;
+            box-sizing: border-box !important;
           }
           .hero-image-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            position: relative !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 14px !important;
+            overflow: hidden !important;
           }
           .hero-img {
             object-fit: contain !important;
             object-position: center !important;
           }
-          
-          .impact-section { margin-top: 30px; margin-bottom: 40px; padding: 0 16px; }
+
+          /* Achievements Banner */
+          .impact-section {
+            margin-top: 20px !important;
+            margin-bottom: 28px !important;
+            padding: 0 16px !important;
+          }
           .about-achievement-image-wrap {
             overflow: hidden !important;
             width: 100% !important;
@@ -1060,8 +1086,6 @@ export default function AboutPage() {
             box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08) !important;
           }
           .about-achievement-image-wrap img {
-            min-width: 100% !important;
-            max-width: 100% !important;
             width: 100% !important;
             height: auto !important;
             border-radius: 16px !important;
@@ -1069,62 +1093,157 @@ export default function AboutPage() {
             object-fit: contain !important;
           }
 
-          .story-section { gap: 32px; margin-bottom: 60px; }
-          .story-content { text-align: center; }
-          .story-text p { font-size: 0.95rem; line-height: 1.65; margin-bottom: 14px; text-align: left; }
-          .story-image-container { width: 100%; position: relative; margin-top: 10px; }
+          /* Our Story Section */
+          .story-section {
+            flex-direction: column !important;
+            gap: 20px !important;
+            margin-bottom: 28px !important;
+            width: 100% !important;
+          }
+          .story-content {
+            width: 100% !important;
+            text-align: left !important;
+          }
+          .story-content .eyebrow {
+            justify-content: flex-start !important;
+          }
+          .story-text p {
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            margin-bottom: 12px !important;
+            text-align: left !important;
+          }
+          .story-image-container {
+            width: 100% !important;
+            position: relative !important;
+            margin-top: 0 !important;
+          }
           .story-img-wrapper {
-            position: relative;
-            height: 260px;
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            position: relative !important;
+            height: 240px !important;
+            width: 100% !important;
+            border-radius: 18px !important;
+            overflow: hidden !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
           }
           .story-quote-card {
             display: none !important;
           }
 
-          .philosophy-section { margin-bottom: 60px; }
+          /* Philosophy & Mentorship Section */
+          .philosophy-section {
+            margin-bottom: 28px !important;
+            width: 100% !important;
+          }
+          .philosophy-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            width: 100% !important;
+          }
           .philosophy-card {
-            padding: 24px 20px;
-            min-height: auto;
-            border-radius: 16px;
+            padding: 22px 18px !important;
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: visible !important;
+            border-radius: 18px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
           .phil-header {
-            margin-bottom: 24px;
+            margin-bottom: 18px !important;
+            gap: 12px !important;
+          }
+          .phil-icon {
+            width: 44px !important;
+            height: 44px !important;
+            font-size: 18px !important;
           }
           .phil-title {
-            font-size: 1.35rem;
+            font-size: 1.3rem !important;
+          }
+          .phil-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
           }
           .phil-list li {
-            font-size: 0.92rem;
-            margin-bottom: 12px;
-            gap: 10px;
+            font-size: 0.92rem !important;
+            margin-bottom: 0 !important;
+            gap: 10px !important;
+            line-height: 1.5 !important;
+            align-items: flex-start !important;
           }
           .check-icon {
-            font-size: 16px;
-            margin-top: 3px;
+            font-size: 16px !important;
+            margin-top: 3px !important;
           }
           .phil-illustration {
-            opacity: 0.3;
-            transform: scale(0.75);
-            transform-origin: bottom right;
+            opacity: 0.2 !important;
+            transform: scale(0.6) !important;
+            transform-origin: bottom right !important;
           }
 
-          .infra-section { margin-bottom: 60px; }
-          .infra-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-          .infra-img-box { height: 140px; }
-          .infra-info-box { padding: 12px; gap: 10px; }
-          .infra-box-icon { width: 32px; height: 32px; font-size: 14px; }
-          .infra-box-text { font-size: 0.78rem; }
-          .footer-dots { display: none; }
+          /* Infrastructure Section */
+          .infra-section {
+            margin-bottom: 36px !important;
+            width: 100% !important;
+          }
+          .infra-section .eyebrow {
+            justify-content: flex-start !important;
+          }
+          .infra-grid-4 {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+            width: 100% !important;
+            margin-bottom: 30px !important;
+          }
+          .infra-img-box {
+            height: 170px !important;
+          }
+          .infra-info-box {
+            padding: 14px 16px !important;
+            gap: 12px !important;
+          }
+          .infra-box-icon {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 16px !important;
+          }
+          .infra-box-text {
+            font-size: 0.85rem !important;
+          }
+          .infra-quote-footer {
+            gap: 0 !important;
+            margin-top: 10px !important;
+          }
+          .footer-quote {
+            font-size: 1.05rem !important;
+            line-height: 1.5 !important;
+          }
+          .footer-dots {
+            display: none !important;
+          }
         }
+
         @media (max-width: 480px) {
-          .hero-title { font-size: 1.85rem; }
-          .hero-image-wrapper { height: 280px !important; }
-          .infra-grid-4 { grid-template-columns: 1fr; }
-          .story-img-wrapper { height: 220px; }
+          .hero-title {
+            font-size: 1.8rem !important;
+          }
+          .hero-pills {
+            gap: 8px !important;
+          }
+          .hero-pill {
+            padding: 7px 10px !important;
+            gap: 8px !important;
+          }
+          .hero-image-wrapper {
+            aspect-ratio: 16 / 12 !important;
+            min-height: 220px !important;
+          }
+          .story-img-wrapper {
+            height: 200px !important;
+          }
         }
       `}</style>
     </main>

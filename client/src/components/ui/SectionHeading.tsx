@@ -32,9 +32,10 @@ export default function SectionHeading({
         }
 
         .title {
+          font-family: var(--font-heading);
           font-size: clamp(2rem, 4vw, 3rem);
           font-weight: 700;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.025em;
           color: var(--text-primary);
           margin-bottom: var(--spacing-2);
         }
@@ -44,10 +45,11 @@ export default function SectionHeading({
         }
 
         .subtitle {
+          font-family: var(--font-sans);
           margin-top: var(--spacing-4);
           font-size: 1.125rem;
           color: var(--text-secondary);
-          line-height: 1.6;
+          line-height: 1.65;
         }
 
         .is-light .subtitle {

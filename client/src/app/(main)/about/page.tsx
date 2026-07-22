@@ -24,7 +24,7 @@ export default function AboutPage() {
               <div className="eyebrow-line"></div>
             </div>
             <h1 className="hero-title">
-              Empowering Dreams.<br className="desktop-br" />Building Future Doctors.
+              Empowering Dreams. <br className="desktop-br" />Building Future Doctors.
             </h1>
             <p className="hero-desc">
               Since 2018, Success Code Academy has been shaping the future of NEET aspirants from Baramati and beyond with quality education, mentorship, and unwavering support.
@@ -958,26 +958,72 @@ export default function AboutPage() {
         /* =========================================
            RESPONSIVE STYLES
            ========================================= */
-        @media (max-width: 1024px) {
-          .hero-container { flex-direction: column; }
-          .hero-content { flex: 0 0 100%; max-width: 100%; width: 100%; text-align: center; }
+        /* iPad & Tablet View (641px to 1024px) */
+        @media (max-width: 1024px) and (min-width: 641px) {
+          .hero-section { padding-top: 120px; padding-bottom: 40px; }
+          .hero-container { flex-direction: column; align-items: center; }
+          .hero-content { flex: 0 0 100%; max-width: 760px; width: 100%; text-align: center; }
           .eyebrow { justify-content: center; }
-          .hero-pills { justify-content: center; }
-          .hero-image-wrapper { position: relative; flex: none; right: 0; width: 100%; height: 400px; margin-top: 40px; }
-          .whiteboard-row { flex-direction: column; align-items: center; gap: 32px; }
-          .rank-paper-card { max-width: 320px; margin: 0 auto; }
-          .stat-paper-card { max-width: 320px; margin: 0 auto; width: 100%; }
-          .story-section { flex-direction: column; gap: 40px; }
-          .story-quote-card { bottom: 20px; right: 20px; }
+          .hero-title { font-size: 2.7rem; line-height: 1.2; margin-bottom: 18px; font-weight: 800; }
+          .hero-desc { font-size: 1.05rem; line-height: 1.65; margin: 0 auto 28px; max-width: 680px; text-align: center; }
+          .hero-pills { display: flex; flex-direction: row; justify-content: center; gap: 20px; width: 100%; }
+          .hero-pill { flex: 0 0 auto; min-width: 200px; padding: 12px 24px; border-radius: 40px; box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06); }
+          .hero-image-wrapper { 
+            position: relative;
+            flex: none;
+            width: 100%;
+            max-width: 820px;
+            height: 500px !important;
+            margin: 28px auto 0;
+          }
+          .hero-image-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+          }
+          .hero-img {
+            object-fit: contain !important;
+            object-position: center !important;
+          }
+
+          /* Impact Section / Achievements Banner */
+          .impact-section { margin-top: 36px; margin-bottom: 50px; }
+          .about-achievement-image-wrap {
+            width: 100% !important;
+            max-width: 880px !important;
+            margin: 0 auto !important;
+          }
+
+          /* Our Story Image & Quote Card */
+          .story-section { flex-direction: column; gap: 40px; margin-bottom: 80px; }
+          .story-content { text-align: center; }
+          .story-text p { font-size: 1.05rem; text-align: left; }
+          .story-image-container { width: 100%; position: relative; margin-top: 10px; }
+          .story-img-wrapper {
+            height: 380px !important;
+            width: 100%;
+            border-radius: 24px !important;
+          }
+          .story-quote-card {
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            padding: 24px 28px;
+            border-radius: 16px;
+            display: block !important;
+          }
+
           .philosophy-grid { grid-template-columns: 1fr; }
-          .infra-grid-4 { grid-template-columns: repeat(2, 1fr); }
+          .infra-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .infra-img-box { height: 160px; }
         }
 
-        @media (max-width: 768px) {
+        /* Mobile View (<= 640px) */
+        @media (max-width: 640px) {
           .desktop-br { display: none; }
           .hero-section { padding-top: 100px; padding-bottom: 30px; }
           .hero-content { text-align: center; }
-          .hero-title { font-size: 2.1rem; line-height: 1.25; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
+          .hero-title { font-size: 2.0rem; line-height: 1.25; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em; }
           .hero-desc { font-size: 0.95rem; line-height: 1.6; color: #475569; margin: 0 auto 24px; max-width: 100%; text-align: center; }
           .hero-pills { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
           .hero-pill { flex: 1 1 130px; max-width: 220px; padding: 10px 14px 10px 10px; gap: 10px; border-radius: 30px; }
@@ -986,7 +1032,7 @@ export default function AboutPage() {
             flex: none;
             width: 100%;
             max-width: 540px;
-            height: 340px !important; /* Increased map height for mobile view */
+            height: 340px !important;
             margin: 24px auto 0;
           }
           .hero-image-inner {
@@ -1002,7 +1048,6 @@ export default function AboutPage() {
             object-position: center !important;
           }
           
-          /* NEET Achievers image single frame styling */
           .impact-section { margin-top: 30px; margin-bottom: 40px; padding: 0 16px; }
           .about-achievement-image-wrap {
             overflow: hidden !important;
@@ -1024,7 +1069,6 @@ export default function AboutPage() {
             object-fit: contain !important;
           }
 
-          /* Our Story layout for mobile - Only image, quote card removed */
           .story-section { gap: 32px; margin-bottom: 60px; }
           .story-content { text-align: center; }
           .story-text p { font-size: 0.95rem; line-height: 1.65; margin-bottom: 14px; text-align: left; }
@@ -1038,10 +1082,9 @@ export default function AboutPage() {
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
           }
           .story-quote-card {
-            display: none !important; /* Removed quote card for mobile view */
+            display: none !important;
           }
 
-          /* Philosophy and Mentorship cards adjustments */
           .philosophy-section { margin-bottom: 60px; }
           .philosophy-card {
             padding: 24px 20px;

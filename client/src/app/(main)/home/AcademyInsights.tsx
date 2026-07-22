@@ -169,13 +169,35 @@ export default function AcademyInsights() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [blogStartIndex, setBlogStartIndex] = useState(0);
   const [videoStartIndex, setVideoStartIndex] = useState(0);
+  const [itemsPerView, setItemsPerView] = useState(3);
+  const [videoItemsPerView, setVideoItemsPerView] = useState(4);
+
+  React.useEffect(() => {
+    const updateView = () => {
+      if (typeof window !== "undefined") {
+        if (window.innerWidth <= 640) {
+          setItemsPerView(1);
+          setVideoItemsPerView(1);
+        } else if (window.innerWidth <= 1024) {
+          setItemsPerView(2);
+          setVideoItemsPerView(3);
+        } else {
+          setItemsPerView(3);
+          setVideoItemsPerView(4);
+        }
+      }
+    };
+    updateView();
+    window.addEventListener("resize", updateView);
+    return () => window.removeEventListener("resize", updateView);
+  }, []);
 
   const handlePrevBlog = () => {
     setBlogStartIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleNextBlog = () => {
-    setBlogStartIndex((prev) => Math.min(blogItems.length - 3, prev + 1));
+    setBlogStartIndex((prev) => Math.min(blogItems.length - itemsPerView, prev + 1));
   };
 
   const handlePrevVideo = () => {
@@ -183,7 +205,7 @@ export default function AcademyInsights() {
   };
 
   const handleNextVideo = () => {
-    setVideoStartIndex((prev) => Math.min(videoItems.length - 4, prev + 1));
+    setVideoStartIndex((prev) => Math.min(videoItems.length - videoItemsPerView, prev + 1));
   };
 
 
@@ -211,7 +233,7 @@ export default function AcademyInsights() {
               </button>
               <button
                 onClick={handleNextBlog}
-                disabled={blogStartIndex >= blogItems.length - 3}
+                disabled={blogStartIndex >= blogItems.length - itemsPerView}
                 className="control-btn"
                 aria-label="Next articles"
               >
@@ -223,7 +245,7 @@ export default function AcademyInsights() {
           <div className="blog-slider-container">
             <div
               className="cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / 3 + 6.66px)), 0, 0)` } as React.CSSProperties}
+              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / ${itemsPerView} + ${itemsPerView > 1 ? 10 : 0}px)), 0, 0)` } as React.CSSProperties}
             >
               {blogItems.map((blog) => (
                 <div key={blog.id} className="card-item-wrapper">
@@ -297,7 +319,7 @@ export default function AcademyInsights() {
               </button>
               <button
                 onClick={handleNextVideo}
-                disabled={videoStartIndex >= videoItems.length - 4}
+                disabled={videoStartIndex >= videoItems.length - videoItemsPerView}
                 className="control-btn"
                 aria-label="Next videos"
               >
@@ -306,11 +328,11 @@ export default function AcademyInsights() {
             </div>
           </div>
 
-          {/* 4-Column Flex Slider for Videos */}
+          {/* 4-Column / Responsive Slider for Videos */}
           <div className="blog-slider-container">
             <div
               className="video-cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${videoStartIndex} * (25% + 4px)), 0, 0)` } as React.CSSProperties}
+              style={{ transform: `translate3d(calc(-${videoStartIndex} * (100% / ${videoItemsPerView} + ${videoItemsPerView > 1 ? 10 : 0}px)), 0, 0)` } as React.CSSProperties}
             >
               {videoItems.map((video) => (
                 <div key={video.id} className="video-card-item-wrapper">
@@ -658,12 +680,13 @@ export default function AcademyInsights() {
 
         .apple-video-card {
           position: relative;
-          aspect-ratio: 0.87;
+          aspect-ratio: 0.8;
+          min-height: 310px;
           width: 100%;
-          border-radius: 20px;
+          border-radius: 18px;
           overflow: hidden;
           cursor: pointer;
-          box-shadow: 10px 0px 2px rgba(15, 23, 42, 0.06);
+          box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           background: #0f172a;
           box-sizing: border-box;
@@ -672,8 +695,8 @@ export default function AcademyInsights() {
         .apple-video-card:hover {
           transform: translateY(-4px);
           box-shadow: 
-            0 16px 36px rgba(15, 23, 42, 0.12),
-            0 6px 16px -8px rgba(15, 23, 42, 0.05);
+            0 18px 36px rgba(15, 23, 42, 0.14),
+            0 6px 16px -8px rgba(15, 23, 42, 0.08);
         }
 
         .apple-card-bg-img {
@@ -690,17 +713,18 @@ export default function AcademyInsights() {
         .apple-card-gradient-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.8) 100%);
+          background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.9) 100%);
           z-index: 2;
           transition: background 0.3s;
         }
 
         .apple-video-card:hover .apple-card-gradient-overlay {
-          background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0.85) 100%);
+          background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.95) 100%);
         }
 
         .apple-card-content {
-          position: relative;
+          position: absolute;
+          inset: 0;
           z-index: 3;
           width: 100%;
           height: 100%;
@@ -709,6 +733,7 @@ export default function AcademyInsights() {
           flex-direction: column;
           justify-content: flex-end;
           box-sizing: border-box;
+          overflow: hidden;
         }
 
         .apple-card-bottom-info {
@@ -717,6 +742,7 @@ export default function AcademyInsights() {
           align-items: flex-start;
           text-align: left;
           width: 100%;
+          box-sizing: border-box;
         }
 
         .apple-card-meta-row {
@@ -724,24 +750,29 @@ export default function AcademyInsights() {
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
 
         .apple-card-category {
           font-size: 0.65rem;
           font-weight: 750;
-          color: rgba(255, 255, 255, 0.75);
+          color: rgba(255, 255, 255, 0.85);
           text-transform: uppercase;
           letter-spacing: 0.08em;
         }
 
         .apple-card-title {
-          font-size: 0.95rem;
+          font-size: 0.88rem;
           font-weight: 800;
           color: #ffffff;
-          line-height: 1.35;
+          line-height: 1.3;
           margin: 0;
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .apple-play-btn-wrap {
@@ -897,26 +928,25 @@ export default function AcademyInsights() {
           background: #000000;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 1024px) {
           .cards-grid-layout {
-            transform: none !important;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 24px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
           }
           .card-item-wrapper {
-            flex: 0 0 calc(50% - 12px);
+            flex: 0 0 calc(50% - 10px);
+          }
+          .video-cards-grid-layout {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+          }
+          .video-card-item-wrapper {
+            flex: 0 0 calc(33.333% - 13.33px);
           }
           .main-heading {
             font-size: 1.85rem;
-          }
-          .apple-grid-layout, .video-cards-grid-layout {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            transform: none !important;
-            flex-wrap: wrap;
-            justify-content: center;
           }
         }
 

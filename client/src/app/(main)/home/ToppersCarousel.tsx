@@ -65,7 +65,7 @@ export default function ToppersCarousel() {
         <div className="toppers-header">
           <div className="header-left">
             <span className="section-label">MEET OUR STARS</span>
-            <h2 className="toppers-title">Hall of Academic Excellence</h2>
+            <h2 className="toppers-title">Meet Our Stars</h2>
             <p className="toppers-subtitle">
               Celebrating the hard work, perseverance, and outstanding NEET scores of our classroom students.
             </p>

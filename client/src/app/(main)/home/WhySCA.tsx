@@ -450,7 +450,7 @@ export default function WhySCA() {
           position: absolute;
           left: 20px;
           top: 0;
-          width: 280px;
+          width: 255px;
           height: 100%;
           display: flex;
           flex-direction: column;
@@ -463,7 +463,7 @@ export default function WhySCA() {
           position: absolute;
           right: 20px;
           top: 0;
-          width: 280px;
+          width: 255px;
           height: 100%;
           display: flex;
           flex-direction: column;
@@ -486,8 +486,8 @@ export default function WhySCA() {
           background: var(--bg-surface);
           border: 1px solid var(--bg-surface-border);
           border-radius: 20px;
-          padding: 16px 20px;
-          min-height: auto;
+          padding: 18px 20px;
+          min-height: 85px;
           box-shadow: 0 8px 24px rgba(149, 157, 165, 0.03);
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           width: 100%;
@@ -674,71 +674,69 @@ export default function WhySCA() {
           100% { transform: scale(1.04); opacity: 1; }
         }
 
-        /* Tablet Layout (4 blocks on top, Center, 4 blocks below) */
-        @media (min-width: 769px) and (max-width: 1100px) {
+        /* iPad & Tablet Layout (Structured 2-column Grid, No Center Logo) */
+        @media (min-width: 641px) and (max-width: 1150px) {
+          .why-sca-section { padding: 40px 0; }
           .ecosystem-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
             height: auto !important;
-            min-height: auto;
-            max-width: 100%;
+            min-height: auto !important;
+            width: 100% !important;
+            max-width: 860px !important;
+            margin: 0 auto !important;
           }
           .left-column, .right-column {
-            display: contents;
+            display: contents !important;
             position: static !important;
             width: auto !important;
             height: auto !important;
           }
-          .left-column > * {
-            order: 1;
-          }
           .ecosystem-center {
-            position: relative !important;
-            left: auto !important;
-            top: auto !important;
-            width: 180px !important;
-            height: 200px !important;
-            grid-column: span 4;
-            justify-self: center;
-            margin: 20px 0;
-            order: 2;
-          }
-          .right-column > * {
-            order: 3;
+            display: none !important; /* Hide logo centerpiece on iPad view */
           }
           .ecosystem-svg-lines {
-            display: none;
+            display: none !important;
+          }
+          .capsule-wrap {
+            width: 100% !important;
           }
           .left-capsule, .right-capsule {
-            padding: 20px;
-            min-height: 120px;
-            border-radius: 20px;
+            padding: 16px 18px !important;
+            min-height: 84px !important;
+            border-radius: 18px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 14px !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03) !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
-          .left-capsule {
-            padding-left: 20px;
+          .left-capsule .capsule-icon-box,
+          .right-capsule .capsule-icon-box {
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            top: auto !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
           }
-          .right-capsule {
-            padding-right: 20px;
-          }
-          .capsule-icon-box {
-            position: static !important;
-            margin-bottom: 12px;
-          }
-          .left-capsule, .right-capsule {
-            flex-direction: column !important;
-            align-items: flex-start !important;
+          .capsule-content, .text-right {
             text-align: left !important;
+            flex-grow: 1 !important;
           }
-          .text-right {
-            text-align: left;
+          .mobile-ecosystem-carousel {
+            display: none !important;
           }
         }
 
-        /* Mobile Layout (< 768px) */
-        @media (max-width: 768px) {
-          .why-sca-section { padding: 40px 0; }
-          .header-title { font-size: 1.9rem; }
+        /* Mobile Layout (< 640px) */
+        @media (max-width: 640px) {
+          .why-sca-section { padding: 36px 0; }
+          .header-title { font-size: 1.8rem; }
           .header-subtitle { font-size: 0.88rem; }
           
           .ecosystem-container {

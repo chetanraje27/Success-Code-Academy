@@ -381,7 +381,24 @@ export default function ParentsTrustUs() {
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) and (min-width: 641px) {
+          .top-row {
+            grid-template-columns: 1.5fr 1fr !important;
+            gap: 16px !important;
+          }
+          .bottom-row {
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 16px !important;
+          }
+          .trust-card {
+            padding: 20px 18px;
+            min-height: 140px;
+          }
+          .card-number {
+            font-size: 1.85rem;
+          }
+        }
+        @media (max-width: 640px) {
           .parents-trust-section {
             padding: 36px 0;
           }

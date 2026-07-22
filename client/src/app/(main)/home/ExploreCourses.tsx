@@ -280,7 +280,7 @@ export default function ExploreCourses() {
         }
         
         @media (max-width: 1200px) {
-          .explore-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .explore-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
         }
         @media (max-width: 768px) {
           .explore-section { padding: 35px 0; }

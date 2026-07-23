@@ -34,13 +34,7 @@ function BannerImage({ src, alt, priority = false }: { src: string; alt: string;
   );
 }
 
-const DEFAULT_HERO_POSTERS = [
-  { id: "1", title: "NEET Admissions Open 2026-27", image: "/images/banners/HeroPoster1.png", link: "/courses" },
-  { id: "2", title: "NEET Repeater Achievers Batch", image: "/images/banners/HeroPoster2.png", link: "/courses" },
-  { id: "3", title: "Class 11 & 12 Foundation Program", image: "/images/banners/HeroPoster3.png", link: "/courses" },
-  { id: "4", title: "Grand NEET Mock Test Series", image: "/images/banners/HeroPoster4.png", link: "/admissions" },
-  { id: "5", title: "Success Code Scholarship Test 2026", image: "/images/banners/ScholorshipHero.png", link: "/scholarships" },
-];
+
 
 export default function HomeClient() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -72,7 +66,7 @@ export default function HomeClient() {
   };
 
   const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [slides, setSlides] = useState<any[]>(DEFAULT_HERO_POSTERS);
+  const [slides, setSlides] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -96,12 +90,9 @@ export default function HomeClient() {
         setAnnouncements(nextAnnouncements);
         if (homeBanners.length > 0) {
           setSlides(homeBanners);
-        } else {
-          setSlides(DEFAULT_HERO_POSTERS);
         }
       } catch (err) {
         console.error("Failed to load content:", err);
-        setSlides(DEFAULT_HERO_POSTERS);
       } finally {
         setIsLoading(false);
       }

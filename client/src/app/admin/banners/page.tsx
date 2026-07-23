@@ -154,52 +154,103 @@ export default function AdminBanners() {
         </button>
       </div>
 
-      <div className="table-card">
-        {isLoading ? (
-          <div className="loading-state">Loading banners...</div>
-        ) : (
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Preview</th>
-                <th>Type</th>
-                <th>Alt Text</th>
-                <th>Order</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {banners.length === 0 ? (
-                <tr><td colSpan={6} className="empty-state">No banners found.</td></tr>
-              ) : (
-                banners.map(banner => (
-                  <tr key={banner.id}>
-                    <td>
-                      <div className="banner-preview">
-                        <Image src={banner.image} alt={banner.altText || 'Banner'} fill style={{ objectFit: 'cover' }} unoptimized />
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`badge ${banner.type.toLowerCase()}`}>{banner.type}</span>
-                    </td>
-                    <td>{banner.altText || '-'}</td>
-                    <td>{banner.orderIndex}</td>
-                    <td>
-                      <span className={`status-dot ${banner.isActive ? 'active' : 'inactive'}`}></span>
-                      {banner.isActive ? 'Active' : 'Disabled'}
-                    </td>
-                    <td className="actions-cell">
-                      <button className="action-btn edit" onClick={() => handleOpenModal(banner)}><FaEdit /></button>
-                      <button className="action-btn delete" onClick={() => handleDelete(banner.id)}><FaTrash /></button>
-                    </td>
+      {isLoading ? (
+        <div className="loading-state">Loading banners...</div>
+      ) : (
+        <div className="banner-sections">
+          <div className="banner-section">
+            <h2 className="section-title">Home Page Banners</h2>
+            <div className="table-card">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Type</th>
+                    <th>Alt Text</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {banners.filter(b => b.type === 'HOME').length === 0 ? (
+                    <tr><td colSpan={6} className="empty-state">No home banners found.</td></tr>
+                  ) : (
+                    banners.filter(b => b.type === 'HOME').map(banner => (
+                      <tr key={banner.id}>
+                        <td>
+                          <div className="banner-preview">
+                            <Image src={banner.image} alt={banner.altText || 'Banner'} fill style={{ objectFit: 'cover' }} unoptimized />
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`badge ${banner.type.toLowerCase()}`}>{banner.type}</span>
+                        </td>
+                        <td>{banner.altText || '-'}</td>
+                        <td>{banner.orderIndex}</td>
+                        <td>
+                          <span className={`status-dot ${banner.isActive ? 'active' : 'inactive'}`}></span>
+                          {banner.isActive ? 'Active' : 'Disabled'}
+                        </td>
+                        <td className="actions-cell">
+                          <button className="action-btn edit" onClick={() => handleOpenModal(banner)}><FaEdit /></button>
+                          <button className="action-btn delete" onClick={() => handleDelete(banner.id)}><FaTrash /></button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="banner-section" style={{ marginTop: '32px' }}>
+            <h2 className="section-title">Results Page Banners</h2>
+            <div className="table-card">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Type</th>
+                    <th>Alt Text</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {banners.filter(b => b.type === 'RESULTS').length === 0 ? (
+                    <tr><td colSpan={6} className="empty-state">No results banners found.</td></tr>
+                  ) : (
+                    banners.filter(b => b.type === 'RESULTS').map(banner => (
+                      <tr key={banner.id}>
+                        <td>
+                          <div className="banner-preview">
+                            <Image src={banner.image} alt={banner.altText || 'Banner'} fill style={{ objectFit: 'cover' }} unoptimized />
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`badge ${banner.type.toLowerCase()}`}>{banner.type}</span>
+                        </td>
+                        <td>{banner.altText || '-'}</td>
+                        <td>{banner.orderIndex}</td>
+                        <td>
+                          <span className={`status-dot ${banner.isActive ? 'active' : 'inactive'}`}></span>
+                          {banner.isActive ? 'Active' : 'Disabled'}
+                        </td>
+                        <td className="actions-cell">
+                          <button className="action-btn edit" onClick={() => handleOpenModal(banner)}><FaEdit /></button>
+                          <button className="action-btn delete" onClick={() => handleDelete(banner.id)}><FaTrash /></button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (
@@ -300,6 +351,7 @@ export default function AdminBanners() {
         .admin-page { max-width: 1200px; margin: 0 auto; }
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .page-title { font-size: 1.5rem; color: #1e293b; font-weight: 700; margin: 0; }
+        .section-title { font-size: 1.2rem; color: #334155; font-weight: 600; margin-bottom: 16px; margin-top: 0; }
         
         .primary-btn { display: flex; align-items: center; gap: 8px; background: #0257d0; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: 0.2s; }
         .primary-btn:hover { background: #0146a8; }

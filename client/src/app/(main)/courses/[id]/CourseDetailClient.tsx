@@ -290,11 +290,9 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
       <div className="container">
         {/* Back Link Button */}
         <div className="back-btn-wrap">
-          <Link href="/courses" legacyBehavior>
-            <a className="back-btn">
-              <FaArrowLeft className="back-icon" />
-              <span>Back to Courses</span>
-            </a>
+          <Link href="/courses" className="back-btn">
+            <FaArrowLeft className="back-icon" />
+            <span>Back to Courses</span>
           </Link>
         </div>
 

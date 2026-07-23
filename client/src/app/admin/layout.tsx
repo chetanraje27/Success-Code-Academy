@@ -10,26 +10,14 @@ import {
   FaStar,
   FaDatabase,
   FaSignOutAlt,
-  FaBars,
-  FaSearch,
-  FaFilm,
-  FaPhotoVideo,
-  FaUsersCog,
-  FaHistory,
-  FaGlobe,
-  FaStream,
-  FaSearchLocation,
-  FaUserShield,
-  FaFolder,
-  FaComments
+  FaBars
 } from "react-icons/fa";
-import { FaUserGraduate, FaWpforms, FaFileSignature, FaQuoteLeft } from "react-icons/fa6";
+import { FaUserGraduate, FaWpforms, FaFileSignature } from "react-icons/fa6";
 import Image from "next/image";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [globalSearch, setGlobalSearch] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -45,6 +33,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     try {
       const user = JSON.parse(userStr);
+      // Let backend authorize based on token, but do a quick frontend check
       if (user.mobileNumber !== '9699062427' && user.role !== 'admin') {
         alert("Unauthorized access. Admin privileges required.");
         router.push("/");
@@ -57,36 +46,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [router]);
 
   if (isLoading) {
-    return <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8fafc", color: "#0257d0", fontWeight: 600 }}>Loading Success Code CMS...</div>;
+    return <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Loading Admin Portal...</div>;
   }
 
   const menuItems = [
-    { type: "header", name: "OVERVIEW & DASHBOARD" },
-    { name: "Analytics Dashboard", path: "/admin", icon: <FaChartPie /> },
-
-    { type: "header", name: "CONTENT CMS MODULES" },
-    { name: "Home Page CMS", path: "/admin/home", icon: <FaImages /> },
-    { name: "About Page CMS", path: "/admin/about", icon: <FaFileSignature /> },
-    { name: "Courses CMS", path: "/admin/courses", icon: <FaUserGraduate /> },
-    { name: "Results & Rankers", path: "/admin/results", icon: <FaStar /> },
-    { name: "Testimonials CMS", path: "/admin/testimonials", icon: <FaQuoteLeft /> },
-    { name: "Video Library", path: "/admin/videos", icon: <FaFilm /> },
-    { name: "Gallery & Albums", path: "/admin/gallery", icon: <FaPhotoVideo /> },
-
-    { type: "header", name: "LEADS & APPLICATIONS" },
-    { name: "Scholarship Exams", path: "/admin/scholarships", icon: <FaWpforms /> },
-    { name: "Contact & Leads CRM", path: "/admin/leads", icon: <FaComments /> },
-    { name: "Student Accounts", path: "/admin/database/students", icon: <FaDatabase /> },
-
-    { type: "header", name: "ASSETS & MEDIA" },
-    { name: "Centralized Media", path: "/admin/media", icon: <FaFolder /> },
-
-    { type: "header", name: "SYSTEM & GOVERNANCE" },
-    { name: "Website Settings", path: "/admin/settings", icon: <FaGlobe /> },
-    { name: "Navigation Builder", path: "/admin/navigation", icon: <FaStream /> },
-    { name: "Page SEO Manager", path: "/admin/seo", icon: <FaSearchLocation /> },
-    { name: "User Roles & Auth", path: "/admin/roles", icon: <FaUserShield /> },
-    { name: "Audit Activity Log", path: "/admin/audit", icon: <FaHistory /> },
+    { name: "Dashboard", path: "/admin" },
+    { name: "Banner Management", path: "/admin/banners" },
+    { name: "Notifications", path: "/admin/notifications" },
+    { name: "Meet Our Stars", path: "/admin/content/stars" },
+    { type: "header", name: "DATABASE" },
+    { name: "Student Accounts", path: "/admin/database/students" },
+    { name: "Course Forms", path: "/admin/database/course-forms" },
+    { name: "Scholarship Forms", path: "/admin/database/scholarship-forms" },
   ];
 
   const handleLogout = () => {
@@ -101,13 +72,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
-          <Image src="/images/ui/logo1.png" alt="Logo" width={38} height={38} className="admin-logo" />
-          {isSidebarOpen && (
-            <div className="brand-text">
-              <h2>Success Code</h2>
-              <span className="cms-badge">HEADLESS CMS v2.0</span>
-            </div>
-          )}
+          <Image src="/images/logo1.png" alt="Logo" width={45} height={45} className="admin-logo" />
+          {isSidebarOpen && <h2>Admin Portal</h2>}
         </div>
 
         <nav className="sidebar-nav">
@@ -118,8 +84,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             const isActive = pathname === item.path || (item.path !== '/admin' && pathname.startsWith(item.path!));
             return (
-              <Link key={index} href={item.path!} className={`admin-nav-item ${isActive ? 'active' : ''}`} title={!isSidebarOpen ? item.name : undefined}>
-                <span className="admin-nav-icon">{item.icon}</span>
+              <Link key={index} href={item.path!} className={`admin-nav-item ${isActive ? 'active' : ''}`}>
                 {isSidebarOpen && <span className="admin-nav-text">{item.name}</span>}
               </Link>
             );
@@ -130,34 +95,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content */}
       <div className="admin-main">
         <header className="admin-topbar">
-          <div className="topbar-left">
-            <button className="toggle-sidebar-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-              <FaBars />
-            </button>
-            <div className="global-search-wrap">
-              <FaSearch className="ic" />
-              <input
-                type="text"
-                placeholder="Search CMS modules, courses, results, leads..."
-                value={globalSearch}
-                onChange={e => setGlobalSearch(e.target.value)}
-              />
-            </div>
-          </div>
+          <button className="toggle-sidebar-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <FaBars />
+          </button>
 
           <div className="topbar-right">
-            <div className="status-indicator">
-              <span className="dot online"></span>
-              <span className="lbl">API Online</span>
-            </div>
-            <div className="user-profile-badge">
-              <div className="avatar">A</div>
-              <div className="user-info">
-                <span className="user-name">Super Admin</span>
-                <span className="user-role">Administrator</span>
-              </div>
-            </div>
-            <button className="logout-btn" onClick={handleLogout} title="Logout of CMS">
+            <span className="admin-greeting">Welcome, Admin</span>
+            <button className="logout-btn" onClick={handleLogout}>
               <FaSignOutAlt />
               <span>Logout</span>
             </button>
@@ -169,7 +113,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
 
-      <style jsx global>{`
+      <style jsx>{`
         .admin-layout {
           display: flex;
           height: 100vh;
@@ -180,7 +124,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-sidebar {
           background: #ffffff;
           color: #1e293b;
-          transition: width 0.25s ease;
+          transition: width 0.3s ease;
           display: flex;
           flex-direction: column;
           overflow-y: auto;
@@ -196,7 +140,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 16px 20px;
+          padding: 20px;
           border-bottom: 1px solid #e2e8f0;
           white-space: nowrap;
           overflow: hidden;
@@ -207,46 +151,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .admin-logo {
           object-fit: contain;
           width: auto;
-          max-height: 34px;
-        }
-
-        .brand-text {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
+          max-height: 32px;
         }
 
         .sidebar-header h2 {
-          font-size: 1.05rem;
+          font-size: 1.15rem;
           margin: 0;
-          font-weight: 800;
+          font-weight: 700;
           color: #0f172a;
-          line-height: 1.1;
-        }
-
-        .cms-badge {
-          font-size: 0.62rem;
-          font-weight: 800;
-          color: #0257d0;
-          background: #eff6ff;
-          padding: 1px 6px;
-          border-radius: 4px;
-          letter-spacing: 0.05em;
-          width: max-content;
         }
 
         .sidebar-nav {
           padding: 16px 12px;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 6px;
         }
 
         .nav-header {
-          font-size: 0.68rem;
+          font-size: 0.75rem;
           font-weight: 800;
           color: #94a3b8;
-          margin: 16px 0 6px 10px;
+          margin: 16px 0 8px 12px;
           letter-spacing: 0.08em;
           text-transform: uppercase;
         }
@@ -254,7 +180,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .nav-divider {
           height: 1px;
           background: #e2e8f0;
-          margin: 12px 0;
+          margin: 16px 0;
         }
 
         .admin-nav-item {
@@ -263,44 +189,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           align-items: center !important;
           justify-content: flex-start !important;
           gap: 12px !important;
-          padding: 9px 12px !important;
+          padding: 12px 14px !important;
           border-radius: 8px !important;
           color: #475569 !important;
           text-decoration: none !important;
-          transition: all 0.2s ease !important;
+          transition: all 0.2s !important;
           white-space: nowrap !important;
-          font-size: 0.86rem !important;
           font-weight: 500 !important;
-          width: 100% !important;
-          box-sizing: border-box !important;
         }
 
         .admin-nav-item:hover {
-          background: #f1f5f9 !important;
+          background: #f8fafc !important;
           color: #0f172a !important;
         }
         
         .admin-nav-item.active {
           background: #eff6ff !important;
-          color: #0257d0 !important;
-          font-weight: 700 !important;
+          color: #2563eb !important;
+          font-weight: 600 !important;
         }
 
         .admin-nav-icon {
-          font-size: 0.95rem !important;
-          min-width: 22px !important;
-          width: 22px !important;
-          height: 22px !important;
+          font-size: 0.9rem !important;
+          min-width: 24px !important;
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
-          flex-shrink: 0 !important;
-        }
-
-        .admin-nav-text {
-          flex: 1 !important;
-          font-size: 0.86rem !important;
-          line-height: 1.2 !important;
         }
 
         .admin-main {
@@ -318,136 +232,39 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           align-items: center;
           justify-content: space-between;
           border-bottom: 1px solid #e2e8f0;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-        }
-
-        .topbar-left {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          flex: 1;
-          max-width: 500px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .toggle-sidebar-btn {
           background: transparent;
           border: none;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           color: #475569;
           cursor: pointer;
           padding: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 6px;
-        }
-
-        .toggle-sidebar-btn:hover {
-          background: #f1f5f9;
-        }
-
-        .global-search-wrap {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          padding: 6px 12px;
-          border-radius: 8px;
-          width: 100%;
-        }
-
-        .global-search-wrap .ic {
-          color: #94a3b8;
-          font-size: 0.85rem;
-        }
-
-        .global-search-wrap input {
-          border: none;
-          outline: none;
-          background: transparent;
-          width: 100%;
-          font-size: 0.85rem;
-          color: #0f172a;
         }
 
         .topbar-right {
           display: flex;
           align-items: center;
-          gap: 18px;
+          gap: 20px;
         }
 
-        .status-indicator {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          background: #f0fdf4;
-          border: 1px solid #bbf7d0;
-          padding: 4px 10px;
-          border-radius: 20px;
-        }
-
-        .status-indicator .dot.online {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #22c55e;
-        }
-
-        .status-indicator .lbl {
-          font-size: 0.75rem;
-          font-weight: 700;
-          color: #15803d;
-        }
-
-        .user-profile-badge {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .user-profile-badge .avatar {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          background: #0257d0;
-          color: #fff;
-          font-weight: 800;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.85rem;
-        }
-
-        .user-info {
-          display: flex;
-          flex-direction: column;
-          gap: 1px;
-        }
-
-        .user-name {
-          font-size: 0.82rem;
-          font-weight: 700;
-          color: #0f172a;
-        }
-
-        .user-role {
-          font-size: 0.68rem;
-          color: #64748b;
+        .admin-greeting {
           font-weight: 500;
+          color: #1e293b;
         }
 
         .logout-btn {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           background: #fee2e2;
           color: #ef4444;
           border: none;
-          padding: 7px 12px;
+          padding: 8px 16px;
           border-radius: 6px;
-          font-weight: 600;
-          font-size: 0.8rem;
+          font-weight: 500;
           cursor: pointer;
           transition: background 0.2s;
         }
@@ -458,7 +275,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         .admin-content-area {
           flex: 1;
-          padding: 24px 28px;
+          padding: 32px;
           overflow-y: auto;
           background: #f8fafc;
         }

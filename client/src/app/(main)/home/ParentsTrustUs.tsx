@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaBullseye, FaHeart, FaUsers, FaAward } from "react-icons/fa6";
 import { FiStar } from "react-icons/fi";
+import { EditableText } from "@/components/admin/EditableText";
 
 function StatCounter({ value, duration = 1500 }: { value: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -59,9 +60,22 @@ export default function ParentsTrustUs() {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <h2 className="section-title">Parents trust us, students succeed.</h2>
+          <h2 className="section-title">
+            <EditableText
+              contentKey="trust.heading"
+              label="parent trust heading"
+            >
+              Parents trust us, students succeed.
+            </EditableText>
+          </h2>
           <p className="section-subtitle">
-            Numbers that speak for our commitment to student care, academic rigor, and mentorship excellence.
+            <EditableText
+              contentKey="trust.description"
+              label="parent trust description"
+              kind="multiline"
+            >
+              Numbers that speak for our commitment to student care, academic rigor, and mentorship excellence.
+            </EditableText>
           </p>
         </div>
 
@@ -80,8 +94,16 @@ export default function ParentsTrustUs() {
                 </div>
               </div>
               <div className="card-body">
-                <h3 className="card-title">Selection Rate</h3>
-                <p className="card-desc">Sustained performance in NEET qualifiers annually.</p>
+                <h3 className="card-title">
+                  <EditableText contentKey="trust.selection.title" label="selection rate title">
+                    Selection Rate
+                  </EditableText>
+                </h3>
+                <p className="card-desc">
+                  <EditableText contentKey="trust.selection.description" label="selection rate description">
+                    Sustained performance in NEET qualifiers annually.
+                  </EditableText>
+                </p>
               </div>
               {/* Subtle background arc shape */}
               <div className="arc-shape-wrap" aria-hidden="true">
@@ -102,8 +124,16 @@ export default function ParentsTrustUs() {
                 </div>
               </div>
               <div className="card-body">
-                <h3 className="card-title">Google Rating</h3>
-                <p className="card-desc">Based on 350+ reviews from parents & alumni.</p>
+                <h3 className="card-title">
+                  <EditableText contentKey="trust.rating.title" label="Google rating title">
+                    Google Rating
+                  </EditableText>
+                </h3>
+                <p className="card-desc">
+                  <EditableText contentKey="trust.rating.description" label="Google rating description">
+                    Based on 350+ reviews from parents & alumni.
+                  </EditableText>
+                </p>
               </div>
             </div>
           </div>
@@ -121,8 +151,16 @@ export default function ParentsTrustUs() {
                 </div>
               </div>
               <div className="card-body">
-                <h3 className="card-title">Satisfaction</h3>
-                <p className="card-desc">Highly rated classroom care and responsiveness.</p>
+                <h3 className="card-title">
+                  <EditableText contentKey="trust.satisfaction.title" label="satisfaction title">
+                    Satisfaction
+                  </EditableText>
+                </h3>
+                <p className="card-desc">
+                  <EditableText contentKey="trust.satisfaction.description" label="satisfaction description">
+                    Highly rated classroom care and responsiveness.
+                  </EditableText>
+                </p>
               </div>
             </div>
 
@@ -137,8 +175,16 @@ export default function ParentsTrustUs() {
                 </div>
               </div>
               <div className="card-body">
-                <h3 className="card-title">Students</h3>
-                <p className="card-desc">Classroom medical aspirants mentored till date.</p>
+                <h3 className="card-title">
+                  <EditableText contentKey="trust.students.title" label="students metric title">
+                    Students
+                  </EditableText>
+                </h3>
+                <p className="card-desc">
+                  <EditableText contentKey="trust.students.description" label="students metric description">
+                    Classroom medical aspirants mentored till date.
+                  </EditableText>
+                </p>
               </div>
             </div>
 
@@ -153,8 +199,16 @@ export default function ParentsTrustUs() {
                 </div>
               </div>
               <div className="card-body">
-                <h3 className="card-title">Excellence</h3>
-                <p className="card-desc">Consistently delivering premium medical training.</p>
+                <h3 className="card-title">
+                  <EditableText contentKey="trust.excellence.title" label="excellence title">
+                    Excellence
+                  </EditableText>
+                </h3>
+                <p className="card-desc">
+                  <EditableText contentKey="trust.excellence.description" label="excellence description">
+                    Consistently delivering premium medical training.
+                  </EditableText>
+                </p>
               </div>
             </div>
           </div>

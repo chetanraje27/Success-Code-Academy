@@ -58,6 +58,7 @@ export function initNotification(sequelize: Sequelize): void {
       sequelize,
       tableName: 'notifications',
       timestamps: true,
+      indexes: [{ fields: ['isActive', 'orderIndex'] }],
     }
   );
 }

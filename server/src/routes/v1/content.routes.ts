@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Banner, Notification, StarStudent, SiteSetting, TopperResult } from '../../models';
+import { Banner, ContentBlock, Notification, StarStudent, SiteSetting, TopperResult } from '../../models';
 import { asyncHandler } from '../../utils/asyncHandler';
 
 const router = Router();
@@ -53,6 +53,39 @@ router.get('/settings', asyncHandler(async (_req, res) => {
   const map: Record<string, string> = {};
   for (const row of rows) {
     map[row.key] = row.value;
+  }
+  res.status(200).json({ status: 'success', data: map });
+}));
+
+// Public content overrides for the visual editor. Values are rendered as
+// plain React text; HTML is intentionally not accepted.
+router.get('/page/:pageKey', asyncHandler(async (req, res) => {
+  const pageKey = String(req.params.pageKey || '').trim();
+  if (
+    !pageKey ||
+    pageKey.length > 160 ||
+    !/^[a-z0-9][a-z0-9._:-]*$/.test(pageKey)
+  ) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid page key.',
+    });
+    return;
+  }
+
+  const rows = await ContentBlock.findAll({
+    where: { pageKey },
+    attributes: ['contentKey', 'kind', 'value', 'updatedAt'],
+    order: [['contentKey', 'ASC']],
+  });
+  const map: Record<string, { value: string; kind: string; updatedAt: Date }> =
+    {};
+  for (const row of rows) {
+    map[row.contentKey] = {
+      value: row.value,
+      kind: row.kind,
+      updatedAt: row.updatedAt,
+    };
   }
   res.status(200).json({ status: 'success', data: map });
 }));

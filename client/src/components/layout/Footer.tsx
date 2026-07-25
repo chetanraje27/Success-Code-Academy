@@ -7,6 +7,8 @@ import { siteConfig, navLinks } from "@/data/home";
 import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import SettingsEditor from "@/components/admin/SettingsEditor";
+import { useSiteSettings } from "@/lib/site-settings";
+import { EditableText } from "@/components/admin/EditableText";
 import { 
   FaFacebookF, 
   FaXTwitter, 
@@ -22,6 +24,7 @@ import {
 export default function Footer() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [editSettings, setEditSettings] = useState(false);
+  const settings = useSiteSettings();
 
   const toggleSection = (section: string) => {
     setExpandedSection(prev => prev === section ? null : section);
@@ -33,9 +36,24 @@ export default function Footer() {
         <div className="container">
           <div className="newsletter-content">
             <div className="newsletter-text">
-              <h3 className="newsletter-title">Stay Updated</h3>
+              <h3 className="newsletter-title">
+                <EditableText
+                  contentKey="footer.newsletter.title"
+                  label="newsletter title"
+                  scope="global"
+                >
+                  Stay Updated
+                </EditableText>
+              </h3>
               <p className="newsletter-desc">
-                Subscribe to our newsletter for the latest news and updates.
+                <EditableText
+                  contentKey="footer.newsletter.description"
+                  label="newsletter description"
+                  scope="global"
+                  kind="multiline"
+                >
+                  Subscribe to our newsletter for the latest news and updates.
+                </EditableText>
               </p>
             </div>
             <form className="newsletter-form">
@@ -66,15 +84,24 @@ export default function Footer() {
                   unoptimized
                 />
               </Link>
-              <p className="footer-desc">{siteConfig.description}</p>
+              <p className="footer-desc">
+                <EditableText
+                  contentKey="footer.brand.description"
+                  label="academy footer description"
+                  scope="global"
+                  kind="multiline"
+                >
+                  {siteConfig.description}
+                </EditableText>
+              </p>
               <div className="social-links">
                 {[
-                  { name: "Facebook", icon: <FaFacebookF size={18} />, href: siteConfig.social.facebook },
-                  { name: "Twitter", icon: <FaXTwitter size={18} />, href: siteConfig.social.twitter },
-                  { name: "Instagram", icon: <FaInstagram size={18} />, href: siteConfig.social.instagram },
-                  { name: "LinkedIn", icon: <FaLinkedinIn size={18} />, href: siteConfig.social.linkedin },
-                  { name: "YouTube", icon: <FaYoutube size={18} />, href: siteConfig.social.youtube },
-                ].map((social) => (
+                  { name: "Facebook", icon: <FaFacebookF size={18} />, href: settings.facebook },
+                  { name: "Twitter", icon: <FaXTwitter size={18} />, href: settings.twitter },
+                  { name: "Instagram", icon: <FaInstagram size={18} />, href: settings.instagram },
+                  { name: "LinkedIn", icon: <FaLinkedinIn size={18} />, href: settings.linkedin },
+                  { name: "YouTube", icon: <FaYoutube size={18} />, href: settings.youtube },
+                ].filter((social) => social.href).map((social) => (
                   <a
                     key={social.name}
                     href={social.href}
@@ -92,7 +119,13 @@ export default function Footer() {
             {/* Quick Links Column (Accordion on Mobile) */}
             <div className="footer-col">
               <h4 className="footer-heading" onClick={() => toggleSection("links")}>
-                Quick Links
+                <EditableText
+                  contentKey="footer.quick-links.title"
+                  label="quick links heading"
+                  scope="global"
+                >
+                  Quick Links
+                </EditableText>
                 <span className={`accordion-chevron ${expandedSection === "links" ? "rotated" : ""}`}>
                   <FaChevronDown size={14} />
                 </span>
@@ -101,7 +134,14 @@ export default function Footer() {
                 {navLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="footer-link">
-                      {link.label}
+                      <EditableText
+                        contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
+                        label={`${link.label} navigation label`}
+                        scope="global"
+                        showInlineControls={false}
+                      >
+                        {link.label}
+                      </EditableText>
                     </Link>
                   </li>
                 ))}
@@ -111,7 +151,13 @@ export default function Footer() {
             {/* Our Programs Column (Accordion on Mobile) */}
             <div className="footer-col">
               <h4 className="footer-heading" onClick={() => toggleSection("programs")}>
-                Our Programs
+                <EditableText
+                  contentKey="footer.programs.title"
+                  label="programs heading"
+                  scope="global"
+                >
+                  Our Programs
+                </EditableText>
                 <span className={`accordion-chevron ${expandedSection === "programs" ? "rotated" : ""}`}>
                   <FaChevronDown size={14} />
                 </span>
@@ -126,7 +172,14 @@ export default function Footer() {
                 ].map((course) => (
                   <li key={course}>
                     <Link href="/courses" className="footer-link">
-                      {course}
+                      <EditableText
+                        contentKey={`footer.programs.${course.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                        label={`${course} program label`}
+                        scope="global"
+                        showInlineControls={false}
+                      >
+                        {course}
+                      </EditableText>
                     </Link>
                   </li>
                 ))}
@@ -137,7 +190,13 @@ export default function Footer() {
             <EditableSection label="Contact Info" onEdit={() => setEditSettings(true)}>
             <div className="footer-col">
               <h4 className="footer-heading" onClick={() => toggleSection("contact")}>
-                Contact Us
+                <EditableText
+                  contentKey="footer.contact.title"
+                  label="contact heading"
+                  scope="global"
+                >
+                  Contact Us
+                </EditableText>
                 <span className={`accordion-chevron ${expandedSection === "contact" ? "rotated" : ""}`}>
                   <FaChevronDown size={14} />
                 </span>
@@ -145,18 +204,18 @@ export default function Footer() {
               <ul className={`footer-contact ${expandedSection === "contact" ? "expanded" : ""}`}>
                 <li>
                   <span className="contact-icon"><FaLocationDot /></span>
-                  <span>{siteConfig.address}</span>
+                  <span>{settings.address}</span>
                 </li>
                 <li>
                   <span className="contact-icon"><FaPhone /></span>
-                  <a href={`tel:${siteConfig.phone}`} className="footer-link">
-                    {siteConfig.phone}
+                  <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="footer-link">
+                    {settings.phone}
                   </a>
                 </li>
                 <li>
                   <span className="contact-icon"><FaEnvelope /></span>
-                  <a href={`mailto:${siteConfig.email}`} className="footer-link">
-                    {siteConfig.email}
+                  <a href={`mailto:${settings.email}`} className="footer-link">
+                    {settings.email}
                   </a>
                 </li>
               </ul>

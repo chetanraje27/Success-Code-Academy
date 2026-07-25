@@ -1,256 +1,211 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { FaUserGraduate, FaWpforms, FaFileSignature } from "react-icons/fa6";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  Bell,
+  ClipboardList,
+  GraduationCap,
+  Images,
+  Pencil,
+  Settings,
+  Users,
+} from "lucide-react";
+import { adminApiFetch } from "@/lib/admin-api";
+import {
+  AdminEmptyState,
+  AdminPageHeader,
+  formatAdminDate,
+} from "@/components/admin/AdminUi";
 
-export default function AdminDashboard() {
-  const [stats, setStats] = useState({
-    totalStudents: 0,
-    totalCourseForms: 0,
-    totalScholarshipForms: 0,
-    recentStudents: [] as any[],
-  });
-  const [isLoading, setIsLoading] = useState(true);
+type RecentStudent = {
+  id: number;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  mobileNumber: string;
+  createdAt: string;
+};
+
+type DashboardStats = {
+  totalStudents: number;
+  totalCourseForms: number;
+  totalScholarshipForms: number;
+  recentStudents: RecentStudent[];
+};
+
+const quickActions = [
+  {
+    label: "Edit the live website",
+    description: "Open the visual editor with on-page pencil controls.",
+    href: "/?edit=1",
+    icon: Pencil,
+  },
+  {
+    label: "Update banners",
+    description: "Change the homepage and results hero images.",
+    href: "/admin/banners",
+    icon: Images,
+  },
+  {
+    label: "Post an announcement",
+    description: "Keep admissions and deadline notices current.",
+    href: "/admin/notifications",
+    icon: Bell,
+  },
+  {
+    label: "Edit contact details",
+    description: "Update phone, email, address, and social links.",
+    href: "/admin/settings",
+    icon: Settings,
+  },
+] as const;
+
+export default function AdminDashboardPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/admin/stats`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
-        const data = await res.json();
-        if (data.status === 'success') {
-          setStats(data.data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch dashboard stats", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchStats();
+    adminApiFetch<DashboardStats>("stats")
+      .then((response) => setStats(response.data))
+      .catch((caught: unknown) =>
+        setError(
+          caught instanceof Error
+            ? caught.message
+            : "Unable to load the dashboard.",
+        ),
+      );
   }, []);
 
-  if (isLoading) return <div className="loading-state">Loading dashboard data...</div>;
-
-  const statCards = [
-    { 
-      label: "Registered Students", 
-      value: stats.totalStudents, 
-      icon: <FaUserGraduate />, 
-      color: "#0257d0",
-      bg: "#eff6ff"
-    },
-    { 
-      label: "Course Enquiries", 
-      value: stats.totalCourseForms, 
-      icon: <FaWpforms />, 
-      color: "#059669",
-      bg: "#ecfdf5"
-    },
-    { 
-      label: "Scholarship Apps", 
-      value: stats.totalScholarshipForms, 
-      icon: <FaFileSignature />, 
-      color: "#7c3aed",
-      bg: "#f5f3ff"
-    },
-  ];
-
   return (
-    <div className="dashboard-container">
-      <h1 className="page-title">Dashboard Overview</h1>
-      
-      {/* Stat Cards */}
-      <div className="stat-grid">
-        {statCards.map((card, idx) => (
-          <motion.div 
-            key={idx} 
-            className="stat-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-          >
-            <div className="stat-icon-wrap" style={{ backgroundColor: card.bg, color: card.color }}>
-              {card.icon}
-            </div>
-            <div className="stat-details">
-              <h3 className="stat-value">{card.value}</h3>
-              <p className="stat-label">{card.label}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+    <div className="admin-page">
+      <AdminPageHeader
+        eyebrow="Overview"
+        title="Dashboard"
+        description="A quick view of new registrations and the website tasks staff use most often."
+        action={
+          <Link className="admin-button secondary" href="/" target="_blank">
+            View website
+          </Link>
+        }
+      />
 
-      <div className="dashboard-sections">
-        {/* Recent Registrations */}
-        <div className="recent-activity-panel">
-          <div className="panel-header">
-            <h2>Recent Student Registrations</h2>
-            <Link href="/admin/database/students" className="view-all-link">View All</Link>
-          </div>
-          <div className="panel-body">
-            {stats.recentStudents.length > 0 ? (
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Mobile</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.recentStudents.map((student) => (
-                    <tr key={student.id}>
-                      <td>{student.firstName} {student.lastName}</td>
-                      <td>{student.mobileNumber}</td>
-                      <td>{new Date(student.createdAt).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p className="empty-state">No students registered yet.</p>
-            )}
-          </div>
+      {error && (
+        <div className="admin-notice" role="alert">
+          {error}
         </div>
-      </div>
+      )}
 
-      <style jsx>{`
-        .dashboard-container {
-          max-width: 1200px;
-          margin: 0 auto;
-        }
+      <section className="admin-stats-grid" aria-label="Registration totals">
+        {[
+          {
+            label: "Student accounts",
+            value: stats?.totalStudents,
+            icon: Users,
+          },
+          {
+            label: "Course enquiries",
+            value: stats?.totalCourseForms,
+            icon: ClipboardList,
+          },
+          {
+            label: "Scholarship forms",
+            value: stats?.totalScholarshipForms,
+            icon: GraduationCap,
+          },
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+            <div className="admin-card admin-stat-card" key={item.label}>
+              <span className="admin-stat-icon">
+                <Icon size={21} />
+              </span>
+              <div>
+                <strong>{item.value ?? "—"}</strong>
+                <span>{item.label}</span>
+              </div>
+            </div>
+          );
+        })}
+      </section>
 
-        .page-title {
-          font-size: 1.5rem;
-          color: #1e293b;
-          margin-bottom: 24px;
-          font-weight: 700;
-        }
+      <section className="admin-card">
+        <header className="admin-card-header">
+          <div>
+            <h2>Common tasks</h2>
+            <p>Shortcuts to the content that changes most often</p>
+          </div>
+        </header>
+        <div className="admin-card-body admin-quick-actions">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+            return (
+              <Link href={action.href} className="admin-quick-action" key={action.href}>
+                <span className="admin-stat-icon">
+                  <Icon size={20} />
+                </span>
+                <span>
+                  <strong>{action.label}</strong>
+                  <small>{action.description}</small>
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
-        .stat-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 24px;
-          margin-bottom: 32px;
-        }
-
-        .stat-card {
-          background: #fff;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          border: 1px solid #e2e8f0;
-        }
-
-        .stat-icon-wrap {
-          width: 56px;
-          height: 56px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-        }
-
-        .stat-value {
-          font-size: 1.75rem;
-          font-weight: 700;
-          color: #0f172a;
-          margin: 0 0 4px 0;
-        }
-
-        .stat-label {
-          color: #64748b;
-          margin: 0;
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-
-        .recent-activity-panel {
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-          border: 1px solid #e2e8f0;
-          overflow: hidden;
-        }
-
-        .panel-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px 24px;
-          border-bottom: 1px solid #e2e8f0;
-        }
-
-        .panel-header h2 {
-          margin: 0;
-          font-size: 1.1rem;
-          color: #1e293b;
-          font-weight: 600;
-        }
-
-        .view-all-link {
-          color: #0257d0;
-          font-size: 0.9rem;
-          font-weight: 500;
-          text-decoration: none;
-        }
-        
-        .view-all-link:hover { text-decoration: underline; }
-
-        .panel-body {
-          padding: 0;
-        }
-
-        .admin-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        .admin-table th {
-          text-align: left;
-          padding: 12px 24px;
-          background: #f8fafc;
-          color: #475569;
-          font-size: 0.85rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          border-bottom: 1px solid #e2e8f0;
-        }
-
-        .admin-table td {
-          padding: 16px 24px;
-          border-bottom: 1px solid #e2e8f0;
-          color: #1e293b;
-          font-size: 0.95rem;
-        }
-
-        .empty-state {
-          padding: 32px;
-          text-align: center;
-          color: #64748b;
-        }
-
-        .loading-state {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 300px;
-          color: #64748b;
-          font-size: 1.1rem;
-        }
-      `}</style>
+      <section className="admin-card">
+        <header className="admin-card-header">
+          <div>
+            <h2>Recent student registrations</h2>
+            <p>The five newest student accounts</p>
+          </div>
+          <Link href="/admin/database/students" className="admin-button secondary">
+            View all
+          </Link>
+        </header>
+        {!stats ? (
+          <div className="admin-loading" role="status">
+            <span className="admin-spinner" />
+            Loading dashboard…
+          </div>
+        ) : stats.recentStudents.length === 0 ? (
+          <AdminEmptyState
+            title="No student registrations yet"
+            message="New student accounts will appear here."
+          />
+        ) : (
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Mobile</th>
+                  <th>Registered</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.recentStudents.map((student) => (
+                  <tr key={student.id}>
+                    <td>
+                      <span className="admin-table-title">
+                        {[student.firstName, student.lastName]
+                          .filter(Boolean)
+                          .join(" ") || "Unnamed student"}
+                      </span>
+                      <span className="admin-table-subtitle">
+                        {student.email || "No email provided"}
+                      </span>
+                    </td>
+                    <td>{student.mobileNumber}</td>
+                    <td>{formatAdminDate(student.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

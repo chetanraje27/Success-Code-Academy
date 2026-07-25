@@ -6,6 +6,8 @@ import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
 import CookieConsent from "@/components/layout/CookieConsent";
 import { EditModeProvider } from "@/components/admin/EditModeContext";
 import LeadsDrawer from "@/components/admin/LeadsDrawer";
+import { LiveContentProvider } from "@/components/admin/LiveContentContext";
+import { LiveEditorToolbar } from "@/components/admin/LiveEditorToolbar";
 
 
 export const metadata: Metadata = {
@@ -30,12 +32,15 @@ export default function RootLayout({
 }>) {
   return (
     <EditModeProvider>
-      <Header />
-      <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>{children}</main>
-      <Footer />
-      <WhatsAppWidget />
-      <CookieConsent />
-      <LeadsDrawer />
+      <LiveContentProvider>
+        <Header />
+        <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>{children}</main>
+        <Footer />
+        <WhatsAppWidget />
+        <CookieConsent />
+        <LeadsDrawer />
+        <LiveEditorToolbar />
+      </LiveContentProvider>
     </EditModeProvider>
   );
 }

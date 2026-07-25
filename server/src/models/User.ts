@@ -8,6 +8,7 @@ export interface UserAttributes {
   email?: string;
   age?: number;
   role: string;
+  passwordHash?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -26,6 +27,7 @@ export class User
   declare public email?: string;
   declare public age?: number;
   declare public role: string;
+  declare public passwordHash?: string;
 
   declare public readonly createdAt: Date;
   declare public readonly updatedAt: Date;
@@ -65,11 +67,19 @@ export function initUser(sequelize: Sequelize): void {
         allowNull: false,
         defaultValue: 'student',
       },
+      passwordHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
       tableName: 'users',
       timestamps: true,
+      indexes: [
+        { fields: ['role'] },
+        { fields: ['createdAt'] },
+      ],
     }
   );
 }

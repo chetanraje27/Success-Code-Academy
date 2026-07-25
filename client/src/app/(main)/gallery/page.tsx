@@ -19,6 +19,7 @@ import {
   FaChevronLeft,
   FaChevronRight
 } from "react-icons/fa6";
+import { EditableText } from "@/components/admin/EditableText";
 
 interface VideoItem {
   id: number;
@@ -264,10 +265,24 @@ export default function GalleryPage() {
       <section className="gallery-hero" aria-labelledby="hero-title">
         <div className="container hero-grid-split">
           <div className="hero-left-content">
-            <span className="hero-badge">Success Code Media Library</span>
-            <h1 id="hero-title" className="hero-title">Learn Beyond the Classroom</h1>
+            <span className="hero-badge">
+              <EditableText contentKey="hero.badge" label="gallery badge">
+                Success Code Media Library
+              </EditableText>
+            </span>
+            <h1 id="hero-title" className="hero-title">
+              <EditableText contentKey="hero.heading" label="gallery heading">
+                Learn Beyond the Classroom
+              </EditableText>
+            </h1>
             <p className="hero-desc">
-              Watch campus tours, topper interviews, classroom lectures, and strategic guides to accelerate your NEET prep.
+              <EditableText
+                contentKey="hero.description"
+                label="gallery introduction"
+                kind="multiline"
+              >
+                Watch campus tours, topper interviews, classroom lectures, and strategic guides to accelerate your NEET prep.
+              </EditableText>
             </p>
             <div className="hero-ctas">
               <button onClick={() => setActiveVideo(featuredVideo)} className="btn-primary-custom">
@@ -384,7 +399,14 @@ export default function GalleryPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="section-head-minimal">
-                    <h2 className="section-title">Search & Filter Results</h2>
+                    <h2 className="section-title">
+                      <EditableText
+                        contentKey="search.heading"
+                        label="gallery search heading"
+                      >
+                        Search &amp; Filter Results
+                      </EditableText>
+                    </h2>
                     <p className="sub-title">Found {processedVideos.length} matching resources in catalog.</p>
                   </div>
 
@@ -416,7 +438,15 @@ export default function GalleryPage() {
 
                           <div className="card-details">
                             <span className="card-category">{video.category}</span>
-                            <h3 className="card-title">{video.title}</h3>
+                            <h3 className="card-title">
+                              <EditableText
+                                contentKey={`video-${video.id}.title`}
+                                label={`${video.title} video title`}
+                                showInlineControls={false}
+                              >
+                                {video.title}
+                              </EditableText>
+                            </h3>
                             <div className="card-meta">
                               <span><FaEye /> {video.views} Views</span>
                               <span><FaCalendarDays /> {video.date}</span>
@@ -510,7 +540,15 @@ export default function GalleryPage() {
 
                               <div className="card-details">
                                 <span className="card-category">{video.category}</span>
-                                <h3 className="card-title">{video.title}</h3>
+                                <h3 className="card-title">
+                                  <EditableText
+                                    contentKey={`video-${video.id}.title`}
+                                    label={`${video.title} video title`}
+                                    showInlineControls={false}
+                                  >
+                                    {video.title}
+                                  </EditableText>
+                                </h3>
                                 <div className="card-meta">
                                   <span><FaEye /> {video.views} Views</span>
                                   <span><FaCalendarDays /> {video.date}</span>
@@ -582,8 +620,25 @@ export default function GalleryPage() {
                     </div>
                     <div className="modal-text-content">
                       <span className="modal-tag">{activeVideo.category}</span>
-                      <h2 className="modal-title">{activeVideo.title}</h2>
-                      <p className="modal-excerpt">{activeVideo.excerpt}</p>
+                      <h2 className="modal-title">
+                        <EditableText
+                          contentKey={`video-${activeVideo.id}.title`}
+                          label={`${activeVideo.title} video title`}
+                          showInlineControls={false}
+                        >
+                          {activeVideo.title}
+                        </EditableText>
+                      </h2>
+                      <p className="modal-excerpt">
+                        <EditableText
+                          contentKey={`video-${activeVideo.id}.excerpt`}
+                          label={`${activeVideo.title} video description`}
+                          kind="multiline"
+                          showInlineControls={false}
+                        >
+                          {activeVideo.excerpt}
+                        </EditableText>
+                      </p>
                       <div className="modal-specs">
                         <span><FaCalendarDays /> {activeVideo.date}</span>
                         <span><FaEye /> {activeVideo.views} Views</span>

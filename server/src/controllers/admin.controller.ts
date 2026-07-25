@@ -9,11 +9,11 @@ import {
   ContactMessage,
   SiteSetting,
   TopperResult,
+  ContentBlock,
 } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import multer from 'multer';
-import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import { Op } from 'sequelize';
 
@@ -34,12 +34,52 @@ const storage = multer.memoryStorage();
 export const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  fileFilter: (_req, file, callback) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowed.includes(file.mimetype)) {
+      callback(new AppError('Upload a JPG, PNG, WebP, or GIF image.', 415));
+      return;
+    }
+    callback(null, true);
+  },
 }).single('image');
+
+const IMAGE_SIGNATURES: Record<string, (buffer: Buffer) => boolean> = {
+  'image/jpeg': (buffer) =>
+    buffer.length >= 3 &&
+    buffer[0] === 0xff &&
+    buffer[1] === 0xd8 &&
+    buffer[2] === 0xff,
+  'image/png': (buffer) =>
+    buffer.length >= 8 &&
+    buffer.subarray(0, 8).equals(
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    ),
+  'image/webp': (buffer) =>
+    buffer.length >= 12 &&
+    buffer.subarray(0, 4).toString('ascii') === 'RIFF' &&
+    buffer.subarray(8, 12).toString('ascii') === 'WEBP',
+  'image/gif': (buffer) =>
+    buffer.length >= 6 &&
+    ['GIF87a', 'GIF89a'].includes(buffer.subarray(0, 6).toString('ascii')),
+};
+
+const IMAGE_EXTENSIONS: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+  'image/gif': '.gif',
+};
 
 // --- Image Upload Endpoint ---
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) {
     throw new AppError('No image file provided.', 400);
+  }
+
+  const signatureMatches = IMAGE_SIGNATURES[req.file.mimetype]?.(req.file.buffer);
+  if (!signatureMatches) {
+    throw new AppError('The uploaded file is not a valid image.', 415);
   }
 
   const client = getSupabase();
@@ -54,7 +94,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
 
   // Generate unique filename
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-  const ext = path.extname(req.file.originalname);
+  const ext = IMAGE_EXTENSIONS[req.file.mimetype];
   const filename = `${folder}/${uniqueSuffix}${ext}`;
 
   // Upload to Supabase Storage bucket named 'images'
@@ -85,12 +125,13 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
 
 // --- Dashboard Stats ---
 export const getDashboardStats = asyncHandler(async (req: Request, res: Response) => {
-  const totalStudents = await User.count();
+  const totalStudents = await User.count({ where: { role: 'student' } });
   const totalCourseForms = await CourseRegistration.count();
   const totalScholarshipForms = await ScholarshipRegistration.count();
   
   // Get recent registrations
   const recentStudents = await User.findAll({
+    where: { role: 'student' },
     limit: 5,
     order: [['createdAt', 'DESC']],
     attributes: ['id', 'firstName', 'lastName', 'email', 'mobileNumber', 'createdAt']
@@ -188,50 +229,6 @@ export const deleteStarStudent = asyncHandler(async (req: Request, res: Response
   res.status(204).json({ status: 'success', data: null });
 });
 
-// --- Articles & Blog Posts ---
-export const getArticles = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: [] });
-});
-
-export const createArticle = asyncHandler(async (req: Request, res: Response) => {
-  res.status(201).json({ status: 'success', data: req.body });
-});
-
-export const deleteArticle = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: null });
-});
-
-// --- Video Uploads ---
-export const getVideos = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: [] });
-});
-
-export const createVideo = asyncHandler(async (req: Request, res: Response) => {
-  res.status(201).json({ status: 'success', data: req.body });
-});
-
-export const deleteVideo = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: null });
-});
-
-// --- Courses CMS ---
-export const getCourses = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: [] });
-});
-
-export const createCourse = asyncHandler(async (req: Request, res: Response) => {
-  res.status(201).json({ status: 'success', data: req.body });
-});
-
-// --- Scholarships CMS ---
-export const getScholarships = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: [] });
-});
-
-export const createScholarship = asyncHandler(async (req: Request, res: Response) => {
-  res.status(201).json({ status: 'success', data: req.body });
-});
-
 // --- Results CMS (TopperResult) ---
 export const getResults = asyncHandler(async (req: Request, res: Response) => {
   const where: Record<string, unknown> = {};
@@ -299,60 +296,248 @@ export const getSettings = asyncHandler(async (_req: Request, res: Response) => 
 
 export const updateSettings = asyncHandler(async (req: Request, res: Response) => {
   const body = req.body || {};
+  const rows: Array<{ key: string; value: string }> = [];
+
   for (const key of SETTINGS_KEYS) {
     if (Object.prototype.hasOwnProperty.call(body, key) && body[key] !== undefined) {
-      const value = String(body[key] ?? '');
-      const existing = await SiteSetting.findOne({ where: { key } });
-      if (existing) {
-        await existing.update({ value });
-      } else {
-        await SiteSetting.create({ key, value });
-      }
+      rows.push({ key, value: String(body[key] ?? '') });
     }
   }
+
+  if (rows.length > 0) {
+    await SiteSetting.bulkCreate(rows, {
+      updateOnDuplicate: ['value', 'updatedAt'],
+    });
+  }
+
   const map = await loadSettingsMap();
   res.status(200).json({ status: 'success', data: map });
 });
 
+function serializeContentBlocks(
+  rows: ContentBlock[],
+): Record<string, { value: string; kind: string; updatedAt: Date }> {
+  const map: Record<
+    string,
+    { value: string; kind: string; updatedAt: Date }
+  > = {};
+  for (const row of rows) {
+    map[row.contentKey] = {
+      value: row.value,
+      kind: row.kind,
+      updatedAt: row.updatedAt,
+    };
+  }
+  return map;
+}
+
+export const getPageContent = asyncHandler(
+  async (req: Request, res: Response) => {
+    const rows = await ContentBlock.findAll({
+      where: { pageKey: req.params.pageKey },
+      order: [['contentKey', 'ASC']],
+    });
+    res.status(200).json({
+      status: 'success',
+      data: serializeContentBlocks(rows),
+    });
+  },
+);
+
+export const updateContentBlock = asyncHandler(
+  async (req: Request, res: Response) => {
+    const pageKey = String(req.params.pageKey);
+    const contentKey = String(req.params.contentKey);
+    const [row] = await ContentBlock.upsert(
+      {
+        pageKey,
+        contentKey,
+        kind: req.body.kind,
+        value: req.body.value,
+      },
+      { returning: true },
+    );
+    res.status(200).json({ status: 'success', data: row });
+  },
+);
+
+export const deleteContentBlock = asyncHandler(
+  async (req: Request, res: Response) => {
+    await ContentBlock.destroy({
+      where: {
+        pageKey: req.params.pageKey,
+        contentKey: req.params.contentKey,
+      },
+    });
+    res.status(200).json({
+      status: 'success',
+      data: null,
+      message: 'The original website content has been restored.',
+    });
+  },
+);
+
 // --- Database Viewer Endpoints ---
+function getListOptions(req: Request) {
+  return {
+    q: String(req.query.q || '').trim(),
+    cursor: req.query.cursor ? Number(req.query.cursor) : undefined,
+    limit: Math.min(Number(req.query.limit) || 50, 100),
+  };
+}
+
+function sendPaginated(
+  res: Response,
+  rows: Array<{ id: number }>,
+  limit: number,
+): void {
+  const hasMore = rows.length > limit;
+  const items = hasMore ? rows.slice(0, limit) : rows;
+  const lastItem = items.at(-1);
+  const nextCursor = hasMore ? lastItem?.id ?? null : null;
+
+  res.status(200).json({
+    status: 'success',
+    data: items,
+    pagination: {
+      nextCursor,
+      hasMore,
+      limit,
+    },
+  });
+}
+
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
-  const users = await User.findAll({ order: [['createdAt', 'DESC']] });
-  res.status(200).json({ status: 'success', data: users });
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const users = await User.findAll({
+    where: {
+      role: 'student',
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [
+              { firstName: like },
+              { lastName: like },
+              { email: like },
+              { mobileNumber: like },
+            ],
+          }
+        : {}),
+    },
+    attributes: [
+      'id',
+      'firstName',
+      'lastName',
+      'email',
+      'mobileNumber',
+      'age',
+      'createdAt',
+    ],
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, users, limit);
 });
 
 export const getCourseForms = asyncHandler(async (req: Request, res: Response) => {
-  const forms = await CourseRegistration.findAll({ order: [['createdAt', 'DESC']] });
-  res.status(200).json({ status: 'success', data: forms });
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const forms = await CourseRegistration.findAll({
+    where: {
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [
+              { studentName: like },
+              { studentEmail: like },
+              { studentPhone: like },
+              { courseTitle: like },
+            ],
+          }
+        : {}),
+    },
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, forms, limit);
 });
 
 export const getScholarshipForms = asyncHandler(async (req: Request, res: Response) => {
-  const forms = await ScholarshipRegistration.findAll({ order: [['createdAt', 'DESC']] });
-  res.status(200).json({ status: 'success', data: forms });
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const forms = await ScholarshipRegistration.findAll({
+    where: {
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [
+              { studentName: like },
+              { studentPhone: like },
+              { parentPhone: like },
+              { preferredCourse: like },
+              { schoolName: like },
+              { city: like },
+            ],
+          }
+        : {}),
+    },
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, forms, limit);
 });
 
-export const getContactMessages = asyncHandler(async (_req: Request, res: Response) => {
-  const messages = await ContactMessage.findAll({ order: [['createdAt', 'DESC']] });
-  res.status(200).json({ status: 'success', data: messages });
+export const getContactMessages = asyncHandler(async (req: Request, res: Response) => {
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const messages = await ContactMessage.findAll({
+    where: {
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [
+              { name: like },
+              { email: like },
+              { phone: like },
+              { message: like },
+            ],
+          }
+        : {}),
+    },
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, messages, limit);
 });
 
 export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
-  const q = String(req.query.q || '').trim();
+  const { q, limit } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
 
   const [users, courseForms, scholarshipForms, contactMessages] = await Promise.all([
     User.findAll({
-      ...(like ? {
-        where: {
+      where: {
+        role: 'student',
+        ...(like ? {
           [Op.or]: [
             { firstName: like },
             { lastName: like },
             { email: like },
             { mobileNumber: like },
           ],
-        }
-      } : {}),
+        } : {}),
+      },
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'mobileNumber',
+        'createdAt',
+      ],
       order: [['createdAt', 'DESC']],
-      limit: 200,
+      limit,
     }),
     CourseRegistration.findAll({
       ...(like ? {
@@ -366,7 +551,7 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
         }
       } : {}),
       order: [['createdAt', 'DESC']],
-      limit: 200,
+      limit,
     }),
     ScholarshipRegistration.findAll({
       ...(like ? {
@@ -382,7 +567,7 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
         }
       } : {}),
       order: [['createdAt', 'DESC']],
-      limit: 200,
+      limit,
     }),
     ContactMessage.findAll({
       ...(like ? {
@@ -396,7 +581,7 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
         }
       } : {}),
       order: [['createdAt', 'DESC']],
-      limit: 200,
+      limit,
     }),
   ]);
 

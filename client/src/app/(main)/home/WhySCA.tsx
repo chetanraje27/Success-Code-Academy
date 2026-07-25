@@ -6,6 +6,7 @@ import {
   FaUserGroup, FaChartLine, FaGraduationCap, FaHeart,
   FaArrowRight, FaChevronDown
 } from "react-icons/fa6";
+import { EditableText } from "@/components/admin/EditableText";
 
 interface CountUpProps {
   end: string;
@@ -185,8 +186,19 @@ export default function WhySCA() {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <h2 className="header-title">Why Success Code Academy?</h2>
-          <p className="header-subtitle">Conceptual Learning. Personalized Mentorship. Proven Results.</p>
+          <h2 className="header-title">
+            <EditableText contentKey="why.heading" label="why SCA heading">
+              Why Success Code Academy?
+            </EditableText>
+          </h2>
+          <p className="header-subtitle">
+            <EditableText
+              contentKey="why.description"
+              label="why SCA introduction"
+            >
+              Conceptual Learning. Personalized Mentorship. Proven Results.
+            </EditableText>
+          </p>
 
           {/* Animated Heartbeat Line */}
           <div className="heartbeat-divider">
@@ -248,7 +260,15 @@ export default function WhySCA() {
                     <span className="capsule-icon">{c.icon}</span>
                   </div>
                   <div className="capsule-content">
-                    <h4 className="capsule-title" style={{ color: c.color }}>{c.title}</h4>
+                    <h4 className="capsule-title" style={{ color: c.color }}>
+                      <EditableText
+                        contentKey={`why.feature-${c.id}.title`}
+                        label={`${c.title} feature title`}
+                        showInlineControls={false}
+                      >
+                        {c.title}
+                      </EditableText>
+                    </h4>
                     <div className="capsule-desc">{c.description}</div>
                   </div>
                 </div>
@@ -292,7 +312,15 @@ export default function WhySCA() {
                 >
                   <div className="capsule right-capsule">
                     <div className="capsule-content text-right">
-                      <h4 className="capsule-title" style={{ color: c.color }}>{c.title}</h4>
+                      <h4 className="capsule-title" style={{ color: c.color }}>
+                        <EditableText
+                          contentKey={`why.feature-${c.id}.title`}
+                          label={`${c.title} feature title`}
+                          showInlineControls={false}
+                        >
+                          {c.title}
+                        </EditableText>
+                      </h4>
                       <div className="capsule-desc">{c.description}</div>
                     </div>
                     <div className="capsule-icon-box" style={{ background: `linear-gradient(135deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: `0 8px 20px ${c.color}25` }}>
@@ -331,7 +359,15 @@ export default function WhySCA() {
                         <span className="capsule-icon">{c.icon}</span>
                       </div>
                       <div className="capsule-content">
-                        <h4 className="capsule-title" style={{ color: c.color }}>{c.title}</h4>
+                        <h4 className="capsule-title" style={{ color: c.color }}>
+                          <EditableText
+                            contentKey={`why.feature-${c.id}.title`}
+                            label={`${c.title} feature title`}
+                            showInlineControls={false}
+                          >
+                            {c.title}
+                          </EditableText>
+                        </h4>
                         <div className="capsule-desc">{c.description}</div>
                       </div>
                     </div>

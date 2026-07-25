@@ -1,5 +1,8 @@
 # Success Code Academy NEET Coaching Website - Project Master Context
 
+> Staff instructions: see [ADMIN_GUIDE.md](./ADMIN_GUIDE.md) for the dashboard
+> and visual website editor.
+
 > Updated from the final **Success Code Academy NEET Coaching Institute Website Feature Specification Document v1.0 (June 2026)**. This README is the single source of truth for the AI agent and developers working on the project.
 
 ---

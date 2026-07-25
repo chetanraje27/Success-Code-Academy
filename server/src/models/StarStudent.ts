@@ -89,6 +89,7 @@ export function initStarStudent(sequelize: Sequelize): void {
       sequelize,
       tableName: 'star_students',
       timestamps: true,
+      indexes: [{ fields: ['isActive', 'orderIndex'] }],
     }
   );
 }

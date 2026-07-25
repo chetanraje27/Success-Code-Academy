@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { coursesData } from "@/data/courses";
+import { EditableText } from "@/components/admin/EditableText";
 
 export default function CoursesClient() {
   const [activeTab, setActiveTab] = useState<"freshers" | "repeaters" | "test-series">("freshers");
@@ -27,7 +28,12 @@ export default function CoursesClient() {
             transition={{ duration: 0.6 }}
             className="courses-hero-title"
           >
-            Course that we offer at our institute
+            <EditableText
+              contentKey="hero.heading"
+              label="courses page heading"
+            >
+              Course that we offer at our institute
+            </EditableText>
           </motion.h1>
 
           {/* Filtering Tab Buttons */}
@@ -107,8 +113,25 @@ export default function CoursesClient() {
                         <span>{course.type}</span>
                       </div>
 
-                      <h2 className="course-card-title">{course.title}</h2>
-                      <p className="course-card-desc">{course.description}</p>
+                      <h2 className="course-card-title">
+                        <EditableText
+                          contentKey={`course-${course.id}.title`}
+                          label={`${course.title} title`}
+                          showInlineControls={false}
+                        >
+                          {course.title}
+                        </EditableText>
+                      </h2>
+                      <p className="course-card-desc">
+                        <EditableText
+                          contentKey={`course-${course.id}.description`}
+                          label={`${course.title} description`}
+                          kind="multiline"
+                          showInlineControls={false}
+                        >
+                          {course.description}
+                        </EditableText>
+                      </p>
 
                       <div className="card-divider-line"></div>
 

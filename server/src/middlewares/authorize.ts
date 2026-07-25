@@ -26,16 +26,20 @@ export const authorize = (...allowedRoles: string[]) => {
       return;
     }
 
-    // Hardcoded Admin Access override
-    const isAdminOverride = user.mobileNumber === '9699062427' || user.role === 'admin';
-
-    if (!allowedRoles.includes(user.role) && !(allowedRoles.includes('admin') && isAdminOverride)) {
+    if (!allowedRoles.includes(user.role)) {
       next(
         new AppError(
           'You do not have permission to perform this action.',
           403,
         ),
       );
+      return;
+    }
+
+    // An ordinary student token can never become an admin session, even if
+    // the account role is changed while that token is still valid.
+    if (user.role === 'admin' && user.purpose !== 'admin') {
+      next(new AppError('A verified admin session is required.', 403));
       return;
     }
 

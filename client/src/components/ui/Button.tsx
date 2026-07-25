@@ -65,7 +65,7 @@ const buttonStyles = `
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-sm);
     transition: all 0.2s ease;
     cursor: pointer;
     border: none;
@@ -103,18 +103,18 @@ const buttonStyles = `
   }
 
   .btn-primary:hover {
-    background-color: var(--accent-secondary); /* Vibrant blue hover */
-    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+    background-color: var(--accent-secondary);
+    box-shadow: 0 4px 12px rgba(44, 62, 122, 0.26);
   }
 
   .btn-secondary {
-    background-color: var(--accent-secondary);
+    background-color: var(--accent-warm);
     color: white;
   }
 
   .btn-secondary:hover {
-    background-color: #1e3a8a; /* darker vibrant blue */
-    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    background-color: #c93c0b;
+    box-shadow: 0 4px 12px rgba(232, 73, 15, 0.24);
   }
 
   .btn-outline {

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaDna, FaBookOpen, FaArrowsRotate, FaClipboardCheck } from "react-icons/fa6";
+import { EditableText } from "@/components/admin/EditableText";
 
 const courses = [
   {
@@ -35,9 +36,19 @@ export default function ExploreCourses() {
     <section className="explore-section">
       <div className="container">
         <div className="explore-header">
-          <h2 className="explore-title">Explore Courses</h2>
+          <h2 className="explore-title">
+            <EditableText contentKey="courses.heading" label="courses heading">
+              Explore Courses
+            </EditableText>
+          </h2>
           <p className="explore-subtitle">
-            Choose from our specialized classroom programs tailored to guide medical aspirants to their dream destinations.
+            <EditableText
+              contentKey="courses.description"
+              label="courses introduction"
+              kind="multiline"
+            >
+              Choose from our specialized classroom programs tailored to guide medical aspirants to their dream destinations.
+            </EditableText>
           </p>
         </div>
         <div className="explore-grid">
@@ -65,8 +76,25 @@ export default function ExploreCourses() {
 
                   {/* Content Box */}
                   <div className="content-box">
-                    <h3 className="course-title-text">{c.name}</h3>
-                    <p className="course-desc-text">{c.description}</p>
+                    <h3 className="course-title-text">
+                      <EditableText
+                        contentKey={`courses.card-${i + 1}.title`}
+                        label={`course ${i + 1} title`}
+                        showInlineControls={false}
+                      >
+                        {c.name}
+                      </EditableText>
+                    </h3>
+                    <p className="course-desc-text">
+                      <EditableText
+                        contentKey={`courses.card-${i + 1}.description`}
+                        label={`course ${i + 1} description`}
+                        kind="multiline"
+                        showInlineControls={false}
+                      >
+                        {c.description}
+                      </EditableText>
+                    </p>
 
                     <div className="see-more">
                       <span>Explore Course</span>

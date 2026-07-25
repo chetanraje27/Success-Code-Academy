@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./admin/admin.css";
+import "./live-editor.css";
 import StyledJsxRegistry from "./registry";
 
 export const metadata: Metadata = {

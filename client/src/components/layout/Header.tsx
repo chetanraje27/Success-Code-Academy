@@ -9,6 +9,16 @@ import SignInModal from "@/components/ui/SignInModal";
 import ProfileModal from "@/components/ui/ProfileModal";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import { FaPen, FaDatabase } from "react-icons/fa6";
+import { EditableText } from "@/components/admin/EditableText";
+
+type HeaderUser = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  mobileNumber?: string;
+  age?: number;
+  role?: string;
+};
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +26,7 @@ export default function Header() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
   const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
 
   useEffect(() => {
@@ -27,16 +37,17 @@ export default function Header() {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     
-    // Read logged in user profile from storage
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    const syncStoredUser = () => {
+      const savedUser = localStorage.getItem("user");
+      if (!savedUser) return;
       try {
-        setCurrentUser(JSON.parse(savedUser));
-      } catch (e) {
+        setCurrentUser(JSON.parse(savedUser) as HeaderUser);
+      } catch {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
       }
-    }
+    };
+    const storageTimer = window.setTimeout(syncStoredUser, 0);
 
     const openSignInModal = () => setIsSignInOpen(true);
     window.addEventListener("open-signin-modal", openSignInModal);
@@ -44,6 +55,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("open-signin-modal", openSignInModal);
+      window.clearTimeout(storageTimer);
     };
   }, []);
 
@@ -54,12 +66,12 @@ export default function Header() {
     window.dispatchEvent(new Event("auth-changed"));
   };
 
-  const handleLoginSuccess = (user: any) => {
+  const handleLoginSuccess = (user: HeaderUser) => {
     setCurrentUser(user);
     window.dispatchEvent(new Event("auth-changed"));
   };
 
-  const handleProfileUpdate = (user: any) => {
+  const handleProfileUpdate = (user: HeaderUser) => {
     setCurrentUser(user);
   };
 
@@ -81,7 +93,14 @@ export default function Header() {
           <nav className="desktop-nav">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} className="nav-link">
-                {link.label}
+                <EditableText
+                  contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
+                  label={`${link.label} navigation label`}
+                  scope="global"
+                  showInlineControls={false}
+                >
+                  {link.label}
+                </EditableText>
               </Link>
             ))}
           </nav>
@@ -184,7 +203,7 @@ export default function Header() {
                     >
                       Profile
                     </button>
-                    {currentUser?.mobileNumber === '9699062427' && (
+                    {isAdmin && (
                       <Link 
                         href="/admin"
                         onClick={() => setIsDropdownOpen(false)}
@@ -314,7 +333,14 @@ export default function Header() {
               onClick={() => setIsMenuOpen(false)}
               className="mobile-nav-link"
             >
-              {link.label}
+              <EditableText
+                contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
+                label={`${link.label} navigation label`}
+                scope="global"
+                showInlineControls={false}
+              >
+                {link.label}
+              </EditableText>
             </Link>
           ))}
           <div className="mobile-actions">
@@ -357,7 +383,7 @@ export default function Header() {
                   >
                     Profile
                   </Button>
-                  {currentUser?.mobileNumber === '9699062427' && (
+                  {isAdmin && (
                     <Button 
                       href="/admin"
                       variant="primary" 

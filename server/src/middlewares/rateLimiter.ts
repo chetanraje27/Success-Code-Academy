@@ -34,3 +34,21 @@ export const submissionLimiter = rateLimit({
     errors: [],
   },
 });
+
+/**
+ * Admin sign-in limiter. It is intentionally stricter than public
+ * form limits because repeated failures are likely credential attacks.
+ */
+export const adminLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true,
+  message: {
+    status: 'fail',
+    statusCode: 429,
+    message: 'Too many sign-in attempts. Please wait 15 minutes and try again.',
+    errors: [],
+  },
+});

@@ -15,6 +15,7 @@ import Notification, { initNotification } from './Notification';
 import StarStudent, { initStarStudent } from './StarStudent';
 import SiteSetting, { initSiteSetting } from './SiteSetting';
 import TopperResult, { initTopperResult } from './TopperResult';
+import ContentBlock, { initContentBlock } from './ContentBlock';
 
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
@@ -26,6 +27,7 @@ initNotification(sequelize);
 initStarStudent(sequelize);
 initSiteSetting(sequelize);
 initTopperResult(sequelize);
+initContentBlock(sequelize);
 
 export async function testConnection(): Promise<boolean> {
   try {
@@ -33,8 +35,14 @@ export async function testConnection(): Promise<boolean> {
     logger.info('✅ Database connection established successfully.');
     
     // Automatically create/alter tables to match models
-    await sequelize.sync({ alter: true });
-    logger.info('🔄 Database tables synchronized successfully.');
+    if (process.env.NODE_ENV !== 'production') {
+      // Local development stays convenient. Production schema changes must
+      // go through reviewed migrations (`npm run db:migrate`).
+      await sequelize.sync({ alter: true });
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      logger.info('Development database tables synchronized successfully.');
+    }
     
     return true;
   } catch (error) {
@@ -55,5 +63,6 @@ export {
   StarStudent,
   SiteSetting,
   TopperResult,
+  ContentBlock,
 };
 export default sequelize;

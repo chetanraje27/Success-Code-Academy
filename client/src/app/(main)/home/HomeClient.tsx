@@ -132,7 +132,11 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 1: FLOATING NOTIFICATION BAR
           ══════════════════════════════════════════ */}
-      <EditableSection label="Notifications" onEdit={() => setEditNotifs(true)}>
+      <EditableSection
+        label="Notifications"
+        onEdit={() => setEditNotifs(true)}
+        controlOffsetTop={84}
+      >
       {isLoading ? (
         <div className="notif-bar-wrap">
           <div className="notif-bar">

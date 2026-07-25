@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import { EditableText } from "@/components/admin/EditableText";
 
 type StarStudent = {
   id: string | number;
@@ -102,9 +103,28 @@ export default function ToppersCarousel() {
       <div className="stars-shell">
         <header className="stars-header">
           <div className="heading-copy">
-            <span className="eyebrow">MEET OUR STARS</span>
-            <h2 id="stars-heading">Meet Our Stars</h2>
-            <p>Celebrating the hard work, perseverance, and outstanding NEET scores of our classroom students.</p>
+            <span className="eyebrow">
+              <EditableText
+                contentKey="stars.eyebrow"
+                label="stars eyebrow"
+              >
+                MEET OUR STARS
+              </EditableText>
+            </span>
+            <h2 id="stars-heading">
+              <EditableText contentKey="stars.heading" label="stars heading">
+                Meet Our Stars
+              </EditableText>
+            </h2>
+            <p>
+              <EditableText
+                contentKey="stars.description"
+                label="stars description"
+                kind="multiline"
+              >
+                Celebrating the hard work, perseverance, and outstanding NEET scores of our classroom students.
+              </EditableText>
+            </p>
           </div>
 
           <Link href="/results" className="results-link">

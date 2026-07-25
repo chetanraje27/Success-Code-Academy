@@ -7,8 +7,13 @@ type ValidationTarget = 'body' | 'query' | 'params';
  * Creates a middleware that validates a specific part of the incoming
  * request (`body`, `query`, or `params`) against a Zod schema.
  *
- * On success the raw value is replaced with the parsed (and
+ * On success body and route params are replaced with the parsed (and
  * potentially transformed/defaulted) output from Zod.
+ *
+ * Express 5 exposes `req.query` through a getter-only property, so query
+ * input is validated here but remains on the request in its original
+ * string form. Query-consuming controllers already normalize those values
+ * after this middleware has established that they are safe.
  *
  * On failure the ZodError is forwarded to the global error handler
  * which formats it as a 422 response.
@@ -33,8 +38,11 @@ export const validate = (
       return;
     }
 
-    // Replace raw input with validated and transformed data
-    (req as unknown as Record<string, unknown>)[target] = result.data;
+    // Express 5 defines req.query as a getter on the request prototype.
+    // Assigning to it throws before the controller can run.
+    if (target !== 'query') {
+      (req as unknown as Record<string, unknown>)[target] = result.data;
+    }
     next();
   };
 };

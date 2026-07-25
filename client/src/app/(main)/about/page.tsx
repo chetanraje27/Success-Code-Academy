@@ -8,6 +8,7 @@ import {
 import {
   FiUsers, FiBookOpen, FiAward, FiTrendingUp
 } from "react-icons/fi";
+import { EditableText } from "@/components/admin/EditableText";
 
 export default function AboutPage() {
   return (
@@ -20,14 +21,26 @@ export default function AboutPage() {
           {/* Left Content */}
           <div className="hero-content">
             <div className="eyebrow">
-              <span className="eyebrow-text">ABOUT US</span>
+              <span className="eyebrow-text">
+                <EditableText contentKey="hero.eyebrow" label="about eyebrow">
+                  ABOUT US
+                </EditableText>
+              </span>
               <div className="eyebrow-line"></div>
             </div>
             <h1 className="hero-title">
-              Empowering Dreams. <br className="desktop-br" />Building Future Doctors.
+              <EditableText contentKey="hero.heading" label="about page heading">
+                Empowering Dreams. Building Future Doctors.
+              </EditableText>
             </h1>
             <p className="hero-desc">
-              Since 2018, Success Code Academy has been shaping the future of NEET aspirants from Baramati and beyond with quality education, mentorship, and unwavering support.
+              <EditableText
+                contentKey="hero.description"
+                label="about page introduction"
+                kind="multiline"
+              >
+                Since 2018, Success Code Academy has been shaping the future of NEET aspirants from Baramati and beyond with quality education, mentorship, and unwavering support.
+              </EditableText>
             </p>
 
             <div className="hero-pills">
@@ -82,14 +95,34 @@ export default function AboutPage() {
       <section className="story-section container">
         <div className="story-content">
           <div className="eyebrow">
-            <span className="eyebrow-text">OUR STORY</span>
+            <span className="eyebrow-text">
+              <EditableText contentKey="story.eyebrow" label="story eyebrow">
+                OUR STORY
+              </EditableText>
+            </span>
             <div className="eyebrow-line"></div>
           </div>
-          <h2 className="section-title">Built on a Simple Belief</h2>
+          <h2 className="section-title">
+            <EditableText contentKey="story.heading" label="story heading">
+              Built on a Simple Belief
+            </EditableText>
+          </h2>
           <div className="story-text">
-            <p>Students from regional areas deserve the same opportunities and quality education as those in larger cities.</p>
-            <p>Since 2018, we have been committed to helping aspiring doctors achieve their goals through quality teaching, dedicated guidance, and a student-first approach.</p>
-            <p>Our journey is defined not only by academic results but by the confidence, discipline, and success of every student we mentor.</p>
+            <p>
+              <EditableText contentKey="story.paragraph-1" label="story paragraph 1" kind="multiline">
+                Students from regional areas deserve the same opportunities and quality education as those in larger cities.
+              </EditableText>
+            </p>
+            <p>
+              <EditableText contentKey="story.paragraph-2" label="story paragraph 2" kind="multiline">
+                Since 2018, we have been committed to helping aspiring doctors achieve their goals through quality teaching, dedicated guidance, and a student-first approach.
+              </EditableText>
+            </p>
+            <p>
+              <EditableText contentKey="story.paragraph-3" label="story paragraph 3" kind="multiline">
+                Our journey is defined not only by academic results but by the confidence, discipline, and success of every student we mentor.
+              </EditableText>
+            </p>
           </div>
         </div>
 
@@ -118,7 +151,14 @@ export default function AboutPage() {
           <div className="philosophy-card blue-card">
             <div className="phil-header">
               <div className="phil-icon blue-icon-box"><FaLightbulb /></div>
-              <h3 className="phil-title">Our Teaching Philosophy</h3>
+              <h3 className="phil-title">
+                <EditableText
+                  contentKey="philosophy.teaching.heading"
+                  label="teaching philosophy heading"
+                >
+                  Our Teaching Philosophy
+                </EditableText>
+              </h3>
             </div>
             <ul className="phil-list">
               <li><FaCheckCircle className="check-icon blue-check" /><span>Conceptual clarity before moving to application-based problem solving.</span></li>
@@ -151,7 +191,14 @@ export default function AboutPage() {
           <div className="philosophy-card green-card">
             <div className="phil-header">
               <div className="phil-icon green-icon-box"><FaUserTie /></div>
-              <h3 className="phil-title">Personalized Mentorship</h3>
+              <h3 className="phil-title">
+                <EditableText
+                  contentKey="philosophy.mentorship.heading"
+                  label="mentorship heading"
+                >
+                  Personalized Mentorship
+                </EditableText>
+              </h3>
             </div>
             <ul className="phil-list">
               <li><FaCheckCircle className="check-icon green-check" /><span>Every student learns differently – we guide them individually.</span></li>
@@ -182,10 +229,24 @@ export default function AboutPage() {
       {/* 5. INFRASTRUCTURE SECTION */}
       <section className="infra-section container">
         <div className="eyebrow">
-          <span className="eyebrow-text">OUR INFRASTRUCTURE</span>
+          <span className="eyebrow-text">
+            <EditableText
+              contentKey="infrastructure.eyebrow"
+              label="infrastructure eyebrow"
+            >
+              OUR INFRASTRUCTURE
+            </EditableText>
+          </span>
           <div className="eyebrow-line"></div>
         </div>
-        <h2 className="section-title">A Space That Inspires Excellence</h2>
+        <h2 className="section-title">
+          <EditableText
+            contentKey="infrastructure.heading"
+            label="infrastructure heading"
+          >
+            A Space That Inspires Excellence
+          </EditableText>
+        </h2>
 
         <div className="infra-grid-4">
 

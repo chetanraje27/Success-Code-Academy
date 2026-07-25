@@ -10,6 +10,7 @@ import {
   FaChevronLeft,
   FaChevronRight
 } from "react-icons/fa6";
+import { EditableText } from "@/components/admin/EditableText";
 
 interface BlogItem {
   id: number;
@@ -217,9 +218,22 @@ export default function AcademyInsights() {
         <div className="insights-sub-section">
           <div className="section-header">
             <div className="header-text">
-              <h2 className="main-heading">Success Code Achievers in the News</h2>
+              <h2 className="main-heading">
+                <EditableText
+                  contentKey="insights.news.heading"
+                  label="news section heading"
+                >
+                  Success Code Achievers in the News
+                </EditableText>
+              </h2>
               <p className="subtitle">
-                Read about the incredible achievements and stories of Success Code Academy toppers featured in top national news publications.
+                <EditableText
+                  contentKey="insights.news.description"
+                  label="news section description"
+                  kind="multiline"
+                >
+                  Read about the incredible achievements and stories of Success Code Academy toppers featured in top national news publications.
+                </EditableText>
               </p>
             </div>
             <div className="carousel-controls">
@@ -303,9 +317,22 @@ export default function AcademyInsights() {
         <div className="insights-premium-container">
           <div className="section-header">
             <div className="header-text">
-              <h2 className="main-heading">Get to know Success Code Academy.</h2>
+              <h2 className="main-heading">
+                <EditableText
+                  contentKey="insights.videos.heading"
+                  label="video section heading"
+                >
+                  Get to know Success Code Academy.
+                </EditableText>
+              </h2>
               <p className="subtitle">
-                Watch classroom campus tours, NEET ranker preparation interviews, and annual felicitation ceremonies.
+                <EditableText
+                  contentKey="insights.videos.description"
+                  label="video section description"
+                  kind="multiline"
+                >
+                  Watch classroom campus tours, NEET ranker preparation interviews, and annual felicitation ceremonies.
+                </EditableText>
               </p>
             </div>
             <div className="carousel-controls">

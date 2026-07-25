@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
-import { FaPen } from "react-icons/fa6";
+import type { CSSProperties, ReactNode } from "react";
+import { Pencil } from "lucide-react";
 import { useEditModeOptional } from "./EditModeContext";
 
 type EditableSectionProps = {
   label: string;
   onEdit: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
+  controlOffsetTop?: number;
   /** When true, wrap children in relative container for overlay button */
   as?: "div" | "section";
 };
@@ -24,6 +25,7 @@ export default function EditableSection({
   children,
   className,
   style,
+  controlOffsetTop,
   as = "div",
 }: EditableSectionProps) {
   const { editMode } = useEditModeOptional();
@@ -39,19 +41,17 @@ export default function EditableSection({
 
   return (
     <Tag
-      className={className}
+      className={[className, "sca-editable-section"].filter(Boolean).join(" ")}
       style={{
         ...style,
         position: style?.position || "relative",
-        outline: "2px dashed rgba(37, 99, 235, 0.35)",
-        outlineOffset: 2,
-        borderRadius: 8,
       }}
     >
       {children}
       <button
         type="button"
         className="sca-edit-section-btn"
+        style={controlOffsetTop === undefined ? undefined : { top: controlOffsetTop }}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -60,33 +60,9 @@ export default function EditableSection({
         title={`Edit ${label}`}
         aria-label={`Edit ${label}`}
       >
-        <FaPen size={12} />
-        <span>Edit {label}</span>
+        <Pencil size={14} />
+        <span>Manage {label}</span>
       </button>
-
-      <style jsx global>{`
-        .sca-edit-section-btn {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          z-index: 40;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 7px 11px;
-          border: none;
-          border-radius: 999px;
-          background: #2563eb;
-          color: #fff;
-          font-size: 0.75rem;
-          font-weight: 700;
-          cursor: pointer;
-          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
-        }
-        .sca-edit-section-btn:hover {
-          background: #1d4ed8;
-        }
-      `}</style>
     </Tag>
   );
 }

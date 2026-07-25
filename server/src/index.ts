@@ -14,8 +14,8 @@ import { seedDatabase } from './seedDatabase';
  * 4. Registers graceful-shutdown handlers for SIGTERM / SIGINT.
  */
 async function startServer(): Promise<void> {
-  // We don't need to manually sync here because testConnection() inside models/index.ts already calls sequelize.sync({ alter: true }).
-  // Test database connection and sync tables
+  // Test the database connection. In development, testConnection also
+  // synchronizes models; production schema changes use migrations.
   const dbConnected = await testConnection();
 
   if (dbConnected) {

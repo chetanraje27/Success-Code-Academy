@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   createContext,
   useCallback,
   useContext,
@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { getStoredUser, isAdminUser } from "@/lib/api";
+import type { AdminUser } from "@/lib/admin-api";
 
 type EditModeContextValue = {
   isAdmin: boolean;
@@ -19,53 +19,80 @@ type EditModeContextValue = {
   bumpRefresh: () => void;
   leadsOpen: boolean;
   setLeadsOpen: (open: boolean) => void;
-  user: any | null;
+  user: AdminUser | null;
   refreshAuth: () => void;
 };
 
 const EditModeContext = createContext<EditModeContextValue | null>(null);
-
 const EDIT_MODE_KEY = "sca_edit_mode";
 
 export function EditModeProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<AdminUser | null>(null);
   const [editMode, setEditModeState] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [leadsOpen, setLeadsOpen] = useState(false);
 
   const refreshAuth = useCallback(() => {
-    const next = getStoredUser();
-    setUser(next);
-    if (!isAdminUser(next)) {
-      setEditModeState(false);
-      setLeadsOpen(false);
-    }
+    fetch("/api/admin/session", {
+      credentials: "same-origin",
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        const payload = (await response.json()) as {
+          data?: { user?: AdminUser };
+        };
+        return payload.data?.user?.role === "admin"
+          ? payload.data.user
+          : null;
+      })
+      .then((nextUser) => {
+        setUser(nextUser);
+        if (!nextUser) {
+          setEditModeState(false);
+          setLeadsOpen(false);
+        }
+      })
+      .catch(() => {
+        setUser(null);
+        setEditModeState(false);
+        setLeadsOpen(false);
+      });
   }, []);
 
   useEffect(() => {
     refreshAuth();
     const onAuth = () => refreshAuth();
-    window.addEventListener("auth-changed", onAuth);
-    window.addEventListener("storage", onAuth);
+    const onContent = () => setRefreshKey((key) => key + 1);
+    window.addEventListener("admin-session-expired", onAuth);
+    window.addEventListener("admin-content-changed", onContent);
     return () => {
-      window.removeEventListener("auth-changed", onAuth);
-      window.removeEventListener("storage", onAuth);
+      window.removeEventListener("admin-session-expired", onAuth);
+      window.removeEventListener("admin-content-changed", onContent);
     };
   }, [refreshAuth]);
 
   useEffect(() => {
-    if (!isAdminUser(user)) return;
+    if (!user) return;
     try {
-      const saved = sessionStorage.getItem(EDIT_MODE_KEY);
-      if (saved === "1") setEditModeState(true);
+      // Restore a user-controlled browser preference after auth verification.
+      const requestedByDashboard =
+        new URLSearchParams(window.location.search).get("edit") === "1";
+      if (requestedByDashboard) {
+        sessionStorage.setItem(EDIT_MODE_KEY, "1");
+      }
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setEditModeState(
+        requestedByDashboard || sessionStorage.getItem(EDIT_MODE_KEY) === "1",
+      );
     } catch {
-      /* ignore */
+      setEditModeState(false);
     }
   }, [user]);
 
   const setEditMode = useCallback(
     (on: boolean) => {
-      if (!isAdminUser(user)) {
+      if (!user) {
         setEditModeState(false);
         return;
       }
@@ -73,10 +100,10 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
       try {
         sessionStorage.setItem(EDIT_MODE_KEY, on ? "1" : "0");
       } catch {
-        /* ignore */
+        // Session storage is an optional convenience only.
       }
     },
-    [user]
+    [user],
   );
 
   const toggleEditMode = useCallback(() => {
@@ -84,15 +111,14 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
   }, [editMode, setEditMode]);
 
   const bumpRefresh = useCallback(() => {
-    setRefreshKey((k) => k + 1);
+    setRefreshKey((key) => key + 1);
+    window.dispatchEvent(new Event("admin-content-changed"));
   }, []);
-
-  const isAdmin = isAdminUser(user);
 
   const value = useMemo(
     () => ({
-      isAdmin,
-      editMode: isAdmin && editMode,
+      isAdmin: Boolean(user),
+      editMode: Boolean(user) && editMode,
       setEditMode,
       toggleEditMode,
       refreshKey,
@@ -103,46 +129,45 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
       refreshAuth,
     }),
     [
-      isAdmin,
       editMode,
-      setEditMode,
-      toggleEditMode,
-      refreshKey,
       bumpRefresh,
       leadsOpen,
-      user,
       refreshAuth,
-    ]
+      refreshKey,
+      setEditMode,
+      toggleEditMode,
+      user,
+    ],
   );
 
   return (
-    <EditModeContext.Provider value={value}>{children}</EditModeContext.Provider>
+    <EditModeContext.Provider value={value}>
+      {children}
+    </EditModeContext.Provider>
   );
 }
 
 export function useEditMode() {
-  const ctx = useContext(EditModeContext);
-  if (!ctx) {
+  const context = useContext(EditModeContext);
+  if (!context) {
     throw new Error("useEditMode must be used within EditModeProvider");
   }
-  return ctx;
+  return context;
 }
 
-/** Safe hook when provider might be missing (returns disabled defaults). */
 export function useEditModeOptional(): EditModeContextValue {
-  const ctx = useContext(EditModeContext);
   return (
-    ctx || {
+    useContext(EditModeContext) || {
       isAdmin: false,
       editMode: false,
-      setEditMode: () => {},
-      toggleEditMode: () => {},
+      setEditMode: () => undefined,
+      toggleEditMode: () => undefined,
       refreshKey: 0,
-      bumpRefresh: () => {},
+      bumpRefresh: () => undefined,
       leadsOpen: false,
-      setLeadsOpen: () => {},
+      setLeadsOpen: () => undefined,
       user: null,
-      refreshAuth: () => {},
+      refreshAuth: () => undefined,
     }
   );
 }

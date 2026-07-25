@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { EditableText } from "@/components/admin/EditableText";
 
 export default function AdmissionsClient() {
   const [formData, setFormData] = useState({
@@ -166,8 +167,21 @@ export default function AdmissionsClient() {
             </div>
             
             <h1 className="poster-main-title">
-              Register for<br />
-              <span className="blue-title-highlight">Success Code Scholarship Exam</span>
+              <EditableText
+                contentKey="scholarship.heading-prefix"
+                label="scholarship heading"
+              >
+                Register for
+              </EditableText>
+              <br />
+              <span className="blue-title-highlight">
+                <EditableText
+                  contentKey="scholarship.heading-highlight"
+                  label="scholarship highlighted heading"
+                >
+                  Success Code Scholarship Exam
+                </EditableText>
+              </span>
             </h1>
             
             <div className="poster-badge-pill">
@@ -175,7 +189,13 @@ export default function AdmissionsClient() {
             </div>
             
             <p className="poster-intro-text">
-              This scholarship assessment helps us understand your foundational strength in Physics, Chemistry, and Biology, along with your analytical thinking and concept application. This enables us to provide the right guidance for your NEET journey from the very beginning.
+              <EditableText
+                contentKey="scholarship.introduction"
+                label="scholarship introduction"
+                kind="multiline"
+              >
+                This scholarship assessment helps us understand your foundational strength in Physics, Chemistry, and Biology, along with your analytical thinking and concept application. This enables us to provide the right guidance for your NEET journey from the very beginning.
+              </EditableText>
             </p>
             
             <div className="poster-star-divider">
@@ -196,8 +216,16 @@ export default function AdmissionsClient() {
                 </svg>
               </div>
               <div className="feature-text-block">
-                <h4 className="feature-title">Foundation Assessment</h4>
-                <p className="feature-description">Evaluate basics in Physics, Chemistry &amp; Biology</p>
+                <h4 className="feature-title">
+                  <EditableText contentKey="features.foundation.title" label="foundation assessment title">
+                    Foundation Assessment
+                  </EditableText>
+                </h4>
+                <p className="feature-description">
+                  <EditableText contentKey="features.foundation.description" label="foundation assessment description">
+                    Evaluate basics in Physics, Chemistry &amp; Biology
+                  </EditableText>
+                </p>
               </div>
             </div>
             
@@ -212,8 +240,16 @@ export default function AdmissionsClient() {
                 </svg>
               </div>
               <div className="feature-text-block">
-                <h4 className="feature-title">Performance Analysis</h4>
-                <p className="feature-description">Understand strengths and improvement areas</p>
+                <h4 className="feature-title">
+                  <EditableText contentKey="features.analysis.title" label="performance analysis title">
+                    Performance Analysis
+                  </EditableText>
+                </h4>
+                <p className="feature-description">
+                  <EditableText contentKey="features.analysis.description" label="performance analysis description">
+                    Understand strengths and improvement areas
+                  </EditableText>
+                </p>
               </div>
             </div>
             
@@ -225,8 +261,16 @@ export default function AdmissionsClient() {
                 </svg>
               </div>
               <div className="feature-text-block">
-                <h4 className="feature-title">Personalized Guidance</h4>
-                <p className="feature-description">Get the right academic direction from the start</p>
+                <h4 className="feature-title">
+                  <EditableText contentKey="features.guidance.title" label="personalized guidance title">
+                    Personalized Guidance
+                  </EditableText>
+                </h4>
+                <p className="feature-description">
+                  <EditableText contentKey="features.guidance.description" label="personalized guidance description">
+                    Get the right academic direction from the start
+                  </EditableText>
+                </p>
               </div>
             </div>
             
@@ -238,8 +282,16 @@ export default function AdmissionsClient() {
                 </svg>
               </div>
               <div className="feature-text-block">
-                <h4 className="feature-title">NEET Preparation Roadmap</h4>
-                <p className="feature-description">Build a clear roadmap for the NEET journey</p>
+                <h4 className="feature-title">
+                  <EditableText contentKey="features.roadmap.title" label="NEET roadmap title">
+                    NEET Preparation Roadmap
+                  </EditableText>
+                </h4>
+                <p className="feature-description">
+                  <EditableText contentKey="features.roadmap.description" label="NEET roadmap description">
+                    Build a clear roadmap for the NEET journey
+                  </EditableText>
+                </p>
               </div>
             </div>
             
@@ -251,8 +303,20 @@ export default function AdmissionsClient() {
                 </svg>
               </div>
               <div className="feature-text-block">
-                <h4 className="feature-title-blue">Scholarship Opportunity</h4>
-                <p className="feature-description-blue">Eligible students may receive scholarship benefits based on performance.</p>
+                <h4 className="feature-title-blue">
+                  <EditableText contentKey="features.scholarship.title" label="scholarship opportunity title">
+                    Scholarship Opportunity
+                  </EditableText>
+                </h4>
+                <p className="feature-description-blue">
+                  <EditableText
+                    contentKey="features.scholarship.description"
+                    label="scholarship opportunity description"
+                    kind="multiline"
+                  >
+                    Eligible students may receive scholarship benefits based on performance.
+                  </EditableText>
+                </p>
               </div>
             </div>
           </div>
@@ -272,7 +336,14 @@ export default function AdmissionsClient() {
                   <polyline points="10 9 9 9 8 9" />
                 </svg>
               </div>
-              <h3 className="form-card-title">Fill in your details to<br />Register for the Scholarship Exam</h3>
+              <h3 className="form-card-title">
+                <EditableText
+                  contentKey="form.heading"
+                  label="scholarship form heading"
+                >
+                  Fill in your details to Register for the Scholarship Exam
+                </EditableText>
+              </h3>
               <div className="title-underline"></div>
             </div>
 

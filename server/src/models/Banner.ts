@@ -5,6 +5,7 @@ export interface BannerAttributes {
   type: string; // 'HOME' or 'RESULTS'
   image: string;
   altText: string;
+  targetUrl?: string;
   isActive: boolean;
   orderIndex: number;
   createdAt?: Date;
@@ -22,6 +23,7 @@ export class Banner
   declare public type: string;
   declare public image: string;
   declare public altText: string;
+  declare public targetUrl?: string;
   declare public isActive: boolean;
   declare public orderIndex: number;
 
@@ -50,6 +52,10 @@ export function initBanner(sequelize: Sequelize): void {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      targetUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -65,6 +71,7 @@ export function initBanner(sequelize: Sequelize): void {
       sequelize,
       tableName: 'banners',
       timestamps: true,
+      indexes: [{ fields: ['isActive', 'type', 'orderIndex'] }],
     }
   );
 }

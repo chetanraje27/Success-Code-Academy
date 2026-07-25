@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { coursesData } from "@/data/courses";
 import { FaChevronDown, FaCalendarDays, FaArrowLeft, FaCheck, FaPhone, FaEnvelope, FaClock, FaBookOpen, FaTrophy, FaGraduationCap, FaFileSignature, FaHeart, FaFilePdf } from "react-icons/fa6";
 import { FaChartLine } from "react-icons/fa";
+import { EditableText } from "@/components/admin/EditableText";
 
 interface CourseDetailClientProps {
   id: string;
@@ -301,8 +302,23 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
 
           {/* LEFT SIDE: Course Overview & Syllabus details */}
           <div className="detail-left-content">
-            <h1 className="course-title-header">{course.title}</h1>
-            <p className="course-subtitle-desc">{course.description}</p>
+            <h1 className="course-title-header">
+              <EditableText
+                contentKey="course.heading"
+                label="course heading"
+              >
+                {course.title}
+              </EditableText>
+            </h1>
+            <p className="course-subtitle-desc">
+              <EditableText
+                contentKey="course.description"
+                label="course description"
+                kind="multiline"
+              >
+                {course.description}
+              </EditableText>
+            </p>
 
             <div className="card-divider-line"></div>
 
@@ -310,7 +326,14 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
             <div className="whats-in-course-section">
               <div className="whats-in-course-header-row">
                 <div className="header-text-block">
-                  <h2 className="whats-in-course-title">NEET Course Offerings &amp; Why Choose Us</h2>
+                  <h2 className="whats-in-course-title">
+                    <EditableText
+                      contentKey="course.offerings-heading"
+                      label="course offerings heading"
+                    >
+                      NEET Course Offerings &amp; Why Choose Us
+                    </EditableText>
+                  </h2>
                 </div>
               </div>
 

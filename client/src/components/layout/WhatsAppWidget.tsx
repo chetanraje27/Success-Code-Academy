@@ -1,15 +1,17 @@
 "use client";
 
 import { FaWhatsapp } from "react-icons/fa";
+import { useSiteSettings, whatsappHref } from "@/lib/site-settings";
 
 export default function WhatsAppWidget() {
-  const phoneNumber = "918600470850"; // With country code, no +
+  const settings = useSiteSettings();
   const message = encodeURIComponent("Hi! I'm interested in learning more about Success Code Academy programs.");
+  const href = `${whatsappHref(settings)}?text=${message}`;
 
   return (
     <>
       <a
-        href={`https://wa.me/${phoneNumber}?text=${message}`}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-widget"

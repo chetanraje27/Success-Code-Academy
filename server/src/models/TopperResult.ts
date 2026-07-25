@@ -85,6 +85,7 @@ export function initTopperResult(sequelize: Sequelize): void {
       sequelize,
       tableName: 'topper_results',
       timestamps: true,
+      indexes: [{ fields: ['isActive', 'year', 'orderIndex'] }],
     }
   );
 }

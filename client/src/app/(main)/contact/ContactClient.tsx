@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import Button from "@/components/ui/Button";
-import { FaEnvelope } from "react-icons/fa6";
+import { useSiteSettings } from "@/lib/site-settings";
+import { EditableText } from "@/components/admin/EditableText";
 
 const DESTINATION = {
   address:
@@ -37,12 +37,13 @@ function generateCaptcha(): { question: string; answer: number } {
 }
 
 export default function ContactClient() {
+  const settings = useSiteSettings();
   const [origin, setOrigin] = useState("");
   const [distanceText, setDistanceText] = useState("");
   const [distanceError, setDistanceError] = useState("");
   const [isFindingDistance, setIsFindingDistance] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
-  const [captcha, setCaptcha] = useState({ question: "", answer: 0 });
+  const [captcha, setCaptcha] = useState(generateCaptcha);
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
 
@@ -52,9 +53,7 @@ export default function ContactClient() {
     setCaptchaError("");
   }, []);
 
-  useEffect(() => { refreshCaptcha(); }, [refreshCaptcha]);
-
-  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(DESTINATION.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(settings.address || DESTINATION.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   async function handleDistanceCheck(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -161,9 +160,22 @@ export default function ContactClient() {
           <div className="contact-grid-wrap">
             {/* Left side: Premium Contact Information List */}
             <div className="contact-left-details">
-              <h2 className="contact-info-title">Contact Information</h2>
+              <h2 className="contact-info-title">
+                <EditableText
+                  contentKey="contact.heading"
+                  label="contact information heading"
+                >
+                  Contact Information
+                </EditableText>
+              </h2>
               <p className="contact-info-subtitle-desc">
-                Have questions about admissions, courses, or scheduling? Reach out directly to our team.
+                <EditableText
+                  contentKey="contact.description"
+                  label="contact introduction"
+                  kind="multiline"
+                >
+                  Have questions about admissions, courses, or scheduling? Reach out directly to our team.
+                </EditableText>
               </p>
 
               <div className="enhanced-contact-list">
@@ -171,12 +183,12 @@ export default function ContactClient() {
                 {/* Address Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/ui/location.png" alt="Location" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <Image src="/images/ui/location.png" alt="Location" width={24} height={24} style={{ objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Address</h4>
                     <p className="detail-item-text">
-                      Success Code Academy, NEET Specialist, Baramati., 2nd Floor, Nanaware-Gadhave Pride, Baramati-Bhigwan Rd, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102
+                      {settings.address}
                     </p>
                   </div>
                 </div>
@@ -184,12 +196,12 @@ export default function ContactClient() {
                 {/* Phone Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/ui/phone-ringing.png" alt="Phone" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <Image src="/images/ui/phone-ringing.png" alt="Phone" width={24} height={24} style={{ objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Phone</h4>
                     <p className="detail-item-text">
-                      <a href="tel:+918600470850" className="detail-link">+91 86004 70850</a>
+                      <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="detail-link">{settings.phone}</a>
                     </p>
                   </div>
                 </div>
@@ -197,12 +209,12 @@ export default function ContactClient() {
                 {/* Email Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/ui/email.png" alt="Email" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <Image src="/images/ui/email.png" alt="Email" width={24} height={24} style={{ objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Email</h4>
                     <p className="detail-item-text">
-                      <a href="mailto:successcodeacademy@gmail.com" className="detail-link">successcodeacademy@gmail.com</a>
+                      <a href={`mailto:${settings.email}`} className="detail-link">{settings.email}</a>
                     </p>
                   </div>
                 </div>
@@ -210,7 +222,7 @@ export default function ContactClient() {
                 {/* Working Hours Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <img src="/images/ui/clock (1).png" alt="Working Hours" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                    <Image src="/images/ui/clock (1).png" alt="Working Hours" width={24} height={24} style={{ objectFit: "contain" }} />
                   </div>
                   <div className="detail-content-box">
                     <h4 className="detail-item-label">Working Hours</h4>
@@ -339,7 +351,14 @@ export default function ContactClient() {
         >
           <div className="map-heading">
             <span className="map-badge">📍 CAMPUS LOCATION</span>
-            <h3>Visit our campus or book a guided tour.</h3>
+            <h3>
+              <EditableText
+                contentKey="map.heading"
+                label="campus map heading"
+              >
+                Visit our campus or book a guided tour.
+              </EditableText>
+            </h3>
             <p className="map-addr">{DESTINATION.address}</p>
           </div>
 

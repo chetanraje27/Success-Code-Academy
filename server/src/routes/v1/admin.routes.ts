@@ -2,6 +2,25 @@ import { Router } from 'express';
 import * as adminController from '../../controllers/admin.controller';
 import { authenticate } from '../../middlewares/authenticate';
 import { authorize } from '../../middlewares/authorize';
+import { validate } from '../../middlewares/validate';
+import {
+  adminListQuerySchema,
+  bannerCreateSchema,
+  bannerUpdateSchema,
+  idParamsSchema,
+  notificationCreateSchema,
+  notificationUpdateSchema,
+  resultCreateSchema,
+  resultListQuerySchema,
+  resultUpdateSchema,
+  settingsUpdateSchema,
+  starCreateSchema,
+  starUpdateSchema,
+  uploadQuerySchema,
+  pageContentParamsSchema,
+  contentBlockParamsSchema,
+  contentBlockUpdateSchema,
+} from '../../validation/admin.schemas';
 
 const router = Router();
 
@@ -13,59 +32,128 @@ router.use(authorize('admin'));
 router.get('/stats', adminController.getDashboardStats);
 
 // Image Upload
-router.post('/upload', adminController.upload, adminController.uploadImage);
+router.post(
+  '/upload',
+  validate(uploadQuerySchema, 'query'),
+  adminController.upload,
+  adminController.uploadImage,
+);
 
 // Banners
 router.get('/banners', adminController.getBanners);
-router.post('/banners', adminController.createBanner);
-router.put('/banners/:id', adminController.updateBanner);
-router.delete('/banners/:id', adminController.deleteBanner);
+router.post('/banners', validate(bannerCreateSchema), adminController.createBanner);
+router.put(
+  '/banners/:id',
+  validate(idParamsSchema, 'params'),
+  validate(bannerUpdateSchema),
+  adminController.updateBanner,
+);
+router.delete(
+  '/banners/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteBanner,
+);
 
 // Notifications
 router.get('/notifications', adminController.getNotifications);
-router.post('/notifications', adminController.createNotification);
-router.put('/notifications/:id', adminController.updateNotification);
-router.delete('/notifications/:id', adminController.deleteNotification);
+router.post(
+  '/notifications',
+  validate(notificationCreateSchema),
+  adminController.createNotification,
+);
+router.put(
+  '/notifications/:id',
+  validate(idParamsSchema, 'params'),
+  validate(notificationUpdateSchema),
+  adminController.updateNotification,
+);
+router.delete(
+  '/notifications/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteNotification,
+);
 
 // Star Students
 router.get('/stars', adminController.getStarStudents);
-router.post('/stars', adminController.createStarStudent);
-router.put('/stars/:id', adminController.updateStarStudent);
-router.delete('/stars/:id', adminController.deleteStarStudent);
-
-// Articles & Blog Posts
-router.get('/articles', adminController.getArticles);
-router.post('/articles', adminController.createArticle);
-router.delete('/articles/:id', adminController.deleteArticle);
-
-// Video Uploads
-router.get('/videos', adminController.getVideos);
-router.post('/videos', adminController.createVideo);
-router.delete('/videos/:id', adminController.deleteVideo);
-
-// Courses Management
-router.get('/courses', adminController.getCourses);
-router.post('/courses', adminController.createCourse);
-
-// Scholarships Management
-router.get('/scholarships', adminController.getScholarships);
-router.post('/scholarships', adminController.createScholarship);
+router.post('/stars', validate(starCreateSchema), adminController.createStarStudent);
+router.put(
+  '/stars/:id',
+  validate(idParamsSchema, 'params'),
+  validate(starUpdateSchema),
+  adminController.updateStarStudent,
+);
+router.delete(
+  '/stars/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteStarStudent,
+);
 
 // Results Management
-router.get('/results', adminController.getResults);
-router.post('/results', adminController.createResult);
-router.put('/results/:id', adminController.updateResult);
-router.delete('/results/:id', adminController.deleteResult);
+router.get(
+  '/results',
+  validate(resultListQuerySchema, 'query'),
+  adminController.getResults,
+);
+router.post('/results', validate(resultCreateSchema), adminController.createResult);
+router.put(
+  '/results/:id',
+  validate(idParamsSchema, 'params'),
+  validate(resultUpdateSchema),
+  adminController.updateResult,
+);
+router.delete(
+  '/results/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteResult,
+);
 
 // Site Settings
 router.get('/settings', adminController.getSettings);
-router.put('/settings', adminController.updateSettings);
+router.put('/settings', validate(settingsUpdateSchema), adminController.updateSettings);
+
+// On-page visual editor. Deleting an override restores the code default.
+router.get(
+  '/page-content/:pageKey',
+  validate(pageContentParamsSchema, 'params'),
+  adminController.getPageContent,
+);
+router.put(
+  '/page-content/:pageKey/:contentKey',
+  validate(contentBlockParamsSchema, 'params'),
+  validate(contentBlockUpdateSchema),
+  adminController.updateContentBlock,
+);
+router.delete(
+  '/page-content/:pageKey/:contentKey',
+  validate(contentBlockParamsSchema, 'params'),
+  adminController.deleteContentBlock,
+);
 
 // Database Viewers / Leads
-router.get('/database/users', adminController.getUsers);
-router.get('/database/course-forms', adminController.getCourseForms);
-router.get('/database/scholarship-forms', adminController.getScholarshipForms);
-router.get('/database/contact-messages', adminController.getContactMessages);
-router.get('/leads', adminController.searchLeads);
+router.get(
+  '/database/users',
+  validate(adminListQuerySchema, 'query'),
+  adminController.getUsers,
+);
+router.get(
+  '/database/course-forms',
+  validate(adminListQuerySchema, 'query'),
+  adminController.getCourseForms,
+);
+router.get(
+  '/database/scholarship-forms',
+  validate(adminListQuerySchema, 'query'),
+  adminController.getScholarshipForms,
+);
+router.get(
+  '/database/contact-messages',
+  validate(adminListQuerySchema, 'query'),
+  adminController.getContactMessages,
+);
+router.get(
+  '/leads',
+  validate(adminListQuerySchema, 'query'),
+  adminController.searchLeads,
+);
 
 export default router;

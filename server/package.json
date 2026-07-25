@@ -8,6 +8,8 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
+    "admin:create": "ts-node src/scripts/createAdmin.ts",
+    "db:migrate": "sequelize-cli db:migrate",
     "postinstall": "npm run build"
   },
   "keywords": [],

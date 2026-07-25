@@ -14,6 +14,7 @@ import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import ResultEditor from "@/components/admin/ResultEditor";
+import { EditableText } from "@/components/admin/EditableText";
 
 interface StudentCardTemplateProps {
   name: string;
@@ -293,7 +294,11 @@ export default function ResultsClient() {
           ══════════════════════════════════════════ */}
       <section className="results-heading-section">
         <div className="container">
-          <h2 className="results-section-title">Meet our NEET Results</h2>
+          <h2 className="results-section-title">
+            <EditableText contentKey="results.heading" label="results heading">
+              Meet our NEET Results
+            </EditableText>
+          </h2>
         </div>
       </section>
 
@@ -368,7 +373,14 @@ export default function ResultsClient() {
           {selectedYear === 2025 && (
             <div className="toppers-highlight-section">
 
-              <h3 className="toppers-headline">Our Top Achivers</h3>
+              <h3 className="toppers-headline">
+                <EditableText
+                  contentKey="results.top-achievers-heading"
+                  label="top achievers heading"
+                >
+                  Our Top Achivers
+                </EditableText>
+              </h3>
 
               <div className="toppers-cards-container">
                 <motion.div
@@ -493,7 +505,14 @@ export default function ResultsClient() {
                 <path d="M78 35 L80 39 L84 39 L81 42 L82 46 L78 43 L74 46 L75 42 L72 39 L76 39 Z" fill="#0066cc" />
               </svg>
             </div>
-            <h2 className="stories-title">Success Stories</h2>
+            <h2 className="stories-title">
+              <EditableText
+                contentKey="stories.heading"
+                label="success stories heading"
+              >
+                Success Stories
+              </EditableText>
+            </h2>
             <div className="stories-title-line"></div>
             <div className="stories-quote">
               <p>“Different paths.</p>
@@ -622,9 +641,19 @@ export default function ResultsClient() {
       <section className="results-cta">
         <div className="container">
           <div className="cta-gradient-card">
-            <h2>Ready to Write Your Success Story?</h2>
+            <h2>
+              <EditableText contentKey="cta.heading" label="results CTA heading">
+                Ready to Write Your Success Story?
+              </EditableText>
+            </h2>
             <p>
-              Join Success Code Academy and start your customized learning path. Get expert mentorship, topic-wise tests, and targeted strategy guidance.
+              <EditableText
+                contentKey="cta.description"
+                label="results CTA description"
+                kind="multiline"
+              >
+                Join Success Code Academy and start your customized learning path. Get expert mentorship, topic-wise tests, and targeted strategy guidance.
+              </EditableText>
             </p>
             <div className="cta-actions-group">
               <Button href="/contact" variant="primary" size="lg">

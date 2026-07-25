@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
@@ -36,6 +36,8 @@ function generateCaptcha(): { question: string; answer: number } {
   return { question: `${a} ${op} ${b} = ?`, answer };
 }
 
+const INITIAL_CAPTCHA = { question: "1 + 1 = ?", answer: 2 };
+
 export default function ContactClient() {
   const settings = useSiteSettings();
   const [origin, setOrigin] = useState("");
@@ -43,7 +45,7 @@ export default function ContactClient() {
   const [distanceError, setDistanceError] = useState("");
   const [isFindingDistance, setIsFindingDistance] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
-  const [captcha, setCaptcha] = useState(generateCaptcha);
+  const [captcha, setCaptcha] = useState(INITIAL_CAPTCHA);
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
 
@@ -52,6 +54,11 @@ export default function ContactClient() {
     setCaptchaInput("");
     setCaptchaError("");
   }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(refreshCaptcha, 0);
+    return () => window.clearTimeout(timer);
+  }, [refreshCaptcha]);
 
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(settings.address || DESTINATION.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
@@ -257,7 +264,7 @@ export default function ContactClient() {
                         id="cf-name"
                         name="name"
                         type="text"
-                        placeholder="Manu Arora"
+                        placeholder="Enter your full name"
                         className="dark-form-input"
                         required
                       />
@@ -269,7 +276,7 @@ export default function ContactClient() {
                         id="cf-email"
                         name="email"
                         type="email"
-                        placeholder="support@aceternity.com"
+                        placeholder="you@example.com"
                         className="dark-form-input"
                         required
                       />
@@ -308,11 +315,20 @@ export default function ContactClient() {
                         </button>
                       </div>
                       <div className="dark-captcha-row">
-                        <span className="dark-captcha-q">{captcha.question}</span>
+                        <span
+                          className="dark-captcha-q"
+                          id="captcha-question"
+                          aria-live="polite"
+                        >
+                          {captcha.question}
+                        </span>
                         <input
                           id="captcha-answer"
                           type="number"
                           placeholder="Answer"
+                          aria-labelledby="captcha-question"
+                          aria-describedby={captchaError ? "captcha-error" : undefined}
+                          aria-invalid={Boolean(captchaError)}
                           value={captchaInput}
                           onChange={e => { setCaptchaInput(e.target.value); setCaptchaError(""); }}
                           className="dark-form-input dark-captcha-input"
@@ -320,7 +336,15 @@ export default function ContactClient() {
                           required
                         />
                       </div>
-                      {captchaError && <p className="dark-captcha-error-msg">⚠ {captchaError}</p>}
+                      {captchaError && (
+                        <p
+                          className="dark-captcha-error-msg"
+                          id="captcha-error"
+                          role="alert"
+                        >
+                          ⚠ {captchaError}
+                        </p>
+                      )}
                     </div>
 
                     <button

@@ -1,21 +1,24 @@
-:root {
-  --admin-brand: #2c3e7a;
-  --admin-brand-strong: #1f2d60;
-  --admin-brand-soft: #eef2ff;
-  --admin-accent: #e8490f;
-  --admin-bg: #f5f7fb;
-  --admin-surface: #ffffff;
-  --admin-border: #dfe5ee;
-  --admin-text: #182033;
-  --admin-muted: #687386;
-  --admin-success: #15803d;
-  --admin-success-soft: #ecfdf3;
-  --admin-warning: #b45309;
-  --admin-warning-soft: #fff7ed;
-  --admin-danger: #c62828;
-  --admin-danger-soft: #fff1f2;
-  --admin-radius: 12px;
-  --admin-shadow: 0 12px 35px rgba(31, 45, 96, 0.08);
+.admin-shell,
+.admin-login-page,
+.admin-auth-loading,
+.admin-modal-overlay {
+  --admin-brand: var(--color-brand-primary);
+  --admin-brand-strong: var(--color-brand-primary-hover);
+  --admin-brand-soft: var(--color-brand-primary-soft);
+  --admin-accent: var(--color-brand-accent);
+  --admin-bg: var(--color-background);
+  --admin-surface: var(--color-surface);
+  --admin-border: var(--color-border);
+  --admin-text: var(--color-text-primary);
+  --admin-muted: var(--color-text-muted);
+  --admin-success: var(--color-success);
+  --admin-success-soft: var(--color-success-soft);
+  --admin-warning: var(--color-warning);
+  --admin-warning-soft: var(--color-warning-soft);
+  --admin-danger: var(--color-danger);
+  --admin-danger-soft: var(--color-danger-soft);
+  --admin-radius: var(--radius-dialog);
+  --admin-shadow: var(--shadow-md);
 }
 
 .admin-shell,

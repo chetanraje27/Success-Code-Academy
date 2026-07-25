@@ -1,0 +1,63 @@
+.button {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  padding: 0;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    background-color var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+.sm {
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+}
+
+.md {
+  width: var(--touch-target);
+  height: var(--touch-target);
+}
+
+.neutral:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-surface-hover);
+}
+
+.brand {
+  color: var(--color-brand-primary);
+  background: var(--color-brand-primary-soft);
+}
+
+.brand:hover:not(:disabled) {
+  color: var(--color-text-on-brand);
+  background: var(--color-brand-primary);
+}
+
+.danger {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+.danger:hover:not(:disabled) {
+  color: var(--color-text-on-brand);
+  background: var(--color-danger);
+}

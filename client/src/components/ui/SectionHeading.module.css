@@ -1,0 +1,39 @@
+.heading {
+  max-width: var(--container-reading);
+  margin-inline: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  margin-left: 0;
+  text-align: left;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-relaxed);
+}
+
+.light .title {
+  color: var(--color-text-on-brand);
+}
+
+.light .subtitle {
+  color: rgba(255, 255, 255, 0.82);
+}

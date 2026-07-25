@@ -63,7 +63,7 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
         <div className="info-bg-curve-left"></div>
         <div className="info-bg-curve-right"></div>
 
-        <h2 className={`student-name-text ${isLongName ? "long-name" : ""}`}>{name}</h2>
+        <p className={`student-name-text ${isLongName ? "long-name" : ""}`}>{name}</p>
 
         {/* Customized dotted separator with center solid indicator */}
         <div className="custom-dotted-separator">
@@ -294,11 +294,11 @@ export default function ResultsClient() {
           ══════════════════════════════════════════ */}
       <section className="results-heading-section">
         <div className="container">
-          <h2 className="results-section-title">
+          <h1 className="results-section-title">
             <EditableText contentKey="results.heading" label="results heading">
               Meet our NEET Results
             </EditableText>
-          </h2>
+          </h1>
         </div>
       </section>
 
@@ -1526,11 +1526,10 @@ export default function ResultsClient() {
             padding-right: 16px !important;
           }
           .results-grid {
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 5px !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
           }
 
-          /* Downscale card internal elements inside the 4-column mobile/tablet grid */
           .results-grid .student-card {
             min-width: 0;
           }
@@ -1541,23 +1540,24 @@ export default function ResultsClient() {
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1);
           }
           .results-grid .photo-frame-container {
-            height: 50%;
+            height: 55%;
           }
           .results-grid .gold-separator-bar {
             height: 3px;
           }
           .results-grid .info-section {
-            padding: 6px 2px;
+            padding: 10px 6px;
           }
           .results-grid .student-name-text {
-            font-size: 0.55rem;
-            height: 18px;
+            min-height: 36px;
+            height: auto;
+            font-size: 0.82rem;
             letter-spacing: -0.01em;
-            line-height: 1.1;
+            line-height: 1.2;
             margin: 0;
           }
           .results-grid .student-name-text.long-name {
-            font-size: 0.45rem;
+            font-size: 0.72rem;
           }
           .results-grid .custom-dotted-separator {
             display: none; /* Hide dotted line separator on mobile to prevent layout squishing */
@@ -1570,8 +1570,8 @@ export default function ResultsClient() {
             padding: 0;
           }
           .results-grid .college-pill-badge {
-            padding: 4px 1px;
-            clip-path: none; /* Remove slanted nose on mobile for full width usage */
+            padding: 6px 4px;
+            clip-path: none;
             border-radius: 6px;
             justify-content: center;
           }
@@ -1579,7 +1579,7 @@ export default function ResultsClient() {
             height: 2px;
           }
           .results-grid .college-text {
-            font-size: 0.45rem;
+            font-size: 0.68rem;
             letter-spacing: 0.01em;
             text-align: center;
             width: 100%;

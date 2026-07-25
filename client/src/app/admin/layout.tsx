@@ -1,5 +1,6 @@
 "use client";
 
+import "./admin.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";

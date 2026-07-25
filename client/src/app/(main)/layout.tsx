@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "../live-editor.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
@@ -34,7 +34,7 @@ export default function RootLayout({
     <EditModeProvider>
       <LiveContentProvider>
         <Header />
-        <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>{children}</main>
+        <main className="site-main">{children}</main>
         <Footer />
         <WhatsAppWidget />
         <CookieConsent />

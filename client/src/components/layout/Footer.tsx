@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteConfig, navLinks } from "@/data/home";
 import Button from "@/components/ui/Button";
+import EditableSection from "@/components/admin/EditableSection";
+import SettingsEditor from "@/components/admin/SettingsEditor";
 import { 
   FaFacebookF, 
   FaXTwitter, 
@@ -19,6 +21,7 @@ import {
 
 export default function Footer() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [editSettings, setEditSettings] = useState(false);
 
   const toggleSection = (section: string) => {
     setExpandedSection(prev => prev === section ? null : section);
@@ -131,6 +134,7 @@ export default function Footer() {
             </div>
 
             {/* Contact Us Column (Accordion on Mobile) */}
+            <EditableSection label="Contact Info" onEdit={() => setEditSettings(true)}>
             <div className="footer-col">
               <h4 className="footer-heading" onClick={() => toggleSection("contact")}>
                 Contact Us
@@ -157,6 +161,7 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
+            </EditableSection>
           </div>
         </div>
       </div>
@@ -172,6 +177,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <SettingsEditor open={editSettings} onClose={() => setEditSettings(false)} />
 
       <style jsx>{`
         .footer {

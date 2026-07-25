@@ -1,10 +1,21 @@
 import type { Request, Response } from 'express';
-import { User, CourseRegistration, ScholarshipRegistration, Banner, Notification, StarStudent } from '../models';
+import {
+  User,
+  CourseRegistration,
+  ScholarshipRegistration,
+  Banner,
+  Notification,
+  StarStudent,
+  ContactMessage,
+  SiteSetting,
+  TopperResult,
+} from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import multer from 'multer';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
+import { Op } from 'sequelize';
 
 let supabase: ReturnType<typeof createClient> | null = null;
 const getSupabase = () => {
@@ -39,6 +50,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   let folder = 'uploads';
   if (req.query.type === 'banner') folder = 'banners';
   else if (req.query.type === 'star') folder = 'stars';
+  else if (req.query.type === 'result') folder = 'results';
 
   // Generate unique filename
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -220,13 +232,86 @@ export const createScholarship = asyncHandler(async (req: Request, res: Response
   res.status(201).json({ status: 'success', data: req.body });
 });
 
-// --- Results CMS ---
+// --- Results CMS (TopperResult) ---
 export const getResults = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ status: 'success', data: [] });
+  const where: Record<string, unknown> = {};
+  if (req.query.year) {
+    where.year = Number(req.query.year);
+  }
+  const results = await TopperResult.findAll({
+    where,
+    order: [
+      ['year', 'DESC'],
+      ['orderIndex', 'ASC'],
+      ['id', 'DESC'],
+    ],
+  });
+  res.status(200).json({ status: 'success', data: results });
 });
 
 export const createResult = asyncHandler(async (req: Request, res: Response) => {
-  res.status(201).json({ status: 'success', data: req.body });
+  const result = await TopperResult.create(req.body);
+  res.status(201).json({ status: 'success', data: result });
+});
+
+export const updateResult = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await TopperResult.findByPk(id as string);
+  if (!result) throw new AppError('Result not found', 404);
+  await result.update(req.body);
+  res.status(200).json({ status: 'success', data: result });
+});
+
+export const deleteResult = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await TopperResult.findByPk(id as string);
+  if (!result) throw new AppError('Result not found', 404);
+  await result.destroy();
+  res.status(204).json({ status: 'success', data: null });
+});
+
+// --- Site Settings ---
+const SETTINGS_KEYS = [
+  'phone',
+  'email',
+  'address',
+  'whatsapp',
+  'facebook',
+  'instagram',
+  'youtube',
+  'linkedin',
+  'twitter',
+] as const;
+
+async function loadSettingsMap(): Promise<Record<string, string>> {
+  const rows = await SiteSetting.findAll();
+  const map: Record<string, string> = {};
+  for (const row of rows) {
+    map[row.key] = row.value;
+  }
+  return map;
+}
+
+export const getSettings = asyncHandler(async (_req: Request, res: Response) => {
+  const map = await loadSettingsMap();
+  res.status(200).json({ status: 'success', data: map });
+});
+
+export const updateSettings = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body || {};
+  for (const key of SETTINGS_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(body, key) && body[key] !== undefined) {
+      const value = String(body[key] ?? '');
+      const existing = await SiteSetting.findOne({ where: { key } });
+      if (existing) {
+        await existing.update({ value });
+      } else {
+        await SiteSetting.create({ key, value });
+      }
+    }
+  }
+  const map = await loadSettingsMap();
+  res.status(200).json({ status: 'success', data: map });
 });
 
 // --- Database Viewer Endpoints ---
@@ -243,4 +328,80 @@ export const getCourseForms = asyncHandler(async (req: Request, res: Response) =
 export const getScholarshipForms = asyncHandler(async (req: Request, res: Response) => {
   const forms = await ScholarshipRegistration.findAll({ order: [['createdAt', 'DESC']] });
   res.status(200).json({ status: 'success', data: forms });
+});
+
+export const getContactMessages = asyncHandler(async (_req: Request, res: Response) => {
+  const messages = await ContactMessage.findAll({ order: [['createdAt', 'DESC']] });
+  res.status(200).json({ status: 'success', data: messages });
+});
+
+export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
+  const q = String(req.query.q || '').trim();
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+
+  const [users, courseForms, scholarshipForms, contactMessages] = await Promise.all([
+    User.findAll({
+      ...(like ? {
+        where: {
+          [Op.or]: [
+            { firstName: like },
+            { lastName: like },
+            { email: like },
+            { mobileNumber: like },
+          ],
+        }
+      } : {}),
+      order: [['createdAt', 'DESC']],
+      limit: 200,
+    }),
+    CourseRegistration.findAll({
+      ...(like ? {
+        where: {
+          [Op.or]: [
+            { studentName: like },
+            { studentEmail: like },
+            { studentPhone: like },
+            { courseTitle: like },
+          ],
+        }
+      } : {}),
+      order: [['createdAt', 'DESC']],
+      limit: 200,
+    }),
+    ScholarshipRegistration.findAll({
+      ...(like ? {
+        where: {
+          [Op.or]: [
+            { studentName: like },
+            { studentPhone: like },
+            { parentPhone: like },
+            { preferredCourse: like },
+            { schoolName: like },
+            { city: like },
+          ],
+        }
+      } : {}),
+      order: [['createdAt', 'DESC']],
+      limit: 200,
+    }),
+    ContactMessage.findAll({
+      ...(like ? {
+        where: {
+          [Op.or]: [
+            { name: like },
+            { email: like },
+            { phone: like },
+            { message: like },
+          ],
+        }
+      } : {}),
+      order: [['createdAt', 'DESC']],
+      limit: 200,
+    }),
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: { users, courseForms, scholarshipForms, contactMessages },
+  });
 });

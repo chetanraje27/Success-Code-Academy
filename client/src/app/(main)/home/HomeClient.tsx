@@ -14,6 +14,11 @@ import FAQAccordion from "./FAQAccordion";
 import {
   FaChevronRight, FaChevronLeft
 } from "react-icons/fa6";
+import EditableSection from "@/components/admin/EditableSection";
+import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import BannerEditor from "@/components/admin/BannerEditor";
+import NotificationEditor from "@/components/admin/NotificationEditor";
+import StarStudentEditor from "@/components/admin/StarStudentEditor";
 
 function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
   const [loaded, setLoaded] = useState(false);
@@ -40,6 +45,10 @@ export default function HomeClient() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [announceIdx, setAnnounceIdx] = useState(0);
+  const [editNotifs, setEditNotifs] = useState(false);
+  const [editBanners, setEditBanners] = useState(false);
+  const [editStars, setEditStars] = useState(false);
+  const { refreshKey } = useEditModeOptional();
 
   const tickerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -98,7 +107,7 @@ export default function HomeClient() {
       }
     };
     fetchContent();
-  }, []);
+  }, [refreshKey]);
 
   /* ── Slider auto-play ── */
   useEffect(() => {
@@ -123,6 +132,7 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 1: FLOATING NOTIFICATION BAR
           ══════════════════════════════════════════ */}
+      <EditableSection label="Notifications" onEdit={() => setEditNotifs(true)}>
       {isLoading ? (
         <div className="notif-bar-wrap">
           <div className="notif-bar">
@@ -175,10 +185,12 @@ export default function HomeClient() {
           </div>
         </div>
       )}
+      </EditableSection>
 
       {/* ══════════════════════════════════════════
           SECTION 2: HERO POSTER BANNER SLIDER
           ══════════════════════════════════════════ */}
+      <EditableSection label="Banners" onEdit={() => setEditBanners(true)} as="section">
       <section className="hero-slider-section">
         <div
           className="hero-banner-wrap"
@@ -240,6 +252,11 @@ export default function HomeClient() {
           </div>
         )}
       </section>
+      </EditableSection>
+
+      <NotificationEditor open={editNotifs} onClose={() => setEditNotifs(false)} />
+      <BannerEditor open={editBanners} onClose={() => setEditBanners(false)} />
+      <StarStudentEditor open={editStars} onClose={() => setEditStars(false)} />
 
       {/* ══════════════════════════════════════════
           SECTION 3: EXPLORE COURSES
@@ -249,7 +266,9 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 4: TOPPERS CAROUSEL
           ══════════════════════════════════════════ */}
+      <EditableSection label="Star Students" onEdit={() => setEditStars(true)}>
       <ToppersCarousel />
+      </EditableSection>
 
       {/* ══════════════════════════════════════════
           SECTION 5: WHY SUCCESS CODE ACADEMY

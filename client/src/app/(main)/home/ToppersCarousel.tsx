@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
+import { useEditModeOptional } from "@/components/admin/EditModeContext";
 
 function TopperImage({ src, alt }: { src: string; alt: string }) {
   const [loaded, setLoaded] = React.useState(false);
@@ -37,6 +38,7 @@ const DEFAULT_STARS = [
 export default function ToppersCarousel() {
   const [stars, setStars] = React.useState<any[]>(DEFAULT_STARS);
   const [isLoading, setIsLoading] = React.useState(true);
+  const { refreshKey } = useEditModeOptional();
 
   React.useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/stars`)
@@ -49,13 +51,13 @@ export default function ToppersCarousel() {
         }
       })
       .catch(err => {
-        console.error("Failed to load stars:", err);
+        console.warn("Failed to load stars (backend might be offline):", err);
         setStars(DEFAULT_STARS);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [refreshKey]);
 
   return (
     <section className="toppers-section">

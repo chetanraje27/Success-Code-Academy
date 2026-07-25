@@ -4,6 +4,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
 import CookieConsent from "@/components/layout/CookieConsent";
+import { EditModeProvider } from "@/components/admin/EditModeContext";
+import LeadsDrawer from "@/components/admin/LeadsDrawer";
 
 
 export const metadata: Metadata = {
@@ -27,12 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <EditModeProvider>
       <Header />
       <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>{children}</main>
       <Footer />
       <WhatsAppWidget />
       <CookieConsent />
-    </>
+      <LeadsDrawer />
+    </EditModeProvider>
   );
 }

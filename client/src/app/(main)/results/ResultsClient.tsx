@@ -11,6 +11,9 @@ import {
 } from "react-icons/fa6";
 import { resultsData, StudentResult } from "@/data/results";
 import Button from "@/components/ui/Button";
+import EditableSection from "@/components/admin/EditableSection";
+import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import ResultEditor from "@/components/admin/ResultEditor";
 
 interface StudentCardTemplateProps {
   name: string;
@@ -113,6 +116,8 @@ function BannerImage({ src, alt }: { src: string; alt: string }) {
 export default function ResultsClient() {
   const [heroSlides, setHeroSlides] = useState<any[]>([]);
   const [isBannersLoading, setIsBannersLoading] = useState(true);
+  const [editResults, setEditResults] = useState(false);
+  const { refreshKey } = useEditModeOptional();
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
@@ -338,6 +343,7 @@ export default function ResultsClient() {
       {/* ══════════════════════════════════════════
           RESULTS CARDS GRID
           ══════════════════════════════════════════ */}
+      <EditableSection label="Results" onEdit={() => setEditResults(true)} as="section">
       <section className="grid-section">
         <div className="container">
           {/* Featured Toppers for 2026 */}
@@ -468,6 +474,8 @@ export default function ResultsClient() {
           </div>
         </div>
       </section>
+      </EditableSection>
+      <ResultEditor open={editResults} onClose={() => setEditResults(false)} />
 
       {/* ══════════════════════════════════════════
           SUCCESS STORIES SECTION

@@ -7,6 +7,8 @@ import { navLinks, siteConfig } from "@/data/home";
 import Button from "@/components/ui/Button";
 import SignInModal from "@/components/ui/SignInModal";
 import ProfileModal from "@/components/ui/ProfileModal";
+import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import { FaPen, FaDatabase } from "react-icons/fa6";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +17,7 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +87,28 @@ export default function Header() {
           </nav>
 
           <div className="desktop-actions">
+            {isAdmin && (
+              <>
+                <button
+                  onClick={toggleEditMode}
+                  className={`edit-site-toggle ${editMode ? 'active' : ''}`}
+                  title={editMode ? 'Exit Edit Mode' : 'Edit Site'}
+                >
+                  <FaPen size={12} />
+                  <span>{editMode ? 'Editing' : 'Edit Site'}</span>
+                </button>
+                {editMode && (
+                  <button
+                    onClick={() => setLeadsOpen(true)}
+                    className="edit-site-toggle"
+                    title="View Leads"
+                  >
+                    <FaDatabase size={12} />
+                    <span>Leads</span>
+                  </button>
+                )}
+              </>
+            )}
             {currentUser ? (
               <div className="user-profile-container" style={{ position: 'relative', zIndex: 45 }}>
                 <button 
@@ -298,6 +323,28 @@ export default function Header() {
                 <div className="mobile-user-greeting" style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)', textAlign: 'left' }}>
                   Hi, {currentUser.firstName || "Student"}
                 </div>
+                {isAdmin && (
+                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                    <button
+                      onClick={() => { toggleEditMode(); setIsMenuOpen(false); }}
+                      className={`edit-site-toggle ${editMode ? 'active' : ''}`}
+                      style={{ flex: 1 }}
+                    >
+                      <FaPen size={12} />
+                      <span>{editMode ? 'Editing' : 'Edit Site'}</span>
+                    </button>
+                    {editMode && (
+                      <button
+                        onClick={() => { setLeadsOpen(true); setIsMenuOpen(false); }}
+                        className="edit-site-toggle"
+                        style={{ flex: 1 }}
+                      >
+                        <FaDatabase size={12} />
+                        <span>Leads</span>
+                      </button>
+                    )}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
                   <Button 
                     onClick={() => {
@@ -623,6 +670,34 @@ export default function Header() {
           color: var(--text-primary);
           font-family: 'Outfit', sans-serif;
           margin-bottom: 4px;
+        }
+
+        .edit-site-toggle {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 14px;
+          border: 1.5px solid #cbd5e1;
+          border-radius: 999px;
+          background: #fff;
+          color: #475569;
+          font-size: 0.78rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-family: 'Outfit', sans-serif;
+        }
+
+        .edit-site-toggle:hover {
+          border-color: #2563eb;
+          color: #2563eb;
+        }
+
+        .edit-site-toggle.active {
+          background: #2563eb;
+          border-color: #2563eb;
+          color: #fff;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
       `}</style>
     </>

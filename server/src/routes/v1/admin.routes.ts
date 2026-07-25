@@ -54,10 +54,18 @@ router.post('/scholarships', adminController.createScholarship);
 // Results Management
 router.get('/results', adminController.getResults);
 router.post('/results', adminController.createResult);
+router.put('/results/:id', adminController.updateResult);
+router.delete('/results/:id', adminController.deleteResult);
 
-// Database Viewers
+// Site Settings
+router.get('/settings', adminController.getSettings);
+router.put('/settings', adminController.updateSettings);
+
+// Database Viewers / Leads
 router.get('/database/users', adminController.getUsers);
 router.get('/database/course-forms', adminController.getCourseForms);
 router.get('/database/scholarship-forms', adminController.getScholarshipForms);
+router.get('/database/contact-messages', adminController.getContactMessages);
+router.get('/leads', adminController.searchLeads);
 
 export default router;

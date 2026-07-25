@@ -13,6 +13,8 @@ import CourseRegistration, { initCourseRegistration } from './CourseRegistration
 import Banner, { initBanner } from './Banner';
 import Notification, { initNotification } from './Notification';
 import StarStudent, { initStarStudent } from './StarStudent';
+import SiteSetting, { initSiteSetting } from './SiteSetting';
+import TopperResult, { initTopperResult } from './TopperResult';
 
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
@@ -22,6 +24,8 @@ initCourseRegistration(sequelize);
 initBanner(sequelize);
 initNotification(sequelize);
 initStarStudent(sequelize);
+initSiteSetting(sequelize);
+initTopperResult(sequelize);
 
 export async function testConnection(): Promise<boolean> {
   try {
@@ -39,5 +43,17 @@ export async function testConnection(): Promise<boolean> {
   }
 }
 
-export { sequelize, ScholarshipRegistration, User, OtpVerification, ContactMessage, CourseRegistration, Banner, Notification, StarStudent };
+export {
+  sequelize,
+  ScholarshipRegistration,
+  User,
+  OtpVerification,
+  ContactMessage,
+  CourseRegistration,
+  Banner,
+  Notification,
+  StarStudent,
+  SiteSetting,
+  TopperResult,
+};
 export default sequelize;

@@ -1,235 +1,258 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa6";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 
-function TopperImage({ src, alt }: { src: string; alt: string }) {
-  const [loaded, setLoaded] = React.useState(false);
-  return (
-    <>
-      {!loaded && (
-        <div
-          className="skeleton-pulse"
-          style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.3)" }}
-        ></div>
-      )}
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="240px"
-        className="topper-cover-img"
-        style={{ transition: "transform 0.5s ease" }}
-        onLoad={() => setLoaded(true)}
-      />
-    </>
-  );
+type StarStudent = {
+  id: string | number;
+  name: string;
+  score: string;
+  total?: string | number;
+  rank: string;
+  rankType?: string;
+  course: string;
+  year?: string;
+  image: string;
+  color?: string;
+};
+
+type ParsedResult = {
+  score: string;
+  total: string;
+  rankType: string;
+  rank: string;
+};
+
+function parseResult(student: StarStudent): ParsedResult {
+  const [score = "N/A", scoreTotal = ""] = String(student.score ?? "").split("/");
+  const total = student.total ? `/${student.total}` : scoreTotal ? `/${scoreTotal}` : "";
+
+  if (student.rankType) {
+    return { score, total, rankType: student.rankType, rank: String(student.rank || "N/A") };
+  }
+
+  const rawRank = String(student.rank ?? "").trim();
+  if (!rawRank || rawRank === "-") {
+    return { score, total, rankType: "NEET", rank: "Qualified" };
+  }
+
+  const rankParts = rawRank.split(/\s+/);
+  return {
+    score,
+    total,
+    rankType: rankParts.length > 1 ? rankParts[0] : "AIR",
+    rank: rankParts.length > 1 ? rankParts.slice(1).join(" ") : rankParts[0],
+  };
 }
 
-const DEFAULT_STARS = [
-  { id: "1", name: "Mahesh Bhosale", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "-", score: "550/720", image: "/images/results/2025/MaheshBhosale.png", color: "#0284c7" },
-  { id: "2", name: "Samruddhi Lokhande", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1204", score: "602/720", image: "/images/results/2025/SamruddhiLokhande.png", color: "#2563eb" },
-  { id: "3", name: "Aprupa Patil", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1610", score: "547/720", image: "/images/results/2025/AprupaPatil.png", color: "#0284c7" },
-  { id: "4", name: "Darshana Dhoka", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 1980", score: "533/720", image: "/images/results/2025/DarshanaDhoka.png", color: "#7c3aed" },
-  { id: "5", name: "Siddhi Badhe", year: "NEET UG 2025", course: "NEET FRESHERS BATCH", rank: "AIR 840", score: "681/720", image: "/images/results/2025/SiddhiBadhe.png", color: "#059669" },
-];
+function resolveImageSource(image: string, apiUrl?: string) {
+  if (!image) return "";
+  if (/^(https?:|data:|blob:)/.test(image)) return image;
+  // Serve directly from Next.js public directory
+  return image;
+}
 
 export default function ToppersCarousel() {
-  const [stars, setStars] = React.useState<any[]>(DEFAULT_STARS);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || 'http://localhost:5000';
+  const [stars, setStars] = useState<StarStudent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [brokenImages, setBrokenImages] = useState<Array<string | number>>([]);
   const { refreshKey } = useEditModeOptional();
 
-  React.useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/stars`)
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`${apiUrl}/api/v1/content/stars`, { signal: controller.signal })
       .then(res => res.json())
       .then(data => {
         if (data.status === 'success' && data.data && data.data.length > 0) {
           setStars((data.data || []).filter((item: any) => item?.name));
         } else {
-          setStars(DEFAULT_STARS);
+          setStars([]);
         }
       })
       .catch(err => {
-        console.warn("Failed to load stars (backend might be offline):", err);
-        setStars(DEFAULT_STARS);
+        if (err.name !== "AbortError") {
+          console.warn("Failed to load stars (backend might be offline):", err);
+          setStars([]);
+        }
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [refreshKey]);
+
+    return () => controller.abort();
+  }, [apiUrl, refreshKey]);
+
+  const markImageBroken = (id: string | number) => {
+    setBrokenImages((current) => current.includes(id) ? current : [...current, id]);
+  };
+
+  const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
+
+  const visibleStars = stars.slice(0, 6);
+  const featuredStudents = visibleStars.slice(0, 2);
+  const supportingStudents = visibleStars.slice(2, 6);
 
   return (
-    <section className="toppers-section">
-      <div className="container">
-
-        {/* Section Header */}
-        <div className="toppers-header">
-          <div className="header-left">
-            <span className="section-label">MEET OUR STARS</span>
-            <h2 className="toppers-title">Meet Our Stars</h2>
-            <p className="toppers-subtitle">
-              Celebrating the hard work, perseverance, and outstanding NEET scores of our classroom students.
-            </p>
+    <section className="stars-section" aria-labelledby="stars-heading">
+      <div className="stars-shell">
+        <header className="stars-header">
+          <div className="heading-copy">
+            <span className="eyebrow">MEET OUR STARS</span>
+            <h2 id="stars-heading">Meet Our Stars</h2>
+            <p>Celebrating the hard work, perseverance, and outstanding NEET scores of our classroom students.</p>
           </div>
-          <div className="header-right">
-            <Link href="/results" className="results-link">
-              View All Results <span className="arrow-sym">→</span>
-            </Link>
+
+          <Link href="/results" className="results-link">
+            <span className="results-button">
+              View all results
+              <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
+            </span>
+          </Link>
+        </header>
+
+        {isLoading ? (
+          <div className="results-grid">
+            {[1, 2].map((i) => (
+              <article key={`f-${i}`} className="featured-card skeleton-pulse" style={{ background: "rgba(203, 213, 225, 0.2)", borderColor: "transparent" }}>
+                <div className="featured-copy">
+                  <div style={{ height: 12, width: 80, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4 }}></div>
+                  <div className="featured-rank" style={{ marginTop: 30 }}>
+                    <div style={{ height: 12, width: 40, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4, marginBottom: 4 }}></div>
+                    <div style={{ height: 50, width: 100, background: "rgba(203, 213, 225, 0.4)", borderRadius: 8 }}></div>
+                  </div>
+                  <div style={{ height: 24, width: 140, background: "rgba(203, 213, 225, 0.4)", borderRadius: 6, marginTop: 22 }}></div>
+                  <div style={{ height: 14, width: 120, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4, marginTop: 10 }}></div>
+
+                  <div className="featured-score" style={{ marginTop: "auto", paddingTop: 17, borderTop: "none" }}>
+                    <div style={{ height: 32, width: 90, background: "rgba(203, 213, 225, 0.4)", borderRadius: 6 }}></div>
+                    <div style={{ height: 10, width: 70, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4, marginTop: 8 }}></div>
+                  </div>
+                </div>
+              </article>
+            ))}
+
+            {[1, 2, 3, 4].map((i) => (
+              <article key={`s-${i}`} className="support-card skeleton-pulse" style={{ background: "rgba(203, 213, 225, 0.2)", borderColor: "transparent" }}>
+                <div className="support-copy">
+                  <div style={{ height: 10, width: 60, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4 }}></div>
+                  <div style={{ height: 20, width: 100, background: "rgba(203, 213, 225, 0.4)", borderRadius: 6, marginTop: 17 }}></div>
+                  <div style={{ height: 16, width: 120, background: "rgba(203, 213, 225, 0.4)", borderRadius: 4, marginTop: 12 }}></div>
+                  <div style={{ height: 20, width: 80, background: "rgba(203, 213, 225, 0.4)", borderRadius: 6, marginTop: "auto" }}></div>
+                </div>
+              </article>
+            ))}
           </div>
-        </div>
+        ) : featuredStudents.length === 0 ? (
+          <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+            Results will be updated soon.
+          </div>
+        ) : (
+          <div className="results-grid">
+            {featuredStudents.map((featuredStudent) => {
+              const featuredResult = parseResult(featuredStudent);
+              
+              return (
+                <article className="featured-card" key={featuredStudent.id}>
+                  <span className="featured-watermark" aria-hidden="true">{featuredResult.rankType}</span>
+                  <span className="featured-orbit" aria-hidden="true" />
 
-        {/* Infinite Floating Marquee Ticker */}
-        <div className="marquee-container">
-          {isLoading ? (
-            <div className="marquee-track" style={{ animationPlayState: 'paused' }}>
-              <div className="marquee-group">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className="marquee-item">
-                    <div className="clean-topper-card skeleton-pulse" style={{ borderColor: 'transparent', boxShadow: 'none' }}>
-                      <div className="topper-photo-wrap" style={{ backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
-                      <div className="topper-body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <div style={{ height: '14px', width: '70%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
-                        <div style={{ height: '10px', width: '50%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
-                        <div className="score-box" style={{ marginTop: 'auto', gap: '8px', borderTopColor: "rgba(203, 213, 225, 0.2)" }}>
-                          <div style={{ height: '14px', width: '100%', backgroundColor: "rgba(203, 213, 225, 0.4)", borderRadius: '4px' }}></div>
-                        </div>
-                      </div>
+                  <div className="featured-copy">
+                    <span className="result-year">{featuredStudent.year || "NEET UG 2025"}</span>
+                    <div className="featured-rank">
+                      <span>{featuredResult.rankType}</span>
+                      <strong>{featuredResult.rank}</strong>
+                    </div>
+                    <h3>{featuredStudent.name}</h3>
+                    <p>{featuredStudent.course}</p>
+
+                    <div className="featured-score">
+                      <strong>{featuredResult.score}<small>{featuredResult.total}</small></strong>
+                      <span>NEET UG score</span>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          ) : stars.length > 0 ? (
-            <div className="marquee-track">
-              <div className="marquee-group">
-                {stars.map((t, idx) => (
-                  <div
-                    key={`${t.id}-a-${idx}`}
-                    className="marquee-item"
-                  >
-                    <div className="clean-topper-card">
-                      {/* Photo Area */}
-                      <div className="topper-photo-wrap">
-                        <TopperImage src={t.image} alt={t.name} />
-                        {/* Floating Year Badge */}
-                        <div className="year-indicator">{t.year}</div>
-                      </div>
 
-                      {/* Details Body */}
-                      <div className="topper-body">
-                        <div className="name-batch-block">
-                          <h3 className="topper-name-text">{t.name}</h3>
-                          <span className="topper-batch-text">{t.course}</span>
-                        </div>
+                  <Image
+                    src={brokenImages.includes(featuredStudent.id) ? DEFAULT_AVATAR : resolveImageSource(featuredStudent.image, apiUrl)}
+                    alt={`${featuredStudent.name}, ${featuredResult.rankType} ${featuredResult.rank}`}
+                    fill
+                    unoptimized
+                    priority
+                    onError={() => markImageBroken(featuredStudent.id)}
+                    sizes="(max-width: 720px) 92vw, 480px"
+                    className="featured-student-image"
+                  />
+                </article>
+              );
+            })}
 
-                        <div className="score-box">
-                          {/* Rank Row */}
-                          <div className="rank-row">
-                            <span className="rank-label-text">RANK</span>
-                            <span className="rank-value-badge">
-                              <FaStar className="star-icon" /> {t.rank}
-                            </span>
-                          </div>
+            {supportingStudents.map((student, index) => {
+              const result = parseResult(student);
 
-                          {/* Score Row */}
-                          <div className="score-row">
-                            <span className="score-label-text">NEET SCORE</span>
-                            <span className="score-value-text">{t.score}</span>
-                          </div>
-                        </div>
-                      </div>
+              return (
+                <article className={`support-card support-${index + 1}`} key={student.id}>
+                  <span className="support-index" aria-hidden="true">0{index + 2}</span>
+                  <span className="support-accent" aria-hidden="true" />
+
+                  <div className="support-copy">
+                    <span className="support-year">{student.year || "NEET UG 2025"}</span>
+                    <div className="support-rank">{result.rankType} {result.rank}</div>
+                    <h3>{student.name}</h3>
+                    <div className="support-score">
+                      {result.score}<small>{result.total}</small>
                     </div>
                   </div>
-                ))}
-              </div>
 
-              <div className="marquee-group" aria-hidden="true">
-                {stars.map((t, idx) => (
-                  <div
-                    key={`${t.id}-b-${idx}`}
-                    className="marquee-item"
-                  >
-                    <div className="clean-topper-card">
-                      {/* Photo Area */}
-                      <div className="topper-photo-wrap">
-                        <TopperImage src={t.image} alt={t.name} />
-                        {/* Floating Year Badge */}
-                        <div className="year-indicator">{t.year}</div>
-                      </div>
-
-                      {/* Details Body */}
-                      <div className="topper-body">
-                        <div className="name-batch-block">
-                          <h3 className="topper-name-text">{t.name}</h3>
-                          <span className="topper-batch-text">{t.course}</span>
-                        </div>
-
-                        <div className="score-box">
-                          {/* Rank Row */}
-                          <div className="rank-row">
-                            <span className="rank-label-text">RANK</span>
-                            <span className="rank-value-badge">
-                              <FaStar className="star-icon" /> {t.rank}
-                            </span>
-                          </div>
-
-                          {/* Score Row */}
-                          <div className="score-row">
-                            <span className="score-label-text">NEET SCORE</span>
-                            <span className="score-value-text">{t.score}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
-              Results will be updated soon.
-            </div>
-          )}
-        </div>
+                  <Image
+                    src={brokenImages.includes(student.id) ? DEFAULT_AVATAR : resolveImageSource(student.image, apiUrl)}
+                    alt={`${student.name}, ${result.rankType} ${result.rank}`}
+                    fill
+                    unoptimized
+                    onError={() => markImageBroken(student.id)}
+                    sizes="(max-width: 720px) 46vw, 240px"
+                    className="support-student-image"
+                  />
+                </article>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        .skeleton-pulse {
-          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .toppers-section {
-          padding: 50px 0;
-          background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        .stars-section {
+          width: 100%;
+          padding: 64px 24px 70px;
           overflow: hidden;
-          width: 100%;
+          background: #efede8;
+          color: #2c4050;
+          font-family: "Segoe UI", Arial, sans-serif;
         }
 
-        .container {
+        .stars-shell {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1220px;
+          min-width: 0;
           margin: 0 auto;
-          padding: 0 24px;
-          box-sizing: border-box;
         }
 
-        .toppers-header {
+        .stars-header {
           display: flex;
-          justify-content: space-between;
           align-items: flex-end;
-          margin-bottom: 28px;
+          justify-content: space-between;
+          gap: 40px;
+          margin-bottom: 30px;
         }
 
-        .header-left {
+        .heading-copy {
           max-width: 680px;
-          text-align: left;
         }
 
-        .section-label {
+        .eyebrow {
           display: inline-block;
           font-size: 0.72rem;
           font-weight: 800;
@@ -242,267 +265,396 @@ export default function ToppersCarousel() {
           text-transform: uppercase;
         }
 
-        .toppers-title {
-          font-size: 2.1rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin-bottom: 8px;
-          letter-spacing: -0.025em;
-          line-height: 1.2;
-        }
-
-        .toppers-subtitle {
-          font-size: 0.95rem;
-          color: #64748b;
-          line-height: 1.5;
+        h2 {
           margin: 0;
+          color: #0f172a;
+          font-family: inherit;
+          font-size: clamp(2rem, 3vw, 2.7rem);
+          font-weight: 800;
+          letter-spacing: -0.025em;
+          line-height: 1.08;
         }
 
-        .header-right {
-          display: flex;
+        .heading-copy p {
+          max-width: 640px;
+          margin: 11px 0 0;
+          color: #64748b;
+          font-size: 0.95rem;
+          font-weight: 400;
+          line-height: 1.5;
+        }
+
+        :global(.results-link) {
+          flex-shrink: 0;
+        }
+
+        .results-button {
+          display: inline-flex;
+          min-height: 42px;
           align-items: center;
-          margin-bottom: 8px;
-        }
-
-        .results-link {
+          justify-content: center;
+          gap: 8px;
+          padding: 0 16px;
+          border: 1.5px solid #cbd5e1;
+          border-radius: 99px;
+          background: #ffffff;
+          color: #0284c7;
           font-size: 0.85rem;
           font-weight: 700;
-          color: #0284c7;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          background: #ffffff;
-          padding: 8px 18px;
-          border-radius: 99px;
-          border: 1.5px solid #cbd5e1;
+          line-height: 1;
           box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
           transition: all 0.25s ease;
         }
 
-        .results-link:hover {
+        :global(.results-link:hover) .results-button {
           background: #0284c7;
           color: #ffffff;
           border-color: #0284c7;
           box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
         }
 
-        .arrow-sym {
-          transition: transform 0.2s ease;
-        }
-
-        .results-link:hover .arrow-sym {
-          transform: translateX(4px);
-        }
-
-        /* Infinite Floating Marquee structures */
-        .marquee-container {
+        .results-grid {
+          display: grid;
           width: 100%;
-          overflow: hidden;
-          padding: 16px 0;
+          min-width: 0;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-auto-rows: 218px;
+          gap: 12px;
+        }
+
+        .featured-card,
+        .support-card {
           position: relative;
-          mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
-        }
-
-        .marquee-track {
-          display: flex;
-          width: max-content;
-          animation: float-marquee 28s linear infinite;
-        }
-
-        .marquee-group {
-          display: flex;
-          gap: 22px;
-          padding-right: 22px;
-          flex-shrink: 0;
-        }
-
-        .marquee-container:hover .marquee-track {
-          animation-play-state: paused;
-        }
-
-        .marquee-item {
-          flex-shrink: 0;
-        }
-
-        /* Topper Card Styling */
-        .clean-topper-card {
-          width: 220px;
-          height: 330px;
-          background: #ffffff;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 20px;
+          min-width: 0;
           overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-          box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          box-sizing: border-box;
+          border: 1px solid #c3ced0;
+          border-radius: 8px;
+          background: #e3e8e8;
+          isolation: isolate;
+          transition: border-color 160ms ease, background-color 160ms ease;
         }
 
-        .clean-topper-card:hover {
-          transform: translateY(-6px);
-          border-color: #0284c7;
-          box-shadow: 
-            0 18px 36px rgba(15, 23, 42, 0.08),
-            0 6px 16px rgba(2, 132, 199, 0.15);
+        .featured-card:hover,
+        .support-card:hover {
+          border-color: #91a7aa;
+          background: #dce5e5;
         }
 
-        .topper-photo-wrap {
-          position: relative;
-          width: 100%;
-          height: 175px;
-          background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-          overflow: hidden;
+        .featured-card {
+          grid-row: 1 / 3;
+          background: #d9e5e6;
         }
 
-        :global(.topper-cover-img) {
-          object-fit: cover;
-          object-position: center top;
-        }
-
-        .clean-topper-card:hover :global(.topper-cover-img) {
-          transform: scale(1.05);
-        }
-
-        .year-indicator {
+        .featured-card::after {
+          content: "";
           position: absolute;
-          bottom: 10px;
-          right: 10px;
-          font-size: 0.65rem;
-          font-weight: 800;
-          color: #ffffff;
-          background: rgba(15, 23, 42, 0.85);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
-          padding: 3px 10px;
-          border-radius: 6px;
-          z-index: 10;
-          letter-spacing: 0.03em;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
+          width: 58%;
+          height: 11px;
+          background: #27868d;
         }
 
-        .topper-body {
-          padding: 14px;
-          flex-grow: 1;
+        .featured-watermark {
+          position: absolute;
+          top: 24px;
+          right: 22px;
+          z-index: -1;
+          color: #173d76;
+          font-size: 6rem;
+          font-weight: 600;
+          letter-spacing: -0.08em;
+          line-height: 1;
+          opacity: 0.055;
+        }
+
+        .featured-orbit {
+          position: absolute;
+          right: -80px;
+          bottom: -105px;
+          z-index: -1;
+          width: 330px;
+          height: 330px;
+          border: 28px solid #c2d5d6;
+          border-radius: 50%;
+        }
+
+        .featured-copy {
+          position: relative;
+          z-index: 3;
           display: flex;
+          width: 55%;
+          height: 100%;
+          min-width: 160px;
           flex-direction: column;
-          justify-content: space-between;
-          text-align: left;
-          box-sizing: border-box;
+          align-items: flex-start;
+          padding: 24px 12px 24px 20px;
         }
 
-        .name-batch-block {
-          margin-bottom: 8px;
-        }
-
-        .topper-name-text {
-          font-size: 1rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin: 0 0 2px 0;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          letter-spacing: -0.01em;
-        }
-
-        .topper-batch-text {
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: #0284c7;
+        .result-year,
+        .support-year {
+          color: #197985;
+          font-size: 0.61rem;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          line-height: 1.2;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+        }
+
+        .featured-rank {
+          margin-top: 30px;
+        }
+
+        .featured-rank span {
           display: block;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .score-box {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          background: #f8fafc;
-          border: 1px solid #f1f5f9;
-          border-radius: 12px;
-          padding: 8px 10px;
-          margin-top: auto;
-        }
-
-        .rank-row, .score-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-        }
-
-        .rank-label-text, .score-label-text {
-          font-size: 0.65rem;
-          font-weight: 800;
-          color: #64748b;
-          letter-spacing: 0.06em;
-        }
-
-        .rank-value-badge {
+          margin-bottom: 1px;
+          color: #687986;
           font-size: 0.72rem;
-          font-weight: 800;
-          display: inline-flex;
-          align-items: center;
-          gap: 3px;
-          color: #c2410c;
-          background: #fff7ed;
-          border: 1px solid #ffedd5;
-          padding: 2px 8px;
-          border-radius: 99px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          line-height: 1;
+          text-transform: uppercase;
         }
 
-        .star-icon {
-          font-size: 0.7rem;
-          color: #f59e0b;
+        .featured-rank strong {
+          display: block;
+          color: #173d76;
+          font-size: clamp(3.5rem, 5.5vw, 5.2rem);
+          font-weight: 600;
+          letter-spacing: -0.07em;
+          line-height: 0.92;
         }
 
-        .score-value-text {
-          font-size: 0.95rem;
-          font-weight: 800;
-          color: #0f172a;
-          letter-spacing: -0.01em;
+        .featured-copy h3 {
+          margin: 22px 0 0;
+          color: #273d4e;
+          font-family: inherit;
+          font-size: 1.35rem;
+          font-weight: 600;
+          letter-spacing: -0.025em;
+          line-height: 1.15;
         }
 
-        @keyframes float-marquee {
-          0% {
-            transform: translate3d(0, 0, 0);
+        .featured-copy > p {
+          margin: 6px 0 0;
+          color: #687783;
+          font-size: 0.69rem;
+          line-height: 1.35;
+        }
+
+        .featured-score {
+          margin-top: auto;
+          padding-top: 17px;
+          border-top: 1px solid #b8c9cb;
+        }
+
+        .featured-score strong {
+          display: block;
+          color: #197985;
+          font-size: 2rem;
+          font-weight: 600;
+          letter-spacing: -0.045em;
+          line-height: 1;
+        }
+
+        .featured-score strong small,
+        .support-score small {
+          margin-left: 2px;
+          color: #6e7e8a;
+          font-size: 0.64rem;
+          font-weight: 500;
+          letter-spacing: 0;
+        }
+
+        .featured-score > span {
+          display: block;
+          margin-top: 5px;
+          color: #697985;
+          font-size: 0.58rem;
+          font-weight: 600;
+          letter-spacing: 0.07em;
+          line-height: 1.2;
+          text-transform: uppercase;
+        }
+
+        :global(.featured-student-image) {
+          z-index: 2;
+          width: 75% !important;
+          height: 94% !important;
+          top: auto !important;
+          right: -15% !important;
+          bottom: 0 !important;
+          left: auto !important;
+          object-fit: contain;
+          object-position: bottom right;
+        }
+
+        .support-index {
+          position: absolute;
+          top: 14px;
+          right: 15px;
+          z-index: 1;
+          color: #173d76;
+          font-size: 2.4rem;
+          font-weight: 600;
+          letter-spacing: -0.06em;
+          line-height: 1;
+          opacity: 0.06;
+        }
+
+        .support-accent {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          z-index: 3;
+          width: 48%;
+          height: 5px;
+          background: #27868d;
+        }
+
+        .support-copy {
+          position: relative;
+          z-index: 3;
+          display: flex;
+          width: 58%;
+          height: 100%;
+          min-width: 150px;
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 18px 4px 17px 18px;
+        }
+
+        .support-rank {
+          margin-top: 17px;
+          color: #173d76;
+          font-size: 1.7rem;
+          font-weight: 600;
+          letter-spacing: -0.04em;
+          line-height: 1;
+          white-space: nowrap;
+        }
+
+        .support-copy h3 {
+          max-width: 100%;
+          overflow: hidden;
+          margin: 9px 0 0;
+          color: #2b4050;
+          font-family: inherit;
+          font-size: 0.83rem;
+          font-weight: 600;
+          letter-spacing: -0.015em;
+          line-height: 1.2;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .support-score {
+          margin-top: auto;
+          color: #197985;
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: -0.025em;
+          line-height: 1;
+        }
+
+        :global(.support-student-image) {
+          z-index: 2;
+          width: 56% !important;
+          height: 92% !important;
+          top: auto !important;
+          right: -5% !important;
+          bottom: 0 !important;
+          left: auto !important;
+          object-fit: contain;
+          object-position: bottom right;
+        }
+
+        @media (max-width: 1020px) {
+          .results-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: minmax(205px, auto);
           }
-          100% {
-            transform: translate3d(-50%, 0, 0);
+
+          .featured-card {
+            grid-column: span 2;
+            height: 380px;
+          }
+
+          .featured-copy {
+            width: 45%;
+          }
+
+          :global(.featured-student-image) {
+            width: 60% !important;
+            right: 0 !important;
           }
         }
 
-        @media (max-width: 768px) {
-          .toppers-section {
-            padding: 36px 0;
+        @media (max-width: 640px) {
+          .stars-section {
+            padding: 46px 20px 52px;
           }
-          .toppers-header {
-            flex-direction: column;
+
+          .stars-header {
             align-items: flex-start;
-            gap: 12px;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 23px;
           }
-          .header-right {
-            margin-bottom: 0;
+
+          h2 {
+            font-size: 1.95rem;
           }
-          .toppers-title {
-            font-size: 1.65rem;
+
+          :global(.results-link),
+          .results-button {
+            width: 100%;
           }
-          .clean-topper-card {
-            width: 190px;
-            height: 300px;
+
+          .results-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: 430px repeat(4, 190px);
           }
-          .topper-photo-wrap {
-            height: 155px;
+
+          .featured-card {
+            grid-column: auto;
+          }
+
+          .featured-copy {
+            width: 52%;
+            min-width: 180px;
+            padding: 25px 8px 24px 22px;
+          }
+
+          .featured-rank {
+            margin-top: 24px;
+          }
+
+          .featured-rank strong {
+            font-size: 3.6rem;
+          }
+
+          .featured-copy h3 {
+            margin-top: 18px;
+            font-size: 1.15rem;
+          }
+
+          :global(.featured-student-image) {
+            width: 68% !important;
+            right: -8% !important;
+          }
+
+          .support-copy {
+            width: 60%;
+          }
+
+          :global(.support-student-image) {
+            width: 55% !important;
           }
         }
       `}</style>
     </section>
   );
 }
+

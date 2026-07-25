@@ -53,7 +53,15 @@ export default function CoursesClient() {
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                 </svg>
               </span>
-              <span className="tab-label">Neet Freashers</span>
+              <span className="tab-label">
+                <EditableText
+                  contentKey="filters.freshers"
+                  label="freshers filter"
+                  showInlineControls={false}
+                >
+                  Neet Freashers
+                </EditableText>
+              </span>
             </button>
 
             <button
@@ -67,7 +75,15 @@ export default function CoursesClient() {
                   <circle cx="12" cy="12" r="2" />
                 </svg>
               </span>
-              <span className="tab-label">Neet Repeaters</span>
+              <span className="tab-label">
+                <EditableText
+                  contentKey="filters.repeaters"
+                  label="repeaters filter"
+                  showInlineControls={false}
+                >
+                  Neet Repeaters
+                </EditableText>
+              </span>
             </button>
 
             <button
@@ -81,7 +97,15 @@ export default function CoursesClient() {
                   <path d="M9 12l2 2 4-4" />
                 </svg>
               </span>
-              <span className="tab-label">Test series</span>
+              <span className="tab-label">
+                <EditableText
+                  contentKey="filters.test-series"
+                  label="test series filter"
+                  showInlineControls={false}
+                >
+                  Test series
+                </EditableText>
+              </span>
             </button>
           </motion.div>
         </div>
@@ -110,7 +134,15 @@ export default function CoursesClient() {
                             <circle cx="9" cy="7" r="4" />
                           </svg>
                         </span>
-                        <span>{course.type}</span>
+                        <span>
+                          <EditableText
+                            contentKey={`course-${course.id}.type`}
+                            label={`${course.title} type`}
+                            showInlineControls={false}
+                          >
+                            {course.type}
+                          </EditableText>
+                        </span>
                       </div>
 
                       <h2 className="course-card-title">
@@ -163,7 +195,15 @@ export default function CoursesClient() {
                                 </svg>
                               )}
                             </span>
-                            <span className="highlight-text">{highlight}</span>
+                            <span className="highlight-text">
+                              <EditableText
+                                contentKey={`course-${course.id}.highlight-${idx + 1}`}
+                                label={`${course.title} highlight ${idx + 1}`}
+                                showInlineControls={false}
+                              >
+                                {highlight}
+                              </EditableText>
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -173,7 +213,15 @@ export default function CoursesClient() {
                       {/* Bottom Know More action indicator */}
                       <div className="course-action-wrap">
                         <div className="course-know-more-link">
-                          <span>Know more</span>
+                          <span>
+                            <EditableText
+                              contentKey={`course-${course.id}.action`}
+                              label={`${course.title} action`}
+                              showInlineControls={false}
+                            >
+                              Know more
+                            </EditableText>
+                          </span>
                           <span className="arrow-symbol">→</span>
                         </div>
                       </div>
@@ -183,7 +231,15 @@ export default function CoursesClient() {
                     <div className="course-card-right">
                       {/* Orange fold-over starts ribbon banner */}
                       <div className="starts-ribbon-banner">
-                        <span className="ribbon-text">{course.badge}</span>
+                        <span className="ribbon-text">
+                          <EditableText
+                            contentKey={`course-${course.id}.badge`}
+                            label={`${course.title} batch badge`}
+                            showInlineControls={false}
+                          >
+                            {course.badge}
+                          </EditableText>
+                        </span>
                         <span className="ribbon-fold-corner"></span>
                       </div>
 

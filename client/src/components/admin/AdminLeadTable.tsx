@@ -5,6 +5,8 @@ import { Download, Search } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import {
   AdminEmptyState,
+  AdminLoadingState,
+  AdminNotice,
   AdminPageHeader,
   formatAdminDate,
 } from "./AdminUi";
@@ -123,9 +125,7 @@ export default function AdminLeadTable({
       />
 
       {error && (
-        <div className="admin-notice" role="alert">
-          {error}
-        </div>
+        <AdminNotice>{error}</AdminNotice>
       )}
 
       <div className="admin-toolbar">
@@ -163,10 +163,7 @@ export default function AdminLeadTable({
         </header>
 
         {loading ? (
-          <div className="admin-loading" role="status">
-            <span className="admin-spinner" />
-            Loading records…
-          </div>
+          <AdminLoadingState label="Loading records…" />
         ) : rows.length === 0 ? (
           <AdminEmptyState
             title="No records found"

@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { coursesData } from "@/data/courses";
-import { FaChevronDown, FaCalendarDays, FaArrowLeft, FaCheck, FaPhone, FaEnvelope, FaClock, FaBookOpen, FaTrophy, FaGraduationCap, FaFileSignature, FaHeart, FaFilePdf } from "react-icons/fa6";
-import { FaChartLine } from "react-icons/fa";
+import { FaChevronDown, FaCalendarDays, FaArrowLeft, FaCheck, FaFilePdf } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 
 interface CourseDetailClientProps {
@@ -27,6 +26,34 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          setIsAuthenticated(true);
+          setFormData(prev => ({
+            ...prev,
+            name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+            email: user.email || prev.email,
+            phone: user.mobileNumber || prev.phone,
+          }));
+        } catch {
+          setIsAuthenticated(false);
+        }
+      } else {
+        setIsAuthenticated(false);
+        setFormData(prev => ({ ...prev, name: "", email: "", phone: "" }));
+      }
+    };
+
+    checkAuth();
+    window.addEventListener("auth-changed", checkAuth);
+    return () => window.removeEventListener("auth-changed", checkAuth);
+  }, []);
 
   // Office Hours
   const timeSlots = [
@@ -49,7 +76,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "One of the best selection ratios in Maharashtra",
       ],
       renderGraphic: () => (
-        <img src="/images/crops/results_graphic.png" alt="Our Results Speak for Themselves" className="row-graphic-img" />
+        <Image src="/images/crops/results_graphic.png" alt="Our Results Speak for Themselves" width={322} height={185} className="row-graphic-img" />
       )
     },
     {
@@ -62,7 +89,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Exam strategy guidance"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/mentorship_graphic.png" alt="Personalized Mentorship" className="row-graphic-img" />
+        <Image src="/images/crops/mentorship_graphic.png" alt="Personalized Mentorship" width={322} height={158} className="row-graphic-img" />
       )
     },
     {
@@ -75,7 +102,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Strong fundamentals over memorization"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/learning_graphic.png" alt="Concept-Driven Classroom Learning" className="row-graphic-img" />
+        <Image src="/images/crops/learning_graphic.png" alt="Concept-Driven Classroom Learning" width={323} height={155} className="row-graphic-img" />
       )
     },
     {
@@ -88,7 +115,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Revision booklets & PYQs"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/material_graphic.png" alt="Study Material & Daily Practice" className="row-graphic-img" />
+        <Image src="/images/crops/material_graphic.png" alt="Study Material & Daily Practice" width={313} height={146} className="row-graphic-img" />
       )
     },
     {
@@ -102,7 +129,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Time-management practice"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/assessment_graphic.png" alt="Smart Assessment System" className="row-graphic-img" />
+        <Image src="/images/crops/assessment_graphic.png" alt="Smart Assessment System" width={323} height={154} className="row-graphic-img" />
       )
     },
     {
@@ -115,7 +142,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Faculty feedback"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/analytics_graphic.png" alt="Personalized Performance Analytics" className="row-graphic-img" />
+        <Image src="/images/crops/analytics_graphic.png" alt="Personalized Performance Analytics" width={321} height={145} className="row-graphic-img" />
       )
     },
     {
@@ -127,7 +154,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Extra support until every doubt is cleared"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/doubt_graphic.png" alt="Unlimited Doubt Support" className="row-graphic-img" />
+        <Image src="/images/crops/doubt_graphic.png" alt="Unlimited Doubt Support" width={319} height={129} className="row-graphic-img" />
       )
     },
     {
@@ -139,7 +166,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Rapid revision before exams"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/revision_graphic.png" alt="Structured Revision Program" className="row-graphic-img" />
+        <Image src="/images/crops/revision_graphic.png" alt="Structured Revision Program" width={309} height={115} className="row-graphic-img" />
       )
     },
     {
@@ -151,45 +178,10 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Continuous motivation"
       ],
       renderGraphic: () => (
-        <img src="/images/crops/wellness_graphic.png" alt="Student Wellness & Motivation" className="row-graphic-img" />
+        <Image src="/images/crops/wellness_graphic.png" alt="Student Wellness & Motivation" width={273} height={105} className="row-graphic-img" />
       )
     }
   ];
-
-  // Map original fees for display
-  const courseFees: Record<number, string> = {
-    1: "₹1,00,300",
-    2: "₹1,15,300",
-    3: "₹1,25,300",
-    4: "₹9,900"
-  };
-
-  const originalFee = courseFees[courseId] || "₹1,00,300";
-
-  // Syllabus details depending on course
-  const syllabusDetails: Record<number, { subject: string; topics: string[] }[]> = {
-    1: [
-      { subject: "Physics", topics: ["Mathematical Tools", "Units & Measurements", "Kinematics", "Laws of Motion", "Work, Energy & Power"] },
-      { subject: "Chemistry", topics: ["Some Basic Concepts", "Structure of Atom", "Classification of Elements", "Chemical Bonding"] },
-      { subject: "Biology", topics: ["The Living World", "Biological Classification", "Plant Kingdom", "Animal Kingdom", "Cell Biology"] }
-    ],
-    2: [
-      { subject: "Physics", topics: ["Electrostatics", "Current Electricity", "Magnetic Effects", "Electromagnetic Induction", "Optics & Modern Physics"] },
-      { subject: "Chemistry", topics: ["Solutions", "Electrochemistry", "Chemical Kinetics", "d & f Block Elements", "Organic Chemistry Core"] },
-      { subject: "Biology", topics: ["Reproduction", "Genetics & Evolution", "Biology in Human Welfare", "Biotechnology", "Ecology"] }
-    ],
-    3: [
-      { subject: "Complete Physics", topics: ["Mechanics & Thermodynamics", "Electromagnetism", "Optics & Wave Theory", "Modern & Nuclear Physics"] },
-      { subject: "Complete Chemistry", topics: ["Physical Chemistry revision", "Inorganic concepts & trends", "Organic reactions & mechanism pathways"] },
-      { subject: "Complete Biology", topics: ["Comprehensive Botany", "Advanced Zoology", "NCERT Line-by-line review series"] }
-    ],
-    4: [
-      { subject: "Test Structure", topics: ["24 Part-syllabus minor tests", "12 Full-syllabus major test simulations", "Detailed performance diagnostics & analytics"] },
-      { subject: "NCERT Focus", topics: ["Strict alignment with the latest NEET syllabus updates", "Topic-wise weightage indicators"] }
-    ]
-  };
-
-  const syllabus = syllabusDetails[courseId] || [];
 
   if (!course) {
     return (
@@ -202,35 +194,6 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
       </div>
     );
   }
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        try {
-          const user = JSON.parse(savedUser);
-          setIsAuthenticated(true);
-          setFormData(prev => ({
-            ...prev,
-            name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-            email: user.email || prev.email,
-            phone: user.mobileNumber || prev.phone,
-          }));
-        } catch (e) {
-          setIsAuthenticated(false);
-        }
-      } else {
-        setIsAuthenticated(false);
-        setFormData(prev => ({ ...prev, name: "", email: "", phone: "" }));
-      }
-    };
-
-    checkAuth();
-    window.addEventListener("auth-changed", checkAuth);
-    return () => window.removeEventListener("auth-changed", checkAuth);
-  }, []);
 
   const handleAuthInterceptor = (e: React.MouseEvent | React.FocusEvent) => {
     if (!isAuthenticated) {
@@ -293,7 +256,15 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         <div className="back-btn-wrap">
           <Link href="/courses" className="back-btn">
             <FaArrowLeft className="back-icon" />
-            <span>Back to Courses</span>
+            <span>
+              <EditableText
+                contentKey="navigation.back"
+                label="back to courses link"
+                showInlineControls={false}
+              >
+                Back to Courses
+              </EditableText>
+            </span>
           </Link>
         </div>
 
@@ -342,15 +313,34 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
                   <div key={idx} className="whats-in-course-row">
                     <div className="row-text-content">
                       <h4 className="row-item-title">
-                        {feat.title}
+                        <EditableText
+                          contentKey={`offerings.item-${idx + 1}.heading`}
+                          label={`course offering ${idx + 1} heading`}
+                        >
+                          {feat.title}
+                        </EditableText>
                         {feat.badge && (
-                          <span className="row-item-badge">{feat.badge}</span>
+                          <span className="row-item-badge">
+                            <EditableText
+                              contentKey={`offerings.item-${idx + 1}.badge`}
+                              label={`course offering ${idx + 1} badge`}
+                              showInlineControls={false}
+                            >
+                              {feat.badge}
+                            </EditableText>
+                          </span>
                         )}
                       </h4>
                       <ul className="row-bullet-list">
                         {feat.bullets.map((bullet, bIdx) => (
                           <li key={bIdx} className="row-bullet-point">
-                            {bullet}
+                            <EditableText
+                              contentKey={`offerings.item-${idx + 1}.point-${bIdx + 1}`}
+                              label={`course offering ${idx + 1}, point ${bIdx + 1}`}
+                              showInlineControls={false}
+                            >
+                              {bullet}
+                            </EditableText>
                           </li>
                         ))}
                       </ul>
@@ -368,7 +358,14 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
             {/* Syllabus Download Banner */}
             <div className="syllabus-download-card">
               <div className="download-text-wrap">
-                <h4 className="download-title">Download Course Syllabus</h4>
+                <h4 className="download-title">
+                  <EditableText
+                    contentKey="syllabus.heading"
+                    label="syllabus download heading"
+                  >
+                    Download Course Syllabus
+                  </EditableText>
+                </h4>
               </div>
               <a
                 href="/documents/Syllabus_neet_2026.pdf"
@@ -378,7 +375,15 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
                 <span className="pdf-icon-box">
                   <FaFilePdf />
                 </span>
-                <span>Download PDF Syllabus</span>
+                <span>
+                  <EditableText
+                    contentKey="syllabus.action"
+                    label="syllabus download action"
+                    showInlineControls={false}
+                  >
+                    Download PDF Syllabus
+                  </EditableText>
+                </span>
               </a>
             </div>
           </div>
@@ -434,13 +439,26 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
                   onFocusCapture={handleAuthInterceptor}
                 >
                   <h2 className="form-card-title">
-                    Register for the course
+                    <EditableText
+                      contentKey="registration.heading"
+                      label="registration form heading"
+                    >
+                      Register for the course
+                    </EditableText>
                     <span className="form-course-highlight">{course.title}</span>
                   </h2>
 
                   {/* Section Title */}
                   <div className="form-section-title-wrap">
-                    <span className="form-section-label">STUDENT INFORMATION</span>
+                    <span className="form-section-label">
+                      <EditableText
+                        contentKey="registration.student-section"
+                        label="student information label"
+                        showInlineControls={false}
+                      >
+                        STUDENT INFORMATION
+                      </EditableText>
+                    </span>
                   </div>
 
                   {/* Inputs */}
@@ -485,7 +503,15 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
 
                     {/* Batch starting from block */}
                     <div className="subcard-field-group">
-                      <span className="subcard-section-label">BATCH STARTING FROM</span>
+                      <span className="subcard-section-label">
+                        <EditableText
+                          contentKey="registration.batch-label"
+                          label="batch starting label"
+                          showInlineControls={false}
+                        >
+                          BATCH STARTING FROM
+                        </EditableText>
+                      </span>
                       <div className="batch-pill-badge">
                         <span className="batch-pill-icon"><FaCalendarDays /></span>
                         <span className="batch-pill-date">{course.badge.replace("Starts: ", "")}</span>
@@ -544,7 +570,17 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
                     className="submit-registration-btn"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Registering..." : "Register Now"}
+                    {isSubmitting ? (
+                      "Registering..."
+                    ) : (
+                      <EditableText
+                        contentKey="registration.action"
+                        label="registration action"
+                        showInlineControls={false}
+                      >
+                        Register Now
+                      </EditableText>
+                    )}
                   </button>
 
                   {formStatus === "error" && (

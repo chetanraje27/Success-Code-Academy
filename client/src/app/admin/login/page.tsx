@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, LockKeyhole, LogIn } from "lucide-react";
+import { AdminNotice } from "@/components/admin/AdminUi";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -88,9 +89,7 @@ export default function AdminLoginPage() {
           </p>
 
           {error && (
-            <div className="admin-notice" role="alert">
-              {error}
-            </div>
+            <AdminNotice>{error}</AdminNotice>
           )}
 
           <form className="admin-login-form" onSubmit={handleSubmit}>

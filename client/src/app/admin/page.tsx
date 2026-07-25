@@ -14,6 +14,8 @@ import {
 import { adminApiFetch } from "@/lib/admin-api";
 import {
   AdminEmptyState,
+  AdminLoadingState,
+  AdminNotice,
   AdminPageHeader,
   formatAdminDate,
 } from "@/components/admin/AdminUi";
@@ -91,9 +93,7 @@ export default function AdminDashboardPage() {
       />
 
       {error && (
-        <div className="admin-notice" role="alert">
-          {error}
-        </div>
+        <AdminNotice>{error}</AdminNotice>
       )}
 
       <section className="admin-stats-grid" aria-label="Registration totals">
@@ -165,10 +165,7 @@ export default function AdminDashboardPage() {
           </Link>
         </header>
         {!stats ? (
-          <div className="admin-loading" role="status">
-            <span className="admin-spinner" />
-            Loading dashboard…
-          </div>
+          <AdminLoadingState label="Loading dashboard…" />
         ) : stats.recentStudents.length === 0 ? (
           <AdminEmptyState
             title="No student registrations yet"

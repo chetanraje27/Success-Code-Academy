@@ -5,7 +5,17 @@ function backendUrl(pageKey: string): string {
     process.env.API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
     "http://localhost:5000";
-  return `${base.replace(/\/$/, "")}/api/v1/content/page/${encodeURIComponent(pageKey)}`;
+  const publicCollections = new Set([
+    "banners",
+    "notifications",
+    "results",
+    "settings",
+    "stars",
+  ]);
+  const contentPath = publicCollections.has(pageKey)
+    ? pageKey
+    : `page/${encodeURIComponent(pageKey)}`;
+  return `${base.replace(/\/$/, "")}/api/v1/content/${contentPath}`;
 }
 
 export async function GET(

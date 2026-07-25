@@ -131,6 +131,7 @@ export default function ContactClient() {
 
   return (
     <section className="contact-page">
+      <h1 className="sr-only">Contact Success Code Academy</h1>
 
       {/* ══════════════════════════════════════════
           HERO BANNER — Contact Poster Section
@@ -190,10 +191,14 @@ export default function ContactClient() {
                 {/* Address Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/location.png" alt="Location" width={24} height={24} style={{ objectFit: "contain" }} />
+                    <Image src="/images/ui/location.png" alt="" width={24} height={24} className="contact-detail-icon" />
                   </div>
                   <div className="detail-content-box">
-                    <h4 className="detail-item-label">Address</h4>
+                    <h4 className="detail-item-label">
+                      <EditableText contentKey="contact.address-label" label="address label">
+                        Address
+                      </EditableText>
+                    </h4>
                     <p className="detail-item-text">
                       {settings.address}
                     </p>
@@ -203,10 +208,14 @@ export default function ContactClient() {
                 {/* Phone Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/phone-ringing.png" alt="Phone" width={24} height={24} style={{ objectFit: "contain" }} />
+                    <Image src="/images/ui/phone-ringing.png" alt="" width={24} height={24} className="contact-detail-icon" />
                   </div>
                   <div className="detail-content-box">
-                    <h4 className="detail-item-label">Phone</h4>
+                    <h4 className="detail-item-label">
+                      <EditableText contentKey="contact.phone-label" label="phone label">
+                        Phone
+                      </EditableText>
+                    </h4>
                     <p className="detail-item-text">
                       <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="detail-link">{settings.phone}</a>
                     </p>
@@ -216,10 +225,14 @@ export default function ContactClient() {
                 {/* Email Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/email.png" alt="Email" width={24} height={24} style={{ objectFit: "contain" }} />
+                    <Image src="/images/ui/email.png" alt="" width={24} height={24} className="contact-detail-icon" />
                   </div>
                   <div className="detail-content-box">
-                    <h4 className="detail-item-label">Email</h4>
+                    <h4 className="detail-item-label">
+                      <EditableText contentKey="contact.email-label" label="email label">
+                        Email
+                      </EditableText>
+                    </h4>
                     <p className="detail-item-text">
                       <a href={`mailto:${settings.email}`} className="detail-link">{settings.email}</a>
                     </p>
@@ -229,12 +242,18 @@ export default function ContactClient() {
                 {/* Working Hours Item */}
                 <div className="contact-detail-item">
                   <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/clock (1).png" alt="Working Hours" width={24} height={24} style={{ objectFit: "contain" }} />
+                    <Image src="/images/ui/clock (1).png" alt="" width={24} height={24} className="contact-detail-icon" />
                   </div>
                   <div className="detail-content-box">
-                    <h4 className="detail-item-label">Working Hours</h4>
+                    <h4 className="detail-item-label">
+                      <EditableText contentKey="contact.hours-label" label="working hours label">
+                        Working Hours
+                      </EditableText>
+                    </h4>
                     <p className="detail-item-text">
-                      Monday - Saturday: 9:00 AM - 6:00 PM
+                      <EditableText contentKey="contact.hours" label="working hours">
+                        Monday - Saturday: 9:00 AM - 6:00 PM
+                      </EditableText>
                     </p>
                   </div>
                 </div>
@@ -264,7 +283,7 @@ export default function ContactClient() {
                         id="cf-name"
                         name="name"
                         type="text"
-                        placeholder="Enter your full name"
+                        placeholder="Manu Arora"
                         className="dark-form-input"
                         required
                       />
@@ -276,7 +295,7 @@ export default function ContactClient() {
                         id="cf-email"
                         name="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="support@aceternity.com"
                         className="dark-form-input"
                         required
                       />
@@ -388,7 +407,7 @@ export default function ContactClient() {
 
           <div className="distance-box">
             <form className="distance-form" onSubmit={handleDistanceCheck}>
-              <div className="field-group" style={{ flex: 1 }}>
+              <div className="field-group distance-origin-field">
                 <label htmlFor="dist-origin" className="dist-label-text">Check distance from your location</label>
                 <input id="dist-origin" value={origin} onChange={e => setOrigin(e.target.value)}
                   type="text" placeholder="E.g. Pune, Mumbai, Satara" className="dist-input-box" />
@@ -555,6 +574,9 @@ export default function ContactClient() {
         }
         .detail-icon-box:hover {
           transform: scale(1.05);
+        }
+        .contact-detail-icon {
+          object-fit: contain;
         }
         .detail-icon-svg {
           width: 20px;
@@ -876,6 +898,9 @@ export default function ContactClient() {
           gap: 16px;
           align-items: flex-end;
           flex-wrap: wrap;
+        }
+        .distance-origin-field {
+          flex: 1;
         }
 
         .dist-label-text {

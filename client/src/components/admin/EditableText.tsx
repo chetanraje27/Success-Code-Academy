@@ -43,11 +43,25 @@ export function EditableText({
       <span
         className={`live-editable-text${customized ? " is-customized" : ""}`}
         data-live-content-key={contentKey}
+        data-live-content-label={label}
+        role="button"
+        tabIndex={0}
+        aria-label={`Edit ${label}`}
         title={`Click to edit ${label}`}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
           setOpen(true);
+        }}
+        onKeyDown={(event) => {
+          if (
+            event.target === event.currentTarget &&
+            (event.key === "Enter" || event.key === " ")
+          ) {
+            event.preventDefault();
+            event.stopPropagation();
+            setOpen(true);
+          }
         }}
       >
         <span className="live-editable-value">{value}</span>

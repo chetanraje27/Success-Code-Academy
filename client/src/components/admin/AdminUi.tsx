@@ -48,6 +48,32 @@ export function AdminEmptyState({
   );
 }
 
+export function AdminNotice({
+  children,
+  tone = "error",
+}: {
+  children: ReactNode;
+  tone?: "error" | "success";
+}) {
+  return (
+    <div
+      className={`admin-notice ${tone === "success" ? "success" : ""}`}
+      role={tone === "error" ? "alert" : "status"}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function AdminLoadingState({ label }: { label: string }) {
+  return (
+    <div className="admin-loading" role="status" aria-live="polite">
+      <span className="admin-spinner" aria-hidden="true" />
+      {label}
+    </div>
+  );
+}
+
 export function formatAdminDate(value: unknown): string {
   if (typeof value !== "string" && !(value instanceof Date)) return "—";
   const date = new Date(value);

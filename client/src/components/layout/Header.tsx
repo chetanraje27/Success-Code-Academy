@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/data/home";
 import Button from "@/components/ui/Button";
 import SignInModal from "@/components/ui/SignInModal";
@@ -21,6 +22,9 @@ type HeaderUser = {
 };
 
 export default function Header() {
+  const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -28,6 +32,8 @@ export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
   const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
+  const isActivePath = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +64,66 @@ export default function Header() {
       window.clearTimeout(storageTimer);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : menuButtonRef.current;
+    const drawer = drawerRef.current;
+    document.body.style.overflow = "hidden";
+
+    const frame = window.requestAnimationFrame(() => {
+      drawer?.querySelector<HTMLElement>(".drawer-close-btn")?.focus();
+    });
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !drawer) return;
+
+      const focusable = Array.from(
+        drawer.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsDropdownOpen(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isDropdownOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -90,9 +156,14 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="desktop-nav">
+          <nav className="desktop-nav" aria-label="Primary navigation">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="nav-link">
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`nav-link ${isActivePath(link.href) ? "active" : ""}`}
+                aria-current={isActivePath(link.href) ? "page" : undefined}
+              >
                 <EditableText
                   contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
                   label={`${link.label} navigation label`}
@@ -129,35 +200,26 @@ export default function Header() {
               </>
             )}
             {currentUser ? (
-              <div className="user-profile-container" style={{ position: 'relative', zIndex: 45 }}>
+              <div className="user-profile-container">
                 <button 
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  type="button"
+                  onClick={() => setIsDropdownOpen((open) => !open)}
                   className="user-profile-trigger"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    outline: 'none',
-                    padding: '8px 4px'
-                  }}
+                  aria-expanded={isDropdownOpen}
+                  aria-controls="user-account-menu"
                 >
-                  <span className="user-greeting" style={{ fontSize: '0.88rem', fontWeight: 750, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>
+                  <span className="user-greeting">
                     Hi, {currentUser.firstName || "Student"}
                   </span>
                   <svg 
+                    className={`dropdown-chevron ${isDropdownOpen ? "open" : ""}`}
                     viewBox="0 0 24 24" 
                     width="16" 
                     height="16" 
                     fill="none" 
                     stroke="var(--text-primary)" 
                     strokeWidth="2.5"
-                    style={{
-                      transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.2s ease'
-                    }}
+                    aria-hidden="true"
                   >
                     <path d="M6 9l6 6 6-6" />
                   </svg>
@@ -165,41 +227,16 @@ export default function Header() {
 
                 {isDropdownOpen && (
                   <div 
+                    id="user-account-menu"
                     className="user-dropdown-menu"
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      right: 0,
-                      marginTop: '8px',
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '12px',
-                      padding: '8px 0',
-                      width: '160px',
-                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      zIndex: 46
-                    }}
                   >
                     <button 
+                      type="button"
                       onClick={() => {
                         setIsProfileOpen(true);
                         setIsDropdownOpen(false);
                       }}
                       className="dropdown-item"
-                      style={{
-                        padding: '10px 16px',
-                        background: 'transparent',
-                        border: 'none',
-                        textAlign: 'left',
-                        fontSize: '0.88rem',
-                        fontWeight: 600,
-                        color: '#1e293b',
-                        cursor: 'pointer',
-                        transition: 'background 0.2s',
-                        borderRadius: 0
-                      }}
                     >
                       Profile
                     </button>
@@ -207,41 +244,19 @@ export default function Header() {
                       <Link 
                         href="/admin"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="dropdown-item"
-                        style={{
-                          display: 'block',
-                          padding: '10px 16px',
-                          background: 'transparent',
-                          border: 'none',
-                          textAlign: 'left',
-                          fontSize: '0.88rem',
-                          fontWeight: 600,
-                          color: '#4f46e5',
-                          textDecoration: 'none'
-                        }}
+                        className="dropdown-item admin"
                       >
                         Admin Portal
                       </Link>
                     )}
-                    <div style={{ height: '1px', backgroundColor: '#e2e8f0', margin: '4px 0' }} />
+                    <div className="dropdown-separator" role="separator" />
                     <button 
+                      type="button"
                       onClick={() => {
                         handleLogout();
                         setIsDropdownOpen(false);
                       }}
-                      className="dropdown-item"
-                      style={{
-                        padding: '10px 16px',
-                        background: 'transparent',
-                        border: 'none',
-                        textAlign: 'left',
-                        fontSize: '0.88rem',
-                        fontWeight: 600,
-                        color: '#dc2626',
-                        cursor: 'pointer',
-                        transition: 'background 0.2s',
-                        borderRadius: 0
-                      }}
+                      className="dropdown-item danger"
                     >
                       Sign Out
                     </button>
@@ -259,9 +274,12 @@ export default function Header() {
           </div>
 
           <button
+            ref={menuButtonRef}
             onClick={() => setIsMenuOpen(true)}
             className="mobile-menu-btn"
-            aria-label="Toggle menu"
+            aria-label="Open menu"
+            aria-controls="mobile-navigation"
+            aria-expanded={isMenuOpen}
           >
             <div className="hamburger">
               <span></span>
@@ -289,12 +307,7 @@ export default function Header() {
         <div 
           className="dropdown-backdrop-click"
           onClick={() => setIsDropdownOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 40,
-            background: 'transparent'
-          }}
+          aria-hidden="true"
         />
       )}
 
@@ -302,10 +315,20 @@ export default function Header() {
       <div 
         className={`drawer-overlay ${isMenuOpen ? "visible" : ""}`}
         onClick={() => setIsMenuOpen(false)}
+        aria-hidden="true"
       />
 
       {/* Mobile Menu Drawer */}
-      <div className={`mobile-drawer ${isMenuOpen ? "open" : ""}`}>
+      <div
+        ref={drawerRef}
+        id="mobile-navigation"
+        className={`mobile-drawer ${isMenuOpen ? "open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Website navigation"
+        aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen}
+      >
         <div className="drawer-header">
           <Link href="/" className="logo-group" onClick={() => setIsMenuOpen(false)}>
             <Image
@@ -331,7 +354,8 @@ export default function Header() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMenuOpen(false)}
-              className="mobile-nav-link"
+              className={`mobile-nav-link ${isActivePath(link.href) ? "active" : ""}`}
+              aria-current={isActivePath(link.href) ? "page" : undefined}
             >
               <EditableText
                 contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
@@ -345,25 +369,25 @@ export default function Header() {
           ))}
           <div className="mobile-actions">
             {currentUser ? (
-              <div className="mobile-user-profile w-full" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '12px 0', borderBottom: '1px solid #e2e8f0', marginBottom: '12px' }}>
-                <div className="mobile-user-greeting" style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)', textAlign: 'left' }}>
+              <div className="mobile-user-profile">
+                <div className="mobile-user-greeting">
                   Hi, {currentUser.firstName || "Student"}
                 </div>
                 {isAdmin && (
-                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                  <div className="mobile-editor-actions">
                     <button
+                      type="button"
                       onClick={() => { toggleEditMode(); setIsMenuOpen(false); }}
                       className={`edit-site-toggle ${editMode ? 'active' : ''}`}
-                      style={{ flex: 1 }}
                     >
                       <FaPen size={12} />
                       <span>{editMode ? 'Editing' : 'Edit Site'}</span>
                     </button>
                     {editMode && (
                       <button
+                        type="button"
                         onClick={() => { setLeadsOpen(true); setIsMenuOpen(false); }}
                         className="edit-site-toggle"
-                        style={{ flex: 1 }}
                       >
                         <FaDatabase size={12} />
                         <span>Leads</span>
@@ -371,7 +395,7 @@ export default function Header() {
                     )}
                   </div>
                 )}
-                <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <div className="mobile-account-actions">
                   <Button 
                     onClick={() => {
                       setIsProfileOpen(true);
@@ -379,7 +403,7 @@ export default function Header() {
                     }}
                     variant="outline" 
                     size="sm" 
-                    className="w-full"
+                    className="mobile-action-button"
                   >
                     Profile
                   </Button>
@@ -388,9 +412,8 @@ export default function Header() {
                       href="/admin"
                       variant="primary" 
                       size="sm" 
-                      className="w-full"
+                      className="mobile-action-button mobile-admin-button"
                       onClick={() => setIsMenuOpen(false)}
-                      style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
                     >
                       Admin Portal
                     </Button>
@@ -402,8 +425,7 @@ export default function Header() {
                     }}
                     variant="outline" 
                     size="sm" 
-                    className="w-full"
-                    style={{ borderColor: '#fca5a5', color: '#dc2626' }}
+                    className="mobile-action-button mobile-signout-button"
                   >
                     Sign Out
                   </Button>
@@ -417,7 +439,7 @@ export default function Header() {
                 }} 
                 variant="outline" 
                 size="sm" 
-                className="w-full"
+                className="mobile-action-button"
               >
                 Sign In
               </Button>
@@ -426,7 +448,7 @@ export default function Header() {
               href="/courses" 
               variant="primary" 
               size="sm" 
-              className="w-full" 
+              className="mobile-action-button"
               onClick={() => setIsMenuOpen(false)}
             >
               Courses
@@ -442,7 +464,10 @@ export default function Header() {
           left: 0;
           right: 0;
           z-index: 50;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          transition:
+            background-color var(--duration-normal) var(--ease-standard),
+            border-color var(--duration-normal) var(--ease-standard),
+            box-shadow var(--duration-normal) var(--ease-standard);
           background: transparent;
           border-bottom: 1px solid transparent;
         }
@@ -458,7 +483,7 @@ export default function Header() {
           align-items: center;
           justify-content: space-between;
           height: 80px;
-          transition: height 0.3s ease;
+          transition: height var(--duration-normal) var(--ease-standard);
         }
 
         .header.scrolled .header-container {
@@ -469,7 +494,7 @@ export default function Header() {
           display: flex;
           align-items: center;
           cursor: pointer;
-          transition: transform 0.3s ease;
+          transition: transform var(--duration-fast) var(--ease-standard);
         }
 
         .logo-group:hover {
@@ -490,19 +515,21 @@ export default function Header() {
           .desktop-nav {
             display: flex;
             align-items: center;
-            gap: var(--spacing-8);
+            gap: clamp(var(--space-4), 1.8vw, var(--space-8));
           }
         }
 
         .nav-link {
           font-size: 0.875rem;
-          font-weight: 500;
+          font-weight: 600;
           color: var(--text-secondary);
           position: relative;
-          padding: var(--spacing-2) 0;
+          padding: var(--space-2) 0;
+          transition: color var(--duration-fast) var(--ease-standard);
         }
 
-        .nav-link:hover {
+        .nav-link:hover,
+        .nav-link.active {
           color: var(--text-primary);
         }
 
@@ -514,10 +541,11 @@ export default function Header() {
           width: 0;
           height: 2px;
           background: var(--accent-primary);
-          transition: width 0.3s ease;
+          transition: width var(--duration-normal) var(--ease-standard);
         }
 
-        .nav-link:hover::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
           width: 100%;
         }
 
@@ -534,11 +562,16 @@ export default function Header() {
         }
 
         .mobile-menu-btn {
-          display: block;
+          width: var(--touch-target);
+          height: var(--touch-target);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           background: transparent;
           border: none;
           cursor: pointer;
-          padding: var(--spacing-2);
+          padding: var(--space-2);
+          border-radius: var(--radius-control);
         }
 
         @media (min-width: 1024px) {
@@ -561,7 +594,9 @@ export default function Header() {
           height: 2px;
           width: 100%;
           background: var(--text-primary);
-          transition: all 0.3s ease;
+          transition:
+            background-color var(--duration-fast) var(--ease-standard),
+            transform var(--duration-fast) var(--ease-standard);
           border-radius: 2px;
         }
 
@@ -574,7 +609,9 @@ export default function Header() {
           -webkit-backdrop-filter: blur(4px);
           opacity: 0;
           visibility: hidden;
-          transition: all 0.3s ease;
+          transition:
+            opacity var(--duration-overlay) var(--ease-standard),
+            visibility var(--duration-overlay) var(--ease-standard);
           z-index: 900;
         }
 
@@ -590,10 +627,11 @@ export default function Header() {
           right: 0;
           bottom: 0;
           width: 300px;
-          background: #ffffff;
-          box-shadow: -10px 0 30px rgba(15, 23, 42, 0.15);
+          max-width: calc(100vw - 32px);
+          background: var(--color-surface);
+          box-shadow: var(--shadow-md);
           transform: translateX(100%);
-          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: transform var(--duration-overlay) var(--ease-standard);
           z-index: 1000;
           display: flex;
           flex-direction: column;
@@ -608,8 +646,8 @@ export default function Header() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 20px 24px;
-          border-bottom: 1px solid var(--bg-surface-border);
+          padding: var(--space-4) var(--space-6);
+          border-bottom: 1px solid var(--color-border);
         }
 
         .drawer-close-btn {
@@ -621,109 +659,243 @@ export default function Header() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
-          line-height: 32px;
-          transition: color 0.2s;
+          width: var(--touch-target);
+          height: var(--touch-target);
+          line-height: var(--touch-target);
+          border-radius: var(--radius-control);
+          transition:
+            color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard);
         }
 
         .drawer-close-btn:hover {
           color: var(--accent-primary);
+          background: var(--color-surface-muted);
         }
 
         .mobile-nav-links {
-          padding: 24px;
+          padding: var(--space-5) var(--space-6) max(var(--space-6), env(safe-area-inset-bottom));
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: var(--space-2);
+          overflow-y: auto;
         }
 
         .mobile-nav-link {
-          font-size: 1.05rem;
+          min-height: var(--touch-target);
+          display: flex;
+          align-items: center;
+          font-size: 1rem;
           font-weight: 600;
           color: var(--text-primary);
-          padding: 8px 0;
-          border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-          transition: all 0.2s ease;
+          padding: var(--space-2) var(--space-3);
+          border-radius: var(--radius-control);
+          transition:
+            color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard);
           text-align: left;
         }
 
-        .mobile-nav-link:hover {
-          color: var(--accent-secondary);
-          padding-left: 4px;
+        .mobile-nav-link:hover,
+        .mobile-nav-link.active {
+          color: var(--brand-primary);
+          background: var(--color-surface-muted);
         }
 
         .mobile-actions {
-          margin-top: 24px;
+          margin-top: var(--space-4);
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: var(--space-3);
+          padding-top: var(--space-4);
+          border-top: 1px solid var(--color-border);
         }
 
-        .w-full {
+        :global(.mobile-action-button) {
           width: 100%;
         }
 
-        /* User Profile Nav Styling */
-        .user-profile-menu {
+        .user-profile-container {
+          position: relative;
+          z-index: 45;
+        }
+
+        .user-profile-trigger {
+          min-height: var(--touch-target);
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: var(--space-2);
+          padding: var(--space-2);
+          color: var(--text-primary);
+          background: transparent;
+          border: 0;
+          border-radius: var(--radius-control);
+          cursor: pointer;
+          transition: background-color var(--duration-fast) var(--ease-standard);
+        }
+
+        .user-profile-trigger:hover {
+          background: var(--color-surface-muted);
         }
 
         .user-greeting {
           font-size: 0.88rem;
-          font-weight: 750;
+          font-weight: 700;
           color: var(--text-primary);
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-sans);
+        }
+
+        .dropdown-chevron {
+          transition: transform var(--duration-fast) var(--ease-standard);
+        }
+
+        .dropdown-chevron.open {
+          transform: rotate(180deg);
+        }
+
+        .user-dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          z-index: 46;
+          width: 180px;
+          display: flex;
+          flex-direction: column;
+          margin-top: var(--space-2);
+          padding: var(--space-2) 0;
+          background: var(--color-surface);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-card);
+          box-shadow: var(--shadow-md);
+        }
+
+        .dropdown-item {
+          min-height: var(--touch-target);
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: var(--space-2) var(--space-4);
+          color: var(--text-primary);
+          background: transparent;
+          border: 0;
+          border-radius: 0;
+          cursor: pointer;
+          font-size: 0.875rem;
+          font-weight: 600;
+          text-align: left;
+          text-decoration: none;
+          transition:
+            color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard);
+        }
+
+        .dropdown-item.admin {
+          color: var(--brand-primary);
+        }
+
+        .dropdown-item.danger {
+          color: var(--color-danger);
         }
 
         .dropdown-item:hover {
-          background-color: #f8fafc !important;
+          background: var(--color-surface-muted);
+        }
+
+        .dropdown-separator {
+          height: 1px;
+          margin: var(--space-1) 0;
+          background: var(--color-border);
+        }
+
+        .dropdown-backdrop-click {
+          position: fixed;
+          inset: 0;
+          z-index: 40;
+          background: transparent;
         }
 
         .mobile-user-profile {
+          width: 100%;
           display: flex;
           flex-direction: column;
-          gap: 8px;
-          text-align: center;
-          margin-bottom: 8px;
+          gap: var(--space-3);
+          padding-bottom: var(--space-4);
+          border-bottom: 1px solid var(--color-border);
+          margin-bottom: var(--space-1);
         }
 
         .mobile-user-greeting {
-          font-size: 1.05rem;
-          font-weight: 750;
+          font-size: 1rem;
+          font-weight: 700;
           color: var(--text-primary);
-          font-family: 'Outfit', sans-serif;
-          margin-bottom: 4px;
+          font-family: var(--font-sans);
+          text-align: left;
+        }
+
+        .mobile-editor-actions,
+        .mobile-account-actions {
+          display: flex;
+          gap: var(--space-2);
+          width: 100%;
+        }
+
+        .mobile-editor-actions .edit-site-toggle {
+          flex: 1;
+          justify-content: center;
+        }
+
+        :global(.mobile-account-actions .mobile-action-button) {
+          min-width: 0;
+          flex: 1;
+          padding-inline: var(--space-2);
+        }
+
+        :global(.mobile-admin-button) {
+          background: var(--brand-primary);
+          border-color: var(--brand-primary);
+        }
+
+        :global(.mobile-signout-button) {
+          color: var(--color-danger);
+          border-color: color-mix(in srgb, var(--color-danger) 35%, transparent);
         }
 
         .edit-site-toggle {
+          min-height: 36px;
           display: inline-flex;
           align-items: center;
           gap: 6px;
           padding: 7px 14px;
-          border: 1.5px solid #cbd5e1;
+          border: 1px solid var(--color-border-strong);
           border-radius: 999px;
-          background: #fff;
-          color: #475569;
+          background: var(--color-surface);
+          color: var(--text-secondary);
           font-size: 0.78rem;
           font-weight: 700;
           cursor: pointer;
-          transition: all 0.2s ease;
-          font-family: 'Outfit', sans-serif;
+          transition:
+            color var(--duration-fast) var(--ease-standard),
+            border-color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard);
+          font-family: var(--font-sans);
         }
 
         .edit-site-toggle:hover {
-          border-color: #2563eb;
-          color: #2563eb;
+          border-color: var(--brand-primary);
+          color: var(--brand-primary);
         }
 
         .edit-site-toggle.active {
-          background: #2563eb;
-          border-color: #2563eb;
+          background: var(--brand-primary);
+          border-color: var(--brand-primary);
           color: #fff;
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+          box-shadow: var(--shadow-subtle);
+        }
+
+        @media (max-width: 360px) {
+          .mobile-account-actions {
+            flex-direction: column;
+          }
         }
       `}</style>
     </>

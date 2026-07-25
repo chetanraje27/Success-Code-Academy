@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { KeyRound, Save } from "lucide-react";
 import { adminApiFetch, AdminApiError } from "@/lib/admin-api";
-import { AdminPageHeader } from "@/components/admin/AdminUi";
+import {
+  AdminLoadingState,
+  AdminNotice,
+  AdminPageHeader,
+} from "@/components/admin/AdminUi";
 
 type SiteSettings = {
   phone: string;
@@ -138,14 +142,10 @@ export default function AdminSettingsPage() {
       />
 
       {error && (
-        <div className="admin-notice" role="alert">
-          {error}
-        </div>
+        <AdminNotice>{error}</AdminNotice>
       )}
       {message && (
-        <div className="admin-notice success" role="status">
-          {message}
-        </div>
+        <AdminNotice tone="success">{message}</AdminNotice>
       )}
 
       <section className="admin-card">
@@ -157,10 +157,7 @@ export default function AdminSettingsPage() {
         </header>
         <div className="admin-card-body">
           {loading ? (
-            <div className="admin-loading" role="status">
-              <span className="admin-spinner" />
-              Loading settings…
-            </div>
+            <AdminLoadingState label="Loading settings…" />
           ) : (
             <form className="admin-form" onSubmit={saveSettings}>
               <div className="admin-form-grid">

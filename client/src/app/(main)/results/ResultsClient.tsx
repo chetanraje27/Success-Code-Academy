@@ -3,13 +3,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import {
-  FaMagnifyingGlass, FaChevronLeft, FaChevronRight, FaXmark,
-  FaArrowRight, FaGraduationCap, FaHospital, FaTrophy,
-  FaArrowUpRightFromSquare, FaMaximize
+  FaChevronLeft, FaChevronRight, FaXmark
 } from "react-icons/fa6";
-import { resultsData, StudentResult } from "@/data/results";
+import { resultsData } from "@/data/results";
 import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
@@ -22,6 +19,12 @@ interface StudentCardTemplateProps {
   city?: string;
   marks?: number;
 }
+
+type ResultsBanner = {
+  image: string;
+  alt?: string;
+  type?: string;
+};
 
 function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplateProps) {
   const isLongName = name.length > 15;
@@ -115,17 +118,19 @@ function BannerImage({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function ResultsClient() {
-  const [heroSlides, setHeroSlides] = useState<any[]>([]);
+  const [heroSlides, setHeroSlides] = useState<ResultsBanner[]>([]);
   const [isBannersLoading, setIsBannersLoading] = useState(true);
   const [editResults, setEditResults] = useState(false);
   const { refreshKey } = useEditModeOptional();
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
+    fetch("/api/content/banners", { cache: "no-store" })
       .then(res => res.json())
-      .then(data => {
+      .then((data: { status?: string; data?: ResultsBanner[] }) => {
         if (data.status === 'success') {
-          const resultBanners = (data.data || []).filter((b: any) => b?.type === 'RESULTS' && b?.image);
+          const resultBanners = (data.data || []).filter(
+            (banner) => banner.type === "RESULTS" && banner.image,
+          );
           setHeroSlides(resultBanners);
         } else {
           setHeroSlides([]);
@@ -138,7 +143,7 @@ export default function ResultsClient() {
       .finally(() => {
         setIsBannersLoading(false);
       });
-  }, []);
+  }, [refreshKey]);
 
   const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const currentHeroSlide = slideTuple[0];
@@ -212,6 +217,10 @@ export default function ResultsClient() {
   const filteredResults = useMemo(() => {
     return resultsData.filter((item) => item.year === selectedYear);
   }, [selectedYear]);
+  const resultsSectionHeading =
+    selectedYear >= 2025
+      ? "Other Successful Selections"
+      : `Our NEET ${selectedYear} Results`;
 
   return (
     <div className="results-page-container">
@@ -359,11 +368,13 @@ export default function ResultsClient() {
               transition={{ duration: 0.5 }}
               className="toppers-highlight-section"
             >
-              <div className="toppers-banner-wrap-2026" style={{ maxWidth: "700px", margin: "0 auto", borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
-                <img
+              <div className="toppers-banner-wrap-2026">
+                <Image
                   src="/images/results/heroes/NeetUG2026AchiversShravani.png"
                   alt="NEET UG 2026 Achievers"
-                  style={{ width: "100%", height: "auto", display: "block" }}
+                  width={1430}
+                  height={813}
+                  className="toppers-banner-image-2026"
                 />
               </div>
             </motion.div>
@@ -422,21 +433,14 @@ export default function ResultsClient() {
             </div>
           )}
 
-          {selectedYear === 2026 && (
-            <h3 className="toppers-headline other-selections-title">Other Successful Selections</h3>
-          )}
-          {selectedYear === 2025 && (
-            <h3 className="toppers-headline other-selections-title">Other Successful Selections</h3>
-          )}
-          {selectedYear === 2024 && (
-            <h3 className="toppers-headline other-selections-title">Our NEET 2024 Results</h3>
-          )}
-          {selectedYear === 2023 && (
-            <h3 className="toppers-headline other-selections-title">Our NEET 2023 Results</h3>
-          )}
-          {selectedYear === 2022 && (
-            <h3 className="toppers-headline other-selections-title">Our NEET 2022 Results</h3>
-          )}
+          <h3 className="toppers-headline other-selections-title">
+            <EditableText
+              contentKey={`results.${selectedYear}.section-heading`}
+              label={`${selectedYear} results section heading`}
+            >
+              {resultsSectionHeading}
+            </EditableText>
+          </h3>
 
           {/* Student cards grid */}
           <div className="results-grid">
@@ -515,9 +519,21 @@ export default function ResultsClient() {
             </h2>
             <div className="stories-title-line"></div>
             <div className="stories-quote">
-              <p>“Different paths.</p>
-              <p>One goal.</p>
-              <p>Countless success stories.”</p>
+              <p>
+                <EditableText contentKey="stories.quote-line-1" label="success stories quote line 1">
+                  “Different paths.
+                </EditableText>
+              </p>
+              <p>
+                <EditableText contentKey="stories.quote-line-2" label="success stories quote line 2">
+                  One goal.
+                </EditableText>
+              </p>
+              <p>
+                <EditableText contentKey="stories.quote-line-3" label="success stories quote line 3">
+                  Countless success stories.”
+                </EditableText>
+              </p>
             </div>
           </div>
 
@@ -586,7 +602,16 @@ export default function ResultsClient() {
                     {/* Tagline inside the card */}
                     <div className="story-card-info">
                       {story.tagline ? (
-                        <p className="story-card-tagline">{story.tagline}</p>
+                        <p className="story-card-tagline">
+                          <EditableText
+                            contentKey={`stories.card-${story.id}.tagline`}
+                            label={`${story.name} story tagline`}
+                            kind="multiline"
+                            showInlineControls={false}
+                          >
+                            {story.tagline}
+                          </EditableText>
+                        </p>
                       ) : (
                         <p className="story-card-placeholder">Story Coming Soon</p>
                       )}
@@ -596,7 +621,12 @@ export default function ResultsClient() {
                   {/* Name below the card (outside) */}
                   {story.name && (
                     <h4 className="story-card-name-outside">
-                      {story.name}
+                      <EditableText
+                        contentKey={`stories.card-${story.id}.name`}
+                        label={`success story ${story.id} student name`}
+                      >
+                        {story.name}
+                      </EditableText>
                     </h4>
                   )}
                 </div>
@@ -619,7 +649,7 @@ export default function ResultsClient() {
                   src={activeVideo}
                   controls
                   autoPlay
-                  style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: "#000000" }}
+                  className="results-video-player"
                 />
               ) : (
                 <iframe
@@ -1323,6 +1353,18 @@ export default function ResultsClient() {
           text-align: center;
           position: relative;
           z-index: 2;
+        }
+        .toppers-banner-wrap-2026 {
+          max-width: 700px;
+          margin: 0 auto;
+          overflow: hidden;
+          border-radius: 16px;
+          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+        }
+        .toppers-banner-image-2026 {
+          display: block;
+          width: 100%;
+          height: auto;
         }
         .toppers-badge-container {
           margin-bottom: 14px;
@@ -2199,6 +2241,7 @@ export default function ResultsClient() {
           left: 0;
           width: 100%;
           height: 100%;
+          border-radius: 12px;
           border: 0;
           outline: none;
           background: #000000;

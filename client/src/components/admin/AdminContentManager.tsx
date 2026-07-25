@@ -10,6 +10,8 @@ import {
 import AdminModal from "./AdminModal";
 import {
   AdminEmptyState,
+  AdminLoadingState,
+  AdminNotice,
   AdminPageHeader,
   AdminStatusBadge,
 } from "./AdminUi";
@@ -251,9 +253,7 @@ export default function AdminContentManager({
       />
 
       {error && !modalOpen && (
-        <div className="admin-notice" role="alert">
-          {error}
-        </div>
+        <AdminNotice>{error}</AdminNotice>
       )}
 
       <section className="admin-card">
@@ -267,10 +267,7 @@ export default function AdminContentManager({
         </header>
 
         {loading ? (
-          <div className="admin-loading" role="status">
-            <span className="admin-spinner" />
-            Loading content…
-          </div>
+          <AdminLoadingState label="Loading content…" />
         ) : items.length === 0 ? (
           <AdminEmptyState
             title={`No ${title.toLowerCase()} yet`}
@@ -351,9 +348,7 @@ export default function AdminContentManager({
         onClose={closeModal}
       >
         {error && (
-          <div className="admin-notice" role="alert">
-            {error}
-          </div>
+          <AdminNotice>{error}</AdminNotice>
         )}
         <form className="admin-form" onSubmit={handleSubmit}>
           <div className="admin-form-grid">

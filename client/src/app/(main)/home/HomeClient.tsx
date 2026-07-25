@@ -20,6 +20,34 @@ import BannerEditor from "@/components/admin/BannerEditor";
 import NotificationEditor from "@/components/admin/NotificationEditor";
 import StarStudentEditor from "@/components/admin/StarStudentEditor";
 
+type Announcement = {
+  id?: number;
+  text: string;
+  link?: string | null;
+};
+
+type HomeBanner = {
+  id?: number;
+  type?: "HOME" | "RESULTS";
+  image: string;
+  altText?: string;
+  title?: string;
+  link?: string;
+  targetUrl?: string;
+};
+
+type PublicContentResponse<T> = {
+  status: string;
+  data?: T[];
+};
+
+const defaultHomeBanners: HomeBanner[] = [
+  { image: "/images/banners/HeroPoster1.png", altText: "Hero Banner 1", type: "HOME" },
+  { image: "/images/banners/HeroPoster2.png", altText: "Hero Banner 2", type: "HOME" },
+  { image: "/images/banners/HeroPoster3.png", altText: "Hero Banner 3", type: "HOME" },
+  { image: "/images/banners/HeroPoster4.png", altText: "Hero Banner 4", type: "HOME" },
+];
+
 function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -74,30 +102,33 @@ export default function HomeClient() {
     });
   };
 
-  const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [slides, setSlides] = useState<any[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [slides, setSlides] = useState<HomeBanner[]>(defaultHomeBanners);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const [notifRes, bannerRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/notifications`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/content/banners`)
+          fetch("/api/content/notifications", { cache: "no-store" }),
+          fetch("/api/content/banners", { cache: "no-store" }),
         ]);
 
-        const notifData = await notifRes.json();
-        const bannerData = await bannerRes.json();
+        const notifData = await notifRes.json() as PublicContentResponse<Announcement>;
+        const bannerData = await bannerRes.json() as PublicContentResponse<HomeBanner>;
 
         const nextAnnouncements = notifData.status === 'success'
-          ? (notifData.data || []).filter((item: any) => item?.text)
+          ? (notifData.data || []).filter((item) => item?.text)
           : [];
         const homeBanners = bannerData.status === 'success'
-          ? (bannerData.data || []).filter((b: any) => (b?.type === 'HOME' || b?.type === undefined) && b?.image)
-          : [];
+          ? (bannerData.data || []).filter((banner) =>
+              (banner?.type === 'HOME' || banner?.type === undefined) && banner?.image
+            )
+          : null;
 
         setAnnouncements(nextAnnouncements);
-        if (homeBanners.length > 0) {
+        if (homeBanners) {
+          setCurrentSlide(0);
           setSlides(homeBanners);
         }
       } catch (err) {
@@ -128,6 +159,7 @@ export default function HomeClient() {
 
   return (
     <div className="home-container">
+      <h1 className="sr-only">Success Code Academy</h1>
 
       {/* ══════════════════════════════════════════
           SECTION 1: FLOATING NOTIFICATION BAR
@@ -201,9 +233,7 @@ export default function HomeClient() {
           onMouseEnter={() => setIsSliderHovered(true)}
           onMouseLeave={() => setIsSliderHovered(false)}
         >
-          {isLoading ? (
-            <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
-          ) : slides.length > 0 ? (
+          {slides.length > 0 ? (
             <>
               <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
                 <FaChevronLeft />
@@ -236,6 +266,8 @@ export default function HomeClient() {
                 </motion.div>
               </AnimatePresence>
             </>
+          ) : isLoading ? (
+            <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
           ) : (
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f8fbff", color: "#64748b", fontWeight: 600 }}>
               No banners available
@@ -243,7 +275,7 @@ export default function HomeClient() {
           )}
         </div>
 
-        {!isLoading && slides.length > 0 && (
+        {slides.length > 0 && (
           <div className="banner-dots">
             {slides.map((_, idx) => (
               <button

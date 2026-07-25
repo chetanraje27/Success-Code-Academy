@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../live-editor.css";
+import "../admin/admin.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";

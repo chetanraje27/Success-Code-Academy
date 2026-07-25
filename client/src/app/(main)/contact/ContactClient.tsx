@@ -6,6 +6,8 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { EditableText } from "@/components/admin/EditableText";
+import EditableSection from "@/components/admin/EditableSection";
+import SettingsEditor from "@/components/admin/SettingsEditor";
 
 const DESTINATION = {
   address:
@@ -48,6 +50,7 @@ export default function ContactClient() {
   const [captcha, setCaptcha] = useState(INITIAL_CAPTCHA);
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
+  const [editSettings, setEditSettings] = useState(false);
 
   const refreshCaptcha = useCallback(() => {
     setCaptcha(generateCaptcha());
@@ -152,7 +155,6 @@ export default function ContactClient() {
                 height={500}
                 className="contact-poster-img"
                 priority
-                unoptimized
               />
             </div>
           </motion.div>
@@ -186,6 +188,10 @@ export default function ContactClient() {
                 </EditableText>
               </p>
 
+              <EditableSection
+                label="Contact Details"
+                onEdit={() => setEditSettings(true)}
+              >
               <div className="enhanced-contact-list">
                 
                 {/* Address Item */}
@@ -259,6 +265,7 @@ export default function ContactClient() {
                 </div>
 
               </div>
+              </EditableSection>
             </div>
 
             {/* Right side: Glassmorphic form container with grid mesh pattern (Theme Matched) */}
@@ -427,6 +434,11 @@ export default function ContactClient() {
       </div>
 
       {/* ══ STYLES ══ */}
+      <SettingsEditor
+        open={editSettings}
+        onClose={() => setEditSettings(false)}
+      />
+
       <style jsx>{`
         .contact-page {
           position: relative;

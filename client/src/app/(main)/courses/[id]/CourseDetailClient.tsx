@@ -12,6 +12,8 @@ interface CourseDetailClientProps {
   id: string;
 }
 
+const graphicImageStyle = { width: "100%", height: "auto" } as const;
+
 export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   const courseId = parseInt(id);
   const course = coursesData.find((c) => c.id === courseId);
@@ -76,7 +78,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "One of the best selection ratios in Maharashtra",
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/results_graphic.png" alt="Our Results Speak for Themselves" width={322} height={185} className="row-graphic-img" />
+        <Image src="/images/crops/results_graphic.png" alt="Our Results Speak for Themselves" width={322} height={185} className="row-graphic-img" style={graphicImageStyle} priority />
       )
     },
     {
@@ -89,7 +91,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Exam strategy guidance"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/mentorship_graphic.png" alt="Personalized Mentorship" width={322} height={158} className="row-graphic-img" />
+        <Image src="/images/crops/mentorship_graphic.png" alt="Personalized Mentorship" width={322} height={158} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -102,7 +104,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Strong fundamentals over memorization"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/learning_graphic.png" alt="Concept-Driven Classroom Learning" width={323} height={155} className="row-graphic-img" />
+        <Image src="/images/crops/learning_graphic.png" alt="Concept-Driven Classroom Learning" width={323} height={155} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -115,7 +117,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Revision booklets & PYQs"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/material_graphic.png" alt="Study Material & Daily Practice" width={313} height={146} className="row-graphic-img" />
+        <Image src="/images/crops/material_graphic.png" alt="Study Material & Daily Practice" width={313} height={146} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -129,7 +131,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Time-management practice"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/assessment_graphic.png" alt="Smart Assessment System" width={323} height={154} className="row-graphic-img" />
+        <Image src="/images/crops/assessment_graphic.png" alt="Smart Assessment System" width={323} height={154} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -142,7 +144,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Faculty feedback"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/analytics_graphic.png" alt="Personalized Performance Analytics" width={321} height={145} className="row-graphic-img" />
+        <Image src="/images/crops/analytics_graphic.png" alt="Personalized Performance Analytics" width={321} height={145} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -154,7 +156,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Extra support until every doubt is cleared"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/doubt_graphic.png" alt="Unlimited Doubt Support" width={319} height={129} className="row-graphic-img" />
+        <Image src="/images/crops/doubt_graphic.png" alt="Unlimited Doubt Support" width={319} height={129} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -166,7 +168,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Rapid revision before exams"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/revision_graphic.png" alt="Structured Revision Program" width={309} height={115} className="row-graphic-img" />
+        <Image src="/images/crops/revision_graphic.png" alt="Structured Revision Program" width={309} height={115} className="row-graphic-img" style={graphicImageStyle} />
       )
     },
     {
@@ -178,7 +180,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
         "Continuous motivation"
       ],
       renderGraphic: () => (
-        <Image src="/images/crops/wellness_graphic.png" alt="Student Wellness & Motivation" width={273} height={105} className="row-graphic-img" />
+        <Image src="/images/crops/wellness_graphic.png" alt="Student Wellness & Motivation" width={273} height={105} className="row-graphic-img" style={graphicImageStyle} />
       )
     }
   ];
@@ -186,7 +188,7 @@ export default function CourseDetailClient({ id }: CourseDetailClientProps) {
   if (!course) {
     return (
       <div className="course-not-found">
-        <h2>Course Not Found</h2>
+        <h1>Course Not Found</h1>
         <p>The selected course program does not exist or has been removed.</p>
         <Link href="/courses" className="back-link">
           <FaArrowLeft /> Back to Courses

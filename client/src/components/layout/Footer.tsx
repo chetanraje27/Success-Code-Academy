@@ -118,7 +118,11 @@ export default function Footer() {
                   {siteConfig.description}
                 </EditableText>
               </p>
-              <div className="social-links">
+              <EditableSection
+                label="Social Links"
+                onEdit={() => setEditSettings(true)}
+                className="social-links"
+              >
                 {[
                   { name: "Facebook", icon: <FaFacebookF size={18} />, href: settings.facebook },
                   { name: "Twitter", icon: <FaXTwitter size={18} />, href: settings.twitter },
@@ -137,7 +141,7 @@ export default function Footer() {
                     {social.icon}
                   </a>
                 ))}
-              </div>
+              </EditableSection>
             </div>
 
             {/* Quick Links Column (Accordion on Mobile) */}

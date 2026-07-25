@@ -1,143 +1,196 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Save } from "lucide-react";
+import {
+  adminApiFetch,
+  AdminApiError,
+} from "@/lib/admin-api";
+import {
+  defaultSiteSettings,
+  type PublicSiteSettings,
+} from "@/lib/site-settings";
 import AdminModal from "./AdminModal";
-import { apiFetch } from "@/lib/api";
 import { useEditMode } from "./EditModeContext";
+import { AdminLoadingState, AdminNotice } from "./AdminUi";
 
-export default function SettingsEditor({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function SettingsEditor({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const { bumpRefresh } = useEditMode();
+  const [settings, setSettings] =
+    useState<PublicSiteSettings>(defaultSiteSettings);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
-    phone: "",
-    email: "",
-    address: "",
-    whatsapp: "",
-    facebook: "",
-    instagram: "",
-    youtube: "",
-    linkedin: "",
-    twitter: ""
-  });
-
-  useEffect(() => {
-    if (open) {
-      loadSettings();
-    }
-  }, [open]);
-
-  async function loadSettings() {
+  const loadSettings = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await apiFetch("/api/v1/admin/settings", { auth: true });
-      if (res.success && res.data) {
-        setFormData({
-          phone: res.data.phone || "",
-          email: res.data.email || "",
-          address: res.data.address || "",
-          whatsapp: res.data.whatsapp || "",
-          facebook: res.data.facebook || "",
-          instagram: res.data.instagram || "",
-          youtube: res.data.youtube || "",
-          linkedin: res.data.linkedin || "",
-          twitter: res.data.twitter || ""
-        });
-      }
-    } catch (e: any) {
-      setError(e.message || "Failed to load settings");
+      const response =
+        await adminApiFetch<Partial<PublicSiteSettings>>("settings");
+      setSettings((current) => ({ ...current, ...response.data }));
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Unable to load website settings.",
+      );
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    // Opening the dialog synchronizes it with the remote settings resource.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (open) void loadSettings();
+  }, [loadSettings, open]);
+
+  function updateSetting(key: keyof PublicSiteSettings, value: string) {
+    setSettings((current) => ({ ...current, [key]: value }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setIsSubmitting(true);
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
     setError("");
-
     try {
-      const res = await apiFetch("/api/v1/admin/settings", {
+      await adminApiFetch("settings", {
         method: "PUT",
-        body: JSON.stringify(formData),
-        auth: true
+        body: JSON.stringify(settings),
       });
-      if (res.success) {
-        bumpRefresh();
-        onClose();
+      bumpRefresh();
+      onClose();
+    } catch (caught) {
+      if (caught instanceof AdminApiError && caught.fields.length > 0) {
+        setError(caught.fields.map((field) => field.message).join(" "));
       } else {
-        setError(res.message || "Failed to save settings");
+        setError(
+          caught instanceof Error
+            ? caught.message
+            : "Unable to save website settings.",
+        );
       }
-    } catch (err: any) {
-      setError(err.message || "Error saving settings");
     } finally {
-      setIsSubmitting(false);
+      setSaving(false);
     }
   }
 
-  function handleChange(field: string, value: string) {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  }
-
   return (
-    <AdminModal open={open} onClose={onClose} title="Site Settings" width={560}>
-      {error && <div className="sca-admin-error">{error}</div>}
+    <AdminModal
+      open={open}
+      onClose={onClose}
+      title="Website contact and social links"
+      width={680}
+    >
+      {error && <AdminNotice>{error}</AdminNotice>}
       {loading ? (
-        <p>Loading settings...</p>
+        <AdminLoadingState label="Loading website settings…" />
       ) : (
-        <form className="sca-admin-form" onSubmit={handleSubmit}>
-          <div className="sca-admin-field">
-            <label>Phone</label>
-            <input type="text" value={formData.phone} onChange={e => handleChange("phone", e.target.value)} />
-          </div>
-          <div className="sca-admin-field">
-            <label>Email</label>
-            <input type="text" value={formData.email} onChange={e => handleChange("email", e.target.value)} />
-          </div>
-          <div className="sca-admin-field">
-            <label>Address</label>
-            <input type="text" value={formData.address} onChange={e => handleChange("address", e.target.value)} />
-          </div>
-          <div className="sca-admin-row">
-            <div className="sca-admin-field">
-              <label>WhatsApp URL</label>
-              <input type="text" value={formData.whatsapp} onChange={e => handleChange("whatsapp", e.target.value)} />
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="admin-form-grid">
+            <div className="admin-field">
+              <label htmlFor="live-settings-phone">Phone number</label>
+              <input
+                id="live-settings-phone"
+                type="tel"
+                value={settings.phone}
+                onChange={(event) =>
+                  updateSetting("phone", event.target.value)
+                }
+                placeholder="+91 86004 70850"
+              />
             </div>
-            <div className="sca-admin-field">
-              <label>Facebook URL</label>
-              <input type="text" value={formData.facebook} onChange={e => handleChange("facebook", e.target.value)} />
+            <div className="admin-field">
+              <label htmlFor="live-settings-email">Email address</label>
+              <input
+                id="live-settings-email"
+                type="email"
+                value={settings.email}
+                onChange={(event) =>
+                  updateSetting("email", event.target.value)
+                }
+                placeholder="successcodeacademy@gmail.com"
+              />
             </div>
-          </div>
-          <div className="sca-admin-row">
-            <div className="sca-admin-field">
-              <label>Instagram URL</label>
-              <input type="text" value={formData.instagram} onChange={e => handleChange("instagram", e.target.value)} />
+            <div className="admin-field full">
+              <label htmlFor="live-settings-address">Institute address</label>
+              <textarea
+                id="live-settings-address"
+                value={settings.address}
+                onChange={(event) =>
+                  updateSetting("address", event.target.value)
+                }
+                rows={3}
+              />
+              <small>
+                Used on the Contact page, map, and website footer.
+              </small>
             </div>
-            <div className="sca-admin-field">
-              <label>YouTube URL</label>
-              <input type="text" value={formData.youtube} onChange={e => handleChange("youtube", e.target.value)} />
-            </div>
-          </div>
-          <div className="sca-admin-row">
-            <div className="sca-admin-field">
-              <label>LinkedIn URL</label>
-              <input type="text" value={formData.linkedin} onChange={e => handleChange("linkedin", e.target.value)} />
-            </div>
-            <div className="sca-admin-field">
-              <label>Twitter URL</label>
-              <input type="text" value={formData.twitter} onChange={e => handleChange("twitter", e.target.value)} />
+            <div className="admin-field full">
+              <label htmlFor="live-settings-whatsapp">
+                WhatsApp number or link
+              </label>
+              <input
+                id="live-settings-whatsapp"
+                value={settings.whatsapp}
+                onChange={(event) =>
+                  updateSetting("whatsapp", event.target.value)
+                }
+                placeholder="918600470850 or https://wa.me/918600470850"
+              />
+              <small>
+                Include the country code when entering only a number.
+              </small>
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-            <button type="submit" className="sca-admin-btn sca-admin-btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Settings"}
-            </button>
-            <button type="button" className="sca-admin-btn sca-admin-btn-ghost" onClick={onClose}>
+          <div className="admin-settings-divider">
+            <strong>Social media links</strong>
+            <span>Leave a platform blank to hide its footer icon.</span>
+          </div>
+
+          <div className="admin-form-grid">
+            {(
+              [
+                ["facebook", "Facebook"],
+                ["instagram", "Instagram"],
+                ["youtube", "YouTube"],
+                ["linkedin", "LinkedIn"],
+                ["twitter", "X / Twitter"],
+              ] as const
+            ).map(([key, label]) => (
+              <div className="admin-field" key={key}>
+                <label htmlFor={`live-settings-${key}`}>{label}</label>
+                <input
+                  id={`live-settings-${key}`}
+                  type="url"
+                  value={settings[key]}
+                  onChange={(event) => updateSetting(key, event.target.value)}
+                  placeholder="https://"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="admin-form-actions">
+            <button
+              className="admin-button secondary"
+              type="button"
+              onClick={onClose}
+              disabled={saving}
+            >
               Cancel
+            </button>
+            <button className="admin-button" type="submit" disabled={saving}>
+              <Save size={17} />
+              {saving ? "Saving…" : "Save website settings"}
             </button>
           </div>
         </form>

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { siteConfig } from "@/data/home";
-import { getApiBase } from "./api";
 
 export type PublicSiteSettings = {
   phone: string;
@@ -29,7 +28,7 @@ export function useSiteSettings(): PublicSiteSettings {
     useState<PublicSiteSettings>(defaultSiteSettings);
 
   const refresh = useCallback(() => {
-    fetch(`${getApiBase()}/api/v1/content/settings`, { cache: "no-store" })
+    fetch("/api/content/settings", { cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) return null;
         return (await response.json()) as {

@@ -688,7 +688,8 @@
   font-weight: 750;
 }
 
-.admin-field small {
+.admin-field small,
+.sca-admin-field small {
   color: var(--admin-muted);
   font-size: 0.72rem;
   line-height: 1.45;
@@ -798,6 +799,12 @@
   gap: 10px;
 }
 
+.sca-admin-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
 .sca-admin-list-item {
   min-width: 0;
   display: flex;
@@ -819,6 +826,24 @@
   align-items: center;
   gap: 6px;
   margin-left: auto;
+}
+
+.sca-admin-list-copy {
+  min-width: 0;
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+
+.sca-admin-list-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sca-admin-meta {
+  color: var(--admin-muted);
+  font-size: 0.76rem;
 }
 
 .sca-admin-icon-btn {
@@ -856,6 +881,29 @@
   object-fit: cover;
   border: 1px solid var(--admin-border);
   border-radius: 8px;
+}
+
+.sca-admin-preview {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  margin-top: 4px;
+  border: 1px solid var(--admin-border);
+  border-radius: 9px;
+  object-fit: contain;
+}
+
+.sca-admin-preview.wide {
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  background: #f8fafc;
+}
+
+.sca-admin-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
 }
 
 .admin-check span {

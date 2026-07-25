@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import AdminModal from "./AdminModal";
-import { apiFetch, uploadAdminImage } from "@/lib/api";
+import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 
@@ -10,6 +10,7 @@ interface Banner {
   id: string;
   image: string;
   altText: string;
+  targetUrl: string | null;
   type: string;
   isActive: boolean;
   orderIndex: number;
@@ -31,40 +32,33 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
   const [formData, setFormData] = useState({
     image: "",
     altText: "",
+    targetUrl: "",
     type: "HOME",
     isActive: true,
     orderIndex: 0,
   });
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    if (open) {
-      fetchItems();
-      resetForm();
-    }
-  }, [open]);
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
-      const res = await apiFetch("/api/v1/admin/banners", { auth: true });
-      if (res && res.data) {
-        setItems(res.data);
-      } else if (Array.isArray(res)) {
-        setItems(res);
-      }
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch banners");
+      const response = await adminApiFetch<Banner[]>("banners");
+      setItems(response.data);
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to load banners.",
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const resetForm = () => {
     setFormData({
       image: "",
       altText: "",
+      targetUrl: "",
       type: "HOME",
       isActive: true,
       orderIndex: 0,
@@ -74,11 +68,21 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
     setError("");
   };
 
+  useEffect(() => {
+    if (open) {
+      // Opening the dialog synchronizes it with the remote banner resource.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void fetchItems();
+      resetForm();
+    }
+  }, [fetchItems, open]);
+
   const handleEdit = (item: Banner) => {
     setEditingItem(item);
     setFormData({
       image: item.image,
       altText: item.altText,
+      targetUrl: item.targetUrl || "",
       type: item.type,
       isActive: item.isActive,
       orderIndex: item.orderIndex,
@@ -90,14 +94,15 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
     if (!confirm("Are you sure you want to delete this banner?")) return;
     try {
       setLoading(true);
-      await apiFetch(`/api/v1/admin/banners/${id}`, {
+      await adminApiFetch(`banners/${id}`, {
         method: "DELETE",
-        auth: true,
       });
       bumpRefresh();
-      fetchItems();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete banner");
+      await fetchItems();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to delete banner.",
+      );
       setLoading(false);
     }
   };
@@ -110,8 +115,10 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       setError("");
       const url = await uploadAdminImage(file, "banner");
       setFormData((prev) => ({ ...prev, image: url }));
-    } catch (err: any) {
-      setError("Image upload failed");
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Image upload failed.",
+      );
     } finally {
       setUploading(false);
     }
@@ -123,23 +130,23 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       setLoading(true);
       setError("");
       if (editingItem) {
-        await apiFetch(`/api/v1/admin/banners/${editingItem.id}`, {
+        await adminApiFetch(`banners/${editingItem.id}`, {
           method: "PUT",
-          auth: true,
           body: JSON.stringify(formData),
         });
       } else {
-        await apiFetch("/api/v1/admin/banners", {
+        await adminApiFetch("banners", {
           method: "POST",
-          auth: true,
           body: JSON.stringify(formData),
         });
       }
       bumpRefresh();
-      fetchItems();
+      await fetchItems();
       resetForm();
-    } catch (err: any) {
-      setError(err.message || "Failed to save banner");
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to save banner.",
+      );
       setLoading(false);
     }
   };
@@ -150,8 +157,8 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       
       {!showForm ? (
         <>
-          <div style={{ marginBottom: 16 }}>
-            <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
+          <div className="sca-admin-toolbar">
+            <button type="button" className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
               <FaPlus /> Add Banner
             </button>
           </div>
@@ -165,19 +172,22 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
               {items.map((item) => (
                 <div key={item.id} className="sca-admin-list-item">
                   {item.image && (
-                    <img src={item.image} alt={item.altText} className="sca-admin-thumb" style={{ width: 60, height: 40, objectFit: "cover" }} />
+                    // Dynamic CMS URLs are validated by the API.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={item.image} alt="" className="sca-admin-thumb" />
                   )}
-                  <div style={{ flex: 1, marginLeft: 12 }}>
-                    <div style={{ fontWeight: 600 }}>{item.altText || "No text"}</div>
-                    <div style={{ fontSize: "0.85em", color: "#666" }}>
-                      Type: {item.type} | {item.isActive ? "Active" : "Inactive"}
+                  <div className="sca-admin-list-copy">
+                    <strong>{item.altText || "No description"}</strong>
+                    <div className="sca-admin-meta">
+                      {item.type === "HOME" ? "Home page" : "Results page"} ·{" "}
+                      {item.isActive ? "Visible" : "Hidden"}
                     </div>
                   </div>
                   <div className="sca-admin-list-actions">
-                    <button className="sca-admin-icon-btn" onClick={() => handleEdit(item)}>
+                    <button type="button" className="sca-admin-icon-btn" onClick={() => handleEdit(item)} aria-label={`Edit ${item.altText || "banner"}`}>
                       <FaPen />
                     </button>
-                    <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)}>
+                    <button type="button" className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)} aria-label={`Delete ${item.altText || "banner"}`}>
                       <FaTrash />
                     </button>
                   </div>
@@ -189,39 +199,73 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       ) : (
         <form className="sca-admin-form" onSubmit={handleSubmit}>
           <div className="sca-admin-field">
-            <label>Image</label>
-            <input type="file" accept="image/*" onChange={handleImageSelect} />
-            {uploading && <span>Uploading...</span>}
+            <label htmlFor="live-banner-image">Banner image</label>
+            <input
+              id="live-banner-image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleImageSelect}
+              required={!formData.image}
+            />
+            <small>Use a wide landscape image. JPG, PNG, WebP, or GIF up to 5 MB.</small>
+            {uploading && <span role="status">Uploading image…</span>}
             {formData.image && (
-              <img src={formData.image} alt="Preview" style={{ marginTop: 8, maxWidth: 100 }} />
+              // Dynamic CMS URLs are validated by the API.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={formData.image} alt="Banner preview" className="sca-admin-preview wide" />
             )}
           </div>
           <div className="sca-admin-field">
-            <label>Alt Text</label>
+            <label htmlFor="live-banner-description">Image description</label>
             <input
+              id="live-banner-description"
               type="text"
               value={formData.altText}
               onChange={(e) => setFormData({ ...formData, altText: e.target.value })}
+              placeholder="Example: NEET 2026 achievers"
+              required
             />
+            <small>Describe what the banner communicates in one short sentence.</small>
+          </div>
+          <div className="sca-admin-field">
+            <label htmlFor="live-banner-destination">
+              Click destination (optional)
+            </label>
+            <input
+              id="live-banner-destination"
+              type="text"
+              value={formData.targetUrl}
+              onChange={(event) =>
+                setFormData({ ...formData, targetUrl: event.target.value })
+              }
+              placeholder="/courses or https://example.com"
+            />
+            <small>
+              Leave blank when the banner should not open another page.
+            </small>
           </div>
           <div className="sca-admin-row">
             <div className="sca-admin-field">
-              <label>Type</label>
+              <label htmlFor="live-banner-page">Shown on</label>
               <select
+                id="live-banner-page"
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               >
-                <option value="HOME">HOME</option>
-                <option value="RESULTS">RESULTS</option>
+                <option value="HOME">Home page</option>
+                <option value="RESULTS">Results page</option>
               </select>
             </div>
             <div className="sca-admin-field">
-              <label>Order Index</label>
+              <label htmlFor="live-banner-order">Display order</label>
               <input
+                id="live-banner-order"
                 type="number"
+                min={0}
                 value={formData.orderIndex}
                 onChange={(e) => setFormData({ ...formData, orderIndex: parseInt(e.target.value) || 0 })}
               />
+              <small>Lower numbers appear first.</small>
             </div>
           </div>
           <div className="sca-admin-check">
@@ -231,15 +275,15 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               />
-              Active
+              Visible on the website
             </label>
           </div>
-          <div className="sca-admin-row" style={{ marginTop: 16 }}>
+          <div className="sca-admin-form-actions">
             <button type="button" className="sca-admin-btn ghost" onClick={resetForm} disabled={loading || uploading}>
               Cancel
             </button>
             <button type="submit" className="sca-admin-btn primary" disabled={loading || uploading}>
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Saving…" : editingItem ? "Save changes" : "Add banner"}
             </button>
           </div>
         </form>

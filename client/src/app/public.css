@@ -119,21 +119,37 @@
   position: relative;
   overflow: hidden;
   color: #d8e4f2;
-  background:
-    radial-gradient(circle at 85% 0%, rgba(7, 141, 146, 0.22), transparent 26rem),
-    #081c38;
-  border-top: 0;
+  background: #0a1f38;
+  border-top: 1px solid rgba(112, 209, 206, 0.34);
+}
+
+.public-shell footer.footer::before {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(90deg, #078d92, #70d1ce 48%, rgba(112, 209, 206, 0.16));
 }
 
 .public-shell .footer .footer-newsletter {
-  padding: clamp(2.25rem, 5vw, 3.75rem) 0;
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0;
   border-bottom-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.035);
+  background: #0d2745;
 }
 
 .public-shell .footer .newsletter-title,
 .public-shell .footer .footer-heading {
   color: #fff;
+}
+
+.public-shell .footer .newsletter-title {
+  margin-bottom: 0.45rem;
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
 }
 
 .public-shell .footer .newsletter-desc,
@@ -146,19 +162,23 @@
 }
 
 .public-shell .footer .newsletter-content {
-  gap: 2rem;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
 }
 
 .public-shell .footer .newsletter-form-wrap {
-  max-width: 31rem;
+  max-width: 30rem;
+}
+
+.public-shell .footer .newsletter-form {
+  gap: 0.6rem;
 }
 
 .public-shell .footer .newsletter-input {
   min-height: 3rem;
   color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-pill);
+  background: #102e50;
+  border-color: rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
 }
 
 .public-shell .footer .newsletter-input::placeholder {
@@ -167,34 +187,84 @@
 
 .public-shell .footer .newsletter-input:focus {
   border-color: rgba(96, 215, 210, 0.75);
-  box-shadow: 0 0 0 4px rgba(7, 141, 146, 0.2);
+  box-shadow: 0 0 0 3px rgba(7, 141, 146, 0.2);
+}
+
+.public-shell .footer .newsletter-form button {
+  min-height: 3rem;
+  padding-inline: 1.35rem;
+  border-radius: 9px;
+  box-shadow: none;
 }
 
 .public-shell .footer .footer-main {
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  padding: clamp(3.25rem, 6vw, 4.75rem) 0;
 }
 
 .public-shell .footer .footer-grid {
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .public-shell .footer .footer-col:not(.brand-col) {
+    padding-left: clamp(1.5rem, 3vw, 2.5rem);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 
 .public-shell .footer .footer-logo .logo-image {
-  padding: 0.4rem;
-  border-radius: 0.75rem;
+  padding: 0.38rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
   background: #fff;
 }
 
+.public-shell .footer .footer-desc {
+  max-width: 28rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.public-shell .footer .social-links {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+}
+
 .public-shell .footer .social-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
   color: #dce7f4;
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
+  place-items: center;
 }
 
 .public-shell .footer .social-icon:hover {
   color: #fff;
-  background: var(--brand-accent);
-  border-color: var(--brand-accent);
+  background: rgba(112, 209, 206, 0.13);
+  border-color: rgba(112, 209, 206, 0.72);
+}
+
+.public-shell .footer .footer-heading-row {
+  margin-bottom: 1.25rem;
+}
+
+.public-shell .footer .footer-heading {
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.public-shell .footer .footer-links {
+  gap: 0.72rem;
+}
+
+.public-shell .footer .footer-link {
+  font-size: 0.9rem;
 }
 
 .public-shell .footer .footer-link:hover,
@@ -205,6 +275,26 @@
 
 .public-shell .footer .footer-bottom {
   border-top-color: rgba(255, 255, 255, 0.1);
+  background: #081a30;
+}
+
+.public-shell .footer .contact-icon {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  margin-top: -2px;
+  background: rgba(112, 209, 206, 0.08);
+  border: 1px solid rgba(112, 209, 206, 0.14);
+  border-radius: 7px;
+  font-size: 0.82rem;
+}
+
+.public-shell .footer .footer-contact .footer-link {
+  overflow-wrap: anywhere;
+}
+
+.public-shell .footer .footer-bottom-content {
+  font-size: 0.8rem;
 }
 
 /* Shared public patterns */

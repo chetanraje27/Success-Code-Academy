@@ -259,7 +259,7 @@ export default function AcademyInsights() {
           <div className="blog-slider-container">
             <div
               className="cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / ${itemsPerView} + ${itemsPerView > 1 ? 10 : 0}px)), 0, 0)` } as React.CSSProperties}
+              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / ${itemsPerView} + ${20 / itemsPerView}px)), 0, 0)` } as React.CSSProperties}
             >
               {blogItems.map((blog) => (
                 <div key={blog.id} className="card-item-wrapper">
@@ -274,6 +274,7 @@ export default function AcademyInsights() {
                           sizes="400px"
                           className="blog-bg-img"
                         />
+                        <span className="blog-category-badge">{blog.category}</span>
                         <div className="blog-card-content">
                           <span className="blog-meta-text">
                             {blog.date} | BY {blog.author}
@@ -294,6 +295,7 @@ export default function AcademyInsights() {
                           sizes="400px"
                           className="blog-bg-img"
                         />
+                        <span className="blog-category-badge">{blog.category}</span>
                         <div className="blog-card-content">
                           <span className="blog-meta-text">
                             {blog.date} | BY {blog.author}
@@ -359,14 +361,15 @@ export default function AcademyInsights() {
           <div className="blog-slider-container">
             <div
               className="video-cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${videoStartIndex} * (100% / ${videoItemsPerView} + ${videoItemsPerView > 1 ? 10 : 0}px)), 0, 0)` } as React.CSSProperties}
+              style={{ transform: `translate3d(calc(-${videoStartIndex} * (100% / ${videoItemsPerView} + ${20 / videoItemsPerView}px)), 0, 0)` } as React.CSSProperties}
             >
               {videoItems.map((video) => (
                 <div key={video.id} className="video-card-item-wrapper">
-                  <div
-                    key={video.id}
+                  <button
+                    type="button"
                     className="apple-video-card"
                     onClick={() => setActiveVideo(video.videoUrl)}
+                    aria-label={`Play ${video.title}`}
                   >
                     {/* Full Card Cover Image */}
                     <Image
@@ -401,7 +404,7 @@ export default function AcademyInsights() {
                         <h3 className="apple-card-title">{video.title}</h3>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </div>
               ))}
             </div>

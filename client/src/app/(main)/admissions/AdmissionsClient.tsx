@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { EditableText } from "@/components/admin/EditableText";
 
 export default function AdmissionsClient() {
@@ -34,7 +33,7 @@ export default function AdmissionsClient() {
             studentName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
             studentPhone: user.mobileNumber || prev.studentPhone,
           }));
-        } catch (e) {
+        } catch {
           setIsAuthenticated(false);
         }
       } else {
@@ -95,8 +94,12 @@ export default function AdmissionsClient() {
         city: "",
         preferredCourse: "",
       });
-    } catch (err: any) {
-      setErrorMessage(err.message || "An unexpected error occurred. Please try again.");
+    } catch (err: unknown) {
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -114,62 +114,71 @@ function StoryCard({
 }) {
   return (
     <div className={`result-story-item ${story.videoUrl ? "is-playable" : "is-placeholder"}`}>
-      <button
-        type="button"
-        className="result-story-card"
-        disabled={!story.videoUrl}
-        onClick={() => story.videoUrl && onPlay(story.videoUrl)}
-        aria-label={story.videoUrl ? `Play ${story.name} success story` : "Story coming soon"}
-      >
-        {story.coverImage ? (
-          <Image
-            src={story.coverImage}
-            alt={story.name || "Success Story"}
+      <div className="result-story-card">
+        {story.videoUrl ? (
+          <button
+            type="button"
+            className="result-story-media"
+            onClick={() => onPlay(story.videoUrl)}
+            aria-label={`Play ${story.name} success story`}
+          >
+            <Image
+              src={story.coverImage}
+              alt={story.name || "Success Story"}
             fill
             unoptimized
-            sizes="(max-width: 720px) 100vw, 460px"
-            className="result-story-cover"
-          />
+              sizes="(max-width: 720px) 100vw, 460px"
+              className="result-story-cover"
+            />
+            <span className="result-story-overlay" aria-hidden="true" />
+            <span className="result-story-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
+          </button>
         ) : (
-          <div className="result-story-placeholder-visual" aria-hidden="true">
-            <span />
-            <span />
+          <div className="result-story-media" aria-hidden="true">
+            <div className="result-story-placeholder-visual">
+              <span />
+              <span />
+            </div>
+            <span className="result-story-play">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
           </div>
         )}
 
-        <span className="result-story-overlay" aria-hidden="true" />
-        <span className="result-story-play" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
+        <div className="result-story-details">
+          {story.name && (
+            <h3>
+              <EditableText
+                contentKey={`stories.card-${story.id}.name`}
+                label={`success story ${story.id} student name`}
+              >
+                {story.name}
+              </EditableText>
+            </h3>
+          )}
 
-        <span className="result-story-copy">
           {story.tagline ? (
-            <EditableText
-              contentKey={`stories.card-${story.id}.tagline`}
-              label={`${story.name} story tagline`}
+            <p>
+              <EditableText
+                contentKey={`stories.card-${story.id}.tagline`}
+                label={`${story.name} story tagline`}
               kind="multiline"
               showInlineControls={false}
-            >
-              {story.tagline}
-            </EditableText>
+              >
+                {story.tagline}
+              </EditableText>
+            </p>
           ) : (
             <span>Story Coming Soon</span>
           )}
-        </span>
-      </button>
-
-      {story.name && (
-        <h3>
-          <EditableText
-            contentKey={`stories.card-${story.id}.name`}
-            label={`success story ${story.id} student name`}
-          >
-            {story.name}
-          </EditableText>
-        </h3>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

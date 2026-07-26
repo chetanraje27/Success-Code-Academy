@@ -7,6 +7,7 @@ export default function AdminResultsPage() {
       description="Manage the CMS-backed topper results used on the results page. Hidden entries stay saved but are not shown publicly."
       itemName="Result"
       resource="results"
+      historyType="result"
       uploadType="result"
       fields={[
         { name: "name", label: "Student name", kind: "text", required: true },

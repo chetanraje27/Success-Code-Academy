@@ -7,6 +7,7 @@ export default function AdminStarsPage() {
       description="Maintain the student achievement cards shown on the home page. Enter results exactly as they should appear publicly."
       itemName="Star student"
       resource="stars"
+      historyType="star"
       uploadType="star"
       fields={[
         { name: "name", label: "Student name", kind: "text", required: true },

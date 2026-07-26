@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import AdminModal from "./AdminModal";
-import { apiFetch, uploadAdminImage } from "@/lib/api";
+import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
+import RevisionHistoryButton from "./RevisionHistoryButton";
 
 interface StarStudent {
-  id: string;
+  id: number;
   name: string;
   score: string;
   rank: string;
@@ -45,29 +46,22 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
   });
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    if (open) {
-      fetchItems();
-      resetForm();
-    }
-  }, [open]);
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
-      const res = await apiFetch("/api/v1/admin/stars", { auth: true });
-      if (res && res.data) {
-        setItems(res.data);
-      } else if (Array.isArray(res)) {
-        setItems(res);
-      }
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch star students");
+      const response = await adminApiFetch<StarStudent[]>("stars");
+      setItems(response.data);
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Unable to load star students.",
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const resetForm = () => {
     setFormData({
@@ -86,6 +80,15 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
     setError("");
   };
 
+  useEffect(() => {
+    if (open) {
+      // Opening the dialog synchronizes it with the remote CMS resource.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void fetchItems();
+      resetForm();
+    }
+  }, [fetchItems, open]);
+
   const handleEdit = (item: StarStudent) => {
     setEditingItem(item);
     setFormData({
@@ -102,18 +105,27 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
     setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this star student?")) return;
+  const handleDelete = async (id: number) => {
+    if (
+      !confirm(
+        "Delete this star student? You can restore it later from History.",
+      )
+    ) {
+      return;
+    }
     try {
       setLoading(true);
-      await apiFetch(`/api/v1/admin/stars/${id}`, {
+      await adminApiFetch(`stars/${id}`, {
         method: "DELETE",
-        auth: true,
       });
       bumpRefresh();
-      fetchItems();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete star student");
+      await fetchItems();
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Unable to delete star student.",
+      );
       setLoading(false);
     }
   };
@@ -126,8 +138,10 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       setError("");
       const url = await uploadAdminImage(file, "star");
       setFormData((prev) => ({ ...prev, image: url }));
-    } catch (err: any) {
-      setError("Image upload failed");
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Image upload failed.",
+      );
     } finally {
       setUploading(false);
     }
@@ -139,23 +153,25 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       setLoading(true);
       setError("");
       if (editingItem) {
-        await apiFetch(`/api/v1/admin/stars/${editingItem.id}`, {
+        await adminApiFetch(`stars/${editingItem.id}`, {
           method: "PUT",
-          auth: true,
           body: JSON.stringify(formData),
         });
       } else {
-        await apiFetch("/api/v1/admin/stars", {
+        await adminApiFetch("stars", {
           method: "POST",
-          auth: true,
           body: JSON.stringify(formData),
         });
       }
       bumpRefresh();
-      fetchItems();
+      await fetchItems();
       resetForm();
-    } catch (err: any) {
-      setError(err.message || "Failed to save star student");
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Unable to save star student.",
+      );
       setLoading(false);
     }
   };
@@ -166,7 +182,16 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       
       {!showForm ? (
         <>
-          <div style={{ marginBottom: 16 }}>
+          <div className="sca-admin-toolbar">
+            <RevisionHistoryButton
+              resourceType="star"
+              itemName="Star student"
+              className="sca-admin-btn ghost"
+              onRestored={async () => {
+                bumpRefresh();
+                await fetchItems();
+              }}
+            />
             <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
               <FaPlus /> Add Star Student
             </button>
@@ -181,6 +206,8 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
               {items.map((item) => (
                 <div key={item.id} className="sca-admin-list-item">
                   {item.image && (
+                    // Dynamic CMS URLs are validated by the API.
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={item.image} alt={item.name} className="sca-admin-thumb" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }} />
                   )}
                   <div style={{ flex: 1, marginLeft: 12 }}>
@@ -267,6 +294,8 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
             <input type="file" accept="image/*" onChange={handleImageSelect} />
             {uploading && <span>Uploading...</span>}
             {formData.image && (
+              // Dynamic CMS URLs are validated by the API.
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={formData.image} alt="Preview" style={{ marginTop: 8, maxWidth: 100 }} />
             )}
           </div>

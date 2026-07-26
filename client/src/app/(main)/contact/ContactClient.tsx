@@ -143,7 +143,7 @@ export default function ContactClient() {
         <div className="contact-hero-container">
           <motion.div
             className="contact-poster-wrapper"
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -395,7 +395,7 @@ export default function ContactClient() {
       <div className="contact-container">
         <motion.div
           className="map-container"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
         >

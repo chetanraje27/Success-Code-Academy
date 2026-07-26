@@ -15,6 +15,9 @@ import {
   AdminPageHeader,
   AdminStatusBadge,
 } from "./AdminUi";
+import RevisionHistoryButton, {
+  type MediaResourceType,
+} from "./RevisionHistoryButton";
 
 type FieldValue = string | number | boolean;
 type ResourceItem = { id: number; [key: string]: unknown };
@@ -84,6 +87,7 @@ export default function AdminContentManager({
   fields,
   columns,
   uploadType,
+  historyType,
 }: {
   title: string;
   description: string;
@@ -92,6 +96,7 @@ export default function AdminContentManager({
   fields: AdminContentField[];
   columns: AdminContentColumn[];
   uploadType?: "banner" | "star" | "result";
+  historyType?: MediaResourceType;
 }) {
   const [items, setItems] = useState<ResourceItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -179,7 +184,13 @@ export default function AdminContentManager({
         : typeof item.text === "string"
           ? item.text
           : `this ${itemName.toLowerCase()}`;
-    if (!window.confirm(`Delete "${label}"? This cannot be undone.`)) return;
+    if (
+      !window.confirm(
+        `Delete "${label}"? You can restore it later from History.`,
+      )
+    ) {
+      return;
+    }
 
     setError("");
     try {
@@ -245,10 +256,19 @@ export default function AdminContentManager({
         title={title}
         description={description}
         action={
-          <button className="admin-button" type="button" onClick={openCreate}>
-            <Plus size={17} />
-            Add {itemName.toLowerCase()}
-          </button>
+          <div className="admin-header-actions">
+            {historyType && (
+              <RevisionHistoryButton
+                resourceType={historyType}
+                itemName={itemName}
+                onRestored={loadItems}
+              />
+            )}
+            <button className="admin-button" type="button" onClick={openCreate}>
+              <Plus size={17} />
+              Add {itemName.toLowerCase()}
+            </button>
+          </div>
         }
       />
 

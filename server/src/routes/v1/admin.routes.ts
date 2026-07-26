@@ -20,6 +20,9 @@ import {
   pageContentParamsSchema,
   contentBlockParamsSchema,
   contentBlockUpdateSchema,
+  mediaHistoryParamsSchema,
+  mediaResourceParamsSchema,
+  mediaRestoreParamsSchema,
 } from '../../validation/admin.schemas';
 
 const router = Router();
@@ -105,6 +108,23 @@ router.delete(
   '/results/:id',
   validate(idParamsSchema, 'params'),
   adminController.deleteResult,
+);
+
+// Media history and rollback
+router.get(
+  '/history/:resourceType',
+  validate(mediaResourceParamsSchema, 'params'),
+  adminController.getMediaHistory,
+);
+router.get(
+  '/history/:resourceType/:id',
+  validate(mediaHistoryParamsSchema, 'params'),
+  adminController.getMediaHistory,
+);
+router.post(
+  '/history/:resourceType/:id/:revisionId/restore',
+  validate(mediaRestoreParamsSchema, 'params'),
+  adminController.restoreMediaRevision,
 );
 
 // Site Settings

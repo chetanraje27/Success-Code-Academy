@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "../live-editor.css";
 import "../admin/admin.css";
+import "../public.css";
+import "./home/home.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
@@ -34,13 +36,15 @@ export default function RootLayout({
   return (
     <EditModeProvider>
       <LiveContentProvider>
-        <Header />
-        <main className="site-main">{children}</main>
-        <Footer />
-        <WhatsAppWidget />
-        <CookieConsent />
-        <LeadsDrawer />
-        <LiveEditorToolbar />
+        <div className="public-shell">
+          <Header />
+          <main className="site-main">{children}</main>
+          <Footer />
+          <WhatsAppWidget />
+          <CookieConsent />
+          <LeadsDrawer />
+          <LiveEditorToolbar />
+        </div>
       </LiveContentProvider>
     </EditModeProvider>
   );

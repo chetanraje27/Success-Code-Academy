@@ -26,6 +26,12 @@ type ResultsBanner = {
   type?: string;
 };
 
+const defaultResultsBanners: ResultsBanner[] = [
+  { image: "/images/banners/Results_Hero.png", alt: "SCA Results Banner", type: "RESULTS" },
+  { image: "/images/banners/Results_Hero2_.png", alt: "SCA Results Banner", type: "RESULTS" },
+  { image: "/images/banners/Results_Hero3.png", alt: "SCA Results Banner", type: "RESULTS" },
+];
+
 function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplateProps) {
   const isLongName = name.length > 15;
   return (
@@ -99,27 +105,22 @@ function StudentCardTemplate({ name, image, city, marks }: StudentCardTemplatePr
 }
 
 function BannerImage({ src, alt }: { src: string; alt: string }) {
-  const [loaded, setLoaded] = useState(false);
   return (
-    <>
-      {!loaded && <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>}
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        priority
-        unoptimized
-        className="results-banner-img"
-        style={{ objectFit: "contain", opacity: loaded ? 1 : 0, transition: "opacity 0.3s ease" }}
-        onLoad={() => setLoaded(true)}
-      />
-    </>
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority
+      unoptimized
+      className="results-banner-img"
+      style={{ objectFit: "contain" }}
+    />
   );
 }
 
 export default function ResultsClient() {
-  const [heroSlides, setHeroSlides] = useState<ResultsBanner[]>([]);
-  const [isBannersLoading, setIsBannersLoading] = useState(true);
+  const [heroSlides, setHeroSlides] = useState<ResultsBanner[]>(defaultResultsBanners);
+  const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const [editResults, setEditResults] = useState(false);
   const { refreshKey } = useEditModeOptional();
 
@@ -131,21 +132,17 @@ export default function ResultsClient() {
           const resultBanners = (data.data || []).filter(
             (banner) => banner.type === "RESULTS" && banner.image,
           );
-          setHeroSlides(resultBanners);
-        } else {
-          setHeroSlides([]);
+          if (resultBanners.length > 0) {
+            setSlideTuple([0, 0]);
+            setHeroSlides(resultBanners);
+          }
         }
       })
       .catch(err => {
         console.error("Failed to fetch result banners", err);
-        setHeroSlides([]);
-      })
-      .finally(() => {
-        setIsBannersLoading(false);
       });
   }, [refreshKey]);
 
-  const [slideTuple, setSlideTuple] = useState<[number, number]>([0, 0]); // [slideIndex, direction]
   const currentHeroSlide = slideTuple[0];
   const slideDirection = slideTuple[1];
   const [selectedYear, setSelectedYear] = useState<number>(2026);
@@ -233,16 +230,14 @@ export default function ResultsClient() {
           ══════════════════════════════════════════ */}
       <section className="results-hero-section">
         <div className="results-banner-wrap">
-          {isBannersLoading ? (
-            <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
-          ) : heroSlides.length > 0 ? (
+          {heroSlides.length > 0 ? (
             <>
               <AnimatePresence initial={false} custom={slideDirection}>
                 <motion.div
                   key={currentHeroSlide}
                   custom={slideDirection}
                   variants={slideVariants}
-                  initial="enter"
+                  initial={false}
                   animate="center"
                   exit="exit"
                   transition={{
@@ -284,7 +279,7 @@ export default function ResultsClient() {
         </div>
 
         {/* Pagination Dots */}
-        {!isBannersLoading && heroSlides.length > 0 && (
+        {heroSlides.length > 0 && (
           <div className="results-banner-dots">
             {heroSlides.map((_, idx) => (
               <button
@@ -363,7 +358,7 @@ export default function ResultsClient() {
           {/* Featured Toppers for 2026 */}
           {selectedYear === 2026 && (
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="toppers-highlight-section"
@@ -395,7 +390,7 @@ export default function ResultsClient() {
 
               <div className="toppers-cards-container">
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                   className="topper-banner-card"
@@ -413,7 +408,7 @@ export default function ResultsClient() {
                 </motion.div>
 
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 }}
                   className="topper-banner-card"
@@ -452,7 +447,7 @@ export default function ResultsClient() {
                 <motion.div
                   key={item.id}
                   layout
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}

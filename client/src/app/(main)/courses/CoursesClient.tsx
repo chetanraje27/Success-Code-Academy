@@ -23,7 +23,7 @@ export default function CoursesClient() {
       <section className="courses-hero-section">
         <div className="container">
           <motion.h1
-            initial={{ opacity: 0, y: -20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="courses-hero-title"
@@ -38,7 +38,7 @@ export default function CoursesClient() {
 
           {/* Filtering Tab Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="courses-filter-tabs"
@@ -119,7 +119,7 @@ export default function CoursesClient() {
               {filteredCourses.map((course, index) => (
                 <Link href={course.link} key={course.id} className="course-card-anchor-link">
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}

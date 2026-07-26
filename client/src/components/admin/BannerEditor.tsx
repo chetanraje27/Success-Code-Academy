@@ -5,9 +5,10 @@ import AdminModal from "./AdminModal";
 import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
+import RevisionHistoryButton from "./RevisionHistoryButton";
 
 interface Banner {
-  id: string;
+  id: number;
   image: string;
   altText: string;
   targetUrl: string | null;
@@ -90,8 +91,10 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this banner?")) return;
+  const handleDelete = async (id: number) => {
+    if (!confirm("Delete this banner? You can restore it later from History.")) {
+      return;
+    }
     try {
       setLoading(true);
       await adminApiFetch(`banners/${id}`, {
@@ -158,6 +161,15 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       {!showForm ? (
         <>
           <div className="sca-admin-toolbar">
+            <RevisionHistoryButton
+              resourceType="banner"
+              itemName="Banner"
+              className="sca-admin-btn ghost"
+              onRestored={async () => {
+                bumpRefresh();
+                await fetchItems();
+              }}
+            />
             <button type="button" className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
               <FaPlus /> Add Banner
             </button>

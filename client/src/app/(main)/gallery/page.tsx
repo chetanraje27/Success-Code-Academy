@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,12 +9,9 @@ import {
   FaXmark, 
   FaClock, 
   FaMagnifyingGlass, 
-  FaArrowDownShortWide, 
   FaX, 
   FaCalendarDays, 
   FaEye, 
-  FaBookmark, 
-  FaRegBookmark, 
   FaShareNodes, 
   FaChevronLeft,
   FaChevronRight
@@ -138,15 +135,7 @@ export default function GalleryPage() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [sortBy, setSortBy] = useState<"newest" | "views">("newest");
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const timer = setTimeout(() => setIsInitialLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Sync Search Debounce
   useEffect(() => {
@@ -191,7 +180,7 @@ export default function GalleryPage() {
 
   // Process sorting & filtering
   const processedVideos = useMemo(() => {
-    let list = nonFeaturedVideos.filter((video) => {
+    const list = nonFeaturedVideos.filter((video) => {
       const catMatch = activeCategory === "All" || video.category === activeCategory;
       const searchMatch =
         video.title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
@@ -252,7 +241,7 @@ export default function GalleryPage() {
         {toastMessage && (
           <motion.div 
             className="toast-notification"
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            initial={false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
           >
@@ -361,7 +350,7 @@ export default function GalleryPage() {
               <div className="filter-select-wrap">
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) => setSortBy(e.target.value as "newest" | "views")}
                   className="filter-select"
                   aria-label="Sort videos"
                 >
@@ -373,27 +362,13 @@ export default function GalleryPage() {
           </div>
 
           {/* Catalog Layout logic */}
-          {isInitialLoading ? (
-            /* Skeleton Shimmer Loaders */
-            <div className="skeleton-grid">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="skeleton-card">
-                  <div className="skeleton-thumb shimmer" />
-                  <div className="skeleton-content">
-                    <div className="skeleton-bar short shimmer" />
-                    <div className="skeleton-bar shimmer" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait">
               {isFilterActive ? (
                 /* 1. Filtered/Search Active View (Clean Grid Layout) */
                 <motion.div
                   key="filtered-grid"
                   className="filtered-results-wrap"
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 15 }}
                   transition={{ duration: 0.3 }}
@@ -460,7 +435,7 @@ export default function GalleryPage() {
                     <div className="empty-results-box">
                       <span className="empty-results-ico">🔍</span>
                       <h3>No Videos Found</h3>
-                      <p>No results match "{debouncedQuery}". Reset search query to browse Categories.</p>
+                      <p>No results match &quot;{debouncedQuery}&quot;. Reset search query to browse Categories.</p>
                       <button
                         onClick={() => {
                           setSearchQuery("");
@@ -478,7 +453,7 @@ export default function GalleryPage() {
                 <motion.div
                   key="carousels-list"
                   className="carousels-stack"
-                  initial={{ opacity: 0 }}
+                  initial={false}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
@@ -562,14 +537,13 @@ export default function GalleryPage() {
                   })}
                 </motion.div>
               )}
-            </AnimatePresence>
-          )}
+          </AnimatePresence>
 
         </div>
       </section>
 
       {/* Premium Video Modal Lightbox with Related Videos */}
-      {mounted && typeof document !== "undefined" && createPortal(
+      {typeof document !== "undefined" && createPortal(
         <AnimatePresence>
           {activeVideo && (
             <motion.div

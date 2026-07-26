@@ -1,0 +1,1339 @@
+/* Public product shell
+   One restrained visual language for every public route. */
+
+.public-shell {
+  min-height: 100vh;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 8% 4%, rgba(7, 141, 146, 0.07), transparent 24rem),
+    var(--color-background);
+}
+
+.public-shell .site-main {
+  isolation: isolate;
+}
+
+.public-shell :where(section, article, div) {
+  min-width: 0;
+}
+
+.public-shell :where(p, li) {
+  color: var(--text-secondary);
+}
+
+.public-shell :where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(7, 141, 146, 0.32);
+  outline-offset: 3px;
+}
+
+/* Header */
+.public-shell header.header {
+  height: 76px;
+  background: #fff;
+  border-bottom: 1px solid rgba(195, 207, 218, 0.72);
+  box-shadow: 0 1px 0 rgba(16, 47, 94, 0.02);
+}
+
+.public-shell header.header.scrolled {
+  background: #fff;
+  border-bottom-color: var(--color-border);
+  box-shadow: 0 10px 35px rgba(16, 47, 94, 0.09);
+}
+
+.public-shell .header .header-container,
+.public-shell .header.scrolled .header-container {
+  height: 76px;
+}
+
+.public-shell .header .logo-group {
+  flex: 0 0 auto;
+}
+
+.public-shell .header .logo-image {
+  width: auto;
+  max-width: 176px;
+  max-height: 52px;
+}
+
+.public-shell .header .desktop-nav {
+  gap: clamp(1rem, 2vw, 1.9rem);
+}
+
+.public-shell .header .nav-link {
+  padding: 0.7rem 0;
+  color: #405169;
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.public-shell .header .nav-link:hover,
+.public-shell .header .nav-link.active {
+  color: var(--brand-primary);
+}
+
+.public-shell .header .nav-link::after {
+  bottom: 2px;
+  left: 50%;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--brand-accent);
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.public-shell .header .nav-link:hover::after,
+.public-shell .header .nav-link.active::after {
+  width: 0.35rem;
+  opacity: 1;
+}
+
+.public-shell .header .desktop-actions {
+  gap: 0.55rem;
+}
+
+.public-shell .header .mobile-menu-btn,
+.public-shell .header .drawer-close-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.public-shell .mobile-drawer {
+  width: min(23rem, calc(100vw - 1rem));
+  border-left: 1px solid var(--color-border);
+  border-radius: 1.5rem 0 0 1.5rem;
+}
+
+.public-shell .mobile-nav-link {
+  border-radius: var(--radius-control);
+}
+
+.public-shell .mobile-nav-link.active {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+}
+
+/* Footer */
+.public-shell footer.footer {
+  position: relative;
+  overflow: hidden;
+  color: #d8e4f2;
+  background:
+    radial-gradient(circle at 85% 0%, rgba(7, 141, 146, 0.22), transparent 26rem),
+    #081c38;
+  border-top: 0;
+}
+
+.public-shell .footer .footer-newsletter {
+  padding: clamp(2.25rem, 5vw, 3.75rem) 0;
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.public-shell .footer .newsletter-title,
+.public-shell .footer .footer-heading {
+  color: #fff;
+}
+
+.public-shell .footer .newsletter-desc,
+.public-shell .footer .footer-desc,
+.public-shell .footer .footer-link,
+.public-shell .footer .footer-contact,
+.public-shell .footer .footer-contact li,
+.public-shell .footer .footer-bottom-content {
+  color: #aebdd0;
+}
+
+.public-shell .footer .newsletter-content {
+  gap: 2rem;
+}
+
+.public-shell .footer .newsletter-form-wrap {
+  max-width: 31rem;
+}
+
+.public-shell .footer .newsletter-input {
+  min-height: 3rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .footer .newsletter-input::placeholder {
+  color: #aebdd0;
+}
+
+.public-shell .footer .newsletter-input:focus {
+  border-color: rgba(96, 215, 210, 0.75);
+  box-shadow: 0 0 0 4px rgba(7, 141, 146, 0.2);
+}
+
+.public-shell .footer .footer-main {
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+}
+
+.public-shell .footer .footer-grid {
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.public-shell .footer .footer-logo .logo-image {
+  padding: 0.4rem;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.public-shell .footer .social-icon {
+  color: #dce7f4;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+
+.public-shell .footer .social-icon:hover {
+  color: #fff;
+  background: var(--brand-accent);
+  border-color: var(--brand-accent);
+}
+
+.public-shell .footer .footer-link:hover,
+.public-shell .footer .footer-link.active,
+.public-shell .footer .contact-icon {
+  color: #70d1ce;
+}
+
+.public-shell .footer .footer-bottom {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Shared public patterns */
+.public-shell :where(
+  .explore-section,
+  .stars-section,
+  .why-sca-section,
+  .insights-outer-section,
+  .parents-trust-section,
+  .faq-section,
+  .impact-section,
+  .philosophy-section,
+  .story-section,
+  .infra-section,
+  .courses-grid-section,
+  .grid-section,
+  .success-stories-section,
+  .results-cta,
+  .contact-premium-section,
+  .contact-container,
+  .scholarship-grid-container,
+  .gallery-content
+) {
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
+}
+
+.public-shell :where(
+  .explore-title,
+  .header-title,
+  .main-heading,
+  .section-title,
+  .results-section-title,
+  .contact-info-title,
+  .stories-title,
+  .courses-hero-title
+) {
+  color: var(--text-primary);
+  font-size: var(--font-size-heading-2);
+  font-weight: 760;
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.04em;
+}
+
+.public-shell :where(
+  .explore-subtitle,
+  .header-subtitle,
+  .subtitle,
+  .section-subtitle,
+  .contact-info-subtitle-desc,
+  .courses-hero-subtitle
+) {
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  line-height: 1.75;
+}
+
+.public-shell :where(
+  .explore-card,
+  .support-card,
+  .capsule,
+  .apple-video-card,
+  .blog-cover-card,
+  .trust-card,
+  .faq-question-btn,
+  .philosophy-card,
+  .infra-card-new,
+  .course-horizontal-card,
+  .register-glass-card,
+  .registration-form-card,
+  .contact-right-form,
+  .contact-detail-item,
+  .map-container,
+  .controls-inner-card,
+  .student-card,
+  .story-video-card,
+  .cta-gradient-card,
+  .video-item-card,
+  .featured-preview-card
+) {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell :where(
+  .explore-card,
+  .support-card,
+  .capsule,
+  .apple-video-card,
+  .blog-cover-card,
+  .trust-card,
+  .course-horizontal-card,
+  .student-card,
+  .story-video-card,
+  .video-item-card
+) {
+  transition:
+    transform var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.public-shell :where(
+  .explore-card,
+  .support-card,
+  .capsule,
+  .apple-video-card,
+  .blog-cover-card,
+  .trust-card,
+  .course-horizontal-card,
+  .student-card,
+  .story-video-card,
+  .video-item-card
+):hover {
+  border-color: rgba(7, 141, 146, 0.34);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.public-shell :where(
+  .dark-form-input,
+  .dist-input-box,
+  .pill-text-input,
+  .subcard-date-input,
+  .subcard-select-field,
+  .register-exam-form input,
+  .register-exam-form select,
+  .search-input,
+  .filter-select
+) {
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  background: #f9fbfc;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  outline: 0;
+}
+
+.public-shell :where(
+  .dark-form-input,
+  .dist-input-box,
+  .pill-text-input,
+  .subcard-date-input,
+  .subcard-select-field,
+  .register-exam-form input,
+  .register-exam-form select,
+  .search-input,
+  .filter-select
+):focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+/* About */
+.public-shell .about-page {
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .about-page .hero-section {
+  min-height: auto;
+  padding: clamp(8.5rem, 13vw, 11rem) 0 clamp(4rem, 8vw, 7rem);
+  background:
+    radial-gradient(circle at 85% 20%, rgba(7, 141, 146, 0.1), transparent 26rem),
+    #f7f9fc;
+}
+
+.public-shell .about-page .hero-container {
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.public-shell .about-page .hero-content {
+  max-width: 38rem;
+}
+
+.public-shell .about-page .hero-title {
+  font-size: clamp(3rem, 5.8vw, 5.35rem);
+  line-height: 0.98;
+}
+
+.public-shell .about-page .hero-desc {
+  max-width: 35rem;
+  font-size: 1.1rem;
+  line-height: 1.75;
+}
+
+.public-shell .about-page .eyebrow-text {
+  color: var(--brand-accent);
+}
+
+.public-shell .about-page .hero-pill {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .about-page .hero-image-wrapper {
+  filter: drop-shadow(0 24px 50px rgba(16, 47, 94, 0.13));
+}
+
+.public-shell .about-page .philosophy-grid {
+  gap: 1.25rem;
+}
+
+.public-shell .about-page .philosophy-card {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background: #fff;
+}
+
+.public-shell .about-page .phil-icon {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+}
+
+.public-shell .about-page .story-quote-card {
+  background: #0b2448;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+}
+
+.public-shell .about-page .story-quote-card :where(p, span) {
+  color: #fff;
+}
+
+.public-shell .about-page .infra-grid-4 {
+  gap: 1.25rem;
+}
+
+.public-shell .about-page .infra-card-new {
+  overflow: hidden;
+}
+
+.public-shell .about-page .infra-img-box {
+  aspect-ratio: 4 / 3;
+}
+
+/* Courses listing */
+.public-shell .courses-page-container {
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .courses-page-container .courses-hero-section {
+  min-height: auto;
+  padding: clamp(8.5rem, 14vw, 11rem) 0 clamp(3rem, 7vw, 5rem);
+  background:
+    radial-gradient(circle at 80% 15%, rgba(7, 141, 146, 0.12), transparent 25rem),
+    #eef3f7;
+}
+
+.public-shell .courses-page-container :where(.bg-blob, .badge-dots-matrix, .curved-badge-bg) {
+  display: none;
+}
+
+.public-shell .courses-page-container .courses-filter-tabs {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0.35rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .courses-page-container .filter-tab-btn {
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .courses-page-container .filter-tab-btn.active {
+  color: #fff;
+  background: var(--brand-primary);
+}
+
+.public-shell .courses-page-container .courses-list-stack {
+  gap: 1.25rem;
+}
+
+.public-shell .courses-page-container .course-horizontal-card {
+  min-height: 22rem;
+  overflow: hidden;
+}
+
+.public-shell .courses-page-container .course-card-left {
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.public-shell .courses-page-container .course-card-right {
+  min-width: 18rem;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(113, 216, 211, 0.28), transparent 11rem),
+    #0b2448;
+}
+
+.public-shell .courses-page-container .course-type-pill {
+  color: var(--brand-accent);
+  background: var(--color-brand-accent-soft);
+  border: 1px solid #cdeceb;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .courses-page-container .course-card-title {
+  color: var(--text-primary);
+}
+
+.public-shell .courses-page-container .course-card-desc,
+.public-shell .courses-page-container .highlight-text {
+  color: var(--text-secondary);
+}
+
+.public-shell .courses-page-container .highlight-icon-box {
+  color: var(--brand-accent);
+  background: var(--color-brand-accent-soft);
+}
+
+.public-shell .courses-page-container .starts-ribbon-banner {
+  color: #fff;
+  background: var(--brand-accent);
+  box-shadow: none;
+}
+
+.public-shell .courses-page-container .floating-gold-star {
+  filter: saturate(0.7);
+}
+
+.public-shell .courses-page-container .course-know-more-link {
+  color: var(--brand-primary);
+}
+
+/* Course details */
+.public-shell .course-detail-page {
+  overflow: hidden;
+  padding: clamp(7.5rem, 11vw, 9rem) 0 var(--section-space);
+  background:
+    radial-gradient(circle at 85% 4%, rgba(7, 141, 146, 0.09), transparent 24rem),
+    var(--color-background);
+}
+
+.public-shell .course-detail-page :where(.bg-blob) {
+  display: none;
+}
+
+.public-shell .course-detail-page .back-btn {
+  color: var(--brand-primary);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+}
+
+.public-shell .course-detail-page .detail-grid-container {
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+  align-items: start;
+}
+
+.public-shell .course-detail-page .detail-left-content {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .course-detail-page .course-title-header {
+  color: var(--text-primary);
+  font-size: clamp(2.4rem, 5vw, 4.25rem);
+}
+
+.public-shell .course-detail-page .course-subtitle-desc {
+  color: var(--text-secondary);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.public-shell .course-detail-page .whats-in-course-row {
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.public-shell .course-detail-page .row-item-badge {
+  color: var(--brand-accent);
+  background: var(--color-brand-accent-soft);
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .course-detail-page .syllabus-download-card,
+.public-shell .course-detail-page .admissions-subcard-wrapper,
+.public-shell .course-detail-page .visit-summary-box {
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.public-shell .course-detail-page .detail-right-sidebar {
+  position: sticky;
+  top: 6.25rem;
+}
+
+.public-shell .course-detail-page .register-glass-card {
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  backdrop-filter: none;
+}
+
+.public-shell .course-detail-page :where(
+  .submit-registration-btn,
+  .syllabus-download-btn,
+  .reset-form-btn
+) {
+  min-height: 3rem;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .course-detail-page .submit-registration-btn {
+  color: #fff;
+  background: var(--brand-primary);
+  box-shadow: 0 10px 24px rgba(16, 47, 94, 0.18);
+}
+
+/* Admissions */
+.public-shell .admissions-page-container {
+  padding-top: 0 !important;
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .admissions-page-container :where(
+  .bg-pattern-dots-left,
+  .bg-pattern-circles-right
+) {
+  display: none;
+}
+
+.public-shell .admissions-page-container .admissions-hero-banner {
+  padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem);
+  background: #eef3f7;
+}
+
+.public-shell .admissions-page-container .admissions-hero-container {
+  max-width: var(--container-content);
+  margin-inline: auto;
+}
+
+.public-shell .admissions-page-container .admissions-poster-wrapper {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: clamp(1rem, 2.5vw, 1.75rem);
+  box-shadow: var(--shadow-md);
+}
+
+.public-shell .admissions-page-container .admissions-poster-img {
+  width: 100%;
+  max-height: 35rem;
+  object-fit: contain;
+  background: #fff;
+}
+
+.public-shell .admissions-page-container .scholarship-grid-container {
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.public-shell .admissions-page-container .poster-feature-card-boxed {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .admissions-page-container :where(
+  .feature-icon-circle,
+  .feature-icon-circle-dark,
+  .form-header-icon
+) {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+  border-radius: 0.9rem;
+}
+
+.public-shell .admissions-page-container .registration-form-card {
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+}
+
+.public-shell .admissions-page-container .register-submit-btn {
+  min-height: 3.1rem;
+  color: #fff;
+  background: var(--brand-primary);
+  border: 0;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 24px rgba(16, 47, 94, 0.18);
+}
+
+/* Contact */
+.public-shell .contact-page {
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .contact-page :where(
+  .contact-page,
+  .contact-premium-section,
+  .contact-premium-section h2,
+  .contact-premium-section p,
+  .contact-premium-section span,
+  .contact-premium-section label,
+  .contact-premium-section input,
+  .contact-premium-section textarea,
+  .contact-premium-section button
+) {
+  font-family: var(--font-sans) !important;
+}
+
+.public-shell .contact-page .contact-hero-banner {
+  padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem) !important;
+  background: #eef3f7;
+}
+
+.public-shell .contact-page .contact-hero-container {
+  max-width: var(--container-content) !important;
+  margin-inline: auto !important;
+}
+
+.public-shell .contact-page .contact-poster-wrapper {
+  overflow: hidden;
+  border: 1px solid var(--color-border) !important;
+  border-radius: clamp(1rem, 2.5vw, 1.75rem) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.public-shell .contact-page .contact-poster-img {
+  width: 100% !important;
+  max-height: 35rem;
+  object-fit: contain;
+  background: #fff;
+}
+
+.public-shell .contact-page .contact-premium-section {
+  background: #fff;
+  border-bottom-color: var(--color-border);
+}
+
+.public-shell .contact-page .insights-premium-container,
+.public-shell .contact-page .contact-container {
+  max-width: var(--container-content);
+}
+
+.public-shell .contact-page .contact-grid-wrap {
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.public-shell .contact-page .enhanced-contact-list {
+  gap: 0.75rem;
+}
+
+.public-shell .contact-page .contact-detail-item {
+  padding: 1rem;
+  box-shadow: none;
+}
+
+.public-shell .contact-page .detail-icon-box {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+  border-radius: 0.8rem;
+}
+
+.public-shell .contact-page .contact-right-form {
+  overflow: hidden;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+}
+
+.public-shell .contact-page .form-grid-mesh {
+  opacity: 0.35;
+}
+
+.public-shell .contact-page .dark-form-label,
+.public-shell .contact-page .captcha-label-txt,
+.public-shell .contact-page .dist-label-text {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.public-shell .contact-page .dark-captcha-box,
+.public-shell .contact-page .distance-box {
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.public-shell .contact-page :where(.dark-submit-btn, .dark-reset-btn) {
+  min-height: 3rem;
+  color: #fff;
+  background: var(--brand-primary);
+  border: 0;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .contact-page .map-container {
+  overflow: hidden;
+  padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.public-shell .contact-page .map-frame {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+/* Results */
+.public-shell .results-page-container {
+  padding-top: 0 !important;
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .results-page-container :where(.bg-blob-glow, .card-top-bg-decorator) {
+  display: none;
+}
+
+.public-shell .results-page-container .results-hero-section {
+  padding: calc(76px + 1.5rem) var(--page-gutter) 0;
+  background: #eef3f7;
+}
+
+.public-shell .results-page-container .results-banner-wrap {
+  max-width: var(--container-content);
+  height: auto;
+  aspect-ratio: 2.45 / 1;
+  margin-inline: auto;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: clamp(1rem, 2.5vw, 1.75rem);
+  box-shadow: var(--shadow-md);
+}
+
+.public-shell .results-page-container .results-banner-img {
+  object-fit: contain !important;
+}
+
+.public-shell .results-page-container .results-heading-section {
+  padding: clamp(3.5rem, 7vw, 5rem) 0 1.5rem;
+  background: #eef3f7;
+}
+
+.public-shell .results-page-container .results-section-title {
+  text-align: center;
+}
+
+.public-shell .results-page-container .controls-section {
+  padding: 0 0 2rem;
+  background: #eef3f7;
+}
+
+.public-shell .results-page-container .controls-inner-card {
+  padding: 0.35rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.public-shell .results-page-container .tabs-container {
+  gap: 0.25rem;
+}
+
+.public-shell .results-page-container .tab-btn {
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .results-page-container .tab-btn.active {
+  color: #fff;
+  background: var(--brand-primary);
+  box-shadow: 0 8px 18px rgba(16, 47, 94, 0.14);
+}
+
+.public-shell .results-page-container .grid-section {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  background: #fff;
+}
+
+.public-shell .results-page-container .toppers-banner-wrap-2026,
+.public-shell .results-page-container .topper-banner-card {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .results-page-container .toppers-headline {
+  color: var(--text-primary);
+}
+
+.public-shell .results-page-container .results-grid {
+  gap: 1.25rem;
+}
+
+.public-shell .results-page-container .student-card {
+  overflow: hidden;
+}
+
+.public-shell .results-page-container .success-stories-section {
+  background: #eef3f7;
+}
+
+.public-shell .results-page-container .stories-container {
+  max-width: var(--container-content);
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.public-shell .results-page-container .stories-left-col {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.public-shell .results-page-container .stories-icon-wrapper {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+  border-radius: 1rem;
+}
+
+.public-shell .results-page-container .stories-grid-container {
+  gap: 1.25rem;
+}
+
+.public-shell .results-page-container .story-video-card {
+  overflow: hidden;
+}
+
+.public-shell .results-page-container .story-cover-overlay {
+  background: linear-gradient(180deg, transparent 20%, rgba(8, 28, 56, 0.82));
+}
+
+.public-shell .results-page-container .cta-gradient-card {
+  padding: clamp(2rem, 6vw, 4.5rem);
+  color: #fff;
+  background:
+    radial-gradient(circle at 82% 15%, rgba(111, 215, 210, 0.22), transparent 20rem),
+    #0b2448;
+  border: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.public-shell .results-page-container .cta-gradient-card :where(h2, p) {
+  color: #fff;
+}
+
+/* Gallery */
+.public-shell .gallery-page-container {
+  overflow: hidden;
+  background: transparent;
+}
+
+.public-shell .gallery-page-container .gallery-hero {
+  min-height: auto;
+  padding: clamp(8.5rem, 13vw, 11rem) 0 clamp(4rem, 8vw, 6rem);
+  background:
+    radial-gradient(circle at 82% 20%, rgba(7, 141, 146, 0.12), transparent 24rem),
+    #eef3f7;
+}
+
+.public-shell .gallery-page-container .hero-grid-split {
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.public-shell .gallery-page-container .hero-badge,
+.public-shell .gallery-page-container .card-category,
+.public-shell .gallery-page-container .modal-tag {
+  color: var(--brand-accent);
+  background: var(--color-brand-accent-soft);
+  border: 1px solid #cdeceb;
+  border-radius: var(--radius-pill);
+}
+
+.public-shell .gallery-page-container .hero-title {
+  color: var(--text-primary);
+  font-size: clamp(3rem, 5.8vw, 5rem);
+  line-height: 1;
+}
+
+.public-shell .gallery-page-container .featured-preview-card {
+  overflow: hidden;
+}
+
+.public-shell .gallery-page-container .preview-overlay,
+.public-shell .gallery-page-container .card-thumb-overlay {
+  background: linear-gradient(180deg, transparent 35%, rgba(8, 28, 56, 0.7));
+}
+
+.public-shell .gallery-page-container .toolbar-container {
+  padding: 0.75rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-shell .gallery-page-container .carousels-stack,
+.public-shell .gallery-page-container .filtered-grid {
+  gap: 1.25rem;
+}
+
+.public-shell .gallery-page-container .video-item-card {
+  overflow: hidden;
+}
+
+.public-shell .gallery-page-container :where(
+  .btn-primary-custom,
+  .modal-share-btn,
+  .clear-btn
+) {
+  border-radius: var(--radius-pill);
+}
+
+/* Floating utility UI */
+.public-shell .whatsapp-widget {
+  width: 3.25rem;
+  height: 3.25rem;
+  background: #0d7c6d;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-md);
+}
+
+.public-shell .cookie-card {
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+  .public-shell .header .header-container,
+  .public-shell .header.scrolled .header-container,
+  .public-shell header.header {
+    height: 68px;
+  }
+
+  .public-shell .home-container .notif-bar-wrap {
+    padding-top: 68px;
+  }
+
+  .public-shell .explore-section .explore-grid,
+  .public-shell .parents-trust-section .trust-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-shell .why-sca-section .ecosystem-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .public-shell .why-sca-section .ecosystem-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .public-shell .course-detail-page .detail-right-sidebar,
+  .public-shell .faq-section .faq-header-column,
+  .public-shell .results-page-container .stories-left-col {
+    position: static;
+  }
+}
+
+@media (max-width: 767px) {
+  .public-shell :where(
+    .explore-section,
+    .stars-section,
+    .why-sca-section,
+    .insights-outer-section,
+    .parents-trust-section,
+    .faq-section,
+    .impact-section,
+    .philosophy-section,
+    .story-section,
+    .infra-section,
+    .courses-grid-section,
+    .grid-section,
+    .success-stories-section,
+    .results-cta,
+    .contact-premium-section,
+    .contact-container,
+    .scholarship-grid-container,
+    .gallery-content
+  ) {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .public-shell .home-container .notif-bar {
+    height: 42px;
+    padding-inline: 0.85rem;
+  }
+
+  .public-shell .home-container .notif-icon,
+  .public-shell .home-container .notif-right {
+    display: none;
+  }
+
+  .public-shell .home-container .notif-inner {
+    gap: 0.65rem;
+  }
+
+  .public-shell .home-container .notif-label {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.62rem;
+  }
+
+  .public-shell .home-container .notif-text {
+    font-size: 0.76rem;
+  }
+
+  .public-shell .home-container .hero-slider-section {
+    padding: 0.8rem 0.75rem 3.5rem;
+  }
+
+  .public-shell .home-container .hero-banner-wrap,
+  .public-shell .results-page-container .results-banner-wrap {
+    aspect-ratio: 16 / 8.8;
+    border-radius: 1rem;
+  }
+
+  .public-shell .home-container .banner-arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .public-shell .explore-section .explore-grid,
+  .public-shell .parents-trust-section .trust-row,
+  .public-shell .why-sca-section .ecosystem-container {
+    grid-template-columns: 1fr;
+  }
+
+  .public-shell .explore-section .explore-card {
+    min-height: 0;
+  }
+
+  .public-shell .explore-section .explore-grid {
+    display: grid !important;
+    grid-auto-columns: minmax(13.5rem, 72vw);
+    grid-auto-flow: column;
+    grid-template-columns: none !important;
+    gap: 0.85rem !important;
+    overflow-x: auto;
+    padding: 0.25rem 0 0.75rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .public-shell .explore-section .explore-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .public-shell .explore-section .explore-card {
+    min-height: 11rem !important;
+    height: auto !important;
+    scroll-snap-align: start;
+  }
+
+  .public-shell .explore-section .content-box {
+    padding: 1rem !important;
+  }
+
+  .public-shell .explore-section .course-title-text {
+    font-size: 0.9rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .public-shell .explore-section .see-more {
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .public-shell .stars-section .results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: none !important;
+    grid-auto-rows: auto !important;
+    gap: 1rem !important;
+  }
+
+  .public-shell .stars-section .featured-card {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    width: 100%;
+    height: 22rem !important;
+  }
+
+  .public-shell .stars-section .support-card {
+    grid-row: auto !important;
+    min-height: 11.5rem;
+  }
+
+  .public-shell .why-sca-section .ecosystem-center {
+    grid-column: auto;
+  }
+
+  .public-shell .why-sca-section .ecosystem-column {
+    display: none;
+  }
+
+  .public-shell .why-sca-section .mobile-ecosystem-carousel {
+    display: block;
+  }
+
+  .public-shell .insights-outer-section .section-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .public-shell .faq-section .faq-grid-layout,
+  .public-shell .contact-page .contact-grid-wrap,
+  .public-shell .admissions-page-container .scholarship-grid-container,
+  .public-shell .course-detail-page .detail-grid-container,
+  .public-shell .results-page-container .stories-container,
+  .public-shell .gallery-page-container .hero-grid-split {
+    grid-template-columns: 1fr;
+  }
+
+  .public-shell .about-page .hero-section,
+  .public-shell .courses-page-container .courses-hero-section,
+  .public-shell .gallery-page-container .gallery-hero {
+    padding-top: 7.25rem;
+  }
+
+  .public-shell .about-page .hero-title,
+  .public-shell .gallery-page-container .hero-title {
+    font-size: clamp(2.6rem, 12vw, 3.75rem);
+  }
+
+  .public-shell .courses-page-container .courses-filter-tabs,
+  .public-shell .results-page-container .controls-inner-card {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .public-shell .courses-page-container .filter-tab-btn,
+  .public-shell .results-page-container .tab-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .public-shell .courses-page-container .course-horizontal-card {
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .public-shell .courses-page-container .course-card-right {
+    min-width: 0;
+    min-height: 12rem;
+  }
+
+  .public-shell .course-detail-page {
+    padding-top: 6.25rem;
+  }
+
+  .public-shell .course-detail-page .detail-left-content,
+  .public-shell .course-detail-page .register-glass-card,
+  .public-shell .contact-page .contact-right-form,
+  .public-shell .admissions-page-container .registration-form-card {
+    padding: 1.25rem;
+  }
+
+  .public-shell .course-detail-page .whats-in-course-row {
+    grid-template-columns: 1fr;
+  }
+
+  .public-shell .course-detail-page .row-graphic-content {
+    display: none;
+  }
+
+  .public-shell .admissions-page-container .admissions-hero-banner,
+  .public-shell .contact-page .contact-hero-banner,
+  .public-shell .results-page-container .results-hero-section {
+    padding-top: calc(68px + 1rem) !important;
+  }
+
+  .public-shell .admissions-page-container .admissions-poster-wrapper,
+  .public-shell .contact-page .contact-poster-wrapper {
+    border-radius: 1rem !important;
+  }
+
+  .public-shell .results-page-container .tabs-container {
+    width: max-content;
+  }
+
+  .public-shell .results-page-container .cta-actions-group {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .public-shell .gallery-page-container .toolbar-container,
+  .public-shell .gallery-page-container .toolbar-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .public-shell .footer .footer-heading-row {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .public-shell .footer .footer-links.expanded,
+  .public-shell .footer .footer-contact.expanded {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-shell :where(
+    .explore-card,
+    .support-card,
+    .capsule,
+    .apple-video-card,
+    .blog-cover-card,
+    .trust-card,
+    .course-horizontal-card,
+    .student-card,
+    .story-video-card,
+    .video-item-card
+  ) {
+    transform: none !important;
+  }
+}

@@ -10,12 +10,23 @@ import {
   SiteSetting,
   TopperResult,
   ContentBlock,
+  MediaRevision,
+  sequelize,
 } from '../models';
+import type {
+  MediaRevisionAction,
+  MediaResourceType,
+} from '../models/MediaRevision';
+import type { BannerCreationAttributes } from '../models/Banner';
+import type { StarStudentCreationAttributes } from '../models/StarStudent';
+import type { TopperResultCreationAttributes } from '../models/TopperResult';
+import { restoreValues } from '../utils/mediaRevision';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import multer from 'multer';
 import { createClient } from '@supabase/supabase-js';
 import { Op } from 'sequelize';
+import type { Transaction } from 'sequelize';
 
 let supabase: ReturnType<typeof createClient> | null = null;
 const getSupabase = () => {
@@ -70,6 +81,27 @@ const IMAGE_EXTENSIONS: Record<string, string> = {
   'image/webp': '.webp',
   'image/gif': '.gif',
 };
+
+type RevisionableMedia = Banner | StarStudent | TopperResult;
+
+async function recordMediaRevision(
+  resourceType: MediaResourceType,
+  item: RevisionableMedia,
+  action: MediaRevisionAction,
+  createdBy: number | undefined,
+  transaction: Transaction,
+) {
+  return MediaRevision.create(
+    {
+      resourceType,
+      resourceId: item.id,
+      action,
+      snapshot: item.toJSON() as Record<string, unknown>,
+      createdBy: createdBy ?? null,
+    },
+    { transaction },
+  );
+}
 
 // --- Image Upload Endpoint ---
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
@@ -161,18 +193,37 @@ export const createBanner = asyncHandler(async (req: Request, res: Response) => 
 
 export const updateBanner = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const banner = await Banner.findByPk(id as string);
-  if (!banner) throw new AppError('Banner not found', 404);
-  await banner.update(req.body);
+  const banner = await sequelize.transaction(async (transaction) => {
+    const current = await Banner.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!current) throw new AppError('Banner not found', 404);
+    await recordMediaRevision('banner', current, 'update', req.user?.id, transaction);
+    return current.update(req.body, { transaction });
+  });
   res.status(200).json({ status: 'success', data: banner });
 });
 
 export const deleteBanner = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const banner = await Banner.findByPk(id as string);
-  if (!banner) throw new AppError('Banner not found', 404);
-  await banner.destroy();
-  res.status(204).json({ status: 'success', data: null });
+  const revision = await sequelize.transaction(async (transaction) => {
+    const banner = await Banner.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!banner) throw new AppError('Banner not found', 404);
+    const saved = await recordMediaRevision(
+      'banner',
+      banner,
+      'delete',
+      req.user?.id,
+      transaction,
+    );
+    await banner.destroy({ transaction });
+    return saved;
+  });
+  res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
 });
 
 // --- Notifications CRUD ---
@@ -215,18 +266,37 @@ export const createStarStudent = asyncHandler(async (req: Request, res: Response
 
 export const updateStarStudent = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const star = await StarStudent.findByPk(id as string);
-  if (!star) throw new AppError('Star Student not found', 404);
-  await star.update(req.body);
+  const star = await sequelize.transaction(async (transaction) => {
+    const current = await StarStudent.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!current) throw new AppError('Star Student not found', 404);
+    await recordMediaRevision('star', current, 'update', req.user?.id, transaction);
+    return current.update(req.body, { transaction });
+  });
   res.status(200).json({ status: 'success', data: star });
 });
 
 export const deleteStarStudent = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const star = await StarStudent.findByPk(id as string);
-  if (!star) throw new AppError('Star Student not found', 404);
-  await star.destroy();
-  res.status(204).json({ status: 'success', data: null });
+  const revision = await sequelize.transaction(async (transaction) => {
+    const star = await StarStudent.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!star) throw new AppError('Star Student not found', 404);
+    const saved = await recordMediaRevision(
+      'star',
+      star,
+      'delete',
+      req.user?.id,
+      transaction,
+    );
+    await star.destroy({ transaction });
+    return saved;
+  });
+  res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
 });
 
 // --- Results CMS (TopperResult) ---
@@ -253,19 +323,118 @@ export const createResult = asyncHandler(async (req: Request, res: Response) => 
 
 export const updateResult = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await TopperResult.findByPk(id as string);
-  if (!result) throw new AppError('Result not found', 404);
-  await result.update(req.body);
+  const result = await sequelize.transaction(async (transaction) => {
+    const current = await TopperResult.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!current) throw new AppError('Result not found', 404);
+    await recordMediaRevision('result', current, 'update', req.user?.id, transaction);
+    return current.update(req.body, { transaction });
+  });
   res.status(200).json({ status: 'success', data: result });
 });
 
 export const deleteResult = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await TopperResult.findByPk(id as string);
-  if (!result) throw new AppError('Result not found', 404);
-  await result.destroy();
-  res.status(204).json({ status: 'success', data: null });
+  const revision = await sequelize.transaction(async (transaction) => {
+    const result = await TopperResult.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!result) throw new AppError('Result not found', 404);
+    const saved = await recordMediaRevision(
+      'result',
+      result,
+      'delete',
+      req.user?.id,
+      transaction,
+    );
+    await result.destroy({ transaction });
+    return saved;
+  });
+  res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
 });
+
+// --- Media revision history ---
+export const getMediaHistory = asyncHandler(async (req: Request, res: Response) => {
+  const { resourceType, id } = req.params;
+  const where: { resourceType: MediaResourceType; resourceId?: number } = {
+    resourceType: resourceType as MediaResourceType,
+  };
+  if (id) where.resourceId = Number(id);
+
+  const revisions = await MediaRevision.findAll({
+    where,
+    order: [['createdAt', 'DESC']],
+    limit: 100,
+  });
+  res.status(200).json({ status: 'success', data: revisions });
+});
+
+export const restoreMediaRevision = asyncHandler(
+  async (req: Request, res: Response) => {
+    const resourceType = req.params.resourceType as MediaResourceType;
+    const resourceId = Number(req.params.id);
+    const revisionId = Number(req.params.revisionId);
+
+    const restored = await sequelize.transaction(async (transaction) => {
+      const revision = await MediaRevision.findOne({
+        where: { id: revisionId, resourceType, resourceId },
+        transaction,
+        lock: transaction.LOCK.UPDATE,
+      });
+      if (!revision) throw new AppError('Saved version not found', 404);
+
+      const values = restoreValues(resourceType, revision.snapshot);
+
+      if (resourceType === 'banner') {
+        const current = await Banner.findByPk(resourceId, {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        });
+        if (current) {
+          await recordMediaRevision('banner', current, 'restore', req.user?.id, transaction);
+          return current.update(values, { transaction });
+        }
+        return Banner.create(
+          { id: resourceId, ...values } as BannerCreationAttributes,
+          { transaction },
+        );
+      }
+
+      if (resourceType === 'star') {
+        const current = await StarStudent.findByPk(resourceId, {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        });
+        if (current) {
+          await recordMediaRevision('star', current, 'restore', req.user?.id, transaction);
+          return current.update(values, { transaction });
+        }
+        return StarStudent.create(
+          { id: resourceId, ...values } as StarStudentCreationAttributes,
+          { transaction },
+        );
+      }
+
+      const current = await TopperResult.findByPk(resourceId, {
+        transaction,
+        lock: transaction.LOCK.UPDATE,
+      });
+      if (current) {
+        await recordMediaRevision('result', current, 'restore', req.user?.id, transaction);
+        return current.update(values, { transaction });
+      }
+      return TopperResult.create(
+        { id: resourceId, ...values } as TopperResultCreationAttributes,
+        { transaction },
+      );
+    });
+
+    res.status(200).json({ status: 'success', data: restored });
+  },
+);
 
 // --- Site Settings ---
 const SETTINGS_KEYS = [

@@ -33,6 +33,24 @@ export const idParamsSchema = z
   })
   .strict();
 
+export const mediaResourceParamsSchema = z
+  .object({
+    resourceType: z.enum(['banner', 'star', 'result']),
+  })
+  .strict();
+
+export const mediaHistoryParamsSchema = mediaResourceParamsSchema
+  .extend({
+    id: z.coerce.number().int().positive(),
+  })
+  .strict();
+
+export const mediaRestoreParamsSchema = mediaHistoryParamsSchema
+  .extend({
+    revisionId: z.coerce.number().int().positive(),
+  })
+  .strict();
+
 export const uploadQuerySchema = z
   .object({
     type: z.enum(['banner', 'star', 'result', 'uploads']).default('uploads'),

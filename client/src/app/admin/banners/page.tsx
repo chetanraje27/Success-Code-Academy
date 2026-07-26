@@ -7,6 +7,7 @@ export default function AdminBannersPage() {
       description="Manage the large images shown on the home and results pages. Use short, meaningful alternative text for accessibility."
       itemName="Banner"
       resource="banners"
+      historyType="banner"
       uploadType="banner"
       fields={[
         {

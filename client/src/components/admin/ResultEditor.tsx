@@ -1,16 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import AdminModal from "./AdminModal";
-import { apiFetch, uploadAdminImage } from "@/lib/api";
+import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
+import RevisionHistoryButton from "./RevisionHistoryButton";
+
+interface Result {
+  id: number;
+  name: string;
+  image: string;
+  year: number;
+  college?: string | null;
+  city?: string | null;
+  marks?: number | null;
+  isActive: boolean;
+  orderIndex: number;
+}
 
 export default function ResultEditor({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Result[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [editingResult, setEditingResult] = useState<any>(null);
+  const [editingResult, setEditingResult] = useState<Result | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { bumpRefresh } = useEditMode();
@@ -26,25 +39,28 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     orderIndex: 0,
   });
 
-  useEffect(() => {
-    if (open && !isFormOpen) {
-      loadResults();
-    }
-  }, [open, isFormOpen]);
-
-  async function loadResults() {
+  const loadResults = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await apiFetch("/api/v1/admin/results", { auth: true });
-      if (res.success) setResults(res.data);
-      else setError(res.message || "Failed to load results");
-    } catch (e: any) {
-      setError(e.message);
+      const response = await adminApiFetch<Result[]>("results");
+      setResults(response.data);
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to load results.",
+      );
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    if (open && !isFormOpen) {
+      // Opening the dialog synchronizes it with the remote CMS resource.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void loadResults();
+    }
+  }, [isFormOpen, loadResults, open]);
 
   function handleAddNew() {
     setEditingResult(null);
@@ -61,33 +77,33 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     setIsFormOpen(true);
   }
 
-  function handleEdit(item: any) {
+  function handleEdit(item: Result) {
     setEditingResult(item);
     setFormData({
       name: item.name || "",
       image: item.image || "",
-      year: item.year || "",
+      year: item.year ? String(item.year) : "",
       college: item.college || "",
       city: item.city || "",
-      marks: item.marks || "",
+      marks: item.marks != null ? String(item.marks) : "",
       isActive: item.isActive !== false,
       orderIndex: item.orderIndex || 0,
     });
     setIsFormOpen(true);
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this result?")) return;
+  async function handleDelete(id: number) {
+    if (!confirm("Delete this result? You can restore it later from History.")) {
+      return;
+    }
     try {
-      const res = await apiFetch(`/api/v1/admin/results/${id}`, { method: "DELETE", auth: true });
-      if (res.success) {
-        bumpRefresh();
-        loadResults();
-      } else {
-        alert(res.message || "Delete failed");
-      }
-    } catch (e: any) {
-      alert(e.message);
+      await adminApiFetch(`results/${id}`, { method: "DELETE" });
+      bumpRefresh();
+      await loadResults();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to delete result.",
+      );
     }
   }
 
@@ -97,8 +113,10 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     try {
       const url = await uploadAdminImage(file, "result");
       setFormData(prev => ({ ...prev, image: url }));
-    } catch (err: any) {
-      alert("Upload failed: " + err.message);
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Image upload failed.",
+      );
     }
   }
 
@@ -108,7 +126,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     setError("");
 
     try {
-      const url = editingResult ? `/api/v1/admin/results/${editingResult.id}` : "/api/v1/admin/results";
+      const url = editingResult ? `results/${editingResult.id}` : "results";
       const method = editingResult ? "PUT" : "POST";
 
       const payload = {
@@ -118,15 +136,14 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
         orderIndex: Number(formData.orderIndex),
       };
 
-      const res = await apiFetch(url, { method, body: JSON.stringify(payload), auth: true });
-      if (res.success) {
-        bumpRefresh();
-        setIsFormOpen(false);
-      } else {
-        setError(res.message || "Failed to save result");
-      }
-    } catch (err: any) {
-      setError(err.message);
+      await adminApiFetch(url, { method, body: JSON.stringify(payload) });
+      bumpRefresh();
+      setIsFormOpen(false);
+      await loadResults();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Unable to save result.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -138,8 +155,17 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
       
       {!isFormOpen ? (
         <>
-          <div style={{ marginBottom: "1rem", textAlign: "right" }}>
-            <button className="sca-admin-btn sca-admin-btn-primary" onClick={handleAddNew}>
+          <div className="sca-admin-toolbar">
+            <RevisionHistoryButton
+              resourceType="result"
+              itemName="Result"
+              className="sca-admin-btn ghost"
+              onRestored={async () => {
+                bumpRefresh();
+                await loadResults();
+              }}
+            />
+            <button className="sca-admin-btn primary" onClick={handleAddNew}>
               <FaPlus style={{ marginRight: 6 }} /> Add Result
             </button>
           </div>
@@ -150,10 +176,14 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
             <div className="sca-admin-empty">No results found.</div>
           ) : (
             <div className="sca-admin-list">
-              {results.map((r: any) => (
+              {results.map((r) => (
                 <div key={r.id} className="sca-admin-list-item">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1 }}>
-                    {r.image && <img src={r.image} alt={r.name} className="sca-admin-thumb" />}
+                    {r.image && (
+                      // Dynamic CMS URLs are validated by the API.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={r.image} alt={r.name} className="sca-admin-thumb" />
+                    )}
                     <div>
                       <div style={{ fontWeight: 600 }}>{r.name} ({r.year})</div>
                       {r.marks && <div style={{ fontSize: 13, color: '#666' }}>Marks: {r.marks}</div>}
@@ -162,7 +192,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
                   </div>
                   <div className="sca-admin-list-actions">
                     <button className="sca-admin-icon-btn" onClick={() => handleEdit(r)}><FaPen /></button>
-                    <button className="sca-admin-icon-btn" style={{ color: 'var(--sca-danger)' }} onClick={() => handleDelete(r.id)}><FaTrash /></button>
+                    <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(r.id)}><FaTrash /></button>
                   </div>
                 </div>
               ))}
@@ -184,7 +214,11 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
           <div className="sca-admin-field">
             <label>Image</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
-            {formData.image && <img src={formData.image} alt="preview" style={{ height: 60, marginTop: 10, borderRadius: 4 }} />}
+            {formData.image && (
+              // Dynamic CMS URLs are validated by the API.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={formData.image} alt="Preview" className="sca-admin-preview" />
+            )}
           </div>
           <div className="sca-admin-row">
             <div className="sca-admin-field">
@@ -212,12 +246,12 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
               Is Active
             </label>
           </div>
-          <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-            <button type="submit" className="sca-admin-btn sca-admin-btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save"}
-            </button>
-            <button type="button" className="sca-admin-btn sca-admin-btn-ghost" onClick={() => setIsFormOpen(false)}>
+          <div className="sca-admin-form-actions">
+            <button type="button" className="sca-admin-btn ghost" onClick={() => setIsFormOpen(false)}>
               Cancel
+            </button>
+            <button type="submit" className="sca-admin-btn primary" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

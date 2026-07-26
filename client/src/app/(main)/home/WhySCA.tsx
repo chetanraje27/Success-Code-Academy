@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import {
-  FaCalendarDays, FaTrophy, FaHospital, FaBrain,
+  FaTrophy, FaHospital, FaBrain,
   FaUserGroup, FaChartLine, FaGraduationCap, FaHeart,
-  FaArrowRight, FaChevronDown
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 
@@ -16,18 +15,14 @@ interface CountUpProps {
 
 // Counting component to animate numbers when visible
 function CountUp({ end, duration = 1500, suffix = "" }: CountUpProps) {
-  const [count, setCount] = useState(0);
+  const endNum = parseInt(end.replace(/\D/g, ""));
+  const isNumeric = !Number.isNaN(endNum);
+  const [count, setCount] = useState<number | string>(isNumeric ? 0 : end);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const endNum = parseInt(end.replace(/\D/g, ''));
-    if (isNaN(endNum)) {
-      setCount(end as any);
-      return;
-    }
+    if (!isInView || !isNumeric) return;
     const totalFrames = 50;
     const frameDuration = duration / totalFrames;
     let frame = 0;
@@ -40,7 +35,7 @@ function CountUp({ end, duration = 1500, suffix = "" }: CountUpProps) {
       }
     }, frameDuration);
     return () => clearInterval(timer);
-  }, [isInView, end, duration]);
+  }, [isInView, endNum, isNumeric, duration]);
 
   return <span ref={ref}>{count}{suffix}</span>;
 }
@@ -135,7 +130,6 @@ const rightCapsules = [
 export default function WhySCA() {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
-  const [isExpanded, setIsExpanded] = useState(false);
   const [currentMobileSlide, setCurrentMobileSlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -251,16 +245,16 @@ export default function WhySCA() {
               <motion.div
                 key={c.id}
                 className="capsule-wrap"
-                initial={{ opacity: 0, x: -30 }}
+                initial={false}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <div className="capsule left-capsule">
-                  <div className="capsule-icon-box" style={{ background: `linear-gradient(135deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: `0 8px 20px ${c.color}25` }}>
+                  <div className="capsule-icon-box">
                     <span className="capsule-icon">{c.icon}</span>
                   </div>
                   <div className="capsule-content">
-                    <h4 className="capsule-title" style={{ color: c.color }}>
+                    <h4 className="capsule-title">
                       <EditableText
                         contentKey={`why.feature-${c.id}.title`}
                         label={`${c.title} feature title`}
@@ -280,9 +274,11 @@ export default function WhySCA() {
           <div className="ecosystem-center">
             <div className="hexagon-inner">
               <div className="logo-icon-wrap" style={{ width: '220px', height: '110px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                <img
+                <Image
                   src="/images/ui/Success Code Academy Logo.png"
                   alt="Success Code Academy Logo"
+                  width={220}
+                  height={110}
                   style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />
               </div>
@@ -301,18 +297,17 @@ export default function WhySCA() {
           {/* Right Columns - Capsules (Icon Right) */}
           <div className="ecosystem-column right-column">
             {rightCapsules.map((c, i) => {
-              const showOnMobile = isExpanded || (c.id <= 9); // Handles mobile logic dynamically
               return (
                 <motion.div
                   key={c.id}
-                  className={`capsule-wrap ${!isExpanded && c.id > 5 ? "mobile-hidden" : ""}`}
-                  initial={{ opacity: 0, x: 30 }}
+                  className={`capsule-wrap ${c.id > 5 ? "mobile-hidden" : ""}`}
+                  initial={false}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
                   <div className="capsule right-capsule">
                     <div className="capsule-content text-right">
-                      <h4 className="capsule-title" style={{ color: c.color }}>
+                      <h4 className="capsule-title">
                         <EditableText
                           contentKey={`why.feature-${c.id}.title`}
                           label={`${c.title} feature title`}
@@ -323,7 +318,7 @@ export default function WhySCA() {
                       </h4>
                       <div className="capsule-desc">{c.description}</div>
                     </div>
-                    <div className="capsule-icon-box" style={{ background: `linear-gradient(135deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: `0 8px 20px ${c.color}25` }}>
+                    <div className="capsule-icon-box">
                       <span className="capsule-icon">{c.icon}</span>
                     </div>
                   </div>
@@ -355,11 +350,11 @@ export default function WhySCA() {
                 <div className="mobile-slide-pair-wrap">
                   {pair.map((c) => (
                     <div key={c.id} className="capsule mobile-slider-card">
-                      <div className="capsule-icon-box" style={{ background: `linear-gradient(135deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: `0 8px 20px ${c.color}25` }}>
+                      <div className="capsule-icon-box">
                         <span className="capsule-icon">{c.icon}</span>
                       </div>
                       <div className="capsule-content">
-                        <h4 className="capsule-title" style={{ color: c.color }}>
+                        <h4 className="capsule-title">
                           <EditableText
                             contentKey={`why.feature-${c.id}.title`}
                             label={`${c.title} feature title`}
@@ -392,502 +387,6 @@ export default function WhySCA() {
 
 
       </div>
-
-      <style jsx>{`
-        .why-sca-section {
-          position: relative;
-          background: linear-gradient(180deg, var(--bg-base) 0%, #edf3fc 100%);
-          padding: 40px 0;
-          width: 100%;
-          overflow: hidden;
-        }
-        .mobile-ecosystem-carousel {
-          display: none;
-        }
-        /* Background patterns */
-        .medical-pattern-bg {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          z-index: 1;
-        }
-        .medical-lines {
-          width: 100%;
-          height: 100%;
-        }
-        .gradient-blob {
-          position: absolute;
-          width: 300px;
-          height: 300px;
-          border-radius: 50%;
-          filter: blur(100px);
-          opacity: 0.12;
-        }
-        .blob-top-left {
-          background: #40b5c1;
-          top: -100px;
-          left: -100px;
-        }
-        .blob-bottom-right {
-          background: #1e40af;
-          bottom: -150px;
-          right: -150px;
-        }
-        .container {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 24px;
-          box-sizing: border-box;
-        }
-        /* Header styles */
-        .section-header {
-          text-align: center;
-          margin-bottom: 32px;
-        }
-        .header-title {
-          font-size: 1.95rem;
-          font-weight: 900;
-          color: var(--text-primary);
-          letter-spacing: -0.02em;
-          margin: 0 0 8px;
-        }
-        .header-subtitle {
-          font-size: 0.92rem;
-          font-weight: 700;
-          color: var(--text-secondary);
-          margin: 0 0 12px;
-          letter-spacing: 0.02em;
-        }
-        /* Heartbeat Divider */
-        .heartbeat-divider {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 20px;
-        }
-        .heartbeat-path {
-          stroke-dasharray: 400;
-          stroke-dashoffset: 400;
-          animation: heartbeat-draw 2.5s ease-out forwards infinite;
-        }
-
-        /* Ecosystem main layout container (fixed width to match SVG coordinate layout) */
-        .ecosystem-container {
-          width: 1150px;
-          max-width: 100%;
-          margin: 0 auto 30px;
-          position: relative;
-          height: 600px;
-        }
-        .left-column {
-          position: absolute;
-          left: 20px;
-          top: 0;
-          width: 255px;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          padding: 0;
-          box-sizing: border-box;
-          z-index: 5;
-        }
-        .right-column {
-          position: absolute;
-          right: 20px;
-          top: 0;
-          width: 255px;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          padding: 0;
-          box-sizing: border-box;
-          z-index: 5;
-        }
-        .capsule-wrap {
-          position: relative;
-          display: flex;
-          align-items: center;
-          width: 100%;
-        }
-        
-        /* Pill-shaped capsules (white surface, thin borders) */
-        .capsule {
-          display: flex;
-          align-items: center;
-          background: var(--bg-surface);
-          border: 1px solid var(--bg-surface-border);
-          border-radius: 20px;
-          padding: 18px 20px;
-          min-height: 85px;
-          box-shadow: 0 8px 24px rgba(149, 157, 165, 0.03);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          width: 100%;
-          box-sizing: border-box;
-          z-index: 10;
-          position: relative;
-        }
-        .left-capsule {
-          gap: 12px;
-          padding-left: 48px; /* space for absolute icon overlapping left side */
-        }
-        .right-capsule {
-          gap: 12px;
-          padding-right: 48px; /* space for absolute icon overlapping right side */
-          justify-content: flex-end;
-        }
-        /* Hover lift & shadow increase */
-        .capsule:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 16px 30px rgba(149, 157, 165, 0.08);
-          border-color: var(--accent-secondary);
-        }
-        
-        .capsule-icon-box {
-          position: absolute;
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          border: 2.5px solid #ffffff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          color: #ffffff;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-          z-index: 15;
-          top: calc(50% - 22px);
-          transition: transform 0.3s ease;
-        }
-        .left-capsule .capsule-icon-box {
-          left: -22px;
-        }
-        .right-capsule .capsule-icon-box {
-          right: -22px;
-        }
-        .capsule:hover .capsule-icon-box {
-          transform: scale(1.08) rotate(4deg);
-        }
-        .capsule-icon {
-          font-size: 1.05rem;
-          display: flex;
-        }
-
-        .capsule-content {
-          flex-grow: 1;
-        }
-        .capsule-title {
-          font-size: 0.92rem;
-          font-weight: 850;
-          margin-bottom: 3px;
-          letter-spacing: -0.01em;
-        }
-        .capsule-desc {
-          font-size: 0.72rem;
-          color: var(--text-secondary);
-          font-weight: 500;
-          line-height: 1.4;
-          margin: 0;
-        }
-        .text-right {
-          text-align: right;
-        }
-
-        /* Connecting SVG Lines (Desktop only) */
-        .ecosystem-svg-lines {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 1;
-          display: block;
-        }
-        .glow-dot {
-          animation: dot-glow-pulse 2s infinite alternate;
-        }
-        @keyframes dot-glow-pulse {
-          0% { r: 3.5px; opacity: 0.7; }
-          100% { r: 5px; opacity: 1; }
-        }        /* Hexagon centerpiece centerpiece */
-        .ecosystem-center {
-          position: absolute;
-          left: 445px; /* Centered in 1150px container: (1150 - 260) / 2 */
-          top: 160px; /* Centered vertically in 600px container: (600 - 280) / 2 */
-          width: 260px;
-          height: 280px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 10;
-          flex-shrink: 0;
-        }
-        .hexagon-inner {
-          position: absolute;
-          inset: 0;
-          background: transparent;
-          border: none;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 20px 14px;
-          text-align: center;
-        }
-        .hexagon-glow {
-          display: none;
-        }
-        .logo-icon-wrap {
-          margin-bottom: 6px;
-        }
-        .logo-text-wrap {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1px;
-        }
-        .logo-success {
-          font-size: 0.9rem;
-          font-weight: 900;
-          color: #0b1a30;
-          letter-spacing: 0.04em;
-        }
-        .logo-code {
-          font-size: 0.9rem;
-          font-weight: 900;
-          color: #0b1a30;
-          letter-spacing: 0.04em;
-        }
-        .logo-city {
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: #1e40af;
-          letter-spacing: 0.12em;
-          margin-top: 1px;
-        }
-        .center-divider {
-          width: 60px;
-          height: 1.5px;
-          background: #1e40af;
-          margin: 8px 0;
-        }
-        .center-tagline {
-          font-size: 0.68rem;
-          font-weight: 600;
-          color: #475569;
-          margin: 0;
-          line-height: 1.35;
-        }
-        .pulse-ring {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border: 1px solid rgba(30, 64, 175, 0.15);
-          border-radius: 32px;
-          animation: pulse 3.5s linear infinite;
-        }
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(1.15); opacity: 0; }
-        } }
-
-
-        /* Mobile Expand Button */
-        .mobile-expand-btn-wrap {
-          display: none;
-        }
-
-        /* Animations */
-        @keyframes heartbeat-draw {
-          to { stroke-dashoffset: 0; }
-        }
-        @keyframes hex-pulse {
-          0% { transform: scale(0.96); opacity: 0.6; }
-          100% { transform: scale(1.04); opacity: 1; }
-        }
-
-        /* iPad & Tablet Layout (Structured 2-column Grid, No Center Logo) */
-        @media (min-width: 641px) and (max-width: 1150px) {
-          .why-sca-section { padding: 40px 0; }
-          .ecosystem-container {
-            display: grid !important;
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 16px !important;
-            height: auto !important;
-            min-height: auto !important;
-            width: 100% !important;
-            max-width: 860px !important;
-            margin: 0 auto !important;
-          }
-          .left-column, .right-column {
-            display: contents !important;
-            position: static !important;
-            width: auto !important;
-            height: auto !important;
-          }
-          .ecosystem-center {
-            display: none !important; /* Hide logo centerpiece on iPad view */
-          }
-          .ecosystem-svg-lines {
-            display: none !important;
-          }
-          .capsule-wrap {
-            width: 100% !important;
-          }
-          .left-capsule, .right-capsule {
-            padding: 16px 18px !important;
-            min-height: 84px !important;
-            border-radius: 18px !important;
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: flex-start !important;
-            gap: 14px !important;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03) !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-          }
-          .left-capsule .capsule-icon-box,
-          .right-capsule .capsule-icon-box {
-            position: relative !important;
-            left: auto !important;
-            right: auto !important;
-            top: auto !important;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-          }
-          .capsule-content, .text-right {
-            text-align: left !important;
-            flex-grow: 1 !important;
-          }
-          .mobile-ecosystem-carousel {
-            display: none !important;
-          }
-        }
-
-        /* Mobile Layout (< 640px) */
-        @media (max-width: 640px) {
-          .why-sca-section { padding: 36px 0; }
-          .header-title { font-size: 1.8rem; }
-          .header-subtitle { font-size: 0.88rem; }
-          
-          .ecosystem-container {
-            display: none !important; /* Hide static layout on mobile */
-          }
-          .mobile-ecosystem-carousel {
-            display: block !important;
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            margin-bottom: 20px;
-            padding: 10px 0;
-            box-sizing: border-box;
-          }
-          .mobile-carousel-track {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 100%;
-          }
-          .mobile-carousel-slide {
-            width: 100% !important;
-            max-width: 100% !important;
-            min-width: 100% !important;
-            flex-shrink: 0;
-            box-sizing: border-box !important;
-            padding: 0 24px !important;
-          }
-          .mobile-slide-pair-wrap {
-            display: grid !important;
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
-            background: rgba(255, 255, 255, 0.6) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
-            border-radius: 24px !important;
-            padding: 20px 16px !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box !important;
-            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.04) !important;
-          }
-          .mobile-slider-card {
-            position: relative !important;
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 16px !important;
-            padding: 16px 12px 12px 48px !important;
-            min-height: auto !important;
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            text-align: left !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02) !important;
-          }
-          .capsule-icon-box {
-            position: absolute !important;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            top: calc(50% - 18px) !important;
-            left: -18px !important;
-            right: auto !important;
-            border-width: 2px;
-          }
-          .capsule-icon {
-            font-size: 0.9rem;
-          }
-          .capsule-content {
-            text-align: left !important;
-          }
-          .capsule-title { 
-            font-size: 0.85rem; 
-            margin-bottom: 4px;
-          }
-          .capsule-desc { 
-            font-size: 0.68rem; 
-            line-height: 1.35;
-          }
-          .mobile-carousel-dots {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin-top: 16px;
-          }
-          .carousel-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #cbd5e1;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          }
-          .carousel-dot:focus {
-            outline: none;
-          }
-          .carousel-dot.active {
-            width: 24px;
-            border-radius: 4px;
-            background: #1e40af;
-          }
-          .mobile-expand-btn-wrap {
-            display: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

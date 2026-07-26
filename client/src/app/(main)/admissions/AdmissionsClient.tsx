@@ -131,7 +131,7 @@ export default function AdmissionsClient() {
         <div className="admissions-hero-container">
           <motion.div
             className="admissions-poster-wrapper"
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >

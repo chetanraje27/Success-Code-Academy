@@ -48,22 +48,26 @@ const defaultHomeBanners: HomeBanner[] = [
   { image: "/images/banners/HeroPoster4.png", altText: "Hero Banner 4", type: "HOME" },
 ];
 
+const defaultAnnouncements: Announcement[] = [
+  { text: "Admissions Open 2026-27 for NEET & JEE batches!" },
+  { text: "Free Demo Classes available — Book your slot today." },
+  { text: "Scholarship Test (SCST) registration started — up to 100% fee waiver!" },
+  { text: "JEE & NEET new batch starting July 15 — Limited seats!" },
+];
+
+const removeAnnouncementEmoji = (text: string) =>
+  text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, "").replace(/\s{2,}/g, " ").trim();
+
 function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
-  const [loaded, setLoaded] = useState(false);
   return (
-    <>
-      {!loaded && <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>}
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        priority={priority}
-        sizes="(max-width: 1200px) 100vw, 1200px"
-        className="banner-img"
-        style={{ objectFit: "fill", transition: "opacity 0.3s ease" }}
-        onLoad={() => setLoaded(true)}
-      />
-    </>
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority={priority}
+      sizes="(max-width: 1200px) 100vw, 1200px"
+      className="banner-img"
+    />
   );
 }
 
@@ -102,9 +106,9 @@ export default function HomeClient() {
     });
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
   const [slides, setSlides] = useState<HomeBanner[]>(defaultHomeBanners);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -118,7 +122,9 @@ export default function HomeClient() {
         const bannerData = await bannerRes.json() as PublicContentResponse<HomeBanner>;
 
         const nextAnnouncements = notifData.status === 'success'
-          ? (notifData.data || []).filter((item) => item?.text)
+          ? (notifData.data || [])
+              .filter((item) => item?.text)
+              .map((item) => ({ ...item, text: removeAnnouncementEmoji(item.text) }))
           : [];
         const homeBanners = bannerData.status === 'success'
           ? (bannerData.data || []).filter((banner) =>
@@ -126,8 +132,10 @@ export default function HomeClient() {
             )
           : null;
 
-        setAnnouncements(nextAnnouncements);
-        if (homeBanners) {
+        if (nextAnnouncements.length > 0) {
+          setAnnouncements(nextAnnouncements);
+        }
+        if (homeBanners && homeBanners.length > 0) {
           setCurrentSlide(0);
           setSlides(homeBanners);
         }
@@ -174,7 +182,6 @@ export default function HomeClient() {
           <div className="notif-bar">
             <div className="notif-inner">
               <div className="notif-left">
-                <span className="notif-icon">📢</span>
                 <span className="notif-label">Latest Updates</span>
               </div>
               <div className="notif-ticker">
@@ -188,7 +195,6 @@ export default function HomeClient() {
           <div className="notif-bar">
             <div className="notif-inner">
               <div className="notif-left">
-                <span className="notif-icon">📢</span>
                 <span className="notif-label">Latest Updates</span>
               </div>
               <div className="notif-ticker" ref={tickerRef}>
@@ -196,7 +202,7 @@ export default function HomeClient() {
                   <motion.span
                     key={announceIdx}
                     ref={textRef}
-                    initial={{ y: 10, opacity: 0 }}
+                    initial={false}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ duration: 0.3 }}
@@ -235,36 +241,42 @@ export default function HomeClient() {
         >
           {slides.length > 0 ? (
             <>
-              <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
-                <FaChevronLeft />
-              </button>
-              <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
-                <FaChevronRight />
-              </button>
+              {slides.length > 1 && (
+                <>
+                  <button className="banner-arrow left" onClick={prevSlide} aria-label="Previous slide">
+                    <FaChevronLeft />
+                  </button>
+                  <button className="banner-arrow right" onClick={nextSlide} aria-label="Next slide">
+                    <FaChevronRight />
+                  </button>
+                </>
+              )}
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSlide}
-                  className="banner-slide"
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <a
-                    href={slides[currentSlide]?.link || slides[currentSlide]?.targetUrl || "/courses"}
-                    style={{ display: "block", width: "100%", height: "100%", cursor: "pointer", position: "relative" }}
-                    title={`Click to view details for ${slides[currentSlide]?.title || 'Poster'}`}
+              {(slides.length > 1 ? [-1, 0, 1] : [0]).map((offset) => {
+                const slideIndex = (currentSlide + offset + slides.length) % slides.length;
+                const slide = slides[slideIndex];
+                const position = offset === 0 ? "active" : offset < 0 ? "previous" : "next";
+
+                return (
+                  <div
+                    key={slides.length > 2 ? (slide.id ?? slide.image) : `${slide.id ?? slide.image}-${position}`}
+                    className={`banner-slide ${position}`}
+                    aria-hidden={offset !== 0}
                   >
-                    <BannerImage
-                      src={slides[currentSlide]?.image}
-                      alt={slides[currentSlide]?.title || slides[currentSlide]?.altText || "SCA Banner"}
-                      priority={currentSlide === 0}
-                    />
-                  </a>
-                </motion.div>
-              </AnimatePresence>
+                    <a
+                      href={slide.link || slide.targetUrl || "/courses"}
+                      tabIndex={offset === 0 ? 0 : -1}
+                      title={`Click to view details for ${slide.title || "Poster"}`}
+                    >
+                      <BannerImage
+                        src={slide.image}
+                        alt={slide.title || slide.altText || "SCA Banner"}
+                        priority={slideIndex === 0}
+                      />
+                    </a>
+                  </div>
+                );
+              })}
             </>
           ) : isLoading ? (
             <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
@@ -327,338 +339,6 @@ export default function HomeClient() {
           SECTION 12: FAQS SECTION
           ══════════════════════════════════════════ */}
       <FAQAccordion />
-
-      <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        .skeleton-pulse {
-          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .home-container {
-          background-color: var(--bg-base);
-          background-image: 
-            radial-gradient(circle at 10% 15%, rgba(64, 181, 193, 0.035) 0%, transparent 45%),
-            radial-gradient(circle at 90% 75%, rgba(30, 64, 175, 0.035) 0%, transparent 45%);
-        }
-
-        /* ── SECTION 1: NOTIFICATION BAR ══ */
-        .notif-bar-wrap {
-          padding-top: 80px; /* Sits flush under header */
-          padding-bottom: 0;
-          width: 100%;
-          box-sizing: border-box;
-        }
-        .notif-bar {
-          display: flex;
-          align-items: center;
-          height: 42px;
-          background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
-          border-bottom: 1px solid rgba(64, 181, 193, 0.3);
-          border-radius: 0;
-          padding: 0 24px;
-          width: 100%;
-          box-sizing: border-box;
-          box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
-        }
-        .notif-inner {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          box-sizing: border-box;
-        }
-        .notif-left {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-shrink: 0;
-        }
-        .notif-icon { font-size: 1.1rem; }
-        .notif-label {
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          color: #ffffff;
-          white-space: nowrap;
-          background: linear-gradient(90deg, #40b5c1 0%, #2563eb 100%);
-          padding: 4px 10px;
-          border-radius: 99px;
-          box-shadow: 0 2px 6px rgba(64, 181, 193, 0.25);
-        }
-        .notif-ticker {
-          flex: 1;
-          overflow: hidden;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          position: relative;
-        }
-        .notif-text {
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: #ffffff; /* White high contrast text */
-          white-space: nowrap;
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start; /* align left on desktop default */
-          will-change: transform;
-        }
-        .notif-text.scroll-active {
-          position: relative;
-          display: inline-flex;
-          left: auto;
-          right: auto;
-          top: auto;
-          bottom: auto;
-          padding-left: 100%;
-          animation: notif-marquee-scroll 18s linear infinite;
-        }
-        .notif-ticker:hover .notif-text.scroll-active {
-          animation-play-state: paused;
-        }
-        @keyframes notif-marquee-scroll {
-          0% { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(-100%, 0, 0); }
-        }
-        .notif-right { flex-shrink: 0; }
-        .notif-right :global(.btn) {
-          background-color: var(--accent-primary) !important;
-          color: #ffffff !important;
-          font-weight: 700 !important;
-          box-shadow: 0 4px 12px rgba(64, 181, 193, 0.15) !important;
-          height: 28px !important;
-          line-height: 28px !important;
-          padding: 0 12px !important;
-          font-size: 0.75rem !important;
-          display: inline-flex !important;
-          align-items: center !important;
-        }
-        .notif-right :global(.btn):hover {
-          background-color: #35a5b0 !important;
-          box-shadow: 0 6px 16px rgba(64, 181, 193, 0.3) !important;
-        }
-
-        /* ══ SECTION 2: HERO POSTER BANNER ══ */
-        .hero-slider-section {
-          width: 100%;
-          max-width: 1200px; /* Exactly matches container width */
-          margin: 0 auto;
-          padding: 24px 24px 14px;
-          box-sizing: border-box;
-        }
-
-        .hero-banner-wrap {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 16 / 6.2;
-          overflow: hidden;
-          border-radius: 20px;
-          background: linear-gradient(135deg, #f8fbff 0%, #edf4ff 100%);
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          box-shadow:
-            0 10px 30px rgba(15, 23, 42, 0.03),
-            0 25px 50px rgba(37, 99, 235, 0.04);
-        }
-
-        /* Decorative Glow */
-        .hero-banner-wrap::before {
-          content: "";
-          position: absolute;
-          inset: -80px;
-          background: radial-gradient(circle,
-              rgba(59,130,246,.12),
-              transparent 65%);
-          pointer-events: none;
-          z-index: 1;
-        }
-
-        /* Slide */
-        :global(.banner-slide) {
-          position: absolute !important;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          z-index: 2;
-        }
-
-        /* Image */
-        :global(.banner-img) {
-          width: 100% !important;
-          height: 100% !important;
-          object-fit: contain !important;
-          object-position: center;
-        }
-
-        /* Overlay */
-        .banner-overlay {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background: linear-gradient(
-              to bottom,
-              rgba(255,255,255,.04),
-              rgba(0,0,0,.03));
-        }
-
-        /* ============================================
-          NAVIGATION BUTTONS
-        ============================================ */
-        .banner-arrow {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 52px;
-          height: 52px;
-          border: none;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 20;
-          color: #1e3a8a;
-          background: rgba(255, 255, 255, .82);
-          backdrop-filter: blur(14px);
-          box-shadow: 0 10px 25px rgba(15,23,42,.12);
-          transition: all .3s ease;
-          opacity: .92;
-        }
-
-        .banner-arrow.left {
-          left: 22px;
-        }
-
-        .banner-arrow.right {
-          right: 22px;
-        }
-
-        .banner-arrow:hover {
-          background: #2563eb;
-          color: #fff;
-          transform: translateY(-50%) scale(1.08);
-          box-shadow: 0 15px 35px rgba(37,99,235,.35);
-          opacity: 1;
-        }
-
-        .banner-arrow:active {
-          transform: translateY(-50%) scale(.96);
-        }
-
-        /* ============================================
-          DOTS
-        ============================================ */
-        .banner-dots {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-          padding: 20px 0 8px;
-        }
-
-        .banner-dot {
-          width: 12px;
-          height: 12px;
-          border: none;
-          border-radius: 50px;
-          cursor: pointer;
-          background: #cbd5e1;
-          transition: all .35s ease;
-        }
-
-        .banner-dot:hover {
-          background: #93c5fd;
-        }
-
-        .banner-dot.active {
-          width: 42px;
-          background: linear-gradient(
-              90deg,
-              #2563eb,
-              #38bdf8);
-          box-shadow: 0 4px 12px rgba(37,99,235,.35);
-        }
-
-        /* ============================================
-          RESPONSIVE
-        ============================================ */
-        @media (max-width: 992px) {
-          .hero-slider-section {
-            padding: 14px;
-          }
-          .hero-banner-wrap {
-            aspect-ratio: 16 / 7.6;
-            border-radius: 32px;
-          }
-          .banner-arrow {
-            width: 44px;
-            height: 44px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-slider-section {
-            padding: 10px 12px;
-          }
-          .hero-banner-wrap {
-            aspect-ratio: 16 / 8.8;
-            border-radius: 26px;
-          }
-          .banner-arrow {
-            display: none;
-          }
-          .banner-dots {
-            padding-top: 16px;
-          }
-          .notif-left, .notif-right {
-            display: none !important;
-          }
-          .notif-ticker {
-            justify-content: center !important;
-            width: 100%;
-          }
-          .notif-text {
-            justify-content: center;
-            font-size: 0.78rem !important;
-          }
-          .notif-text.scroll-active {
-            justify-content: flex-start;
-          }
-          .notif-bar-wrap {
-            padding-top: 64px !important; /* Fits flush below 64px scrolled mobile header */
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-          }
-          .notif-bar {
-            height: 42px !important;
-            padding: 0 16px !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .hero-banner-wrap {
-            aspect-ratio: 16 / 10.0;
-            border-radius: 22px;
-          }
-          .banner-dot {
-            width: 10px;
-            height: 10px;
-          }
-          .banner-dot.active {
-            width: 30px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

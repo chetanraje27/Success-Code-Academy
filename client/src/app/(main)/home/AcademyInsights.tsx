@@ -11,6 +11,7 @@ import {
   FaChevronRight
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
+import EditableSection from "@/components/admin/EditableSection";
 import { apiFetch } from "@/lib/api";
 
 interface BlogItem {
@@ -106,7 +107,11 @@ export default function AcademyInsights() {
     <section className="insights-outer-section">
       <div className="insights-premium-container">
 
-        {/* ==================== SECTION 1: BLOGS ==================== */}
+        {/* ==================== SECTION 1: BLOGS & NEWS (CARDS LAYOUT) ==================== */}
+      <EditableSection 
+        label="News Articles" 
+        onEdit={() => window.open('/admin/content/news', '_blank')}
+      >
         <div className="insights-sub-section">
           <div className="section-header">
             <div className="header-text">
@@ -203,11 +208,16 @@ export default function AcademyInsights() {
             </div>
           </div>
         </div>
+      </EditableSection>
 
       </div>
 
       {/* ==================== SECTION 2: VIDEOS (THEME MATCHED LIGHT THEME WITH GRID PATTERN) ==================== */}
-      <div className="video-section-premium-wrap">
+      <EditableSection 
+        label="Academy Videos" 
+        onEdit={() => window.open('/admin/content/videos', '_blank')}
+      >
+        <div className="video-section-premium-wrap">
         <div className="insights-premium-container">
           <div className="section-header">
             <div className="header-text">
@@ -300,11 +310,12 @@ export default function AcademyInsights() {
                 </div>
               ))}
             </div>
+            </div>
           </div>
         </div>
-      </div>
+      </EditableSection>
 
-      {/* Video Modal Overlay */}
+      {/* Video Modal overlay */}
       {activeVideo && (
         <div className="video-modal" onClick={() => setActiveVideo(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

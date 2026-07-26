@@ -312,7 +312,7 @@
 }
 
 .public-shell .contact-page .dark-captcha-q {
-  color: #fff !important;
+  color: var(--contact-ink) !important;
 }
 
 .public-shell .contact-page .dark-captcha-input {
@@ -549,4 +549,3 @@
     padding: 22px !important;
   }
 }
-

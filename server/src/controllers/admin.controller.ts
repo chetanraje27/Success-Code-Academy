@@ -37,8 +37,13 @@ const getSupabase = () => {
   if (supabase) return supabase;
   const supabaseUrl = process.env.SUPABASE_URL || '';
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
+  console.log('getSupabase debug: url=', supabaseUrl ? 'exists' : 'empty', 'key=', supabaseKey ? 'exists' : 'empty');
   if (supabaseUrl && supabaseKey) {
-    supabase = createClient(supabaseUrl, supabaseKey);
+    try {
+      supabase = createClient(supabaseUrl, supabaseKey);
+    } catch (e) {
+      console.error('getSupabase error:', e);
+    }
   }
   return supabase;
 };

@@ -33,7 +33,8 @@ export type AdminContentField = {
     | "select"
     | "color"
     | "image"
-    | "url";
+    | "url"
+    | "video-url";
   defaultValue?: FieldValue;
   required?: boolean;
   placeholder?: string;
@@ -111,9 +112,14 @@ export default function AdminContentManager({
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [videoFile, setVideoFile] = useState<File | null>(null);
 
   const imageField = useMemo(
     () => fields.find((field) => field.kind === "image"),
+    [fields],
+  );
+  const videoField = useMemo(
+    () => fields.find((field) => field.kind === "video-url"),
     [fields],
   );
 
@@ -152,6 +158,7 @@ export default function AdminContentManager({
     setEditing(null);
     setValues(initialValues(fields));
     setImageFile(null);
+    setVideoFile(null);
     setImagePreview("");
     setError("");
     setModalOpen(true);
@@ -165,6 +172,7 @@ export default function AdminContentManager({
     setEditing(item);
     setValues(next);
     setImageFile(null);
+    setVideoFile(null);
     setImagePreview(
       imageField && typeof item[imageField.name] === "string"
         ? String(item[imageField.name])
@@ -179,6 +187,7 @@ export default function AdminContentManager({
     setModalOpen(false);
     setEditing(null);
     setImageFile(null);
+    setVideoFile(null);
     setImagePreview("");
     setError("");
   }
@@ -228,6 +237,9 @@ export default function AdminContentManager({
       if (imageFile && imageField && uploadType) {
         payload[imageField.name] = await uploadAdminImage(imageFile, uploadType);
       }
+      if (videoFile && videoField && uploadType) {
+        payload[videoField.name] = await uploadAdminImage(videoFile, uploadType);
+      }
 
       const url = editing ? `${resource}/${editing.id}` : resource;
       await adminApiFetch(url, {
@@ -238,6 +250,7 @@ export default function AdminContentManager({
       setModalOpen(false);
       setEditing(null);
       setImageFile(null);
+      setVideoFile(null);
       setImagePreview("");
       await loadItems();
       window.dispatchEvent(new Event("admin-content-changed"));
@@ -449,15 +462,66 @@ export default function AdminContentManager({
                           }}
                           required={field.required && !imagePreview}
                         />
+                        {field.help && <small>{field.help}</small>}
                         {imagePreview && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={imagePreview}
-                            alt="Selected image preview"
+                            alt="Preview"
                             className="admin-image-preview"
                           />
                         )}
                       </>
+                    ) : field.kind === "video-url" ? (
+                      <div className="admin-video-url-field">
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "normal", color: "var(--admin-muted)" }}>Option A: Upload MP4 Video</label>
+                          <input
+                            id={`admin-${resource}-${field.name}-file`}
+                            type="file"
+                            accept="video/mp4,video/webm"
+                            onChange={(event) => {
+                              const file = event.target.files?.[0] || null;
+                              setVideoFile(file);
+                              if (file) {
+                                // Clear external URL if file is chosen
+                                setValues((current) => ({
+                                  ...current,
+                                  [field.name]: "",
+                                }));
+                              }
+                            }}
+                          />
+                          {videoFile && <small style={{ color: "var(--admin-brand)" }}>Selected: {videoFile.name}</small>}
+                        </div>
+                        
+                        <div style={{ margin: "8px 0", textAlign: "center", color: "var(--admin-border)", fontSize: "0.8rem", textTransform: "uppercase" }}>or</div>
+                        
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "normal", color: "var(--admin-muted)" }}>Option B: Provide External URL</label>
+                          <input
+                            id={`admin-${resource}-${field.name}-url`}
+                            type="url"
+                            value={String(values[field.name] ?? "")}
+                            onChange={(event) => {
+                              setValues((current) => ({
+                                ...current,
+                                [field.name]: event.target.value,
+                              }));
+                              if (event.target.value) {
+                                setVideoFile(null);
+                                const fileInput = document.getElementById(`admin-${resource}-${field.name}-file`) as HTMLInputElement;
+                                if (fileInput) fileInput.value = "";
+                              }
+                            }}
+                            placeholder={field.placeholder || "https://youtube.com/..."}
+                          />
+                        </div>
+                        {field.help && <small style={{ marginTop: "8px", display: "block" }}>{field.help}</small>}
+                        {!videoFile && !values[field.name] && field.required && (
+                          <small style={{ color: "var(--admin-error)", marginTop: "4px", display: "block" }}>Please upload a video or provide a URL.</small>
+                        )}
+                      </div>
                     ) : (
                       <input
                         id={`admin-${resource}-${field.name}`}

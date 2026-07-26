@@ -63,11 +63,11 @@ export default function AdminVideosPage() {
         },
         {
           name: "videoUrl",
-          label: "Video URL",
-          kind: "url",
+          label: "Video Source",
+          kind: "video-url",
           required: true,
           full: true,
-          help: "URL to the video file (.mp4) or YouTube embed URL.",
+          help: "Upload an MP4 file or provide a YouTube embed URL.",
         },
         {
           name: "orderIndex",

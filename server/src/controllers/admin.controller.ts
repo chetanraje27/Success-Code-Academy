@@ -48,18 +48,18 @@ const storage = multer.memoryStorage();
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max
   fileFilter: (_req, file, callback) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm'];
     if (!allowed.includes(file.mimetype)) {
-      callback(new AppError('Upload a JPG, PNG, WebP, or GIF image.', 415));
+      callback(new AppError('Upload a JPG, PNG, WebP, GIF image, or MP4/WebM video.', 415));
       return;
     }
     callback(null, true);
   },
 }).single('image');
 
-const IMAGE_SIGNATURES: Record<string, (buffer: Buffer) => boolean> = {
+const MEDIA_SIGNATURES: Record<string, (buffer: Buffer) => boolean> = {
   'image/jpeg': (buffer) =>
     buffer.length >= 3 &&
     buffer[0] === 0xff &&
@@ -77,13 +77,21 @@ const IMAGE_SIGNATURES: Record<string, (buffer: Buffer) => boolean> = {
   'image/gif': (buffer) =>
     buffer.length >= 6 &&
     ['GIF87a', 'GIF89a'].includes(buffer.subarray(0, 6).toString('ascii')),
+  'video/mp4': (buffer) =>
+    buffer.length >= 8 &&
+    buffer.subarray(4, 8).toString('ascii') === 'ftyp',
+  'video/webm': (buffer) =>
+    buffer.length >= 4 &&
+    buffer[0] === 0x1a && buffer[1] === 0x45 && buffer[2] === 0xdf && buffer[3] === 0xa3,
 };
 
-const IMAGE_EXTENSIONS: Record<string, string> = {
+const MEDIA_EXTENSIONS: Record<string, string> = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
   'image/webp': '.webp',
   'image/gif': '.gif',
+  'video/mp4': '.mp4',
+  'video/webm': '.webm',
 };
 
 type RevisionableMedia = Banner | StarStudent | TopperResult | NewsArticle | AcademyVideo;
@@ -113,9 +121,9 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
     throw new AppError('No image file provided.', 400);
   }
 
-  const signatureMatches = IMAGE_SIGNATURES[req.file.mimetype]?.(req.file.buffer);
+  const signatureMatches = MEDIA_SIGNATURES[req.file.mimetype]?.(req.file.buffer);
   if (!signatureMatches) {
-    throw new AppError('The uploaded file is not a valid image.', 415);
+    throw new AppError('The uploaded file is not a valid image or video.', 415);
   }
 
   const client = getSupabase();
@@ -132,7 +140,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
 
   // Generate unique filename
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-  const ext = IMAGE_EXTENSIONS[req.file.mimetype];
+  const ext = MEDIA_EXTENSIONS[req.file.mimetype];
   const filename = `${folder}/${uniqueSuffix}${ext}`;
 
   // Upload to Supabase Storage bucket named 'images'

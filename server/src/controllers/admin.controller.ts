@@ -11,6 +11,8 @@ import {
   TopperResult,
   ContentBlock,
   MediaRevision,
+  NewsArticle,
+  AcademyVideo,
   sequelize,
 } from '../models';
 import type {
@@ -20,6 +22,8 @@ import type {
 import type { BannerCreationAttributes } from '../models/Banner';
 import type { StarStudentCreationAttributes } from '../models/StarStudent';
 import type { TopperResultCreationAttributes } from '../models/TopperResult';
+import type { NewsArticleCreationAttributes } from '../models/NewsArticle';
+import type { AcademyVideoCreationAttributes } from '../models/AcademyVideo';
 import { restoreValues } from '../utils/mediaRevision';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
@@ -82,7 +86,7 @@ const IMAGE_EXTENSIONS: Record<string, string> = {
   'image/gif': '.gif',
 };
 
-type RevisionableMedia = Banner | StarStudent | TopperResult;
+type RevisionableMedia = Banner | StarStudent | TopperResult | NewsArticle | AcademyVideo;
 
 async function recordMediaRevision(
   resourceType: MediaResourceType,
@@ -123,6 +127,8 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (req.query.type === 'banner') folder = 'banners';
   else if (req.query.type === 'star') folder = 'stars';
   else if (req.query.type === 'result') folder = 'results';
+  else if (req.query.type === 'news') folder = 'news';
+  else if (req.query.type === 'video') folder = 'videos';
 
   // Generate unique filename
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -356,6 +362,98 @@ export const deleteResult = asyncHandler(async (req: Request, res: Response) => 
   res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
 });
 
+// --- News Articles CRUD ---
+export const getNewsArticles = asyncHandler(async (req: Request, res: Response) => {
+  const news = await NewsArticle.findAll({ order: [['orderIndex', 'ASC'], ['id', 'DESC']] });
+  res.status(200).json({ status: 'success', data: news });
+});
+
+export const createNewsArticle = asyncHandler(async (req: Request, res: Response) => {
+  const news = await NewsArticle.create(req.body);
+  res.status(201).json({ status: 'success', data: news });
+});
+
+export const updateNewsArticle = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const news = await sequelize.transaction(async (transaction) => {
+    const current = await NewsArticle.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!current) throw new AppError('News article not found', 404);
+    await recordMediaRevision('news', current, 'update', req.user?.id, transaction);
+    return current.update(req.body, { transaction });
+  });
+  res.status(200).json({ status: 'success', data: news });
+});
+
+export const deleteNewsArticle = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const revision = await sequelize.transaction(async (transaction) => {
+    const news = await NewsArticle.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!news) throw new AppError('News article not found', 404);
+    const saved = await recordMediaRevision(
+      'news',
+      news,
+      'delete',
+      req.user?.id,
+      transaction,
+    );
+    await news.destroy({ transaction });
+    return saved;
+  });
+  res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
+});
+
+// --- Academy Videos CRUD ---
+export const getAcademyVideos = asyncHandler(async (req: Request, res: Response) => {
+  const videos = await AcademyVideo.findAll({ order: [['orderIndex', 'ASC'], ['id', 'DESC']] });
+  res.status(200).json({ status: 'success', data: videos });
+});
+
+export const createAcademyVideo = asyncHandler(async (req: Request, res: Response) => {
+  const video = await AcademyVideo.create(req.body);
+  res.status(201).json({ status: 'success', data: video });
+});
+
+export const updateAcademyVideo = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const video = await sequelize.transaction(async (transaction) => {
+    const current = await AcademyVideo.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!current) throw new AppError('Academy video not found', 404);
+    await recordMediaRevision('video', current, 'update', req.user?.id, transaction);
+    return current.update(req.body, { transaction });
+  });
+  res.status(200).json({ status: 'success', data: video });
+});
+
+export const deleteAcademyVideo = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const revision = await sequelize.transaction(async (transaction) => {
+    const video = await AcademyVideo.findByPk(id as string, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+    if (!video) throw new AppError('Academy video not found', 404);
+    const saved = await recordMediaRevision(
+      'video',
+      video,
+      'delete',
+      req.user?.id,
+      transaction,
+    );
+    await video.destroy({ transaction });
+    return saved;
+  });
+  res.status(200).json({ status: 'success', data: { revisionId: revision.id } });
+});
+
 // --- Media revision history ---
 export const getMediaHistory = asyncHandler(async (req: Request, res: Response) => {
   const { resourceType, id } = req.params;
@@ -414,6 +512,36 @@ export const restoreMediaRevision = asyncHandler(
         }
         return StarStudent.create(
           { id: resourceId, ...values } as StarStudentCreationAttributes,
+          { transaction },
+        );
+      }
+
+      if (resourceType === 'news') {
+        const current = await NewsArticle.findByPk(resourceId, {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        });
+        if (current) {
+          await recordMediaRevision('news', current, 'restore', req.user?.id, transaction);
+          return current.update(values, { transaction });
+        }
+        return NewsArticle.create(
+          { id: resourceId, ...values } as NewsArticleCreationAttributes,
+          { transaction },
+        );
+      }
+
+      if (resourceType === 'video') {
+        const current = await AcademyVideo.findByPk(resourceId, {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        });
+        if (current) {
+          await recordMediaRevision('video', current, 'restore', req.user?.id, transaction);
+          return current.update(values, { transaction });
+        }
+        return AcademyVideo.create(
+          { id: resourceId, ...values } as AcademyVideoCreationAttributes,
           { transaction },
         );
       }

@@ -84,7 +84,7 @@ export async function apiFetch<T = any>(
 
 export async function uploadAdminImage(
   file: File,
-  type: "banner" | "star" | "result" | "uploads" = "uploads"
+  type: "banner" | "star" | "result" | "uploads" | "news" | "video" = "uploads"
 ): Promise<string> {
   return uploadThroughAdminGateway(file, type);
 }

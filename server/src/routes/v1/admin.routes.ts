@@ -10,6 +10,10 @@ import {
   idParamsSchema,
   notificationCreateSchema,
   notificationUpdateSchema,
+  newsCreateSchema,
+  newsUpdateSchema,
+  videoCreateSchema,
+  videoUpdateSchema,
   resultCreateSchema,
   resultListQuerySchema,
   resultUpdateSchema,
@@ -108,6 +112,36 @@ router.delete(
   '/results/:id',
   validate(idParamsSchema, 'params'),
   adminController.deleteResult,
+);
+
+// News Articles
+router.get('/news', adminController.getNewsArticles);
+router.post('/news', validate(newsCreateSchema), adminController.createNewsArticle);
+router.put(
+  '/news/:id',
+  validate(idParamsSchema, 'params'),
+  validate(newsUpdateSchema),
+  adminController.updateNewsArticle,
+);
+router.delete(
+  '/news/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteNewsArticle,
+);
+
+// Academy Videos
+router.get('/videos', adminController.getAcademyVideos);
+router.post('/videos', validate(videoCreateSchema), adminController.createAcademyVideo);
+router.put(
+  '/videos/:id',
+  validate(idParamsSchema, 'params'),
+  validate(videoUpdateSchema),
+  adminController.updateAcademyVideo,
+);
+router.delete(
+  '/videos/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteAcademyVideo,
 );
 
 // Media history and rollback

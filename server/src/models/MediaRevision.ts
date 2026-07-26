@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type MediaResourceType = 'banner' | 'star' | 'result';
+export type MediaResourceType = 'banner' | 'star' | 'result' | 'news' | 'video';
 export type MediaRevisionAction = 'update' | 'delete' | 'restore';
 
 export interface MediaRevisionAttributes {
@@ -38,7 +38,7 @@ export function initMediaRevision(sequelize: Sequelize): void {
         primaryKey: true,
       },
       resourceType: {
-        type: DataTypes.ENUM('banner', 'star', 'result'),
+        type: DataTypes.ENUM('banner', 'star', 'result', 'news', 'video'),
         allowNull: false,
       },
       resourceId: {

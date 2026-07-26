@@ -35,7 +35,7 @@ export const idParamsSchema = z
 
 export const mediaResourceParamsSchema = z
   .object({
-    resourceType: z.enum(['banner', 'star', 'result']),
+    resourceType: z.enum(['banner', 'star', 'result', 'news', 'video']),
   })
   .strict();
 
@@ -53,7 +53,7 @@ export const mediaRestoreParamsSchema = mediaHistoryParamsSchema
 
 export const uploadQuerySchema = z
   .object({
-    type: z.enum(['banner', 'star', 'result', 'uploads']).default('uploads'),
+    type: z.enum(['banner', 'star', 'result', 'uploads', 'news', 'video']).default('uploads'),
   })
   .strict();
 
@@ -115,6 +115,41 @@ export const resultCreateSchema = z
   .strict();
 
 export const resultUpdateSchema = resultCreateSchema.partial().strict();
+
+export const newsCreateSchema = z
+  .object({
+    category: z.string().trim().min(2).max(100),
+    title: z.string().trim().min(2).max(200),
+    shortTitle: z.string().trim().max(100).optional(),
+    excerpt: z.string().trim().min(2).max(500),
+    date: z.string().trim().min(2).max(40),
+    author: z.string().trim().min(2).max(100),
+    readTime: z.string().trim().min(2).max(40),
+    image: imageLocation,
+    slug: z.string().trim().min(2).max(200),
+    externalUrl: optionalLink,
+    isActive: z.boolean().default(true),
+    orderIndex,
+  })
+  .strict();
+
+export const newsUpdateSchema = newsCreateSchema.partial().strict();
+
+export const videoCreateSchema = z
+  .object({
+    category: z.string().trim().min(2).max(100),
+    title: z.string().trim().min(2).max(200),
+    excerpt: z.string().trim().min(2).max(500),
+    date: z.string().trim().min(2).max(40),
+    duration: z.string().trim().min(2).max(20),
+    image: imageLocation,
+    videoUrl: z.string().trim().min(2).max(2048),
+    isActive: z.boolean().default(true),
+    orderIndex,
+  })
+  .strict();
+
+export const videoUpdateSchema = videoCreateSchema.partial().strict();
 
 export const settingsUpdateSchema = z
   .object({

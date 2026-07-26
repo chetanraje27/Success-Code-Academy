@@ -97,7 +97,7 @@ export async function adminApiFetch<T>(
 
 export async function uploadAdminImage(
   file: File,
-  type: "banner" | "star" | "result" | "uploads" = "uploads",
+  type: "banner" | "star" | "result" | "uploads" | "news" | "video" = "uploads",
 ): Promise<string> {
   const body = new FormData();
   body.append("image", file);

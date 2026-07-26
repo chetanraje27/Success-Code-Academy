@@ -13,20 +13,25 @@ const resultYears = [2026, 2025, 2024, 2023, 2022] as const;
 
 const videoStories = [
   {
-    id: 1,
+    id: 1, name: "Shravani Kudale",
+    tagline: "Daily Discipline. Expert Guidance. Consistent Success.",
+    videoUrl: "/videos/Shravani_Kudale_Success_Story.mp4",
+    coverImage: "/videos/Cover/Shravani.jpg",
+  },
+  {
+    id: 2,
     name: "Siddhi Badhe",
     tagline: "Right Guidence. Conceptual Understanding. Extraordinary Results.",
     videoUrl: "/videos/Siddhi_Journey_Video.mp4",
     coverImage: "/videos/Cover/Siddhi.png",
   },
   {
-    id: 2,
+    id: 3,
     name: "Samrudhi Lokhande",
     tagline: "Daily Practice. Doubt Resolution. Consistant Success.",
     videoUrl: "/videos/SuccessCode_Academy1.mp4",
     coverImage: "/videos/Cover/Samrudhi.png",
   },
-  { id: 3, name: "", tagline: "", videoUrl: "", coverImage: "" },
   { id: 4, name: "", tagline: "", videoUrl: "", coverImage: "" },
   { id: 5, name: "", tagline: "", videoUrl: "", coverImage: "" },
 ];
@@ -125,8 +130,8 @@ function StoryCard({
             <Image
               src={story.coverImage}
               alt={story.name || "Success Story"}
-            fill
-            unoptimized
+              fill
+              unoptimized
               sizes="(max-width: 720px) 100vw, 460px"
               className="result-story-cover"
             />
@@ -168,8 +173,8 @@ function StoryCard({
               <EditableText
                 contentKey={`stories.card-${story.id}.tagline`}
                 label={`${story.name} story tagline`}
-              kind="multiline"
-              showInlineControls={false}
+                kind="multiline"
+                showInlineControls={false}
               >
                 {story.tagline}
               </EditableText>

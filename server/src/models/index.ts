@@ -17,6 +17,8 @@ import SiteSetting, { initSiteSetting } from './SiteSetting';
 import TopperResult, { initTopperResult } from './TopperResult';
 import ContentBlock, { initContentBlock } from './ContentBlock';
 import MediaRevision, { initMediaRevision } from './MediaRevision';
+import NewsArticle, { initNewsArticle } from './NewsArticle';
+import AcademyVideo, { initAcademyVideo } from './AcademyVideo';
 
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
@@ -30,6 +32,8 @@ initSiteSetting(sequelize);
 initTopperResult(sequelize);
 initContentBlock(sequelize);
 initMediaRevision(sequelize);
+initNewsArticle(sequelize);
+initAcademyVideo(sequelize);
 
 export async function testConnection(): Promise<boolean> {
   try {
@@ -67,5 +71,7 @@ export {
   TopperResult,
   ContentBlock,
   MediaRevision,
+  NewsArticle,
+  AcademyVideo,
 };
 export default sequelize;

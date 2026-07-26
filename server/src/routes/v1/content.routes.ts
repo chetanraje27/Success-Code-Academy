@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Banner, ContentBlock, Notification, StarStudent, SiteSetting, TopperResult } from '../../models';
+import { Banner, ContentBlock, Notification, StarStudent, SiteSetting, TopperResult, NewsArticle, AcademyVideo } from '../../models';
 import { asyncHandler } from '../../utils/asyncHandler';
 
 const router = Router();
@@ -45,6 +45,24 @@ router.get('/results', asyncHandler(async (req, res) => {
     ],
   });
   res.status(200).json({ status: 'success', data: results });
+}));
+
+// Get active news articles
+router.get('/news', asyncHandler(async (req, res) => {
+  const news = await NewsArticle.findAll({
+    where: { isActive: true },
+    order: [['orderIndex', 'ASC'], ['id', 'DESC']],
+  });
+  res.status(200).json({ status: 'success', data: news });
+}));
+
+// Get active academy videos
+router.get('/videos', asyncHandler(async (req, res) => {
+  const videos = await AcademyVideo.findAll({
+    where: { isActive: true },
+    order: [['orderIndex', 'ASC'], ['id', 'DESC']],
+  });
+  res.status(200).json({ status: 'success', data: videos });
 }));
 
 // Public site settings (contact / social)

@@ -23,6 +23,31 @@ const WRITABLE_FIELDS: Record<MediaResourceType, readonly string[]> = {
     'isActive',
     'orderIndex',
   ],
+  news: [
+    'category',
+    'title',
+    'shortTitle',
+    'excerpt',
+    'date',
+    'author',
+    'readTime',
+    'image',
+    'slug',
+    'externalUrl',
+    'isActive',
+    'orderIndex',
+  ],
+  video: [
+    'category',
+    'title',
+    'excerpt',
+    'date',
+    'duration',
+    'image',
+    'videoUrl',
+    'isActive',
+    'orderIndex',
+  ],
 };
 
 export function restoreValues(

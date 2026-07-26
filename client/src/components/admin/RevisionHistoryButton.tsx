@@ -5,7 +5,7 @@ import { History, RotateCcw } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import AdminModal from "./AdminModal";
 
-export type MediaResourceType = "banner" | "star" | "result";
+export type MediaResourceType = "banner" | "star" | "result" | "news" | "video";
 
 type Revision = {
   id: number;

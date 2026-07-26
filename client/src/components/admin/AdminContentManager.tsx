@@ -88,6 +88,7 @@ export default function AdminContentManager({
   columns,
   uploadType,
   historyType,
+  filterItems,
 }: {
   title: string;
   description: string;
@@ -95,8 +96,9 @@ export default function AdminContentManager({
   resource: string;
   fields: AdminContentField[];
   columns: AdminContentColumn[];
-  uploadType?: "banner" | "star" | "result";
+  uploadType?: "banner" | "star" | "result" | "news" | "video";
   historyType?: MediaResourceType;
+  filterItems?: (item: ResourceItem) => boolean;
 }) {
   const [items, setItems] = useState<ResourceItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -114,6 +116,10 @@ export default function AdminContentManager({
     () => fields.find((field) => field.kind === "image"),
     [fields],
   );
+
+  const displayedItems = useMemo(() => {
+    return filterItems ? items.filter(filterItems) : items;
+  }, [items, filterItems]);
 
   const loadItems = useCallback(async () => {
     setLoading(true);
@@ -281,14 +287,14 @@ export default function AdminContentManager({
           <div>
             <h2>{title}</h2>
             <p>
-              {items.length} {items.length === 1 ? "item" : "items"} in total
+              {displayedItems.length} {displayedItems.length === 1 ? "item" : "items"} in total
             </p>
           </div>
         </header>
 
         {loading ? (
           <AdminLoadingState label="Loading content…" />
-        ) : items.length === 0 ? (
+        ) : displayedItems.length === 0 ? (
           <AdminEmptyState
             title={`No ${title.toLowerCase()} yet`}
             message={`Add the first ${itemName.toLowerCase()} to get started.`}
@@ -305,7 +311,7 @@ export default function AdminContentManager({
                 </tr>
               </thead>
               <tbody>
-                {items.map((item) => (
+                {displayedItems.map((item) => (
                   <tr key={item.id}>
                     {columns.map((column) => {
                       const value = item[column.key];

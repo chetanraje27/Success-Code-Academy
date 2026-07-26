@@ -17,10 +17,12 @@ import {
   LogOut,
   Menu,
   MessageSquareText,
+  Newspaper,
   Settings,
   Star,
   Trophy,
   Users,
+  Video,
   X,
 } from "lucide-react";
 import type { AdminUser } from "@/lib/admin-api";
@@ -40,6 +42,8 @@ const navigation = [
     items: [
       { label: "Banners", href: "/admin/banners", icon: Images },
       { label: "Announcements", href: "/admin/notifications", icon: Bell },
+      { label: "News articles", href: "/admin/content/news", icon: Newspaper },
+      { label: "Academy videos", href: "/admin/content/videos", icon: Video },
       { label: "Star students", href: "/admin/content/stars", icon: Star },
       { label: "Results", href: "/admin/results", icon: Trophy },
       { label: "Site settings", href: "/admin/settings", icon: Settings },

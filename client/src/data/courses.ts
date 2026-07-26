@@ -1,5 +1,6 @@
 export interface CourseDetail {
   id: number;
+  slug: string;
   type: string;
   badge: string;
   title: string;
@@ -12,6 +13,7 @@ export interface CourseDetail {
 export const coursesData: CourseDetail[] = [
   {
     id: 1,
+    slug: "neet-fresher",
     type: "Classroom Course",
     badge: "Starts: 9 July",
     title: "NEET Fresher",
@@ -22,10 +24,11 @@ export const coursesData: CourseDetail[] = [
       "Doubt solving & mentorship support"
     ],
     category: "freshers",
-    link: "/courses/1"
+    link: "/courses/neet-fresher"
   },
   {
     id: 3,
+    slug: "neet-repeaters",
     type: "Classroom Course",
     badge: "Starts: 15 July",
     title: "NEET Repeaters",
@@ -36,10 +39,11 @@ export const coursesData: CourseDetail[] = [
       "Syllabus completion by Jan with extensive mock series"
     ],
     category: "repeaters",
-    link: "/courses/3"
+    link: "/courses/neet-repeaters"
   },
   {
     id: 4,
+    slug: "online-test-series",
     type: "Test Series",
     badge: "Starts: 1 August",
     title: "Online Test Series",
@@ -50,10 +54,11 @@ export const coursesData: CourseDetail[] = [
       "Part-tests and Full-syllabus simulation"
     ],
     category: "test-series",
-    link: "/courses/4"
+    link: "/courses/online-test-series"
   },
   {
     id: 5,
+    slug: "offline-test-series",
     type: "Test Series",
     badge: "Starts: 1 August",
     title: "Offline Test Series",
@@ -64,6 +69,6 @@ export const coursesData: CourseDetail[] = [
       "Part-tests and Full-syllabus simulation"
     ],
     category: "test-series",
-    link: "/courses/5"
+    link: "/courses/offline-test-series"
   }
 ];

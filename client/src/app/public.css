@@ -451,124 +451,6 @@
   box-shadow: 0 0 0 4px var(--accent-glow);
 }
 
-/* Course details */
-.public-shell .course-detail-page {
-  overflow: hidden;
-  padding: clamp(7.5rem, 11vw, 9rem) 0 var(--section-space);
-  background:
-    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
-    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
-    radial-gradient(circle at 85% 4%, rgba(7, 141, 146, 0.09), transparent 24rem),
-    var(--color-background);
-  background-size: 44px 44px, 44px 44px, auto, auto;
-}
-
-.public-shell .course-detail-page :where(.bg-blob) {
-  display: none;
-}
-
-.public-shell .course-detail-page .back-btn {
-  color: var(--brand-primary);
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: none;
-}
-
-.public-shell .course-detail-page .detail-grid-container {
-  gap: clamp(1.5rem, 4vw, 2.75rem);
-  align-items: start;
-}
-
-.public-shell .course-detail-page .detail-left-content {
-  padding: clamp(1.5rem, 4vw, 3rem);
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  box-shadow: none;
-}
-
-.public-shell .course-detail-page .course-title-header {
-  color: var(--text-primary);
-  font-size: clamp(2.6rem, 4.5vw, 3.8rem);
-  font-weight: 650;
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-}
-
-.public-shell .course-detail-page .course-subtitle-desc {
-  color: var(--text-secondary);
-  font-size: 1.08rem;
-  line-height: 1.75;
-}
-
-.public-shell .course-detail-page .whats-in-course-row {
-  gap: 2rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.public-shell .course-detail-page .row-item-badge {
-  color: var(--brand-accent);
-  background: var(--color-brand-accent-soft);
-  border: 1px solid #d7eeee;
-  border-radius: 6px;
-}
-
-.public-shell .course-detail-page .whats-in-course-title,
-.public-shell .course-detail-page .form-card-title {
-  font-weight: 650;
-  letter-spacing: -0.025em;
-}
-
-.public-shell .course-detail-page .syllabus-download-card,
-.public-shell .course-detail-page .admissions-subcard-wrapper,
-.public-shell .course-detail-page .visit-summary-box {
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: 11px;
-}
-
-.public-shell .course-detail-page .detail-right-sidebar {
-  position: sticky;
-  top: 6.25rem;
-}
-
-.public-shell .course-detail-page .register-glass-card {
-  overflow: hidden;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
-.public-shell .course-detail-page .premium-register-form .pill-text-input,
-.public-shell .course-detail-page .admissions-subcard-wrapper .subcard-date-input,
-.public-shell .course-detail-page .admissions-subcard-wrapper .subcard-select-field {
-  border-radius: 9px !important;
-}
-
-.public-shell .course-detail-page .batch-pill-badge {
-  border-radius: 8px;
-}
-
-.public-shell .course-detail-page :where(
-  .submit-registration-btn,
-  .syllabus-download-btn,
-  .reset-form-btn
-) {
-  min-height: 3rem;
-  border-radius: 9px;
-}
-
-.public-shell .course-detail-page .submit-registration-btn {
-  color: #fff;
-  background: var(--brand-primary);
-  box-shadow: none;
-}
-
 /* Admissions */
 .public-shell .admissions-page-container {
   padding-top: 0 !important;
@@ -829,198 +711,6 @@
   letter-spacing: -0.025em;
 }
 
-/* Results */
-.public-shell .results-page-container {
-  padding-top: 0 !important;
-  overflow: hidden;
-  background: transparent;
-}
-
-.public-shell .results-page-container :where(.bg-blob-glow, .card-top-bg-decorator) {
-  display: none;
-}
-
-.public-shell .results-page-container .results-hero-section {
-  width: 100%;
-  max-width: 1180px;
-  padding: calc(76px + 1.5rem) var(--page-gutter) 0;
-  background:
-    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
-    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
-    #f2f6f8;
-  background-size: 48px 48px;
-}
-
-.public-shell .results-page-container .results-banner-wrap {
-  width: min(100%, 1120px);
-  max-width: var(--container-content);
-  height: auto;
-  aspect-ratio: 2.45 / 1;
-  margin-inline: auto;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .results-banner-wrap:hover {
-  box-shadow: none;
-  transform: none;
-}
-
-.public-shell .results-page-container .slider-nav-btn {
-  width: 40px;
-  height: 40px;
-  color: var(--brand-primary);
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid var(--color-border);
-  border-radius: 9px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .results-banner-img {
-  object-fit: contain !important;
-}
-
-.public-shell .results-page-container .results-heading-section {
-  padding: clamp(3.5rem, 7vw, 5rem) 0 1.5rem;
-  background: #f2f6f8;
-}
-
-.public-shell .results-page-container .results-section-title {
-  font-size: clamp(2.35rem, 4vw, 3.25rem);
-  font-weight: 650;
-  letter-spacing: -0.04em;
-  text-align: center;
-}
-
-.public-shell .results-page-container .controls-section {
-  padding: 0 0 2rem;
-  background: #f2f6f8;
-}
-
-.public-shell .results-page-container .controls-inner-card {
-  padding: 0.35rem;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .tabs-container {
-  gap: 0.25rem;
-}
-
-.public-shell .results-page-container .tab-btn {
-  min-height: 2.75rem;
-  padding: 0.65rem 1rem;
-  color: var(--text-secondary);
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-}
-
-.public-shell .results-page-container .tab-btn.active {
-  color: #fff;
-  background: var(--brand-primary);
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .grid-section {
-  padding-top: clamp(2.5rem, 5vw, 4rem);
-  background: #fff;
-}
-
-.public-shell .results-page-container .toppers-banner-wrap-2026,
-.public-shell .results-page-container .topper-banner-card {
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .toppers-headline {
-  color: var(--text-primary);
-  font-weight: 650;
-  letter-spacing: -0.03em;
-}
-
-.public-shell .results-page-container .results-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.public-shell .results-page-container .student-card {
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.public-shell .results-page-container .student-template-card {
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .gold-separator-bar {
-  height: 2px;
-  background: var(--brand-accent);
-}
-
-.public-shell .results-page-container .college-pill-badge {
-  border-radius: 8px;
-}
-
-.public-shell .results-page-container .success-stories-section {
-  background: #eef3f7;
-}
-
-.public-shell .results-page-container .stories-container {
-  max-width: var(--container-content);
-  gap: clamp(2rem, 6vw, 5rem);
-}
-
-.public-shell .results-page-container .stories-left-col {
-  position: sticky;
-  top: 7rem;
-  align-self: start;
-}
-
-.public-shell .results-page-container .stories-icon-wrapper {
-  color: var(--brand-primary);
-  background: var(--color-brand-primary-soft);
-  border-radius: 1rem;
-}
-
-.public-shell .results-page-container .stories-grid-container {
-  gap: 1.25rem;
-}
-
-.public-shell .results-page-container .story-video-card {
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .story-cover-overlay {
-  background: linear-gradient(180deg, transparent 20%, rgba(8, 28, 56, 0.82));
-}
-
-.public-shell .results-page-container .cta-gradient-card {
-  padding: clamp(2rem, 6vw, 4.5rem);
-  color: #fff;
-  background:
-    radial-gradient(circle at 82% 15%, rgba(111, 215, 210, 0.22), transparent 20rem),
-    #0b2448;
-  border: 1px solid rgba(112, 209, 206, 0.24);
-  border-radius: 14px;
-  box-shadow: none;
-}
-
-.public-shell .results-page-container .cta-gradient-card :where(h2, p) {
-  color: #fff;
-}
-
 /* Gallery */
 .public-shell .gallery-page-container {
   overflow: hidden;
@@ -1144,14 +834,8 @@
     grid-row: 1;
   }
 
-  .public-shell .course-detail-page .detail-right-sidebar,
-  .public-shell .faq-section .faq-header-column,
-  .public-shell .results-page-container .stories-left-col {
+  .public-shell .faq-section .faq-header-column {
     position: static;
-  }
-
-  .public-shell .results-page-container .results-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
 }
@@ -1208,8 +892,7 @@
     padding: 0.8rem 0.75rem 3.5rem;
   }
 
-  .public-shell .home-container .hero-banner-wrap,
-  .public-shell .results-page-container .results-banner-wrap {
+  .public-shell .home-container .hero-banner-wrap {
     aspect-ratio: 16 / 8.8;
     border-radius: 1rem;
   }
@@ -1304,8 +987,6 @@
   .public-shell .faq-section .faq-grid-layout,
   .public-shell .contact-page .contact-grid-wrap,
   .public-shell .admissions-page-container .scholarship-grid-container,
-  .public-shell .course-detail-page .detail-grid-container,
-  .public-shell .results-page-container .stories-container,
   .public-shell .gallery-page-container .hero-grid-split {
     grid-template-columns: 1fr;
   }
@@ -1318,59 +999,19 @@
     font-size: clamp(2.6rem, 12vw, 3.75rem);
   }
 
-  .public-shell .results-page-container .results-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
-  }
-
-  .public-shell .results-page-container .controls-inner-card {
-    width: 100%;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .public-shell .results-page-container .tab-btn {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-
-  .public-shell .course-detail-page {
-    padding-top: 6.25rem;
-  }
-
-  .public-shell .course-detail-page .detail-left-content,
-  .public-shell .course-detail-page .register-glass-card,
   .public-shell .contact-page .contact-right-form,
   .public-shell .admissions-page-container .registration-form-card {
     padding: 1.25rem;
   }
 
-  .public-shell .course-detail-page .whats-in-course-row {
-    grid-template-columns: 1fr;
-  }
-
-  .public-shell .course-detail-page .row-graphic-content {
-    display: none;
-  }
-
   .public-shell .admissions-page-container .admissions-hero-banner,
-  .public-shell .contact-page .contact-hero-banner,
-  .public-shell .results-page-container .results-hero-section {
+  .public-shell .contact-page .contact-hero-banner {
     padding-top: calc(68px + 1rem) !important;
   }
 
   .public-shell .admissions-page-container .admissions-poster-wrapper,
   .public-shell .contact-page .contact-poster-wrapper {
     border-radius: 1rem !important;
-  }
-
-  .public-shell .results-page-container .tabs-container {
-    width: max-content;
-  }
-
-  .public-shell .results-page-container .cta-actions-group {
-    align-items: stretch;
-    flex-direction: column;
   }
 
   .public-shell .gallery-page-container .toolbar-container,

@@ -5,6 +5,8 @@ import "../public.css";
 import "./home/home.css";
 import "./about/about.css";
 import "./courses/courses.css";
+import "./courses/course-detail.css";
+import "./results/results.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";

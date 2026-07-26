@@ -151,7 +151,7 @@ export default function ToppersCarousel() {
               
               return (
                 <article className="featured-card" key={featuredStudent.id}>
-                  <span className="featured-watermark" aria-hidden="true">{featuredResult.rankType}</span>
+                  <span className="featured-watermark" aria-hidden="true">{featuredResult.rank}</span>
                   <span className="featured-orbit" aria-hidden="true" />
 
                   <div className="featured-copy">
@@ -188,7 +188,7 @@ export default function ToppersCarousel() {
 
               return (
                 <article className={`support-card support-${index + 1}`} key={student.id}>
-                  <span className="support-index" aria-hidden="true">0{index + 2}</span>
+                  <span className="support-index" aria-hidden="true">{result.rank}</span>
                   <span className="support-accent" aria-hidden="true" />
 
                   <div className="support-copy">

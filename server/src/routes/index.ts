@@ -10,6 +10,11 @@ import { getHealth } from '../controllers/health.controller';
  */
 const router = Router();
 
+// Root route to handle Render health checks (which default to /)
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'Success Code Academy API is running.' });
+});
+
 // Unversioned health check for Render / load balancers
 router.get('/health', getHealth);
 

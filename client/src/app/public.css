@@ -459,23 +459,30 @@
 
 .public-shell .about-page .hero-section {
   min-height: auto;
-  padding: clamp(8.5rem, 13vw, 11rem) 0 clamp(4rem, 8vw, 7rem);
+  padding: clamp(8rem, 11vw, 9.5rem) 0 clamp(4rem, 7vw, 6rem);
   background:
-    radial-gradient(circle at 85% 20%, rgba(7, 141, 146, 0.1), transparent 26rem),
+    linear-gradient(90deg, rgba(10, 42, 78, 0.025) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.025) 1px, transparent 1px),
+    radial-gradient(circle at 86% 20%, rgba(7, 141, 146, 0.09), transparent 25rem),
     #f7f9fc;
+  background-size: 48px 48px, 48px 48px, auto, auto;
 }
 
 .public-shell .about-page .hero-container {
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .public-shell .about-page .hero-content {
-  max-width: 38rem;
+  flex: 0 1 44%;
+  max-width: 34rem;
 }
 
 .public-shell .about-page .hero-title {
-  font-size: clamp(3rem, 5.8vw, 5.35rem);
-  line-height: 0.98;
+  max-width: 33rem;
+  font-size: clamp(3rem, 4.8vw, 4.4rem);
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
 .public-shell .about-page .hero-desc {
@@ -491,12 +498,46 @@
 .public-shell .about-page .hero-pill {
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
+  border-radius: 11px;
+  box-shadow: none;
+}
+
+.public-shell .about-page .pill-icon {
+  border-radius: 8px;
+  background: var(--brand-primary);
 }
 
 .public-shell .about-page .hero-image-wrapper {
-  filter: drop-shadow(0 24px 50px rgba(16, 47, 94, 0.13));
+  flex: 1 1 56%;
+  height: clamp(31rem, 44vw, 36rem);
+  filter: none;
+}
+
+.public-shell .about-page .section-title {
+  font-size: clamp(2rem, 3vw, 2.65rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.public-shell .about-page .about-achievement-image-wrap img {
+  border: 1px solid var(--color-border);
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.public-shell .about-page .story-section {
+  gap: clamp(3rem, 7vw, 5.5rem);
+  margin-bottom: clamp(5rem, 9vw, 7rem);
+}
+
+.public-shell .about-page .story-text p {
+  font-size: 1rem;
+  line-height: 1.78;
+}
+
+.public-shell .about-page .story-img-wrapper {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
 }
 
 .public-shell .about-page .philosophy-grid {
@@ -505,18 +546,69 @@
 
 .public-shell .about-page .philosophy-card {
   padding: clamp(1.5rem, 4vw, 2.5rem);
+  min-height: 420px;
   background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.public-shell .about-page .philosophy-card.blue-card {
+  background:
+    linear-gradient(90deg, rgba(16, 47, 94, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(16, 47, 94, 0.035) 1px, transparent 1px),
+    #fbfdff;
+  background-size: 32px 32px;
+}
+
+.public-shell .about-page .philosophy-card.green-card {
+  background:
+    radial-gradient(circle at 88% 88%, rgba(7, 141, 146, 0.11), transparent 12rem),
+    radial-gradient(circle at 88% 88%, transparent 0 5.5rem, rgba(7, 141, 146, 0.08) 5.55rem 5.62rem, transparent 5.68rem),
+    #fbfefd;
 }
 
 .public-shell .about-page .phil-icon {
+  width: 46px;
+  height: 46px;
   color: var(--brand-primary);
   background: var(--color-brand-primary-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.public-shell .about-page .green-card .phil-icon {
+  color: var(--brand-accent);
+  background: var(--color-brand-accent-soft);
+}
+
+.public-shell .about-page .phil-header {
+  margin-bottom: 2rem;
+}
+
+.public-shell .about-page .phil-title {
+  font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.public-shell .about-page .phil-list li {
+  margin-bottom: 1.15rem;
+  font-size: 0.97rem;
+  font-weight: 450;
+  line-height: 1.55;
+}
+
+.public-shell .about-page .phil-illustration {
+  opacity: 0.42;
 }
 
 .public-shell .about-page .story-quote-card {
   background: #0b2448;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(112, 209, 206, 0.25);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .about-page .story-quote-card :where(p, span) {
@@ -529,28 +621,59 @@
 
 .public-shell .about-page .infra-card-new {
   overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.public-shell .about-page .infra-card-new:hover {
+  border-color: rgba(7, 141, 146, 0.32);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
 
 .public-shell .about-page .infra-img-box {
   aspect-ratio: 4 / 3;
 }
 
+.public-shell .about-page .infra-info-box {
+  padding: 1rem;
+}
+
+.public-shell .about-page .infra-box-icon {
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+  border: 1px solid var(--color-border);
+}
+
 /* Courses listing */
 .public-shell .courses-page-container {
   overflow: hidden;
+  padding-top: 0;
   background: transparent;
 }
 
 .public-shell .courses-page-container .courses-hero-section {
   min-height: auto;
-  padding: clamp(8.5rem, 14vw, 11rem) 0 clamp(3rem, 7vw, 5rem);
+  padding: clamp(9rem, 12vw, 10rem) 0 clamp(3rem, 6vw, 4.5rem);
   background:
-    radial-gradient(circle at 80% 15%, rgba(7, 141, 146, 0.12), transparent 25rem),
-    #eef3f7;
+    linear-gradient(90deg, rgba(10, 42, 78, 0.025) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.025) 1px, transparent 1px),
+    radial-gradient(circle at 82% 15%, rgba(7, 141, 146, 0.1), transparent 24rem),
+    #f2f6f8;
+  background-size: 48px 48px, 48px 48px, auto, auto;
 }
 
-.public-shell .courses-page-container :where(.bg-blob, .badge-dots-matrix, .curved-badge-bg) {
+.public-shell .courses-page-container :where(.bg-blob, .badge-dots-matrix) {
   display: none;
+}
+
+.public-shell .courses-page-container .courses-hero-title {
+  margin-bottom: 2rem;
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
 }
 
 .public-shell .courses-page-container .courses-filter-tabs {
@@ -559,8 +682,8 @@
   padding: 0.35rem;
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .courses-page-container .filter-tab-btn {
@@ -569,7 +692,8 @@
   color: var(--text-secondary);
   background: transparent;
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 .public-shell .courses-page-container .filter-tab-btn.active {
@@ -578,34 +702,62 @@
 }
 
 .public-shell .courses-page-container .courses-list-stack {
-  gap: 1.25rem;
+  max-width: 980px;
+  gap: 1.5rem;
+}
+
+.public-shell .courses-page-container .courses-grid-section {
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  background: #f7f9fc;
+}
+
+.public-shell .courses-page-container .course-card-anchor-link {
+  max-width: 980px;
 }
 
 .public-shell .courses-page-container .course-horizontal-card {
-  min-height: 22rem;
+  min-height: 25rem;
   overflow: hidden;
+  background: #fff;
+  background-image: none;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.public-shell .courses-page-container .course-horizontal-card:hover {
+  border-color: rgba(7, 141, 146, 0.34);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
 
 .public-shell .courses-page-container .course-card-left {
+  flex: 1 1 62%;
   padding: clamp(1.5rem, 4vw, 2.75rem);
 }
 
 .public-shell .courses-page-container .course-card-right {
-  min-width: 18rem;
+  width: 38%;
+  min-width: 20rem;
   background:
-    radial-gradient(circle at 30% 35%, rgba(113, 216, 211, 0.28), transparent 11rem),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 50% 52%, rgba(113, 216, 211, 0.24), transparent 10rem),
     #0b2448;
+  background-size: 32px 32px, 32px 32px, auto, auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .public-shell .courses-page-container .course-type-pill {
   color: var(--brand-accent);
   background: var(--color-brand-accent-soft);
   border: 1px solid #cdeceb;
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
 }
 
 .public-shell .courses-page-container .course-card-title {
   color: var(--text-primary);
+  font-weight: 650;
 }
 
 .public-shell .courses-page-container .course-card-desc,
@@ -616,20 +768,52 @@
 .public-shell .courses-page-container .highlight-icon-box {
   color: var(--brand-accent);
   background: var(--color-brand-accent-soft);
+  border: 1px solid #d8eeee;
+  border-radius: 8px;
 }
 
 .public-shell .courses-page-container .starts-ribbon-banner {
+  top: 1.25rem;
+  right: 1.25rem;
   color: #fff;
   background: var(--brand-accent);
+  border-radius: 7px;
   box-shadow: none;
 }
 
+.public-shell .courses-page-container .ribbon-fold-corner {
+  display: none;
+}
+
+.public-shell .courses-page-container .curved-badge-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(112, 209, 206, 0.11) 0 38%, transparent 39%);
+  border: 1px solid rgba(112, 209, 206, 0.24);
+  border-radius: 50%;
+  clip-path: none;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
 .public-shell .courses-page-container .floating-gold-star {
-  filter: saturate(0.7);
+  top: 50%;
+  left: 50%;
+  animation: none;
+  filter: saturate(0.65);
+  transform: translate(-50%, -50%) rotate(-8deg);
 }
 
 .public-shell .courses-page-container .course-know-more-link {
   color: var(--brand-primary);
+}
+
+.public-shell .courses-page-container .course-action-wrap {
+  justify-content: flex-start;
 }
 
 /* Course details */
@@ -637,8 +821,11 @@
   overflow: hidden;
   padding: clamp(7.5rem, 11vw, 9rem) 0 var(--section-space);
   background:
+    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
     radial-gradient(circle at 85% 4%, rgba(7, 141, 146, 0.09), transparent 24rem),
     var(--color-background);
+  background-size: 44px 44px, 44px 44px, auto, auto;
 }
 
 .public-shell .course-detail-page :where(.bg-blob) {
@@ -649,8 +836,8 @@
   color: var(--brand-primary);
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-xs);
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 .public-shell .course-detail-page .detail-grid-container {
@@ -662,13 +849,16 @@
   padding: clamp(1.5rem, 4vw, 3rem);
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 .public-shell .course-detail-page .course-title-header {
   color: var(--text-primary);
-  font-size: clamp(2.4rem, 5vw, 4.25rem);
+  font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+  font-weight: 650;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
 }
 
 .public-shell .course-detail-page .course-subtitle-desc {
@@ -686,7 +876,14 @@
 .public-shell .course-detail-page .row-item-badge {
   color: var(--brand-accent);
   background: var(--color-brand-accent-soft);
-  border-radius: var(--radius-pill);
+  border: 1px solid #d7eeee;
+  border-radius: 6px;
+}
+
+.public-shell .course-detail-page .whats-in-course-title,
+.public-shell .course-detail-page .form-card-title {
+  font-weight: 650;
+  letter-spacing: -0.025em;
 }
 
 .public-shell .course-detail-page .syllabus-download-card,
@@ -694,7 +891,7 @@
 .public-shell .course-detail-page .visit-summary-box {
   background: var(--color-surface-subtle);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: 11px;
 }
 
 .public-shell .course-detail-page .detail-right-sidebar {
@@ -705,7 +902,21 @@
 .public-shell .course-detail-page .register-glass-card {
   overflow: hidden;
   padding: clamp(1.25rem, 3vw, 2rem);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
   backdrop-filter: none;
+}
+
+.public-shell .course-detail-page .premium-register-form .pill-text-input,
+.public-shell .course-detail-page .admissions-subcard-wrapper .subcard-date-input,
+.public-shell .course-detail-page .admissions-subcard-wrapper .subcard-select-field {
+  border-radius: 9px !important;
+}
+
+.public-shell .course-detail-page .batch-pill-badge {
+  border-radius: 8px;
 }
 
 .public-shell .course-detail-page :where(
@@ -714,13 +925,13 @@
   .reset-form-btn
 ) {
   min-height: 3rem;
-  border-radius: var(--radius-pill);
+  border-radius: 9px;
 }
 
 .public-shell .course-detail-page .submit-registration-btn {
   color: #fff;
   background: var(--brand-primary);
-  box-shadow: 0 10px 24px rgba(16, 47, 94, 0.18);
+  box-shadow: none;
 }
 
 /* Admissions */
@@ -739,7 +950,11 @@
 
 .public-shell .admissions-page-container .admissions-hero-banner {
   padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem);
-  background: #eef3f7;
+  background:
+    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    #f2f6f8;
+  background-size: 48px 48px;
 }
 
 .public-shell .admissions-page-container .admissions-hero-container {
@@ -750,8 +965,8 @@
 .public-shell .admissions-page-container .admissions-poster-wrapper {
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: clamp(1rem, 2.5vw, 1.75rem);
-  box-shadow: var(--shadow-md);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 .public-shell .admissions-page-container .admissions-poster-img {
@@ -766,13 +981,30 @@
   margin-inline: auto;
   padding-inline: var(--page-gutter);
   gap: clamp(2rem, 6vw, 5rem);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.public-shell .admissions-page-container .poster-main-title {
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.public-shell .admissions-page-container .poster-badge-pill {
+  border-radius: 7px;
+}
+
+.public-shell .admissions-page-container .poster-feature-item {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .public-shell .admissions-page-container .poster-feature-card-boxed {
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  border-radius: 11px;
+  box-shadow: none;
 }
 
 .public-shell .admissions-page-container :where(
@@ -782,11 +1014,28 @@
 ) {
   color: var(--brand-primary);
   background: var(--color-brand-primary-soft);
-  border-radius: 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
 }
 
 .public-shell .admissions-page-container .registration-form-card {
   padding: clamp(1.4rem, 4vw, 2.5rem);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.public-shell .admissions-page-container .form-card-title {
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.public-shell .admissions-page-container :where(
+  .register-exam-form input,
+  .register-exam-form select
+) {
+  border-radius: 9px;
 }
 
 .public-shell .admissions-page-container .register-submit-btn {
@@ -794,8 +1043,8 @@
   color: #fff;
   background: var(--brand-primary);
   border: 0;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 10px 24px rgba(16, 47, 94, 0.18);
+  border-radius: 9px;
+  box-shadow: none;
 }
 
 /* Contact */
@@ -820,7 +1069,11 @@
 
 .public-shell .contact-page .contact-hero-banner {
   padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem) !important;
-  background: #eef3f7;
+  background:
+    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    #f2f6f8;
+  background-size: 48px 48px;
 }
 
 .public-shell .contact-page .contact-hero-container {
@@ -831,8 +1084,8 @@
 .public-shell .contact-page .contact-poster-wrapper {
   overflow: hidden;
   border: 1px solid var(--color-border) !important;
-  border-radius: clamp(1rem, 2.5vw, 1.75rem) !important;
-  box-shadow: var(--shadow-md) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
 }
 
 .public-shell .contact-page .contact-poster-img {
@@ -856,42 +1109,61 @@
   gap: clamp(2rem, 6vw, 5rem);
 }
 
+.public-shell .contact-page .contact-info-title {
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
 .public-shell .contact-page .enhanced-contact-list {
   gap: 0.75rem;
 }
 
 .public-shell .contact-page .contact-detail-item {
   padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 11px;
   box-shadow: none;
 }
 
 .public-shell .contact-page .detail-icon-box {
   color: var(--brand-primary);
   background: var(--color-brand-primary-soft);
-  border-radius: 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
 }
 
 .public-shell .contact-page .contact-right-form {
   overflow: hidden;
   padding: clamp(1.4rem, 4vw, 2.5rem);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 .public-shell .contact-page .form-grid-mesh {
-  opacity: 0.35;
+  opacity: 0.16;
 }
 
 .public-shell .contact-page .dark-form-label,
 .public-shell .contact-page .captcha-label-txt,
 .public-shell .contact-page .dist-label-text {
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.public-shell .contact-page .dark-form-input {
+  background: #f8fafc;
+  border-color: var(--color-border-strong);
+  border-radius: 9px;
 }
 
 .public-shell .contact-page .dark-captcha-box,
 .public-shell .contact-page .distance-box {
   background: var(--color-surface-subtle);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: 10px;
 }
 
 .public-shell .contact-page :where(.dark-submit-btn, .dark-reset-btn) {
@@ -899,17 +1171,27 @@
   color: #fff;
   background: var(--brand-primary);
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: 9px;
+  box-shadow: none;
 }
 
 .public-shell .contact-page .map-container {
   overflow: hidden;
   padding: clamp(1.25rem, 4vw, 2rem);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 .public-shell .contact-page .map-frame {
   overflow: hidden;
-  border-radius: var(--radius-card);
+  border-radius: 10px;
+}
+
+.public-shell .contact-page .map-heading h3 {
+  font-weight: 650;
+  letter-spacing: -0.025em;
 }
 
 /* Results */
@@ -924,11 +1206,18 @@
 }
 
 .public-shell .results-page-container .results-hero-section {
+  width: 100%;
+  max-width: 1180px;
   padding: calc(76px + 1.5rem) var(--page-gutter) 0;
-  background: #eef3f7;
+  background:
+    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    #f2f6f8;
+  background-size: 48px 48px;
 }
 
 .public-shell .results-page-container .results-banner-wrap {
+  width: min(100%, 1120px);
   max-width: var(--container-content);
   height: auto;
   aspect-ratio: 2.45 / 1;
@@ -936,8 +1225,23 @@
   overflow: hidden;
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: clamp(1rem, 2.5vw, 1.75rem);
-  box-shadow: var(--shadow-md);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.public-shell .results-page-container .results-banner-wrap:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.public-shell .results-page-container .slider-nav-btn {
+  width: 40px;
+  height: 40px;
+  color: var(--brand-primary);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .results-banner-img {
@@ -946,21 +1250,26 @@
 
 .public-shell .results-page-container .results-heading-section {
   padding: clamp(3.5rem, 7vw, 5rem) 0 1.5rem;
-  background: #eef3f7;
+  background: #f2f6f8;
 }
 
 .public-shell .results-page-container .results-section-title {
+  font-size: clamp(2.35rem, 4vw, 3.25rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
   text-align: center;
 }
 
 .public-shell .results-page-container .controls-section {
   padding: 0 0 2rem;
-  background: #eef3f7;
+  background: #f2f6f8;
 }
 
 .public-shell .results-page-container .controls-inner-card {
   padding: 0.35rem;
-  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .tabs-container {
@@ -973,13 +1282,13 @@
   color: var(--text-secondary);
   background: transparent;
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
 }
 
 .public-shell .results-page-container .tab-btn.active {
   color: #fff;
   background: var(--brand-primary);
-  box-shadow: 0 8px 18px rgba(16, 47, 94, 0.14);
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .grid-section {
@@ -991,20 +1300,39 @@
 .public-shell .results-page-container .topper-banner-card {
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .toppers-headline {
   color: var(--text-primary);
+  font-weight: 650;
+  letter-spacing: -0.03em;
 }
 
 .public-shell .results-page-container .results-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem;
 }
 
 .public-shell .results-page-container .student-card {
   overflow: hidden;
+  border-radius: 12px;
+}
+
+.public-shell .results-page-container .student-template-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.public-shell .results-page-container .gold-separator-bar {
+  height: 2px;
+  background: var(--brand-accent);
+}
+
+.public-shell .results-page-container .college-pill-badge {
+  border-radius: 8px;
 }
 
 .public-shell .results-page-container .success-stories-section {
@@ -1034,6 +1362,9 @@
 
 .public-shell .results-page-container .story-video-card {
   overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .story-cover-overlay {
@@ -1046,8 +1377,9 @@
   background:
     radial-gradient(circle at 82% 15%, rgba(111, 215, 210, 0.22), transparent 20rem),
     #0b2448;
-  border: 0;
-  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(112, 209, 206, 0.24);
+  border-radius: 14px;
+  box-shadow: none;
 }
 
 .public-shell .results-page-container .cta-gradient-card :where(h2, p) {
@@ -1062,10 +1394,13 @@
 
 .public-shell .gallery-page-container .gallery-hero {
   min-height: auto;
-  padding: clamp(8.5rem, 13vw, 11rem) 0 clamp(4rem, 8vw, 6rem);
+  padding: clamp(8rem, 11vw, 9.5rem) 0 clamp(4rem, 7vw, 5.5rem);
   background:
+    linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
+    linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
     radial-gradient(circle at 82% 20%, rgba(7, 141, 146, 0.12), transparent 24rem),
-    #eef3f7;
+    #f2f6f8;
+  background-size: 48px 48px, 48px 48px, auto, auto;
 }
 
 .public-shell .gallery-page-container .hero-grid-split {
@@ -1078,17 +1413,22 @@
   color: var(--brand-accent);
   background: var(--color-brand-accent-soft);
   border: 1px solid #cdeceb;
-  border-radius: var(--radius-pill);
+  border-radius: 7px;
 }
 
 .public-shell .gallery-page-container .hero-title {
   color: var(--text-primary);
-  font-size: clamp(3rem, 5.8vw, 5rem);
-  line-height: 1;
+  font-size: clamp(3rem, 4.8vw, 4.35rem);
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
 .public-shell .gallery-page-container .featured-preview-card {
   overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+  box-shadow: none;
 }
 
 .public-shell .gallery-page-container .preview-overlay,
@@ -1100,8 +1440,8 @@
   padding: 0.75rem;
   background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .public-shell .gallery-page-container .carousels-stack,
@@ -1111,6 +1451,14 @@
 
 .public-shell .gallery-page-container .video-item-card {
   overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.public-shell .gallery-page-container :where(.carousel-title, .section-title) {
+  font-weight: 650;
+  letter-spacing: -0.025em;
 }
 
 .public-shell .gallery-page-container :where(
@@ -1118,7 +1466,7 @@
   .modal-share-btn,
   .clear-btn
 ) {
-  border-radius: var(--radius-pill);
+  border-radius: 9px;
 }
 
 /* Floating utility UI */
@@ -1165,6 +1513,49 @@
   .public-shell .faq-section .faq-header-column,
   .public-shell .results-page-container .stories-left-col {
     position: static;
+  }
+
+  .public-shell .about-page .hero-title {
+    font-weight: 650 !important;
+  }
+
+  .public-shell .results-page-container .results-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .public-shell .courses-page-container .course-horizontal-card {
+    flex-direction: column !important;
+  }
+
+  .public-shell .courses-page-container .course-card-right {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 13rem !important;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 50% 52%, rgba(113, 216, 211, 0.24), transparent 10rem),
+      #0b2448 !important;
+    background-size: 32px 32px, 32px 32px, auto, auto !important;
+    border-top: 1px solid var(--color-border) !important;
+    border-left: 0 !important;
+  }
+
+  .public-shell .courses-page-container .curved-badge-bg {
+    top: 50% !important;
+    left: 50% !important;
+    width: 170px !important;
+    height: 170px !important;
+    border: 1px solid rgba(112, 209, 206, 0.24) !important;
+    border-radius: 50% !important;
+    clip-path: none !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .public-shell .courses-page-container .floating-gold-star {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-8deg) !important;
   }
 }
 
@@ -1333,6 +1724,16 @@
     font-size: clamp(2.6rem, 12vw, 3.75rem);
   }
 
+  .public-shell .about-page .hero-title {
+    font-size: clamp(2.25rem, 10vw, 3rem) !important;
+    font-weight: 650 !important;
+  }
+
+  .public-shell .results-page-container .results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
   .public-shell .courses-page-container .courses-filter-tabs,
   .public-shell .results-page-container .controls-inner-card {
     width: 100%;
@@ -1348,12 +1749,13 @@
 
   .public-shell .courses-page-container .course-horizontal-card {
     min-height: 0;
-    flex-direction: column;
+    flex-direction: column !important;
   }
 
   .public-shell .courses-page-container .course-card-right {
-    min-width: 0;
-    min-height: 12rem;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 12rem !important;
   }
 
   .public-shell .course-detail-page {

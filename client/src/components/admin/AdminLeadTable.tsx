@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Download, Search } from "lucide-react";
+import { Download, Search, Edit2, Trash2 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import {
   AdminEmptyState,
@@ -37,6 +37,9 @@ export default function AdminLeadTable({
   searchPlaceholder,
   columns,
   exportName,
+  onEdit,
+  onDelete,
+  onAdd,
 }: {
   title: string;
   description: string;
@@ -44,6 +47,9 @@ export default function AdminLeadTable({
   searchPlaceholder: string;
   columns: LeadColumn[];
   exportName: string;
+  onEdit?: (row: LeadRow) => void;
+  onDelete?: (row: LeadRow) => void;
+  onAdd?: () => void;
 }) {
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [query, setQuery] = useState("");
@@ -143,15 +149,26 @@ export default function AdminLeadTable({
             Search
           </button>
         </form>
-        <button
-          className="admin-button secondary"
-          type="button"
-          onClick={downloadCsv}
-          disabled={rows.length === 0}
-        >
-          <Download size={16} />
-          Export loaded rows
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {onAdd && (
+            <button
+              className="admin-button primary"
+              type="button"
+              onClick={onAdd}
+            >
+              Add New Record
+            </button>
+          )}
+          <button
+            className="admin-button secondary"
+            type="button"
+            onClick={downloadCsv}
+            disabled={rows.length === 0}
+          >
+            <Download size={16} />
+            Export loaded rows
+          </button>
+        </div>
       </div>
 
       <section className="admin-card">
@@ -182,6 +199,7 @@ export default function AdminLeadTable({
                     {columns.map((column) => (
                       <th key={column.key}>{column.label}</th>
                     ))}
+                    {(onEdit || onDelete) && <th>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -196,6 +214,34 @@ export default function AdminLeadTable({
                               : String(row[column.key] ?? "—")}
                         </td>
                       ))}
+                      {(onEdit || onDelete) && (
+                        <td>
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            {onEdit && (
+                              <button
+                                className="sca-admin-icon-btn"
+                                onClick={() => onEdit(row)}
+                                title="Edit"
+                              >
+                                <Edit2 size={16} />
+                              </button>
+                            )}
+                            {onDelete && (
+                              <button
+                                className="sca-admin-icon-btn danger"
+                                onClick={() => {
+                                  if (confirm("Are you sure you want to delete this record?")) {
+                                    onDelete(row);
+                                  }
+                                }}
+                                title="Delete"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

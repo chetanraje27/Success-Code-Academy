@@ -27,6 +27,14 @@ import {
   mediaHistoryParamsSchema,
   mediaResourceParamsSchema,
   mediaRestoreParamsSchema,
+  adminCreateUserSchema,
+  adminUpdateUserSchema,
+  adminCreateCourseFormSchema,
+  adminUpdateCourseFormSchema,
+  adminCreateScholarshipFormSchema,
+  adminUpdateScholarshipFormSchema,
+  adminCreateContactMessageSchema,
+  adminUpdateContactMessageSchema,
 } from '../../validation/admin.schemas';
 
 const router = Router();
@@ -212,5 +220,22 @@ router.get(
   validate(adminListQuerySchema, 'query'),
   adminController.searchLeads,
 );
+
+// Database Management mutations
+router.post('/database/users', validate(adminCreateUserSchema), adminController.createUser);
+router.put('/database/users/:id', validate(idParamsSchema, 'params'), validate(adminUpdateUserSchema), adminController.updateUser);
+router.delete('/database/users/:id', validate(idParamsSchema, 'params'), adminController.deleteUser);
+
+router.post('/database/course-forms', validate(adminCreateCourseFormSchema), adminController.createCourseForm);
+router.put('/database/course-forms/:id', validate(idParamsSchema, 'params'), validate(adminUpdateCourseFormSchema), adminController.updateCourseForm);
+router.delete('/database/course-forms/:id', validate(idParamsSchema, 'params'), adminController.deleteCourseForm);
+
+router.post('/database/scholarship-forms', validate(adminCreateScholarshipFormSchema), adminController.createScholarshipForm);
+router.put('/database/scholarship-forms/:id', validate(idParamsSchema, 'params'), validate(adminUpdateScholarshipFormSchema), adminController.updateScholarshipForm);
+router.delete('/database/scholarship-forms/:id', validate(idParamsSchema, 'params'), adminController.deleteScholarshipForm);
+
+router.post('/database/contact-messages', validate(adminCreateContactMessageSchema), adminController.createContactMessage);
+router.put('/database/contact-messages/:id', validate(idParamsSchema, 'params'), validate(adminUpdateContactMessageSchema), adminController.updateContactMessage);
+router.delete('/database/contact-messages/:id', validate(idParamsSchema, 'params'), adminController.deleteContactMessage);
 
 export default router;

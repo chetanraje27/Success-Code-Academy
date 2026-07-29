@@ -26,6 +26,7 @@ import type { NewsArticleCreationAttributes } from '../models/NewsArticle';
 import type { AcademyVideoCreationAttributes } from '../models/AcademyVideo';
 import { restoreValues } from '../utils/mediaRevision';
 import { asyncHandler } from '../utils/asyncHandler';
+import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import multer from 'multer';
 import { createClient } from '@supabase/supabase-js';
@@ -946,4 +947,103 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
     status: 'success',
     data: { users, courseForms, scholarshipForms, contactMessages },
   });
+});
+
+
+// --- Database Management CRUD ---
+
+
+export const createUser = asyncHandler(async (req: Request, res: Response) => {
+  const data = req.body;
+  if (data.password) {
+    data.passwordHash = await bcrypt.hash(data.password, 10);
+    delete data.password;
+  }
+  const user = await User.create(data);
+  res.status(201).json({ status: 'success', data: { user } });
+});
+
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const data = req.body;
+  const user = await User.findByPk(id);
+  if (!user) throw new AppError('User not found', 404);
+
+  if (data.password) {
+    data.passwordHash = await bcrypt.hash(data.password, 10);
+    delete data.password;
+  }
+  await user.update(data);
+  res.status(200).json({ status: 'success', data: { user } });
+});
+
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const user = await User.findByPk(id);
+  if (!user) throw new AppError('User not found', 404);
+  await user.destroy();
+  res.status(200).json({ status: 'success', data: null });
+});
+
+export const createCourseForm = asyncHandler(async (req: Request, res: Response) => {
+  const form = await CourseRegistration.create(req.body);
+  res.status(201).json({ status: 'success', data: { form } });
+});
+
+export const updateCourseForm = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const form = await CourseRegistration.findByPk(id);
+  if (!form) throw new AppError('Course form not found', 404);
+  await form.update(req.body);
+  res.status(200).json({ status: 'success', data: { form } });
+});
+
+export const deleteCourseForm = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const form = await CourseRegistration.findByPk(id);
+  if (!form) throw new AppError('Course form not found', 404);
+  await form.destroy();
+  res.status(200).json({ status: 'success', data: null });
+});
+
+export const createScholarshipForm = asyncHandler(async (req: Request, res: Response) => {
+  const form = await ScholarshipRegistration.create(req.body);
+  res.status(201).json({ status: 'success', data: { form } });
+});
+
+export const updateScholarshipForm = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const form = await ScholarshipRegistration.findByPk(id);
+  if (!form) throw new AppError('Scholarship form not found', 404);
+  await form.update(req.body);
+  res.status(200).json({ status: 'success', data: { form } });
+});
+
+export const deleteScholarshipForm = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const form = await ScholarshipRegistration.findByPk(id);
+  if (!form) throw new AppError('Scholarship form not found', 404);
+  await form.destroy();
+  res.status(200).json({ status: 'success', data: null });
+});
+
+export const createContactMessage = asyncHandler(async (req: Request, res: Response) => {
+  const msg = await ContactMessage.create(req.body);
+  res.status(201).json({ status: 'success', data: { message: msg } });
+});
+
+export const updateContactMessage = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const msg = await ContactMessage.findByPk(id);
+  if (!msg) throw new AppError('Contact message not found', 404);
+  await msg.update(req.body);
+  res.status(200).json({ status: 'success', data: { message: msg } });
+});
+
+export const deleteContactMessage = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const msg = await ContactMessage.findByPk(id);
+  if (!msg) throw new AppError('Contact message not found', 404);
+  await msg.destroy();
+  res.status(200).json({ status: 'success', data: null });
 });

@@ -1,10 +1,27 @@
 "use client";
 
 import AdminLeadTable from "@/components/admin/AdminLeadTable";
+import ScholarshipFormEditorModal from "./ScholarshipFormEditorModal";
+import { useState } from "react";
+import { adminApiFetch } from "@/lib/admin-api";
 
 export default function AdminScholarshipFormsPage() {
+  const [editingForm, setEditingForm] = useState<any>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  async function handleDelete(formRecord: any) {
+    try {
+      await adminApiFetch(`/api/v1/admin/database/scholarship-forms/${formRecord.id}`, { method: "DELETE" });
+      setRefreshKey(prev => prev + 1);
+    } catch (e: any) {
+      alert(e.message || "Failed to delete scholarship form");
+    }
+  }
+
   return (
+    <>
     <AdminLeadTable
+      key={refreshKey}
       title="Scholarship forms"
       description="Review scholarship registrations with the student, parent, school, city, and preferred course details together."
       endpoint="database/scholarship-forms"
@@ -32,6 +49,16 @@ export default function AdminScholarshipFormsPage() {
         { key: "preferredCourse", label: "Preferred course" },
         { key: "createdAt", label: "Submitted" },
       ]}
+      onAdd={() => setEditingForm({})}
+      onEdit={setEditingForm}
+      onDelete={handleDelete}
     />
+    <ScholarshipFormEditorModal
+      open={!!editingForm}
+      onClose={() => setEditingForm(null)}
+      formRecord={editingForm}
+      onSaved={() => setRefreshKey(prev => prev + 1)}
+    />
+    </>
   );
 }

@@ -1,10 +1,27 @@
 "use client";
 
 import AdminLeadTable from "@/components/admin/AdminLeadTable";
+import StudentEditorModal from "./StudentEditorModal";
+import { useState } from "react";
+import { adminApiFetch } from "@/lib/admin-api";
 
 export default function AdminStudentsPage() {
+  const [editingStudent, setEditingStudent] = useState<any>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  async function handleDelete(student: any) {
+    try {
+      await adminApiFetch(`/api/v1/admin/database/users/${student.id}`, { method: "DELETE" });
+      setRefreshKey(prev => prev + 1);
+    } catch (e: any) {
+      alert(e.message || "Failed to delete student");
+    }
+  }
+
   return (
+    <>
     <AdminLeadTable
+      key={refreshKey}
       title="Student accounts"
       description="View registered student profiles. Password and authentication data are never exposed in this table."
       endpoint="database/users"
@@ -30,6 +47,16 @@ export default function AdminStudentsPage() {
         { key: "age", label: "Age" },
         { key: "createdAt", label: "Registered" },
       ]}
+      onAdd={() => setEditingStudent({})}
+      onEdit={setEditingStudent}
+      onDelete={handleDelete}
     />
+    <StudentEditorModal
+      open={!!editingStudent}
+      onClose={() => setEditingStudent(null)}
+      student={editingStudent}
+      onSaved={() => setRefreshKey(prev => prev + 1)}
+    />
+    </>
   );
 }

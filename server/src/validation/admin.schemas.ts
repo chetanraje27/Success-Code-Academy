@@ -211,3 +211,56 @@ export const contentBlockUpdateSchema = z
     value: z.string().max(20_000),
   })
   .strict();
+export const adminCreateUserSchema = z
+  .object({
+    firstName: z.string().trim().min(1),
+    lastName: z.string().trim().min(1),
+    mobileNumber: z.string().trim().min(10).max(15),
+    email: z.string().email(),
+    age: z.coerce.number().int().min(5).max(100),
+    role: z.enum(['student', 'admin']).default('student'),
+    password: z.string().min(6),
+  })
+  .strict();
+
+export const adminUpdateUserSchema = adminCreateUserSchema.extend({
+  password: z.string().min(6).optional().or(z.literal('')),
+}).partial().strict();
+
+export const adminCreateCourseFormSchema = z
+  .object({
+    studentName: z.string().trim().min(1),
+    courseTitle: z.string().trim().min(1),
+    studentEmail: z.string().trim().email(),
+    studentPhone: z.string().trim().min(10).max(15),
+    visitingDate: z.string().trim().min(1),
+    visitingTime: z.string().trim().min(1),
+  })
+  .strict();
+
+export const adminUpdateCourseFormSchema = adminCreateCourseFormSchema.partial().strict();
+
+export const adminCreateScholarshipFormSchema = z
+  .object({
+    studentName: z.string().trim().min(1),
+    studentPhone: z.string().trim().min(10).max(15),
+    parentPhone: z.string().trim().min(10).max(15),
+    studentClass: z.string().trim().min(1),
+    schoolName: z.string().trim().min(1),
+    city: z.string().trim().min(1),
+    preferredCourse: z.string().trim().min(1),
+  })
+  .strict();
+
+export const adminUpdateScholarshipFormSchema = adminCreateScholarshipFormSchema.partial().strict();
+
+export const adminCreateContactMessageSchema = z
+  .object({
+    name: z.string().trim().min(1),
+    email: z.string().email(),
+    phone: z.string().trim().min(10).max(15),
+    message: z.string().trim().min(1),
+  })
+  .strict();
+
+export const adminUpdateContactMessageSchema = adminCreateContactMessageSchema.partial().strict();

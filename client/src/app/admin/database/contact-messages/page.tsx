@@ -1,10 +1,27 @@
 "use client";
 
 import AdminLeadTable from "@/components/admin/AdminLeadTable";
+import ContactMessageEditorModal from "./ContactMessageEditorModal";
+import { useState } from "react";
+import { adminApiFetch } from "@/lib/admin-api";
 
 export default function AdminContactMessagesPage() {
+  const [editingMessage, setEditingMessage] = useState<any>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  async function handleDelete(messageRecord: any) {
+    try {
+      await adminApiFetch(`/api/v1/admin/database/contact-messages/${messageRecord.id}`, { method: "DELETE" });
+      setRefreshKey(prev => prev + 1);
+    } catch (e: any) {
+      alert(e.message || "Failed to delete contact message");
+    }
+  }
+
   return (
+    <>
     <AdminLeadTable
+      key={refreshKey}
       title="Contact messages"
       description="Read enquiries submitted through the contact page and use the supplied phone or email to follow up."
       endpoint="database/contact-messages"
@@ -38,6 +55,16 @@ export default function AdminContactMessagesPage() {
         },
         { key: "createdAt", label: "Submitted" },
       ]}
+      onAdd={() => setEditingMessage({})}
+      onEdit={setEditingMessage}
+      onDelete={handleDelete}
     />
+    <ContactMessageEditorModal
+      open={!!editingMessage}
+      onClose={() => setEditingMessage(null)}
+      messageRecord={editingMessage}
+      onSaved={() => setRefreshKey(prev => prev + 1)}
+    />
+    </>
   );
 }

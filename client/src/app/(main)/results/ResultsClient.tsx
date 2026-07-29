@@ -237,7 +237,9 @@ export default function ResultsClient() {
                   Meet our NEET Results
                 </EditableText>
               </h1>
+            </div>
 
+            <div className="results-year-navigation">
               <div className="results-year-tabs" role="tablist" aria-label="NEET result years">
                 {resultYears.map((year) => (
                   <button
@@ -269,24 +271,35 @@ export default function ResultsClient() {
                 </div>
 
                 <div className="results-featured-2025-grid">
-                  <article>
-                    <Image
-                      src="/images/results/2025/SiddhiBadhefull.png"
-                      alt="Siddhi Badhe - NEET UG 2025 Topper"
-                      width={540}
-                      height={976}
-                      unoptimized
-                    />
-                  </article>
-                  <article>
-                    <Image
-                      src="/images/results/2025/SamruddhiLokhandeFull.png"
-                      alt="Samruddhi Lokhande - NEET UG 2025 Topper"
-                      width={540}
-                      height={976}
-                      unoptimized
-                    />
-                  </article>
+                  {filteredResults.slice(0, 2).map((result) => (
+                    <article key={result.id}>
+                      <span className="results-featured-watermark" aria-hidden="true">
+                        {result.rank}
+                      </span>
+                      <div className="results-featured-copy">
+                        <span className="results-featured-year">NEET UG 2025</span>
+                        <div className="results-featured-rank">
+                          <span>AIR</span>
+                          <strong>{result.rank}</strong>
+                        </div>
+                        <h3>{result.name}</h3>
+                        <p>{result.college} {result.city}</p>
+                        <div className="results-featured-score">
+                          <strong>{result.marks}</strong>
+                          <span>/720</span>
+                        </div>
+                      </div>
+                      <div className="results-featured-portrait">
+                        <Image
+                          src={result.image}
+                          alt={`${result.name} - NEET UG 2025 AIR ${result.rank}`}
+                          fill
+                          unoptimized
+                          sizes="(max-width: 720px) 72vw, 310px"
+                        />
+                      </div>
+                    </article>
+                  ))}
                 </div>
               </section>
             )}

@@ -108,30 +108,6 @@ const classroomFeatures = [
     height: 145,
   },
   {
-    title: "Unlimited Doubt Support",
-    bullets: [
-      "Dedicated doubt sessions",
-      "One-to-one interaction",
-      "Concept clarification",
-      "Extra support until every doubt is cleared",
-    ],
-    image: "/images/crops/doubt_graphic.png",
-    width: 319,
-    height: 129,
-  },
-  {
-    title: "Structured Revision Program",
-    bullets: [
-      "Multiple revision cycles",
-      "High-yield revision",
-      "Important question practice",
-      "Rapid revision before exams",
-    ],
-    image: "/images/crops/revision_graphic.png",
-    width: 309,
-    height: 115,
-  },
-  {
     title: "Student Wellness & Motivation",
     bullets: [
       "Stress management",

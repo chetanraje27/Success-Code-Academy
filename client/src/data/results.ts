@@ -6,6 +6,7 @@ export interface StudentResult {
   college?: string;
   city?: string;
   marks?: number;
+  rank?: number;
   isCustomCard?: boolean;
 }
 
@@ -47,8 +48,8 @@ export const resultsData: StudentResult[] = [
   { id: 114, name: "Arya Shinde", image: "/images/results/2026/arya_shinde.png", year: 2026, marks: 504, isCustomCard: true },
 
   // ─── YEAR 2025 RESULTS ───
-  { id: 1, name: "Siddhi Badhe", image: "/images/results/2025/SiddhiBadhefull.png", year: 2025, college: "AIIMS", city: "Delhi", isCustomCard: true },
-  { id: 2, name: "Samruddhi Lokhande", image: "/images/results/2025/SamruddhiLokhandeFull.png", year: 2025, college: "AIIMS", city: "Nagpur", isCustomCard: true },
+  { id: 1, name: "Siddhi Badhe", image: "/images/results/2025/SiddhiBadhe.png", year: 2025, college: "AIIMS", city: "Delhi", marks: 665, rank: 26, isCustomCard: true },
+  { id: 2, name: "Samruddhi Lokhande", image: "/images/results/2025/SamruddhiLokhande.png", year: 2025, college: "AIIMS", city: "Nagpur", marks: 602, rank: 1204, isCustomCard: true },
 
   // Row 1 of Grid
   { id: 3, name: "Mahesh Bhosale", image: "/images/results/2025/MaheshBhosale.png", year: 2025, college: "B.J. Government Medical College", city: "Pune", isCustomCard: true },

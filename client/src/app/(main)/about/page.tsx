@@ -75,8 +75,6 @@ export default function AboutPage() {
           </div>
 
           <div className="about-map-card">
-            <span className="about-map-ring about-map-ring-one" aria-hidden="true" />
-            <span className="about-map-ring about-map-ring-two" aria-hidden="true" />
             <div className="about-map-image">
               <Image
                 src="/images/about/map.png"
@@ -249,10 +247,12 @@ export default function AboutPage() {
         <div className="about-container">
           <div className="about-philosophy-grid">
             <article className="about-philosophy-card about-teaching-card">
-              <div className="about-philosophy-pattern" aria-hidden="true">
-                <span />
-                <span />
-                <span />
+              <div className="about-philosophy-visual about-teaching-visual" aria-hidden="true">
+                <FaLightbulb />
+                <span className="about-open-book">
+                  <i />
+                  <i />
+                </span>
               </div>
 
               <header className="about-philosophy-header">
@@ -290,10 +290,12 @@ export default function AboutPage() {
             </article>
 
             <article className="about-philosophy-card about-mentorship-card">
-              <div className="about-mentor-orbits" aria-hidden="true">
-                <span />
-                <span />
-                <span />
+              <div className="about-philosophy-visual about-mentorship-visual" aria-hidden="true">
+                <FaUserTie className="about-mentor-figure" />
+                <span className="about-student-figure">
+                  <FaGraduationCap />
+                </span>
+                <i className="about-guidance-path" />
               </div>
 
               <header className="about-philosophy-header">

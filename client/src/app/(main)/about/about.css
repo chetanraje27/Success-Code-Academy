@@ -83,21 +83,6 @@
   gap: clamp(1rem, 3vw, 2.5rem);
 }
 
-.about-hero-grid::after {
-  position: absolute;
-  top: 72%;
-  left: 40%;
-  z-index: 1;
-  width: 13%;
-  height: 1px;
-  content: "";
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(8, 127, 131, 0.32) 0 5px,
-    transparent 5px 10px
-  );
-}
-
 .about-hero-copy {
   position: relative;
   z-index: 2;
@@ -182,38 +167,19 @@
   min-height: clamp(29rem, 43vw, 35rem);
   margin-right: -1rem;
   margin-left: -1.5rem;
-  background:
-    radial-gradient(circle at 56% 49%, rgba(8, 127, 131, 0.09), transparent 13rem),
-    radial-gradient(circle at 57% 50%, transparent 0 10rem, rgba(8, 127, 131, 0.08) 10.05rem 10.12rem, transparent 10.18rem);
 }
 
 .about-map-card::before {
   position: absolute;
-  top: 50%;
-  left: 54%;
-  width: 22rem;
-  height: 22rem;
+  top: 49%;
+  left: 55%;
+  width: clamp(19rem, 34vw, 26rem);
+  aspect-ratio: 1;
   content: "";
-  background-image: radial-gradient(rgba(16, 47, 94, 0.13) 1px, transparent 1px);
-  background-size: 15px 15px;
+  background: linear-gradient(145deg, rgba(8, 127, 131, 0.085), rgba(16, 47, 94, 0.025));
+  border: 1px solid rgba(8, 127, 131, 0.12);
   border-radius: 50%;
-  opacity: 0.35;
   transform: translate(-50%, -50%);
-  mask-image: radial-gradient(circle, #000, transparent 72%);
-}
-
-.about-map-card::after {
-  position: absolute;
-  top: 72%;
-  left: -0.3rem;
-  z-index: 2;
-  width: 0.55rem;
-  height: 0.55rem;
-  content: "";
-  background: var(--about-teal);
-  border: 3px solid var(--about-bg);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(8, 127, 131, 0.28);
   pointer-events: none;
 }
 
@@ -227,28 +193,6 @@
   object-fit: contain;
   filter: drop-shadow(0 12px 18px rgba(16, 47, 94, 0.08));
   transform: scale(1.01);
-}
-
-.about-map-ring {
-  position: absolute;
-  z-index: 1;
-  border: 1px solid rgba(8, 127, 131, 0.17);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.about-map-ring-one {
-  top: -5rem;
-  right: -3rem;
-  width: 17rem;
-  height: 17rem;
-}
-
-.about-map-ring-two {
-  right: 4rem;
-  bottom: -6rem;
-  width: 13rem;
-  height: 13rem;
 }
 
 /* Achievements */
@@ -695,104 +639,88 @@
   font-size: 0.72rem;
 }
 
-.about-philosophy-pattern {
+.about-philosophy-visual {
   position: absolute;
-  right: 2rem;
-  bottom: 1.5rem;
-  width: 9rem;
-  height: 7rem;
-  opacity: 0.25;
+  right: 1.25rem;
+  bottom: 0.75rem;
+  width: 12rem;
+  height: 11rem;
+  color: var(--about-navy);
+  opacity: 0.085;
+  pointer-events: none;
 }
 
-.about-philosophy-pattern::before,
-.about-philosophy-pattern::after,
-.about-philosophy-pattern span {
+.about-teaching-visual > svg {
   position: absolute;
-  width: 0.45rem;
-  height: 0.45rem;
-  content: "";
-  background: var(--about-navy);
-  border-radius: 50%;
-}
-
-.about-philosophy-pattern::before {
   top: 0;
   left: 50%;
+  width: 5.5rem;
+  height: 5.5rem;
+  transform: translateX(-50%);
 }
 
-.about-philosophy-pattern::after {
+.about-open-book {
+  position: absolute;
   right: 0;
   bottom: 0;
+  left: 0;
+  display: flex;
+  height: 5.3rem;
+  perspective: 12rem;
 }
 
-.about-philosophy-pattern span:nth-child(1) {
+.about-open-book i {
+  width: 50%;
+  border: 0.55rem solid currentColor;
+  border-top-width: 0.35rem;
+}
+
+.about-open-book i:first-child {
+  border-radius: 0.6rem 0 0.4rem 0;
+  transform: skewY(8deg);
+}
+
+.about-open-book i:last-child {
+  border-radius: 0 0.6rem 0 0.4rem;
+  transform: skewY(-8deg);
+}
+
+.about-mentorship-visual {
+  color: var(--about-teal);
+}
+
+.about-mentor-figure {
+  position: absolute;
+  right: 0;
   bottom: 0;
-  left: 0;
+  width: 7.5rem;
+  height: 9rem;
 }
 
-.about-philosophy-pattern span:nth-child(2) {
-  top: 55%;
-  left: 48%;
-}
-
-.about-philosophy-pattern span:nth-child(3) {
-  display: none;
-}
-
-.about-philosophy-pattern {
-  background:
-    linear-gradient(34deg, transparent 49.5%, var(--about-navy) 50%, transparent 50.5%),
-    linear-gradient(146deg, transparent 49.5%, var(--about-navy) 50%, transparent 50.5%);
-}
-
-.about-mentor-orbits {
+.about-student-figure {
   position: absolute;
-  right: -3rem;
-  bottom: -3rem;
-  width: 17rem;
-  height: 17rem;
-  border: 1px solid rgba(8, 127, 131, 0.16);
-  border-radius: 50%;
-}
-
-.about-mentor-orbits::before,
-.about-mentor-orbits::after,
-.about-mentor-orbits span {
-  position: absolute;
-  content: "";
-  border: 1px solid rgba(8, 127, 131, 0.13);
-  border-radius: 50%;
-}
-
-.about-mentor-orbits::before {
-  inset: 2.5rem;
-}
-
-.about-mentor-orbits::after {
-  inset: 5.3rem;
-  background: rgba(8, 127, 131, 0.07);
-}
-
-.about-mentor-orbits span {
-  width: 0.65rem;
-  height: 0.65rem;
-  background: var(--about-teal);
-  border: 0;
-}
-
-.about-mentor-orbits span:nth-child(1) {
-  top: 2.1rem;
-  left: 3.5rem;
-}
-
-.about-mentor-orbits span:nth-child(2) {
-  top: 7rem;
+  bottom: 0.5rem;
   left: 0;
+  display: grid;
+  width: 4.6rem;
+  height: 4.6rem;
+  place-items: center;
+  border: 0.45rem solid currentColor;
+  border-radius: 1rem;
 }
 
-.about-mentor-orbits span:nth-child(3) {
-  right: 3.5rem;
-  bottom: 2.1rem;
+.about-student-figure svg {
+  width: 2.7rem;
+  height: 2.7rem;
+}
+
+.about-guidance-path {
+  position: absolute;
+  right: 6.3rem;
+  bottom: 4.3rem;
+  width: 3.2rem;
+  border-top: 0.45rem solid currentColor;
+  transform: rotate(-18deg);
 }
 
 /* Infrastructure */
@@ -974,11 +902,6 @@
   .about-map-card {
     min-height: 29rem;
     margin-inline: 0;
-  }
-
-  .about-hero-grid::after,
-  .about-map-card::after {
-    display: none;
   }
 
   .about-achievement-grid {

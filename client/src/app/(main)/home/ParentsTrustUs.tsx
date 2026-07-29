@@ -40,6 +40,9 @@ export default function ParentsTrustUs() {
           <div className="trust-row top-row">
             {/* Card 1: 93% Selection Rate (Featured Light Teal Card) */}
             <div className="trust-card featured-teal-card">
+              <div className="trust-card-motif trust-motif-selection" aria-hidden="true">
+                <FaBullseye />
+              </div>
               <div className="card-top-head">
                 <div className="card-icon-box teal-icon-box">
                   <FaBullseye className="card-icon" />
@@ -70,6 +73,9 @@ export default function ParentsTrustUs() {
 
             {/* Card 2: 4.9 Google Rating */}
             <div className="trust-card standard-white-card">
+              <div className="trust-card-motif trust-motif-rating" aria-hidden="true">
+                <FiStar />
+              </div>
               <div className="card-top-head">
                 <div className="card-icon-box yellow-icon-box">
                   <FiStar className="card-icon" />
@@ -97,6 +103,9 @@ export default function ParentsTrustUs() {
           <div className="trust-row bottom-row">
             {/* Card 3: 98% Satisfaction */}
             <div className="trust-card standard-white-card">
+              <div className="trust-card-motif trust-motif-satisfaction" aria-hidden="true">
+                <FaHeart />
+              </div>
               <div className="card-top-head">
                 <div className="card-icon-box blue-icon-box">
                   <FaHeart className="card-icon" />
@@ -121,6 +130,9 @@ export default function ParentsTrustUs() {
 
             {/* Card 4: 1500+ Students */}
             <div className="trust-card standard-white-card">
+              <div className="trust-card-motif trust-motif-students" aria-hidden="true">
+                <FaUsers />
+              </div>
               <div className="card-top-head">
                 <div className="card-icon-box purple-icon-box">
                   <FaUsers className="card-icon" />
@@ -145,6 +157,9 @@ export default function ParentsTrustUs() {
 
             {/* Card 5: 8+ Excellence */}
             <div className="trust-card standard-white-card">
+              <div className="trust-card-motif trust-motif-excellence" aria-hidden="true">
+                <FaAward />
+              </div>
               <div className="card-top-head">
                 <div className="card-icon-box lightblue-icon-box">
                   <FaAward className="card-icon" />

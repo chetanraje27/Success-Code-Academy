@@ -1004,6 +1004,148 @@
   z-index: 1;
 }
 
+.home-container .why-sca-section .capsule::before {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  transform: none !important;
+}
+
+.home-container .capsule > .capsule-card-motif {
+  position: absolute;
+  right: -12px;
+  bottom: -15px;
+  z-index: 0;
+  display: grid;
+  width: 132px;
+  height: 118px;
+  color: rgba(var(--why-accent), 0.13);
+  place-items: center;
+  pointer-events: none;
+}
+
+.home-container .capsule-card-motif > svg {
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+}
+
+.home-container .capsule-card-motif::before,
+.home-container .capsule-card-motif::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+/* AIR 5: trophy standing on a three-level winners' podium. */
+.home-container .why-motif-1::before {
+  right: 8px;
+  bottom: 5px;
+  width: 96px;
+  height: 34px;
+  background:
+    linear-gradient(rgba(var(--why-accent), 0.13), rgba(var(--why-accent), 0.13)) 0 17px / 30px 17px no-repeat,
+    linear-gradient(rgba(var(--why-accent), 0.2), rgba(var(--why-accent), 0.2)) 33px 2px / 30px 32px no-repeat,
+    linear-gradient(rgba(var(--why-accent), 0.1), rgba(var(--why-accent), 0.1)) 66px 23px / 30px 11px no-repeat;
+  border-bottom: 1px solid rgba(var(--why-accent), 0.2);
+}
+
+/* AIR 26: a ranked medal seal rather than another generic circle. */
+.home-container .why-motif-2::before {
+  width: 98px;
+  height: 98px;
+  border: 1px dashed rgba(var(--why-accent), 0.22);
+  border-radius: 50%;
+}
+
+.home-container .why-motif-2::after {
+  bottom: 7px;
+  width: 42px;
+  height: 26px;
+  background: rgba(var(--why-accent), 0.11);
+  clip-path: polygon(0 0, 44% 18%, 50% 100%, 56% 18%, 100% 0, 78% 100%, 22% 100%);
+}
+
+/* Selection ratio: a government medical-college façade and columns. */
+.home-container .why-motif-4::before {
+  right: 7px;
+  bottom: 5px;
+  width: 106px;
+  height: 63px;
+  background:
+    linear-gradient(145deg, transparent 48%, rgba(var(--why-accent), 0.12) 49% 51%, transparent 52%) top / 100% 25px no-repeat,
+    repeating-linear-gradient(90deg, rgba(var(--why-accent), 0.12) 0 9px, transparent 9px 20px) bottom / 100% 39px no-repeat;
+  border-bottom: 3px solid rgba(var(--why-accent), 0.15);
+}
+
+/* Concept learning: connected neural nodes surrounding the brain. */
+.home-container .why-motif-5::before {
+  width: 104px;
+  height: 88px;
+  border: 1px solid rgba(var(--why-accent), 0.14);
+  border-radius: 48% 52% 46% 54%;
+  box-shadow: inset 0 0 0 12px rgba(var(--why-accent), 0.025);
+}
+
+/* 1:1 mentorship: two connected guidance rings. */
+.home-container .why-motif-6::before {
+  left: 7px;
+  bottom: 12px;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(var(--why-accent), 0.16);
+  border-radius: 50%;
+  box-shadow: 52px -22px 0 -8px rgba(var(--why-accent), 0.08);
+}
+
+.home-container .why-motif-6::after {
+  right: 20px;
+  bottom: 33px;
+  width: 72px;
+  height: 1px;
+  background: rgba(var(--why-accent), 0.17);
+  transform: rotate(-23deg);
+}
+
+/* Testing: analysis grid behind the rising performance chart. */
+.home-container .why-motif-7::before {
+  right: 6px;
+  bottom: 7px;
+  width: 112px;
+  height: 86px;
+  background-image:
+    linear-gradient(rgba(var(--why-accent), 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--why-accent), 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+  border-left: 1px solid rgba(var(--why-accent), 0.15);
+  border-bottom: 1px solid rgba(var(--why-accent), 0.15);
+}
+
+/* Faculty: an open-book base supporting the graduation cap. */
+.home-container .why-motif-8::before {
+  right: 10px;
+  bottom: 5px;
+  width: 103px;
+  height: 38px;
+  background:
+    linear-gradient(32deg, transparent 47%, rgba(var(--why-accent), 0.17) 48% 50%, transparent 51%) left / 50% 100% no-repeat,
+    linear-gradient(-32deg, transparent 47%, rgba(var(--why-accent), 0.17) 48% 50%, transparent 51%) right / 50% 100% no-repeat;
+  border-bottom: 2px solid rgba(var(--why-accent), 0.12);
+}
+
+/* Student-first: a care pulse flowing through the heart. */
+.home-container .why-motif-9::before {
+  right: 4px;
+  bottom: 38px;
+  width: 120px;
+  height: 32px;
+  background: rgba(var(--why-accent), 0.17);
+  clip-path: polygon(0 48%, 28% 48%, 35% 28%, 43% 72%, 50% 8%, 58% 82%, 66% 48%, 100% 48%, 100% 54%, 64% 54%, 59% 90%, 50% 30%, 44% 82%, 35% 42%, 30% 54%, 0 54%);
+}
+
 .home-container .right-capsule {
   flex-direction: row-reverse;
 }
@@ -1556,6 +1698,117 @@
 .home-container .trust-card > * {
   position: relative;
   z-index: 1;
+}
+
+.home-container .parents-trust-section .trust-card::before {
+  background: none !important;
+  border: 0 !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  transform: none !important;
+}
+
+.home-container .trust-card > .trust-card-motif {
+  position: absolute;
+  right: -14px;
+  bottom: -16px;
+  z-index: 0;
+  display: grid;
+  width: 142px;
+  height: 132px;
+  color: rgba(var(--trust-accent), 0.13);
+  place-items: center;
+  pointer-events: none;
+}
+
+.home-container .trust-card-motif > svg {
+  position: relative;
+  z-index: 2;
+  width: 82px;
+  height: 82px;
+}
+
+.home-container .trust-card-motif::before,
+.home-container .trust-card-motif::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+/* Selection rate: measurable progress rings around the target. */
+.home-container .trust-motif-selection::before {
+  width: 112px;
+  height: 112px;
+  border: 1px solid rgba(var(--trust-accent), 0.13);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 15px rgba(var(--trust-accent), 0.025),
+    inset 0 0 0 29px rgba(var(--trust-accent), 0.025);
+}
+
+.home-container .trust-motif-selection::after {
+  right: 11px;
+  bottom: 9px;
+  width: 62px;
+  height: 7px;
+  background: linear-gradient(90deg, rgba(var(--trust-accent), 0.2) 93%, rgba(var(--trust-accent), 0.05) 93%);
+  border-radius: 999px;
+}
+
+/* Rating: an unmistakable five-star review trail. */
+.home-container .trust-motif-rating::after {
+  right: 15px;
+  bottom: 10px;
+  color: rgba(var(--trust-accent), 0.2);
+  content: "★★★★★";
+  font-size: 0.72rem;
+  letter-spacing: 0.12rem;
+}
+
+.home-container .trust-motif-rating::before {
+  width: 104px;
+  height: 104px;
+  border: 1px dashed rgba(var(--trust-accent), 0.16);
+  border-radius: 50%;
+}
+
+/* Satisfaction: a care pulse running through the heart. */
+.home-container .trust-motif-satisfaction::before {
+  right: 4px;
+  bottom: 44px;
+  width: 132px;
+  height: 28px;
+  background: rgba(var(--trust-accent), 0.16);
+  clip-path: polygon(0 47%, 26% 47%, 34% 25%, 42% 72%, 50% 8%, 59% 82%, 67% 47%, 100% 47%, 100% 54%, 65% 54%, 59% 91%, 50% 30%, 43% 82%, 34% 40%, 29% 54%, 0 54%);
+}
+
+/* Students: connected community nodes around the group. */
+.home-container .trust-motif-students::before {
+  bottom: 7px;
+  width: 114px;
+  height: 68px;
+  border: 1px solid rgba(var(--trust-accent), 0.14);
+  border-bottom: 0;
+  border-radius: 70px 70px 0 0;
+  box-shadow:
+    inset 0 14px 0 rgba(var(--trust-accent), 0.025),
+    inset 0 29px 0 rgba(var(--trust-accent), 0.025);
+}
+
+/* Excellence: award seal with ribbon tails. */
+.home-container .trust-motif-excellence::before {
+  width: 108px;
+  height: 108px;
+  border: 1px dashed rgba(var(--trust-accent), 0.17);
+  border-radius: 50%;
+}
+
+.home-container .trust-motif-excellence::after {
+  bottom: 3px;
+  width: 52px;
+  height: 34px;
+  background: rgba(var(--trust-accent), 0.11);
+  clip-path: polygon(0 0, 42% 14%, 50% 100%, 58% 14%, 100% 0, 78% 100%, 22% 100%);
 }
 
 .home-container .card-top-head {

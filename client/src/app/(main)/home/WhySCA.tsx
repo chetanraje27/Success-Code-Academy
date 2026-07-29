@@ -250,6 +250,9 @@ export default function WhySCA() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <div className="capsule left-capsule">
+                  <div className={`capsule-card-motif why-motif-${c.id}`} aria-hidden="true">
+                    {c.icon}
+                  </div>
                   <div className="capsule-icon-box">
                     <span className="capsule-icon">{c.icon}</span>
                   </div>
@@ -306,6 +309,9 @@ export default function WhySCA() {
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
                   <div className="capsule right-capsule">
+                    <div className={`capsule-card-motif why-motif-${c.id}`} aria-hidden="true">
+                      {c.icon}
+                    </div>
                     <div className="capsule-content text-right">
                       <h4 className="capsule-title">
                         <EditableText
@@ -350,6 +356,9 @@ export default function WhySCA() {
                 <div className="mobile-slide-pair-wrap">
                   {pair.map((c) => (
                     <div key={c.id} className="capsule mobile-slider-card">
+                      <div className={`capsule-card-motif why-motif-${c.id}`} aria-hidden="true">
+                        {c.icon}
+                      </div>
                       <div className="capsule-icon-box">
                         <span className="capsule-icon">{c.icon}</span>
                       </div>

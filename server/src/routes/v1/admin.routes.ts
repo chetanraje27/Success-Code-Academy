@@ -38,7 +38,10 @@ router.use(authorize('admin'));
 // Dashboard Stats
 router.get('/stats', adminController.getDashboardStats);
 
-// Image Upload
+// Signed URL Upload (Direct to Supabase)
+router.post('/upload/signed-url', adminController.getSignedUploadUrl);
+
+// Image Upload (Legacy/Memory)
 router.post(
   '/upload',
   validate(uploadQuerySchema, 'query'),

@@ -174,6 +174,53 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+// --- Signed URL Endpoint (Direct Upload) ---
+export const getSignedUploadUrl = asyncHandler(async (req: Request, res: Response) => {
+  const { fileName, contentType, type = 'uploads' } = req.body;
+
+  if (!fileName || !contentType) {
+    throw new AppError('fileName and contentType are required in the body.', 400);
+  }
+
+  const client = getSupabase();
+  if (!client) {
+    throw new AppError('Storage is not configured on the server.', 500);
+  }
+
+  let folder = 'uploads';
+  if (type === 'banner') folder = 'banners';
+  else if (type === 'star') folder = 'stars';
+  else if (type === 'result') folder = 'results';
+  else if (type === 'news') folder = 'news';
+  else if (type === 'video') folder = 'videos';
+
+  const extMatch = fileName.match(/\.[0-9a-z]+$/i);
+  const ext = extMatch ? extMatch[0] : '';
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  const storagePath = `${folder}/${uniqueSuffix}${ext}`;
+
+  const { data, error } = await client.storage
+    .from('images')
+    .createSignedUploadUrl(storagePath);
+
+  if (error || !data) {
+    console.error("Supabase signed URL error:", error);
+    throw new AppError(`Failed to generate signed URL: ${error?.message || 'Unknown error'}`, 500);
+  }
+
+  const { data: publicUrlData } = client.storage
+    .from('images')
+    .getPublicUrl(storagePath);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      signedUrl: data.signedUrl,
+      publicUrl: publicUrlData.publicUrl,
+    },
+  });
+});
+
 // --- Dashboard Stats ---
 export const getDashboardStats = asyncHandler(async (req: Request, res: Response) => {
   const totalStudents = await User.count({ where: { role: 'student' } });

@@ -99,11 +99,35 @@ export async function uploadAdminImage(
   file: File,
   type: "banner" | "star" | "result" | "uploads" | "news" | "video" = "uploads",
 ): Promise<string> {
-  const body = new FormData();
-  body.append("image", file);
-  const response = await adminApiFetch<{ url: string }>(
-    `upload?type=${type}`,
-    { method: "POST", body },
+  // Step 1: Request a Signed Upload URL from our secure backend
+  const response = await adminApiFetch<{ signedUrl: string, publicUrl: string }>(
+    `upload/signed-url`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fileName: file.name,
+        contentType: file.type,
+        type,
+      }),
+    },
   );
-  return response.data.url;
+
+  const { signedUrl, publicUrl } = response.data;
+
+  // Step 2: Upload the binary directly to Supabase using the signed URL
+  const uploadResponse = await fetch(signedUrl, {
+    method: "PUT",
+    body: file,
+    headers: {
+      "Content-Type": file.type,
+    },
+  });
+
+  if (!uploadResponse.ok) {
+    throw new Error("Failed to upload file directly to storage");
+  }
+
+  // Step 3: Return the final public URL
+  return publicUrl;
 }

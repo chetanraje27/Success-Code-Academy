@@ -130,28 +130,6 @@ export default function AdmissionsClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER — Scholarship Poster Section
           ══════════════════════════════════════════ */}
-      <div className="admissions-hero-banner">
-        <div className="admissions-hero-container">
-          <motion.div
-            className="admissions-poster-wrapper"
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="poster-img-container">
-              <picture className="admissions-poster-picture">
-                <source media="(max-width: 768px)" srcSet="/images/banners/ScholorshipHeroMobile.png" />
-                <img
-                  src="/images/banners/ScholorshipHero.png"
-                  alt="NEET Admissions & Scholarship Test Hero Banner"
-                  className="admissions-poster-img"
-                />
-              </picture>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
       {/* ══════════════════════════════════════════
           MAIN GRID SECTION (Details on Left, Form on Right)
           ══════════════════════════════════════════ */}
@@ -558,36 +536,6 @@ export default function AdmissionsClient() {
         /* ════════════════════════════════
            HERO BANNER — Admissions Poster Section
            ════════════════════════════════ */
-        .admissions-hero-banner {
-          position: relative;
-          background: #ffffff;
-          width: 100%;
-        }
-        .admissions-hero-container {
-          width: 100% !important;
-          max-width: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-        .admissions-poster-wrapper {
-          width: 100% !important;
-          border-radius: 0 !important;
-          overflow: hidden;
-          box-shadow: none !important;
-          border: none !important;
-          background: #f8fafc;
-        }
-        .poster-img-container {
-          position: relative;
-          width: 100%;
-          display: block;
-        }
-        :global(.admissions-poster-img) {
-          width: 100% !important;
-          height: auto !important;
-          display: block !important;
-        }
-
         /* ════════════════════════════════
            SCHOLARSHIP GRID LAYOUT
            ════════════════════════════════ */
@@ -951,21 +899,6 @@ export default function AdmissionsClient() {
           }
         }
 
-        .poster-img-container {
-          position: relative;
-          width: 100%;
-          display: block;
-        }
-        .admissions-poster-picture {
-          width: 100%;
-          display: block;
-        }
-        :global(.admissions-poster-img) {
-          width: 100% !important;
-          height: auto !important;
-          display: block !important;
-        }
-
         /* ─── Responsive Styles ─── */
         @media (max-width: 992px) {
           .scholarship-grid-container {
@@ -986,27 +919,6 @@ export default function AdmissionsClient() {
         @media (max-width: 768px) {
           .admissions-page-container {
             padding-top: 72px !important;
-          }
-          .admissions-hero-banner {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            width: 100% !important;
-          }
-          .admissions-poster-wrapper {
-            border-radius: 0 !important;
-            width: 100% !important;
-          }
-          .poster-img-container {
-            position: relative !important;
-            width: 100% !important;
-            height: auto !important;
-            display: block !important;
-          }
-          :global(.admissions-poster-img) {
-            width: 100% !important;
-            height: auto !important;
-            object-fit: contain !important;
-            display: block !important;
           }
           .registration-form-card {
             padding: 0;

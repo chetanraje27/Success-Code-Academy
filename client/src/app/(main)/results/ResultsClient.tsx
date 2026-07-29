@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import ResultEditor from "@/components/admin/ResultEditor";
 import { EditableText } from "@/components/admin/EditableText";
+import resultsHeroImage from "../../../../public/images/results/heroes/NeetUG2026AchiversShravani.png";
 
 const resultYears = [2026, 2025, 2024, 2023, 2022] as const;
 
@@ -218,17 +219,13 @@ export default function ResultsClient() {
         className="results-primary-content"
       >
         <section className="results-main-poster-section">
-          <div className="results-container">
-            <div className="results-main-poster">
-              <Image
-                src="/images/results/heroes/NeetUG2026AchiversShravani.png"
-                alt="NEET UG 2026 Achievers"
-                width={1430}
-                height={813}
-                priority
-                sizes="(max-width: 1200px) 100vw, 1160px"
-              />
-            </div>
+          <div className="results-main-poster">
+            <Image
+              src={resultsHeroImage}
+              alt="NEET UG 2026 Achievers"
+              priority
+              sizes="100vw"
+            />
           </div>
         </section>
 

@@ -20,76 +20,19 @@
 
 .results-main-poster-section {
   position: relative;
-  padding: calc(76px + 30px) 0 44px;
+  padding: 76px 0 0;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 13% 0%, rgba(18, 190, 195, 0.2), transparent 25rem),
-    radial-gradient(circle at 89% 85%, rgba(56, 111, 196, 0.22), transparent 28rem),
-    linear-gradient(135deg, #071a34 0%, #0d2e59 58%, #0a2141 100%);
-  border-bottom: 1px solid #173b65;
-}
-
-.results-main-poster-section::before,
-.results-main-poster-section::after {
-  content: "";
-  position: absolute;
-  border: 1px solid rgba(126, 221, 222, 0.13);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.results-main-poster-section::before {
-  top: -250px;
-  left: -170px;
-  width: 520px;
-  height: 520px;
-}
-
-.results-main-poster-section::after {
-  right: -190px;
-  bottom: -310px;
-  width: 580px;
-  height: 580px;
+  background: #071a34;
 }
 
 .results-main-poster {
-  position: relative;
-  z-index: 1;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.23);
-  border-radius: 18px;
-  box-shadow: 0 16px 42px rgba(2, 12, 28, 0.18);
-  backdrop-filter: blur(8px);
-}
-
-.results-main-poster::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 6%;
-  z-index: 2;
-  width: 28%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #5fe0df, transparent);
-}
-
-.results-main-poster::after {
-  content: "";
-  position: absolute;
-  right: 9%;
-  bottom: -1px;
-  z-index: 2;
-  width: 20%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #d7b367, transparent);
+  width: 100%;
 }
 
 .results-main-poster img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 11px;
 }
 
 .results-catalog-section {
@@ -953,17 +896,7 @@
   }
 
   .results-main-poster-section {
-    padding: calc(68px + 18px) 0 28px;
-  }
-
-  .results-main-poster {
-    padding: 6px;
-    border-radius: 12px;
-    box-shadow: 0 10px 28px rgba(2, 12, 28, 0.16);
-  }
-
-  .results-main-poster img {
-    border-radius: 7px;
+    padding-top: 68px;
   }
 
   .results-catalog-section {

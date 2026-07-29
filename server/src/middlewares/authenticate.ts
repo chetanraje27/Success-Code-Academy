@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError } from '../utils/AppError';
 import { env } from '../config/environment';
-import { User } from '../models';
+import { User, Admin } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 
 /**
@@ -53,27 +53,34 @@ export const authenticate = asyncHandler(async (
       throw new AppError('Invalid or expired token.', 401);
     }
 
-    const user = await User.findByPk(decoded.id, {
-      attributes: ['id', 'email', 'mobileNumber', 'role'],
-    });
+    let account: any = null;
 
-    if (!user) {
+    if (decoded.purpose === 'admin') {
+      account = await Admin.findByPk(decoded.id, {
+        attributes: ['id', 'email', 'mobileNumber'],
+      });
+      if (account) {
+        account.role = 'admin'; // For compatibility with the req.user type
+      }
+    } else {
+      account = await User.findByPk(decoded.id, {
+        attributes: ['id', 'email', 'mobileNumber', 'role'],
+      });
+    }
+
+    if (!account) {
       throw new AppError('This account is no longer available.', 401);
     }
 
-    if (decoded.purpose === 'admin' && user.role !== 'admin') {
-      throw new AppError('Admin access has been revoked.', 403);
-    }
-
-    if (decoded.purpose === 'student' && user.role !== 'student') {
+    if (decoded.purpose === 'student' && account.role !== 'student') {
       throw new AppError('Please use the admin sign-in page.', 403);
     }
 
     req.user = {
-      id: user.id,
-      email: user.email || '',
-      mobileNumber: user.mobileNumber,
-      role: user.role,
+      id: account.id,
+      email: account.email || '',
+      mobileNumber: account.mobileNumber,
+      role: account.role,
       purpose: decoded.purpose,
     };
     next();

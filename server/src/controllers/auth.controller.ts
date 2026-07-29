@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { type SignOptions } from 'jsonwebtoken';
-import { User } from '../models';
+import { User, Admin } from '../models';
 import { env } from '../config/environment';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
@@ -10,7 +10,7 @@ import logger from '../utils/logger';
 type AuthPurpose = 'student' | 'admin';
 
 function createToken(
-  user: User,
+  user: { id: number; email?: string; role?: string; mobileNumber: string },
   purpose: AuthPurpose,
   expiresIn: NonNullable<SignOptions['expiresIn']>,
 ): string {
@@ -18,7 +18,7 @@ function createToken(
     {
       id: user.id,
       email: user.email || '',
-      role: user.role,
+      role: user.role || purpose,
       mobileNumber: user.mobileNumber,
       purpose,
     },
@@ -41,6 +41,17 @@ function publicUser(user: User) {
     email: user.email,
     age: user.age,
     role: user.role,
+  };
+}
+
+function publicAdmin(admin: Admin) {
+  return {
+    id: admin.id,
+    firstName: admin.name,
+    lastName: '',
+    mobileNumber: admin.mobileNumber,
+    email: admin.email,
+    role: 'admin',
   };
 }
 
@@ -210,8 +221,8 @@ export const loginAdmin = asyncHandler(
     const email = String(req.body.email).trim().toLowerCase();
     const password = String(req.body.password);
 
-    const user = await User.findOne({
-      where: { email, role: 'admin' },
+    const user = await Admin.findOne({
+      where: { email },
     });
 
     // Comparing a fixed hash for missing accounts reduces account-enumeration
@@ -244,7 +255,7 @@ export const loginAdmin = asyncHandler(
       message: 'Admin sign-in successful.',
       data: {
         token,
-        user: publicUser(user),
+        user: publicAdmin(user),
       },
     });
   },
@@ -253,34 +264,45 @@ export const loginAdmin = asyncHandler(
 /** GET /api/v1/auth/me */
 export const getCurrentUser = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const user = await User.findByPk(req.user?.id, {
-      attributes: [
-        'id',
-        'firstName',
-        'lastName',
-        'mobileNumber',
-        'email',
-        'age',
-        'role',
-      ],
-    });
+    let account = null;
 
-    if (!user) {
+    if (req.user?.purpose === 'admin') {
+      const admin = await Admin.findByPk(req.user.id);
+      if (admin) {
+        account = publicAdmin(admin);
+      }
+    } else {
+      const user = await User.findByPk(req.user?.id, {
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'mobileNumber',
+          'email',
+          'age',
+          'role',
+        ],
+      });
+      if (user) {
+        account = publicUser(user);
+      }
+    }
+
+    if (!account) {
       throw new AppError('This account is no longer available.', 401);
     }
 
     res.status(200).json({
       status: 'success',
-      data: { user: publicUser(user) },
+      data: { user: account },
     });
   },
 );
 
-/** PUT /api/v1/auth/admin/password */
 export const changeAdminPassword = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const user = await User.findByPk(req.user?.id);
-    if (!user || user.role !== 'admin' || !user.passwordHash) {
+    const user = await Admin.findByPk(req.user?.id);
+    if (!user || !user.passwordHash) {
       throw new AppError('A verified admin account is required.', 403);
     }
 

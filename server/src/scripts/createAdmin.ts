@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
-import { sequelize, User } from '../models';
+import { sequelize, Admin } from '../models';
 
 function required(name: string): string {
   const value = process.env[name]?.trim();
@@ -11,17 +11,8 @@ function required(name: string): string {
 }
 
 function validatePassword(password: string): void {
-  const strongEnough =
-    password.length >= 12 &&
-    /[a-z]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[0-9]/.test(password) &&
-    /[^A-Za-z0-9]/.test(password);
-
-  if (!strongEnough) {
-    throw new Error(
-      'ADMIN_PASSWORD must be at least 12 characters and include uppercase, lowercase, number, and symbol.',
-    );
+  if (password.length < 6) {
+    throw new Error('ADMIN_PASSWORD must be at least 6 characters.');
   }
 }
 
@@ -38,18 +29,15 @@ async function createOrUpdateAdmin(): Promise<void> {
   validatePassword(password);
 
   await sequelize.authenticate();
+  await sequelize.sync({ alter: true }); // Ensure the admins table is created before inserting
 
-  const existing = await User.findOne({
+  const name = `${firstName} ${lastName}`.trim();
+
+  const existing = await Admin.findOne({
     where: {
       [Op.or]: [{ email }, { mobileNumber }],
     },
   });
-
-  if (existing && existing.role !== 'admin') {
-    throw new Error(
-      'That email or mobile number belongs to a student account. Use different admin details.',
-    );
-  }
 
   const passwordHash = await bcrypt.hash(password, 12);
 
@@ -57,21 +45,17 @@ async function createOrUpdateAdmin(): Promise<void> {
     await existing.update({
       email,
       mobileNumber,
-      firstName,
-      lastName,
-      role: 'admin',
+      name,
       passwordHash,
     });
     console.log(`Admin credentials updated for ${email}.`);
     return;
   }
 
-  await User.create({
+  await Admin.create({
     email,
     mobileNumber,
-    firstName,
-    lastName,
-    role: 'admin',
+    name,
     passwordHash,
   });
   console.log(`Admin account created for ${email}.`);

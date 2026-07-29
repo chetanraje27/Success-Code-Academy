@@ -5,6 +5,7 @@ import logger from '../utils/logger';
 const sequelize = new Sequelize(dbConfig);
 
 // Import models and initialize them to ensure they are registered on the sequelize instance
+import Admin, { initAdmin } from './Admin';
 import ScholarshipRegistration, { initScholarshipRegistration } from './ScholarshipRegistration';
 import User, { initUser } from './User';
 import OtpVerification, { initOtpVerification } from './OtpVerification';
@@ -20,6 +21,7 @@ import MediaRevision, { initMediaRevision } from './MediaRevision';
 import NewsArticle, { initNewsArticle } from './NewsArticle';
 import AcademyVideo, { initAcademyVideo } from './AcademyVideo';
 
+initAdmin(sequelize);
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
 initOtpVerification(sequelize);
@@ -59,6 +61,7 @@ export async function testConnection(): Promise<boolean> {
 
 export {
   sequelize,
+  Admin,
   ScholarshipRegistration,
   User,
   OtpVerification,

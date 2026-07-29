@@ -22,21 +22,15 @@ type SiteSettings = {
   twitter: string;
 };
 
-const emptySettings: SiteSettings = {
-  phone: "",
-  email: "",
-  address: "",
-  whatsapp: "",
-  facebook: "",
-  instagram: "",
-  youtube: "",
-  linkedin: "",
-  twitter: "",
+import { defaultSiteSettings } from "@/lib/site-settings";
+
+const initialSettings: SiteSettings = {
+  ...defaultSiteSettings,
 };
 
 export default function AdminSettingsPage() {
   const router = useRouter();
-  const [settings, setSettings] = useState(emptySettings);
+  const [settings, setSettings] = useState(initialSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");

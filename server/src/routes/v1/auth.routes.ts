@@ -57,12 +57,8 @@ const adminPasswordSchema = z
     currentPassword: z.string().min(1).max(128),
     newPassword: z
       .string()
-      .min(12, 'New password must be at least 12 characters')
-      .max(128)
-      .regex(/[a-z]/, 'New password must include a lowercase letter')
-      .regex(/[A-Z]/, 'New password must include an uppercase letter')
-      .regex(/[0-9]/, 'New password must include a number')
-      .regex(/[^A-Za-z0-9]/, 'New password must include a symbol'),
+      .min(6, 'New password must be at least 6 characters')
+      .max(128),
   })
   .strict()
   .refine((data) => data.currentPassword !== data.newPassword, {

@@ -274,21 +274,26 @@
 }
 
 .home-container .banner-dots {
-  display: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.25rem;
 }
 
 .home-container .banner-dot {
-  width: 7px;
-  height: 7px;
+  width: 32px;
+  height: 4px;
   padding: 0;
   background: #c5d0db;
   border: 0;
-  border-radius: 99px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .home-container .banner-dot.active {
-  width: 24px;
-  background: var(--home-teal);
+  background: var(--home-navy);
 }
 
 /* Section headings */

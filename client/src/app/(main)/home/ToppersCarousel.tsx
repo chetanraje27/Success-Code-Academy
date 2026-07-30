@@ -20,15 +20,7 @@ type StarStudent = {
   color?: string;
 };
 
-const defaultStarStudents: StarStudent[] = [
-  { id: "siddhi-badhe", name: "Siddhi Badhe", score: "665/720", rank: "AIR 26", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SiddhiBadhe.png" },
-  { id: "samruddhi-lokhande", name: "Samruddhi Lokhande", score: "602/720", rank: "AIR 1204", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/SamruddhiLokhande.png" },
-  { id: "mahesh-bhosale", name: "Mahesh Bhosale", score: "550/720", rank: "AIR 6000", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/MaheshBhosale.png" },
-  { id: "aprupa-patil", name: "Aprupa Patil", score: "550/720", rank: "AIR 1610", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/AprupaPatil.png" },
-  { id: "darshana-dhoka", name: "Darshana Dhoka", score: "550/720", rank: "AIR 1980", course: "NEET Freshers Batch", year: "NEET UG 2025", image: "/images/results/2025/DarshanaDhoka.png" },
-  { id: "piyush-kale", name: "Piyush Kale", score: "681/720", rank: "AIR 2840", course: "NEET Freshers Batch", year: "NEET UG 2024", image: "/images/results/2024/PiyushKale.png" },
-  { id: "rushikesh-kale", name: "Rushikesh Kale", score: "660/720", rank: "AIR 2840", course: "NEET Freshers Batch", year: "NEET UG 2024", image: "/images/results/2024/RushikeshKale.png" },
-];
+
 
 type ParsedResult = {
   score: string;
@@ -66,13 +58,47 @@ function resolveImageSource(image: string) {
   return image;
 }
 
+function StudentImage({ src, alt, priority, sizes, className }: { src: string; alt: string; priority?: boolean; sizes: string; className: string; }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  return (
+    <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}>
+      {(!isLoaded && !isError) && (
+        <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1 }} />
+      )}
+      {isError ? (
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f1f5f9", zIndex: 1 }}>
+          <span style={{ color: "#94a3b8", fontSize: "0.75rem", fontWeight: 600 }}>No Image</span>
+        </div>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          unoptimized
+          priority={priority}
+          sizes={sizes}
+          className={`${className} ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => { setIsError(true); setIsLoaded(true); }}
+          style={{ transition: "opacity 0.3s ease-in-out" }}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function ToppersCarousel() {
-  const [stars, setStars] = useState<StarStudent[]>(defaultStarStudents);
-  const [brokenImages, setBrokenImages] = useState<Array<string | number>>([]);
+  const [stars, setStars] = useState<StarStudent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const { refreshKey } = useEditModeOptional();
 
   useEffect(() => {
     const controller = new AbortController();
+    setIsLoading(true);
+    setFetchError(false);
 
     fetch("/api/content/stars", { signal: controller.signal, cache: "no-store" })
       .then(res => res.json())
@@ -86,18 +112,16 @@ export default function ToppersCarousel() {
       })
       .catch(err => {
         if (err.name !== "AbortError") {
-          console.warn("Failed to load stars (backend might be offline):", err);
+          console.error("Failed to load stars:", err);
+          setFetchError(true);
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
 
     return () => controller.abort();
   }, [refreshKey]);
-
-  const markImageBroken = (id: string | number) => {
-    setBrokenImages((current) => current.includes(id) ? current : [...current, id]);
-  };
-
-  const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
 
   const visibleStars = stars.slice(0, 6);
   const featuredStudents = visibleStars.slice(0, 2);
@@ -140,7 +164,20 @@ export default function ToppersCarousel() {
           </Link>
         </header>
 
-        {featuredStudents.length === 0 ? (
+        {isLoading ? (
+          <div className="results-grid">
+            {[1, 2].map(i => (
+              <article className="featured-card skeleton-pulse" key={`feat-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)", minHeight: "320px", borderRadius: "16px" }}></article>
+            ))}
+            {[1, 2, 3, 4].map(i => (
+              <article className={`support-card support-${i} skeleton-pulse`} key={`supp-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)", minHeight: "180px", borderRadius: "12px" }}></article>
+            ))}
+          </div>
+        ) : fetchError ? (
+          <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+            Unable to load student results. Please try again later.
+          </div>
+        ) : featuredStudents.length === 0 ? (
           <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
             Results will be updated soon.
           </div>
@@ -169,13 +206,10 @@ export default function ToppersCarousel() {
                     </div>
                   </div>
 
-                  <Image
-                    src={brokenImages.includes(featuredStudent.id) ? DEFAULT_AVATAR : resolveImageSource(featuredStudent.image)}
+                  <StudentImage
+                    src={resolveImageSource(featuredStudent.image)}
                     alt={`${featuredStudent.name}, ${featuredResult.rankType} ${featuredResult.rank}`}
-                    fill
-                    unoptimized
                     priority
-                    onError={() => markImageBroken(featuredStudent.id)}
                     sizes="(max-width: 720px) 92vw, 480px"
                     className="featured-student-image"
                   />
@@ -200,12 +234,9 @@ export default function ToppersCarousel() {
                     </div>
                   </div>
 
-                  <Image
-                    src={brokenImages.includes(student.id) ? DEFAULT_AVATAR : resolveImageSource(student.image)}
+                  <StudentImage
+                    src={resolveImageSource(student.image)}
                     alt={`${student.name}, ${result.rankType} ${result.rank}`}
-                    fill
-                    unoptimized
-                    onError={() => markImageBroken(student.id)}
                     sizes="(max-width: 720px) 46vw, 240px"
                     className="support-student-image"
                   />

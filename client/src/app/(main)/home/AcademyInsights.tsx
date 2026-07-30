@@ -38,9 +38,34 @@ interface VideoItem {
   image: string;
   videoUrl: string;
 }
+function LoadingImage({ src, alt, sizes, className }: { src: string; alt: string; sizes: string; className: string; }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-
-
+  return (
+    <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden", borderRadius: "inherit" }}>
+      {(!isLoaded && !isError) && (
+        <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1 }} />
+      )}
+      {isError ? (
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f1f5f9", zIndex: 1 }}>
+          <span style={{ color: "#94a3b8", fontSize: "0.75rem", fontWeight: 600 }}>No Image</span>
+        </div>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          className={`${className} ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => { setIsError(true); setIsLoaded(true); }}
+          style={{ transition: "opacity 0.3s ease-in-out" }}
+        />
+      )}
+    </div>
+  );
+}
 export default function AcademyInsights() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [blogStartIndex, setBlogStartIndex] = useState(0);
@@ -50,8 +75,13 @@ export default function AcademyInsights() {
   const [itemsPerView, setItemsPerView] = useState(3);
   const [videoItemsPerView, setVideoItemsPerView] = useState(4);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
+
   React.useEffect(() => {
     async function loadData() {
+      setIsLoading(true);
+      setFetchError(false);
       try {
         const [newsRes, videoRes] = await Promise.all([
           apiFetch<{ data: BlogItem[] }>("/api/v1/content/news"),
@@ -61,6 +91,9 @@ export default function AcademyInsights() {
         if (videoRes && videoRes.data) setVideoItems(videoRes.data);
       } catch (err) {
         console.error("Failed to load insights data", err);
+        setFetchError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
     loadData();
@@ -154,58 +187,72 @@ export default function AcademyInsights() {
           </div>
 
           <div className="blog-slider-container">
-            <div
-              className="cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / ${itemsPerView} + ${20 / itemsPerView}px)), 0, 0)` } as React.CSSProperties}
-            >
-              {blogItems.map((blog) => (
-                <div key={blog.id} className="card-item-wrapper">
-                  {blog.externalUrl ? (
-                    <a href={blog.externalUrl} target="_blank" rel="noopener noreferrer" className="blog-card-link">
-                      <article className="blog-cover-card">
-                        <div className="blog-image-overlay" />
-                        <Image
-                          src={blog.image}
-                          alt={blog.title}
-                          fill
-                          sizes="400px"
-                          className="blog-bg-img"
-                        />
-                        <span className="blog-category-badge">{blog.category}</span>
-                        <div className="blog-card-content">
-                          <span className="blog-meta-text">
-                            {blog.date} | BY {blog.author}
-                          </span>
-                          <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
-                          <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
-                        </div>
-                      </article>
-                    </a>
-                  ) : (
-                    <Link href={`/blogs/${blog.slug}`} className="blog-card-link">
-                      <article className="blog-cover-card">
-                        <div className="blog-image-overlay" />
-                        <Image
-                          src={blog.image}
-                          alt={blog.title}
-                          fill
-                          sizes="400px"
-                          className="blog-bg-img"
-                        />
-                        <span className="blog-category-badge">{blog.category}</span>
-                        <div className="blog-card-content">
-                          <span className="blog-meta-text">
-                            {blog.date} | BY {blog.author}
-                          </span>
-                          <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
-                          <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
-                        </div>
-                      </article>
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="cards-grid-layout">
+                {[1, 2, 3].map(i => (
+                  <div key={`skel-news-${i}`} className="card-item-wrapper skeleton-pulse" style={{ height: "420px", borderRadius: "16px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
+                ))}
+              </div>
+            ) : fetchError ? (
+              <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+                Unable to load news. Please try again later.
+              </div>
+            ) : blogItems.length === 0 ? (
+              <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+                No news available.
+              </div>
+            ) : (
+              <div
+                className="cards-grid-layout"
+                style={{ transform: `translate3d(calc(-${blogStartIndex} * (100% / ${itemsPerView} + ${20 / itemsPerView}px)), 0, 0)` } as React.CSSProperties}
+              >
+                {blogItems.map((blog) => (
+                  <div key={blog.id} className="card-item-wrapper">
+                    {blog.externalUrl ? (
+                      <a href={blog.externalUrl} target="_blank" rel="noopener noreferrer" className="blog-card-link">
+                        <article className="blog-cover-card">
+                          <div className="blog-image-overlay" />
+                          <LoadingImage
+                            src={blog.image}
+                            alt={blog.title}
+                            sizes="400px"
+                            className="blog-bg-img"
+                          />
+                          <span className="blog-category-badge">{blog.category}</span>
+                          <div className="blog-card-content">
+                            <span className="blog-meta-text">
+                              {blog.date} | BY {blog.author}
+                            </span>
+                            <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
+                            <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
+                          </div>
+                        </article>
+                      </a>
+                    ) : (
+                      <Link href={`/blogs/${blog.slug}`} className="blog-card-link">
+                        <article className="blog-cover-card">
+                          <div className="blog-image-overlay" />
+                          <LoadingImage
+                            src={blog.image}
+                            alt={blog.title}
+                            sizes="400px"
+                            className="blog-bg-img"
+                          />
+                          <span className="blog-category-badge">{blog.category}</span>
+                          <div className="blog-card-content">
+                            <span className="blog-meta-text">
+                              {blog.date} | BY {blog.author}
+                            </span>
+                            <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
+                            <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
+                          </div>
+                        </article>
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </EditableSection>
@@ -261,55 +308,70 @@ export default function AcademyInsights() {
 
           {/* 4-Column / Responsive Slider for Videos */}
           <div className="blog-slider-container">
-            <div
-              className="video-cards-grid-layout"
-              style={{ transform: `translate3d(calc(-${videoStartIndex} * (100% / ${videoItemsPerView} + ${20 / videoItemsPerView}px)), 0, 0)` } as React.CSSProperties}
-            >
-              {videoItems.map((video) => (
-                <div key={video.id} className="video-card-item-wrapper">
-                  <button
-                    type="button"
-                    className="apple-video-card"
-                    onClick={() => setActiveVideo(video.videoUrl)}
-                    aria-label={`Play ${video.title}`}
-                  >
-                    {/* Full Card Cover Image */}
-                    <Image
-                      src={video.image}
-                      alt={video.title}
-                      fill
-                      sizes="400px"
-                      className="apple-card-bg-img"
-                    />
-
-                    {/* Top and bottom gradient overlays for text legibility */}
-                    <div className="apple-card-gradient-overlay" />
-
-                    {/* Content Overlay */}
-                    <div className="apple-card-content">
-                      {/* Play Button Icon absolute centered */}
-                      <div className="apple-play-btn-wrap">
-                        <div className="apple-play-pulse"></div>
-                        <div className="apple-play-btn-circle">
-                          <FaPlay className="apple-play-icon" />
-                        </div>
-                      </div>
-
-                      {/* Bottom Text and Duration row */}
-                      <div className="apple-card-bottom-info">
-                        <div className="apple-card-meta-row">
-                          <span className="apple-card-category">{video.category}</span>
-                          <div className="apple-duration-badge">
-                            <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+            {isLoading ? (
+              <div className="video-cards-grid-layout">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={`skel-vid-${i}`} className="video-card-item-wrapper skeleton-pulse" style={{ height: "460px", borderRadius: "16px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
+                ))}
+              </div>
+            ) : fetchError ? (
+              <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+                Unable to load videos. Please try again later.
+              </div>
+            ) : videoItems.length === 0 ? (
+              <div style={{ width: "100%", padding: "40px 0", textAlign: "center", color: "#64748b", fontWeight: 600 }}>
+                No videos available.
+              </div>
+            ) : (
+              <div
+                className="video-cards-grid-layout"
+                style={{ transform: `translate3d(calc(-${videoStartIndex} * (100% / ${videoItemsPerView} + ${20 / videoItemsPerView}px)), 0, 0)` } as React.CSSProperties}
+              >
+                {videoItems.map((video) => (
+                  <div key={video.id} className="video-card-item-wrapper">
+                    <button
+                      type="button"
+                      className="apple-video-card"
+                      onClick={() => setActiveVideo(video.videoUrl)}
+                      aria-label={`Play ${video.title}`}
+                    >
+                      {/* Full Card Cover Image */}
+                      <LoadingImage
+                        src={video.image}
+                        alt={video.title}
+                        sizes="400px"
+                        className="apple-card-bg-img"
+                      />
+  
+                      {/* Top and bottom gradient overlays for text legibility */}
+                      <div className="apple-card-gradient-overlay" />
+  
+                      {/* Content Overlay */}
+                      <div className="apple-card-content">
+                        {/* Play Button Icon absolute centered */}
+                        <div className="apple-play-btn-wrap">
+                          <div className="apple-play-pulse"></div>
+                          <div className="apple-play-btn-circle">
+                            <FaPlay className="apple-play-icon" />
                           </div>
                         </div>
-                        <h3 className="apple-card-title">{video.title}</h3>
+  
+                        {/* Bottom Text and Duration row */}
+                        <div className="apple-card-bottom-info">
+                          <div className="apple-card-meta-row">
+                            <span className="apple-card-category">{video.category}</span>
+                            <div className="apple-duration-badge">
+                              <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
+                            </div>
+                          </div>
+                          <h3 className="apple-card-title">{video.title}</h3>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                </div>
-              ))}
-            </div>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             </div>
           </div>
         </div>

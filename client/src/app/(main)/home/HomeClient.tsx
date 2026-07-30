@@ -41,33 +41,27 @@ type PublicContentResponse<T> = {
   data?: T[];
 };
 
-const defaultHomeBanners: HomeBanner[] = [
-  { image: "/images/banners/HeroPoster1.png", altText: "Hero Banner 1", type: "HOME" },
-  { image: "/images/banners/HeroPoster2.png", altText: "Hero Banner 2", type: "HOME" },
-  { image: "/images/banners/HeroPoster3.png", altText: "Hero Banner 3", type: "HOME" },
-  { image: "/images/banners/HeroPoster4.png", altText: "Hero Banner 4", type: "HOME" },
-];
-
-const defaultAnnouncements: Announcement[] = [
-  { text: "Admissions Open 2026-27 for NEET & JEE batches!" },
-  { text: "Free Demo Classes available — Book your slot today." },
-  { text: "Scholarship Test (SCST) registration started — up to 100% fee waiver!" },
-  { text: "JEE & NEET new batch starting July 15 — Limited seats!" },
-];
-
 const removeAnnouncementEmoji = (text: string) =>
   text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, "").replace(/\s{2,}/g, " ").trim();
 
 function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      priority={priority}
-      sizes="(max-width: 1200px) 100vw, 1200px"
-      className="banner-img"
-    />
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {!isLoaded && (
+        <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1 }} />
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority={priority}
+        sizes="(max-width: 1200px) 100vw, 1200px"
+        className={`banner-img ${isLoaded ? "opacity-100" : "opacity-0"}`}
+        onLoad={() => setIsLoaded(true)}
+        style={{ transition: "opacity 0.3s ease-in-out" }}
+      />
+    </div>
   );
 }
 
@@ -106,12 +100,15 @@ export default function HomeClient() {
     });
   };
 
-  const [announcements, setAnnouncements] = useState<Announcement[]>(defaultAnnouncements);
-  const [slides, setSlides] = useState<HomeBanner[]>(defaultHomeBanners);
-  const [isLoading, setIsLoading] = useState(false);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [slides, setSlides] = useState<HomeBanner[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
+      setIsLoading(true);
+      setFetchError(false);
       try {
         const [notifRes, bannerRes] = await Promise.all([
           fetch("/api/content/notifications", { cache: "no-store" }),
@@ -141,6 +138,7 @@ export default function HomeClient() {
         }
       } catch (err) {
         console.error("Failed to load content:", err);
+        setFetchError(true);
       } finally {
         setIsLoading(false);
       }
@@ -184,9 +182,18 @@ export default function HomeClient() {
               <div className="notif-left">
                 <span className="notif-label">Latest Updates</span>
               </div>
-              <div className="notif-ticker">
-                <div className="skeleton-pulse" style={{ width: "60%", height: "16px", borderRadius: "4px", backgroundColor: "rgba(255,255,255,0.15)" }}></div>
+              <div className="notif-ticker" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div className="skeleton-pulse" style={{ width: "40%", height: "16px", borderRadius: "4px", backgroundColor: "rgba(255,255,255,0.15)" }}></div>
+                <div className="skeleton-pulse" style={{ width: "30%", height: "16px", borderRadius: "4px", backgroundColor: "rgba(255,255,255,0.15)" }}></div>
               </div>
+            </div>
+          </div>
+        </div>
+      ) : fetchError ? (
+        <div className="notif-bar-wrap">
+          <div className="notif-bar">
+            <div className="notif-inner" style={{ justifyContent: "center" }}>
+              <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem", fontWeight: 600 }}>Unable to load updates at this time.</span>
             </div>
           </div>
         </div>
@@ -280,6 +287,10 @@ export default function HomeClient() {
             </>
           ) : isLoading ? (
             <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)" }}></div>
+          ) : fetchError ? (
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f1f5f9", color: "#64748b", fontWeight: 600 }}>
+              Unable to load banners. Please try again later.
+            </div>
           ) : (
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f8fbff", color: "#64748b", fontWeight: 600 }}>
               No banners available

@@ -20,6 +20,7 @@ import ContentBlock, { initContentBlock } from './ContentBlock';
 import MediaRevision, { initMediaRevision } from './MediaRevision';
 import NewsArticle, { initNewsArticle } from './NewsArticle';
 import AcademyVideo, { initAcademyVideo } from './AcademyVideo';
+import Course, { initCourse } from './Course';
 
 initAdmin(sequelize);
 initScholarshipRegistration(sequelize);
@@ -36,6 +37,7 @@ initContentBlock(sequelize);
 initMediaRevision(sequelize);
 initNewsArticle(sequelize);
 initAcademyVideo(sequelize);
+initCourse(sequelize);
 
 export async function testConnection(): Promise<boolean> {
   try {
@@ -76,5 +78,6 @@ export {
   MediaRevision,
   NewsArticle,
   AcademyVideo,
+  Course,
 };
 export default sequelize;

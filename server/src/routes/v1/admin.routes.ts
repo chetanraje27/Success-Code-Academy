@@ -35,6 +35,8 @@ import {
   adminUpdateScholarshipFormSchema,
   adminCreateContactMessageSchema,
   adminUpdateContactMessageSchema,
+  courseCreateSchema,
+  courseUpdateSchema,
 } from '../../validation/admin.schemas';
 
 const router = Router();
@@ -153,6 +155,21 @@ router.delete(
   '/videos/:id',
   validate(idParamsSchema, 'params'),
   adminController.deleteAcademyVideo,
+);
+
+// Courses
+router.get('/courses', adminController.getCourses);
+router.post('/courses', validate(courseCreateSchema), adminController.createCourse);
+router.put(
+  '/courses/:id',
+  validate(idParamsSchema, 'params'),
+  validate(courseUpdateSchema),
+  adminController.updateCourse,
+);
+router.delete(
+  '/courses/:id',
+  validate(idParamsSchema, 'params'),
+  adminController.deleteCourse,
 );
 
 // Media history and rollback

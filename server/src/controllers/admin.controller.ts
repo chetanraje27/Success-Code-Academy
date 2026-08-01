@@ -13,6 +13,7 @@ import {
   MediaRevision,
   NewsArticle,
   AcademyVideo,
+  Course,
   sequelize,
 } from '../models';
 import type {
@@ -1046,5 +1047,31 @@ export const deleteContactMessage = asyncHandler(async (req: Request, res: Respo
   const msg = await ContactMessage.findByPk(id);
   if (!msg) throw new AppError('Contact message not found', 404);
   await msg.destroy();
+  res.status(200).json({ status: 'success', data: null });
+});
+
+export const getCourses = asyncHandler(async (req: Request, res: Response) => {
+  const courses = await Course.findAll({ order: [['id', 'ASC']] });
+  res.status(200).json({ status: 'success', data: courses });
+});
+
+export const createCourse = asyncHandler(async (req: Request, res: Response) => {
+  const course = await Course.create(req.body);
+  res.status(201).json({ status: 'success', data: course });
+});
+
+export const updateCourse = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const course = await Course.findByPk(id);
+  if (!course) throw new AppError('Course not found', 404);
+  await course.update(req.body);
+  res.status(200).json({ status: 'success', data: course });
+});
+
+export const deleteCourse = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const course = await Course.findByPk(id);
+  if (!course) throw new AppError('Course not found', 404);
+  await course.destroy();
   res.status(200).json({ status: 'success', data: null });
 });

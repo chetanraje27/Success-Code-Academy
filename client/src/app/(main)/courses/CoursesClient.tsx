@@ -3,16 +3,16 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { EditableText } from "@/components/admin/EditableText";
-import { coursesData } from "@/data/courses";
+// import removed
 
 type CourseCategory = "freshers" | "repeaters" | "test-series";
 
-export default function CoursesClient() {
+export default function CoursesClient({ courses }: { courses: any[] }) {
   const [activeTab, setActiveTab] = useState<CourseCategory>("freshers");
 
   const filteredCourses = useMemo(
-    () => coursesData.filter((course) => course.category === activeTab),
-    [activeTab],
+    () => courses.filter((course) => course.category === activeTab),
+    [activeTab, courses],
   );
 
   return (
@@ -102,7 +102,7 @@ export default function CoursesClient() {
         <div className="course-catalog-container">
           <div className="course-catalog-list" aria-live="polite">
             {filteredCourses.map((course) => (
-              <Link href={course.link} key={course.id} className="course-catalog-link">
+              <Link href={`/courses/${course.slug}`} key={course.id} className="course-catalog-link">
                 <article className={`course-catalog-card course-catalog-card-${course.category}`}>
                   <div className="course-catalog-content">
                     <div className="course-catalog-type">
@@ -144,7 +144,7 @@ export default function CoursesClient() {
                     </p>
 
                     <ul className="course-catalog-highlights">
-                      {course.highlights.map((highlight, index) => (
+                      {course.highlights.map((highlight: string, index: number) => (
                         <li key={highlight}>
                           <span className="course-catalog-check" aria-hidden="true">
                             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">

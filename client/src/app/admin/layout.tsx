@@ -41,6 +41,7 @@ const navigation = [
     label: "Website content",
     items: [
       { label: "Banners", href: "/admin/banners", icon: Images },
+      { label: "Course catalog", href: "/admin/content/courses", icon: ClipboardList },
       { label: "Announcements", href: "/admin/notifications", icon: Bell },
       { label: "News articles", href: "/admin/content/news", icon: Newspaper },
       { label: "Academy videos", href: "/admin/content/videos", icon: Video },

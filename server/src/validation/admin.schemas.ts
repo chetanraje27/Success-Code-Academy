@@ -151,6 +151,21 @@ export const videoCreateSchema = z
 
 export const videoUpdateSchema = videoCreateSchema.partial().strict();
 
+export const courseCreateSchema = z
+  .object({
+    slug: z.string().trim().min(2).max(100),
+    category: z.enum(['freshers', 'repeaters', 'test-series']),
+    type: z.string().trim().min(2).max(100),
+    badge: z.string().trim().min(2).max(100),
+    title: z.string().trim().min(2).max(200),
+    description: z.string().trim().min(2).max(2000),
+    highlights: z.array(z.string().trim().min(1).max(200)),
+    isActive: z.boolean().default(true),
+  })
+  .strict();
+
+export const courseUpdateSchema = courseCreateSchema.partial().strict();
+
 export const settingsUpdateSchema = z
   .object({
     phone: z.string().trim().max(40).optional(),

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import { coursesData } from "@/data/courses";
 import CourseDetailClient from "./CourseDetailClient";
+import { getApiBase } from "@/lib/api";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const course = coursesData.find(
-    (item) => item.slug === id || String(item.id) === id,
+  const res = await fetch(`${getApiBase()}/api/v1/content/courses`, { cache: 'no-store' });
+  const data = await res.json();
+  const courses = data?.data || [];
+  const course = courses.find(
+    (item: any) => item.slug === id || String(item.id) === id,
   );
 
   return {
@@ -15,22 +18,21 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export function generateStaticParams() {
-  return coursesData.map((course) => ({ id: course.slug }));
-}
-
 export default async function CourseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const course = coursesData.find(
-    (item) => item.slug === id || String(item.id) === id,
+  const res = await fetch(`${getApiBase()}/api/v1/content/courses`, { cache: 'no-store' });
+  const data = await res.json();
+  const courses = data?.data || [];
+  const course = courses.find(
+    (item: any) => item.slug === id || String(item.id) === id,
   );
 
   if (!course) {
     notFound();
   }
 
-  if (id !== course.slug) {
-    permanentRedirect(course.link);
+  if (String(course.id) === id) {
+    permanentRedirect(`/courses/${course.slug}`);
   }
 
   return <CourseDetailClient course={course} />;

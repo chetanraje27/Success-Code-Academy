@@ -13,10 +13,10 @@ import {
   FaFilePdf,
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
-import type { CourseDetail } from "@/data/courses";
+// import removed
 
 interface CourseDetailClientProps {
-  course: CourseDetail;
+  course: any;
 }
 
 const timeSlots = [
@@ -121,7 +121,7 @@ const classroomFeatures = [
   },
 ];
 
-function CourseEmblem({ category }: { category: CourseDetail["category"] }) {
+function CourseEmblem({ category }: { category: string }) {
   if (category === "freshers") {
     return (
       <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
@@ -304,7 +304,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
               </p>
 
               <ul className="course-detail-highlights">
-                {course.highlights.map((highlight, index) => (
+                {course.highlights.map((highlight: string, index: number) => (
                   <li key={highlight}>
                     <span aria-hidden="true">
                       <FaCheck />

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FaDna, FaArrowsRotate, FaClipboardCheck } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 
-const courses = [
+const fallbackCourses: { id?: number; name: string; icon: React.ReactNode; description: string; color: string; bg: string; href: string }[] = [
   {
     name: "NEET 11th - 12th",
     icon: <FaDna />,
@@ -31,7 +31,24 @@ const courses = [
   },
 ];
 
-export default function ExploreCourses() {
+export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
+  // If we have dynamic courses, merge them with the design properties
+  // Otherwise use the hardcoded fallback
+  const displayCourses = courses.length > 0
+    ? courses.slice(0, 3).map((c, i) => {
+        const style = fallbackCourses[i] || fallbackCourses[0];
+        return {
+          id: c.id,
+          name: c.title,
+          description: c.description,
+          icon: style.icon,
+          color: style.color,
+          bg: style.bg,
+          href: `/courses/${c.slug}`,
+        };
+      })
+    : fallbackCourses;
+
   return (
     <section className="explore-section">
       <div className="container">
@@ -52,7 +69,7 @@ export default function ExploreCourses() {
           </p>
         </div>
         <div className="explore-grid">
-          {courses.map((c, i) => (
+          {displayCourses.map((c, i) => (
             <motion.div
               key={c.name}
               initial={false}
@@ -78,16 +95,17 @@ export default function ExploreCourses() {
                   <div className="content-box">
                     <h3 className="course-title-text">
                       <EditableText
-                        contentKey={`courses.card-${i + 1}.title`}
+                        contentKey={c.id ? `course-${c.id}.heading` : `courses.card-${i + 1}.title`}
                         label={`course ${i + 1} title`}
                         showInlineControls={false}
+                        scope="global"
                       >
                         {c.name}
                       </EditableText>
                     </h3>
                     <p className="course-desc-text">
                       <EditableText
-                        contentKey={`courses.card-${i + 1}.description`}
+                        contentKey={c.id ? `course-${c.id}.description` : `courses.card-${i + 1}.description`}
                         label={`course ${i + 1} description`}
                         kind="multiline"
                         showInlineControls={false}

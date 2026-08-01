@@ -67,7 +67,7 @@ function BannerImage({ src, alt, priority = false }: { src: string; alt: string;
 
 
 
-export default function HomeClient() {
+export default function HomeClient({ courses = [] }: { courses?: any[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [announceIdx, setAnnounceIdx] = useState(0);
@@ -320,7 +320,7 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════
           SECTION 3: EXPLORE COURSES
           ══════════════════════════════════════════ */}
-      <ExploreCourses />
+      <ExploreCourses courses={courses} />
 
       {/* ══════════════════════════════════════════
           SECTION 4: TOPPERS CAROUSEL

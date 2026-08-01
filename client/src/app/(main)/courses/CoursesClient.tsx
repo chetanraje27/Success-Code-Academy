@@ -43,6 +43,7 @@ export default function CoursesClient() {
                 contentKey="course-1.heading"
                 label="freshers filter"
                 showInlineControls={false}
+                scope="global"
               >
                 NEET Freshers
               </EditableText>
@@ -66,6 +67,7 @@ export default function CoursesClient() {
                 contentKey="course-3.heading"
                 label="repeaters filter"
                 showInlineControls={false}
+                scope="global"
               >
                 NEET Repeaters
               </EditableText>
@@ -124,6 +126,7 @@ export default function CoursesClient() {
                         contentKey={`course-${course.id}.heading`}
                         label={`${course.title} heading`}
                         showInlineControls={false}
+                        scope="global"
                       >
                         {course.title}
                       </EditableText>

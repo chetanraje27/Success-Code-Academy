@@ -288,7 +288,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
               </div>
 
               <h1 className="course-detail-title">
-                <EditableText contentKey={`course-${course.id}.heading`} label="course heading">
+                <EditableText contentKey={`course-${course.id}.heading`} label="course heading" scope="global">
                   {course.title}
                 </EditableText>
               </h1>
@@ -515,6 +515,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                         contentKey={`course-${course.id}.heading`}
                         label="course heading"
                         showInlineControls={false}
+                        scope="global"
                       >
                         {course.title}
                       </EditableText>

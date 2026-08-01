@@ -10,16 +10,16 @@ import EditableSection from "@/components/admin/EditableSection";
 import SettingsEditor from "@/components/admin/SettingsEditor";
 import { useSiteSettings } from "@/lib/site-settings";
 import { EditableText } from "@/components/admin/EditableText";
-import { 
-  FaFacebookF, 
-  FaXTwitter, 
-  FaInstagram, 
-  FaLinkedinIn, 
-  FaYoutube, 
-  FaLocationDot, 
-  FaPhone, 
+import {
+  FaFacebookF,
+  FaXTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+  FaYoutube,
+  FaLocationDot,
+  FaPhone,
   FaEnvelope,
-  FaChevronDown 
+  FaChevronDown
 } from "react-icons/fa6";
 
 export default function Footer() {
@@ -125,7 +125,6 @@ export default function Footer() {
               >
                 {[
                   { name: "Facebook", icon: <FaFacebookF size={18} />, href: settings.facebook },
-                  { name: "Twitter", icon: <FaXTwitter size={18} />, href: settings.twitter },
                   { name: "Instagram", icon: <FaInstagram size={18} />, href: settings.instagram },
                   { name: "LinkedIn", icon: <FaLinkedinIn size={18} />, href: settings.linkedin },
                   { name: "YouTube", icon: <FaYoutube size={18} />, href: settings.youtube },
@@ -224,11 +223,10 @@ export default function Footer() {
                 className={`footer-links ${expandedSection === "programs" ? "expanded" : ""}`}
               >
                 {[
-                  "NEET Dropper Batch",
-                  "NEET Target Batch",
-                  "NEET Foundation",
-                  "NEET Crash Course",
-                  "Mock Test Series",
+                  "NEET 11th-12th Batch",
+                  "NEET Reapeaters Batch",
+                  "Mock Test Series - Offline",
+                  "Mock Test Series - Online",
                 ].map((course) => (
                   <li key={course}>
                     <Link href="/courses" className="footer-link">
@@ -248,65 +246,65 @@ export default function Footer() {
 
             {/* Contact Us Column (Accordion on Mobile) */}
             <EditableSection label="Contact Info" onEdit={() => setEditSettings(true)}>
-            <div className="footer-col">
-              <div className="footer-heading-row">
-                <h4 className="footer-heading">
-                  <EditableText
-                    contentKey="footer.contact.title"
-                    label="contact heading"
-                    scope="global"
+              <div className="footer-col">
+                <div className="footer-heading-row">
+                  <h4 className="footer-heading">
+                    <EditableText
+                      contentKey="footer.contact.title"
+                      label="contact heading"
+                      scope="global"
+                    >
+                      Contact Us
+                    </EditableText>
+                  </h4>
+                  <button
+                    type="button"
+                    className="accordion-toggle"
+                    onClick={() => toggleSection("contact")}
+                    aria-expanded={expandedSection === "contact"}
+                    aria-controls="footer-contact-links"
+                    aria-label="Toggle contact information"
                   >
-                    Contact Us
-                  </EditableText>
-                </h4>
-                <button
-                  type="button"
-                  className="accordion-toggle"
-                  onClick={() => toggleSection("contact")}
-                  aria-expanded={expandedSection === "contact"}
-                  aria-controls="footer-contact-links"
-                  aria-label="Toggle contact information"
+                    <span className={`accordion-chevron ${expandedSection === "contact" ? "rotated" : ""}`}>
+                      <FaChevronDown size={14} />
+                    </span>
+                  </button>
+                </div>
+                <ul
+                  id="footer-contact-links"
+                  className={`footer-contact ${expandedSection === "contact" ? "expanded" : ""}`}
                 >
-                  <span className={`accordion-chevron ${expandedSection === "contact" ? "rotated" : ""}`}>
-                    <FaChevronDown size={14} />
-                  </span>
-                </button>
+                  <li>
+                    <span className="contact-icon" style={{ marginTop: '2px' }}><FaLocationDot /></span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {settings.address1 && (
+                        <div>
+                          <strong>Girls Branch:</strong><br />
+                          {settings.address1}
+                        </div>
+                      )}
+                      {settings.address2 && (
+                        <div>
+                          <strong>Boys Branch:</strong><br />
+                          {settings.address2}
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                  <li>
+                    <span className="contact-icon"><FaPhone /></span>
+                    <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="footer-link">
+                      {settings.phone}
+                    </a>
+                  </li>
+                  <li>
+                    <span className="contact-icon"><FaEnvelope /></span>
+                    <a href={`mailto:${settings.email}`} className="footer-link">
+                      {settings.email}
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <ul
-                id="footer-contact-links"
-                className={`footer-contact ${expandedSection === "contact" ? "expanded" : ""}`}
-              >
-                <li>
-                  <span className="contact-icon" style={{ marginTop: '2px' }}><FaLocationDot /></span>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {settings.address1 && (
-                      <div>
-                        <strong>Girls Branch:</strong><br />
-                        {settings.address1}
-                      </div>
-                    )}
-                    {settings.address2 && (
-                      <div>
-                        <strong>Boys Branch:</strong><br />
-                        {settings.address2}
-                      </div>
-                    )}
-                  </div>
-                </li>
-                <li>
-                  <span className="contact-icon"><FaPhone /></span>
-                  <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="footer-link">
-                    {settings.phone}
-                  </a>
-                </li>
-                <li>
-                  <span className="contact-icon"><FaEnvelope /></span>
-                  <a href={`mailto:${settings.email}`} className="footer-link">
-                    {settings.email}
-                  </a>
-                </li>
-              </ul>
-            </div>
             </EditableSection>
           </div>
         </div>
@@ -440,7 +438,7 @@ export default function Footer() {
 
         @media (min-width: 1024px) {
           .footer-grid {
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            grid-template-columns: 1.2fr 0.9fr 1.25fr 2.5fr;
           }
         }
 

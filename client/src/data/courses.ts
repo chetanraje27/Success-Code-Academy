@@ -16,7 +16,7 @@ export const coursesData: CourseDetail[] = [
     slug: "neet-fresher",
     type: "Classroom Course",
     badge: "Starts: 9 July",
-    title: "NEET Fresher",
+    title: "NEET Freshers",
     description: "Offline classroom program for Class 11th students preparing for NEET 2027.",
     highlights: [
       "Expert faculty-led classroom teaching",

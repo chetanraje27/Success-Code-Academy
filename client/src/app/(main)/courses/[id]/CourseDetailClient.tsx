@@ -288,14 +288,14 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
               </div>
 
               <h1 className="course-detail-title">
-                <EditableText contentKey="course.heading" label="course heading">
+                <EditableText contentKey={`course-${course.id}.heading`} label="course heading">
                   {course.title}
                 </EditableText>
               </h1>
 
               <p className="course-detail-description">
                 <EditableText
-                  contentKey="course.description"
+                  contentKey={`course-${course.id}.description`}
                   label="course description"
                   kind="multiline"
                 >
@@ -510,7 +510,15 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                         Register for the course
                       </EditableText>
                     </h2>
-                    <span>{course.title}</span>
+                    <span>
+                      <EditableText
+                        contentKey={`course-${course.id}.heading`}
+                        label="course heading"
+                        showInlineControls={false}
+                      >
+                        {course.title}
+                      </EditableText>
+                    </span>
                   </div>
 
                   <div className="course-registration-section-label">

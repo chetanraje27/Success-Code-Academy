@@ -67,7 +67,7 @@ export default function ContactClient() {
       refreshCaptcha();
       return;
     }
-    
+
     const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get("name"),
@@ -138,81 +138,81 @@ export default function ContactClient() {
                 label="Contact Details"
                 onEdit={() => setEditSettings(true)}
               >
-              <div className="enhanced-contact-list">
-                
-                {/* Address Item */}
-                <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/location.png" alt="" width={24} height={24} className="contact-detail-icon" />
-                  </div>
-                  <div className="detail-content-box">
-                    <h4 className="detail-item-label">
-                      <EditableText contentKey="contact.address-label" label="address label">
-                        Address
-                      </EditableText>
-                    </h4>
-                    <p className="detail-item-text">
-                      {settings.address}
-                    </p>
-                  </div>
-                </div>
+                <div className="enhanced-contact-list">
 
-                {/* Phone Item */}
-                <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/phone-ringing.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  {/* Address Item */}
+                  <div className="contact-detail-item">
+                    <div className="detail-icon-box contact-bg-blue">
+                      <Image src="/images/ui/location.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                    </div>
+                    <div className="detail-content-box">
+                      <h4 className="detail-item-label">
+                        <EditableText contentKey="contact.address-label" label="address label">
+                          Address
+                        </EditableText>
+                      </h4>
+                      <p className="detail-item-text">
+                        {settings.address}
+                      </p>
+                    </div>
                   </div>
-                  <div className="detail-content-box">
-                    <h4 className="detail-item-label">
-                      <EditableText contentKey="contact.phone-label" label="phone label">
-                        Phone
-                      </EditableText>
-                    </h4>
-                    <p className="detail-item-text">
-                      <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="detail-link">{settings.phone}</a>
-                    </p>
-                  </div>
-                </div>
 
-                {/* Email Item */}
-                <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/email.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  {/* Phone Item */}
+                  <div className="contact-detail-item">
+                    <div className="detail-icon-box contact-bg-blue">
+                      <Image src="/images/ui/phone-ringing.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                    </div>
+                    <div className="detail-content-box">
+                      <h4 className="detail-item-label">
+                        <EditableText contentKey="contact.phone-label" label="phone label">
+                          Phone
+                        </EditableText>
+                      </h4>
+                      <p className="detail-item-text">
+                        <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="detail-link">{settings.phone}</a>
+                      </p>
+                    </div>
                   </div>
-                  <div className="detail-content-box">
-                    <h4 className="detail-item-label">
-                      <EditableText contentKey="contact.email-label" label="email label">
-                        Email
-                      </EditableText>
-                    </h4>
-                    <p className="detail-item-text">
-                      <a href={`mailto:${settings.email}`} className="detail-link">
-                        {settings.email}
-                      </a>
-                    </p>
-                  </div>
-                </div>
 
-                {/* Working Hours Item */}
-                <div className="contact-detail-item">
-                  <div className="detail-icon-box contact-bg-blue">
-                    <Image src="/images/ui/clock (1).png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  {/* Email Item */}
+                  <div className="contact-detail-item">
+                    <div className="detail-icon-box contact-bg-blue">
+                      <Image src="/images/ui/email.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                    </div>
+                    <div className="detail-content-box">
+                      <h4 className="detail-item-label">
+                        <EditableText contentKey="contact.email-label" label="email label">
+                          Email
+                        </EditableText>
+                      </h4>
+                      <p className="detail-item-text">
+                        <a href={`mailto:${settings.email}`} className="detail-link">
+                          {settings.email}
+                        </a>
+                      </p>
+                    </div>
                   </div>
-                  <div className="detail-content-box">
-                    <h4 className="detail-item-label">
-                      <EditableText contentKey="contact.hours-label" label="working hours label">
-                        Working Hours
-                      </EditableText>
-                    </h4>
-                    <p className="detail-item-text">
-                      <EditableText contentKey="contact.hours" label="working hours">
-                        Monday - Saturday: 9:00 AM - 6:00 PM
-                      </EditableText>
-                    </p>
-                  </div>
-                </div>
 
-              </div>
+                  {/* Working Hours Item */}
+                  <div className="contact-detail-item">
+                    <div className="detail-icon-box contact-bg-blue">
+                      <Image src="/images/ui/clock (1).png" alt="" width={24} height={24} className="contact-detail-icon" />
+                    </div>
+                    <div className="detail-content-box">
+                      <h4 className="detail-item-label">
+                        <EditableText contentKey="contact.hours-label" label="working hours label">
+                          Working Hours
+                        </EditableText>
+                      </h4>
+                      <p className="detail-item-text">
+                        <EditableText contentKey="contact.hours" label="working hours">
+                          Monday - Saturday: 9:00 AM - 6:00 PM
+                        </EditableText>
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
               </EditableSection>
             </div>
 
@@ -236,7 +236,7 @@ export default function ContactClient() {
                         id="cf-name"
                         name="name"
                         type="text"
-                        placeholder="Manu Arora"
+                        placeholder="Manoj Kumar"
                         className="dark-form-input"
                         required
                       />
@@ -248,7 +248,7 @@ export default function ContactClient() {
                         id="cf-email"
                         name="email"
                         type="email"
-                        placeholder="support@aceternity.com"
+                        placeholder="example@gmail.com"
                         className="dark-form-input"
                         required
                       />
@@ -260,7 +260,7 @@ export default function ContactClient() {
                         id="cf-phone"
                         name="phone"
                         type="tel"
-                        placeholder="E.g. +91 98765 43210"
+                        placeholder="E.g. +91 XXXXXXXXXX"
                         className="dark-form-input"
                         required
                       />

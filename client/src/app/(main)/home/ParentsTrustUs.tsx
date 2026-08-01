@@ -5,7 +5,7 @@ import { FaBullseye, FaHeart, FaUsers, FaAward } from "react-icons/fa6";
 import { FiStar } from "react-icons/fi";
 import { EditableText } from "@/components/admin/EditableText";
 
-function StatCounter({ value }: { value: string }) {
+function StatCounter({ value }: { value: React.ReactNode }) {
   return <span>{value}</span>;
 }
 
@@ -48,7 +48,7 @@ export default function ParentsTrustUs() {
                   <FaBullseye className="card-icon" />
                 </div>
                 <div className="card-number teal-number">
-                  <StatCounter value="93%" />
+                  <StatCounter value={<EditableText contentKey="trust.selection.value" label="selection rate value">93%</EditableText>} />
                 </div>
               </div>
               <div className="card-body">
@@ -81,7 +81,7 @@ export default function ParentsTrustUs() {
                   <FiStar className="card-icon" />
                 </div>
                 <div className="card-number dark-number">
-                  <StatCounter value="4.9" />
+                  <StatCounter value={<EditableText contentKey="trust.rating.value" label="Google rating value">4.9</EditableText>} />
                 </div>
               </div>
               <div className="card-body">
@@ -111,7 +111,7 @@ export default function ParentsTrustUs() {
                   <FaHeart className="card-icon" />
                 </div>
                 <div className="card-number dark-number">
-                  <StatCounter value="98%" />
+                  <StatCounter value={<EditableText contentKey="trust.satisfaction.value" label="satisfaction value">98%</EditableText>} />
                 </div>
               </div>
               <div className="card-body">
@@ -138,7 +138,7 @@ export default function ParentsTrustUs() {
                   <FaUsers className="card-icon" />
                 </div>
                 <div className="card-number dark-number">
-                  <StatCounter value="1500+" />
+                  <StatCounter value={<EditableText contentKey="trust.students.value" label="students value">1500+</EditableText>} />
                 </div>
               </div>
               <div className="card-body">
@@ -165,7 +165,7 @@ export default function ParentsTrustUs() {
                   <FaAward className="card-icon" />
                 </div>
                 <div className="card-number dark-number">
-                  <StatCounter value="8+" />
+                  <StatCounter value={<EditableText contentKey="trust.excellence.value" label="excellence value">8+</EditableText>} />
                 </div>
               </div>
               <div className="card-body">

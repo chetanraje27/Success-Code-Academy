@@ -5,10 +5,13 @@ import Link from "next/link";
 import { EditableText } from "@/components/admin/EditableText";
 // import removed
 
-type CourseCategory = "freshers" | "repeaters" | "test-series";
-
 export default function CoursesClient({ courses }: { courses: any[] }) {
-  const [activeTab, setActiveTab] = useState<CourseCategory>("freshers");
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(courses.map((c) => c.category)));
+    return unique.length > 0 ? unique : ["freshers"];
+  }, [courses]);
+
+  const [activeTab, setActiveTab] = useState<string>(categories[0]);
 
   const filteredCourses = useMemo(
     () => courses.filter((course) => course.category === activeTab),
@@ -26,74 +29,48 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
           </h1>
 
           <div className="course-catalog-tabs" role="tablist" aria-label="Course categories">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "freshers"}
-              onClick={() => setActiveTab("freshers")}
-              className={activeTab === "freshers" ? "active" : ""}
-            >
-              <span className="course-catalog-tab-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 4h6a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H3z" />
-                  <path d="M21 4h-6a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h6z" />
-                </svg>
-              </span>
-              <EditableText
-                contentKey="course-1.heading"
-                label="freshers filter"
-                showInlineControls={false}
-                scope="global"
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === cat}
+                onClick={() => setActiveTab(cat)}
+                className={activeTab === cat ? "active" : ""}
               >
-                NEET Freshers
-              </EditableText>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "repeaters"}
-              onClick={() => setActiveTab("repeaters")}
-              className={activeTab === "repeaters" ? "active" : ""}
-            >
-              <span className="course-catalog-tab-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="5" />
-                  <circle cx="12" cy="12" r="1.5" />
-                </svg>
-              </span>
-              <EditableText
-                contentKey="course-3.heading"
-                label="repeaters filter"
-                showInlineControls={false}
-                scope="global"
-              >
-                NEET Repeaters
-              </EditableText>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "test-series"}
-              onClick={() => setActiveTab("test-series")}
-              className={activeTab === "test-series" ? "active" : ""}
-            >
-              <span className="course-catalog-tab-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="5" y="4" width="14" height="17" rx="2" />
-                  <path d="M9 4V2h6v2M9 11l2 2 4-4M9 17h6" />
-                </svg>
-              </span>
-              <EditableText
-                contentKey="filters.test-series"
-                label="test series filter"
-                showInlineControls={false}
-              >
-                Test series
-              </EditableText>
-            </button>
+                <span className="course-catalog-tab-icon" aria-hidden="true">
+                  {cat === "freshers" ? (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 4h6a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H3z" />
+                      <path d="M21 4h-6a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h6z" />
+                    </svg>
+                  ) : cat === "repeaters" ? (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="9" />
+                      <circle cx="12" cy="12" r="5" />
+                      <circle cx="12" cy="12" r="1.5" />
+                    </svg>
+                  ) : cat === "test-series" ? (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="5" y="4" width="14" height="17" rx="2" />
+                      <path d="M9 4V2h6v2M9 11l2 2 4-4M9 17h6" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                    </svg>
+                  )}
+                </span>
+                <EditableText
+                  contentKey={`category.${cat}.label`}
+                  label={`${cat} category filter`}
+                  showInlineControls={false}
+                  scope="global"
+                >
+                  {cat === "freshers" ? "NEET Freshers" : cat === "repeaters" ? "NEET Repeaters" : cat === "test-series" ? "Test series" : cat}
+                </EditableText>
+              </button>
+            ))}
           </div>
         </div>
       </section>

@@ -46,13 +46,9 @@ const leftCapsules = [
     metric: <>AIR <CountUp end="5" /></>,
     title: "AIR 5",
     description: (
-      <>
-        <strong>NEET 2026</strong>
-        <br />
-        All India Girls Topper
-        <br />
-        Maharashtra Girls Rank 1
-      </>
+      <EditableText contentKey="why.capsule.1.desc" kind="multiline" label="capsule 1 description">
+        {`NEET 2026\nAll India Girls Topper\nMaharashtra Girls Rank 1`}
+      </EditableText>
     ),
     icon: <FaTrophy />,
     color: "#0ca678", // Green
@@ -62,7 +58,11 @@ const leftCapsules = [
     id: 2,
     metric: <>AIR <CountUp end="26" /></>,
     title: "AIR 26",
-    description: "Outstanding NEET 2025 performance reflecting our dedication and expertise.",
+    description: (
+      <EditableText contentKey="why.capsule.2.desc" kind="multiline" label="capsule 2 description">
+        Outstanding NEET 2025 performance reflecting our dedication and expertise.
+      </EditableText>
+    ),
     icon: <FaTrophy />,
     color: "#f08c00", // Amber
     bg: "#fff9db",
@@ -72,7 +72,11 @@ const leftCapsules = [
     id: 4,
     metric: <><CountUp end="36" />+</>,
     title: "Best Selection Ratio",
-    description: "In 2025 – 36+ students got selected for MBBS in Government Medical Colleges.",
+    description: (
+      <EditableText contentKey="why.capsule.4.desc" kind="multiline" label="capsule 4 description">
+        In 2025 – 36+ students got selected for MBBS in Government Medical Colleges.
+      </EditableText>
+    ),
     icon: <FaHospital />,
     color: "#1c7ed6", // Blue
     bg: "#e7f5ff",
@@ -81,7 +85,11 @@ const leftCapsules = [
     id: 5,
     metric: "Concept-Based",
     title: "Concept-Based Learning",
-    description: "Strong conceptual foundation before problem-solving for long-term understanding.",
+    description: (
+      <EditableText contentKey="why.capsule.5.desc" kind="multiline" label="capsule 5 description">
+        Strong conceptual foundation before problem-solving for long-term understanding.
+      </EditableText>
+    ),
     icon: <FaBrain />,
     color: "#7048e8", // Purple
     bg: "#f3f0ff",
@@ -93,7 +101,11 @@ const rightCapsules = [
     id: 6,
     metric: "1:1 Mentorship",
     title: "Personalized Mentorship",
-    description: "Individual attention, doubt solving, progress tracking and confidence-building guidance.",
+    description: (
+      <EditableText contentKey="why.capsule.6.desc" kind="multiline" label="capsule 6 description">
+        Individual attention, doubt solving, progress tracking and confidence-building guidance.
+      </EditableText>
+    ),
     icon: <FaUserGroup />,
     color: "#e03131", // Red
     bg: "#fff5f5",
@@ -102,7 +114,11 @@ const rightCapsules = [
     id: 7,
     metric: "NEET pattern",
     title: "Regular Tests & Analysis",
-    description: "NEET pattern tests with detailed performance analysis to improve accuracy and confidence.",
+    description: (
+      <EditableText contentKey="why.capsule.7.desc" kind="multiline" label="capsule 7 description">
+        NEET pattern tests with detailed performance analysis to improve accuracy and confidence.
+      </EditableText>
+    ),
     icon: <FaChartLine />,
     color: "#097969", // Pine Green
     bg: "#eaf6f0",
@@ -111,7 +127,11 @@ const rightCapsules = [
     id: 8,
     metric: "Mentors",
     title: "Experienced Faculty",
-    description: "Passionate and experienced mentors focused on your success at every step.",
+    description: (
+      <EditableText contentKey="why.capsule.8.desc" kind="multiline" label="capsule 8 description">
+        Passionate and experienced mentors focused on your success at every step.
+      </EditableText>
+    ),
     icon: <FaGraduationCap />,
     color: "#1c7ed6", // Blue
     bg: "#e7f5ff",
@@ -120,7 +140,11 @@ const rightCapsules = [
     id: 9,
     metric: "Student-First",
     title: "Student-First Environment",
-    description: "A disciplined, motivating and supportive atmosphere where every dream matters.",
+    description: (
+      <EditableText contentKey="why.capsule.9.desc" kind="multiline" label="capsule 9 description">
+        A disciplined, motivating and supportive atmosphere where every dream matters.
+      </EditableText>
+    ),
     icon: <FaHeart />,
     color: "#d9480f", // Orange
     bg: "#fff4e6",

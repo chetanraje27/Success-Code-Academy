@@ -40,11 +40,11 @@ export default function CoursesClient() {
                 </svg>
               </span>
               <EditableText
-                contentKey="filters.freshers"
+                contentKey="course-1.heading"
                 label="freshers filter"
                 showInlineControls={false}
               >
-                Neet Freashers
+                NEET Freshers
               </EditableText>
             </button>
 
@@ -63,11 +63,11 @@ export default function CoursesClient() {
                 </svg>
               </span>
               <EditableText
-                contentKey="filters.repeaters"
+                contentKey="course-3.heading"
                 label="repeaters filter"
                 showInlineControls={false}
               >
-                Neet Repeaters
+                NEET Repeaters
               </EditableText>
             </button>
 
@@ -121,8 +121,8 @@ export default function CoursesClient() {
 
                     <h2 className="course-catalog-card-title">
                       <EditableText
-                        contentKey={`course-${course.id}.title`}
-                        label={`${course.title} title`}
+                        contentKey={`course-${course.id}.heading`}
+                        label={`${course.title} heading`}
                         showInlineControls={false}
                       >
                         {course.title}

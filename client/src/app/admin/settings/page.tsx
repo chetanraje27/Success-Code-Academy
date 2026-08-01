@@ -13,7 +13,8 @@ import {
 type SiteSettings = {
   phone: string;
   email: string;
-  address: string;
+  address1: string;
+  address2: string;
   whatsapp: string;
   facebook: string;
   instagram: string;
@@ -179,13 +180,25 @@ export default function AdminSettingsPage() {
                   />
                 </div>
                 <div className="admin-field full">
-                  <label htmlFor="settings-address">Institute address</label>
+                  <label htmlFor="settings-address1">Girls Branch Address</label>
                   <textarea
-                    id="settings-address"
-                    value={settings.address}
+                    id="settings-address1"
+                    value={settings.address1}
                     onChange={(event) =>
-                      updateSetting("address", event.target.value)
+                      updateSetting("address1", event.target.value)
                     }
+                    rows={2}
+                  />
+                </div>
+                <div className="admin-field full">
+                  <label htmlFor="settings-address2">Boys Branch Address</label>
+                  <textarea
+                    id="settings-address2"
+                    value={settings.address2}
+                    onChange={(event) =>
+                      updateSetting("address2", event.target.value)
+                    }
+                    rows={2}
                   />
                 </div>
                 <div className="admin-field full">

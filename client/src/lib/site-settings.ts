@@ -6,7 +6,8 @@ import { siteConfig } from "@/data/home";
 export type PublicSiteSettings = {
   phone: string;
   email: string;
-  address: string;
+  address1: string;
+  address2: string;
   whatsapp: string;
   facebook: string;
   instagram: string;
@@ -18,7 +19,8 @@ export type PublicSiteSettings = {
 export const defaultSiteSettings: PublicSiteSettings = {
   phone: siteConfig.phone,
   email: siteConfig.email,
-  address: siteConfig.address,
+  address1: siteConfig.address1,
+  address2: siteConfig.address2,
   whatsapp: siteConfig.phone.replace(/\D/g, ""),
   ...siteConfig.social,
 };

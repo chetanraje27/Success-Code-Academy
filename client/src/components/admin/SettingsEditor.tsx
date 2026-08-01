@@ -120,17 +120,28 @@ export default function SettingsEditor({
               />
             </div>
             <div className="admin-field full">
-              <label htmlFor="live-settings-address">Institute address</label>
+              <label htmlFor="live-settings-address1">Girls Branch Address</label>
               <textarea
-                id="live-settings-address"
-                value={settings.address}
+                id="live-settings-address1"
+                value={settings.address1}
                 onChange={(event) =>
-                  updateSetting("address", event.target.value)
+                  updateSetting("address1", event.target.value)
                 }
-                rows={3}
+                rows={2}
+              />
+            </div>
+            <div className="admin-field full">
+              <label htmlFor="live-settings-address2">Boys Branch Address</label>
+              <textarea
+                id="live-settings-address2"
+                value={settings.address2}
+                onChange={(event) =>
+                  updateSetting("address2", event.target.value)
+                }
+                rows={2}
               />
               <small>
-                Used on the Contact page, map, and website footer.
+                Used on the Contact page, map, and website footer. Map uses Girls Branch address.
               </small>
             </div>
             <div className="admin-field full">

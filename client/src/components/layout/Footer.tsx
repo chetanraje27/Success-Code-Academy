@@ -277,8 +277,21 @@ export default function Footer() {
                 className={`footer-contact ${expandedSection === "contact" ? "expanded" : ""}`}
               >
                 <li>
-                  <span className="contact-icon"><FaLocationDot /></span>
-                  <span>{settings.address}</span>
+                  <span className="contact-icon" style={{ marginTop: '2px' }}><FaLocationDot /></span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {settings.address1 && (
+                      <div>
+                        <strong>Girls Branch:</strong><br />
+                        {settings.address1}
+                      </div>
+                    )}
+                    {settings.address2 && (
+                      <div>
+                        <strong>Boys Branch:</strong><br />
+                        {settings.address2}
+                      </div>
+                    )}
+                  </div>
                 </li>
                 <li>
                   <span className="contact-icon"><FaPhone /></span>

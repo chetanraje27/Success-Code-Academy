@@ -155,7 +155,8 @@ export const settingsUpdateSchema = z
   .object({
     phone: z.string().trim().max(40).optional(),
     email: z.union([z.literal(''), z.string().trim().email()]).optional(),
-    address: z.string().trim().max(500).optional(),
+    address1: z.string().trim().max(500).optional(),
+    address2: z.string().trim().max(500).optional(),
     whatsapp: z.string().trim().max(2048).optional(),
     facebook: optionalLink,
     instagram: optionalLink,

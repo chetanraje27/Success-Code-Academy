@@ -55,7 +55,7 @@ export default function ContactClient() {
     return () => window.clearTimeout(timer);
   }, [refreshCaptcha]);
 
-  const mapQuery = `${CAMPUS_NAME} ${settings.address || DEFAULT_ADDRESS}`;
+  const mapQuery = `${CAMPUS_NAME} ${settings.address1 || DEFAULT_ADDRESS}`;
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=m&z=17&ie=UTF8&iwloc=near&output=embed`;
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -151,9 +151,20 @@ export default function ContactClient() {
                           Address
                         </EditableText>
                       </h4>
-                      <p className="detail-item-text">
-                        {settings.address}
-                      </p>
+                      <div className="detail-item-text" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {settings.address1 && (
+                          <div>
+                            <strong style={{ color: '#1e293b' }}>Girls Branch:</strong><br />
+                            {settings.address1}
+                          </div>
+                        )}
+                        {settings.address2 && (
+                          <div>
+                            <strong style={{ color: '#1e293b' }}>Boys Branch:</strong><br />
+                            {settings.address2}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

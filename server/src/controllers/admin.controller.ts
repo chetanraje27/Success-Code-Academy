@@ -629,7 +629,8 @@ export const restoreMediaRevision = asyncHandler(
 const SETTINGS_KEYS = [
   'phone',
   'email',
-  'address',
+  'address1',
+  'address2',
   'whatsapp',
   'facebook',
   'instagram',

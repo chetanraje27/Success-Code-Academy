@@ -53,8 +53,8 @@ export const siteConfig = {
     "Join thousands of successful students who transformed their careers through our industry-aligned programs and expert faculty.",
   email: "successcodeacademy@gmail.com",
   phone: "+91 86004 70850",
-  address:
-    "2nd Floor, Nanaware- Gadhave Pride, Baramati Bhigwan Road, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102",
+  address1: "2nd Floor, Nanaware- Gadhave Pride, Baramati Bhigwan Road, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102",
+  address2: "2nd Floor, Above Manpasand Collection, Near Sudit Hotel, Ring Road, Ambikanagar Baramati",
   social: {
     facebook: "https://www.facebook.com/SUCCESSCODE2020/",
     twitter: "https://twitter.com/successcodeacad", // Not Found

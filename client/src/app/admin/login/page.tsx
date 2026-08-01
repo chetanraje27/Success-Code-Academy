@@ -56,9 +56,10 @@ export default function AdminLoginPage() {
           <div className="admin-login-brand-mark">
             <Image
               src="/images/ui/logo2.png"
-              alt=""
-              width={54}
-              height={54}
+              alt="Success Code Academy"
+              width={200}
+              height={60}
+              style={{ width: "auto", height: "100%", objectFit: "contain" }}
             />
           </div>
           <h1>Keep the website current, without touching code.</h1>

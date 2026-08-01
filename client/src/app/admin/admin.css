@@ -57,8 +57,8 @@
 .admin-brand-logo {
   width: 42px;
   height: 42px;
-  object-fit: cover;
-  object-position: left;
+  object-fit: contain;
+  object-position: center;
 }
 
 .admin-brand div {
@@ -84,11 +84,11 @@
   padding: 18px 13px;
 }
 
-.admin-nav-group + .admin-nav-group {
+.admin-nav-group+.admin-nav-group {
   margin-top: 23px;
 }
 
-.admin-nav-group > p {
+.admin-nav-group>p {
   margin: 0 9px 7px;
   color: #8a94a7;
   font-size: 0.69rem;
@@ -203,7 +203,7 @@
   gap: 11px;
 }
 
-.admin-topbar-title > div {
+.admin-topbar-title>div {
   display: grid;
 }
 
@@ -414,7 +414,7 @@
   background: #fafbfc;
 }
 
-.admin-quick-action > span:last-child {
+.admin-quick-action>span:last-child {
   display: grid;
   gap: 3px;
 }
@@ -1128,8 +1128,10 @@
 
 .admin-login-brand-mark {
   display: grid;
-  width: 66px;
+  width: auto;
+  min-width: 66px;
   height: 66px;
+  padding: 0 12px;
   place-items: center;
   margin-bottom: 32px;
   border-radius: 15px;
@@ -1137,10 +1139,11 @@
 }
 
 .admin-login-brand-mark img {
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-  object-position: left;
+  width: auto;
+  height: 100%;
+  max-height: 48px;
+  object-fit: contain;
+  object-position: center;
 }
 
 .admin-login-brand h1 {
@@ -1182,7 +1185,7 @@
   width: min(430px, 100%);
 }
 
-.admin-login-card > span {
+.admin-login-card>span {
   color: var(--admin-accent);
   font-size: 0.75rem;
   font-weight: 850;
@@ -1196,7 +1199,7 @@
   letter-spacing: -0.035em;
 }
 
-.admin-login-card > p {
+.admin-login-card>p {
   margin: 9px 0 28px;
   color: var(--admin-muted);
   font-size: 0.9rem;

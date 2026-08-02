@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/admin/EditableText";
 
@@ -14,7 +15,7 @@ export default function AdmissionsClient() {
     city: "",
     preferredCourse: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -67,7 +68,7 @@ export default function AdmissionsClient() {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
-    
+
     try {
       const response = await fetch("/api/public/scholarships/register", {
         method: "POST",
@@ -130,11 +131,33 @@ export default function AdmissionsClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER — Scholarship Poster Section
           ══════════════════════════════════════════ */}
+      <div className="admissions-hero-banner">
+        <div className="admissions-hero-container">
+          <motion.div
+            className="admissions-poster-wrapper"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="poster-img-container">
+              <Image
+                src="/images/banners/ScholorshipHero.png"
+                alt="NEET Admissions & Scholarship Test Hero Banner"
+                width={800}
+                height={500}
+                className="admissions-poster-img"
+                priority
+                unoptimized
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
       {/* ══════════════════════════════════════════
           MAIN GRID SECTION (Details on Left, Form on Right)
           ══════════════════════════════════════════ */}
       <div className="scholarship-grid-container">
-        
+
         {/* Left Side: Poster Details */}
         <div className="scholarship-left-details">
           <div className="poster-header">
@@ -146,7 +169,7 @@ export default function AdmissionsClient() {
                 <polygon points="50,34 52,39 58,39 53,43 55,48 50,45 45,48 47,43 42,39 48,39" fill="#ffffff" />
               </svg>
             </div>
-            
+
             <h1 className="poster-main-title">
               <EditableText
                 contentKey="scholarship.heading-prefix"
@@ -164,11 +187,11 @@ export default function AdmissionsClient() {
                 </EditableText>
               </span>
             </h1>
-            
+
             <div className="poster-badge-pill">
               For NEET Freshers
             </div>
-            
+
             <p className="poster-intro-text">
               <EditableText
                 contentKey="scholarship.introduction"
@@ -178,7 +201,7 @@ export default function AdmissionsClient() {
                 This scholarship assessment helps us understand your foundational strength in Physics, Chemistry, and Biology, along with your analytical thinking and concept application. This enables us to provide the right guidance for your NEET journey from the very beginning.
               </EditableText>
             </p>
-            
+
             <div className="poster-star-divider">
               <div className="divider-line"></div>
               <svg className="star-svg" viewBox="0 0 24 24" width="16" height="16" fill="#0257d0">
@@ -187,7 +210,7 @@ export default function AdmissionsClient() {
               <div className="divider-line"></div>
             </div>
           </div>
-          
+
           <div className="poster-features-list">
             <div className="poster-feature-item">
               <div className="feature-icon-circle">
@@ -209,7 +232,7 @@ export default function AdmissionsClient() {
                 </p>
               </div>
             </div>
-            
+
             <div className="poster-feature-item">
               <div className="feature-icon-circle">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -233,7 +256,7 @@ export default function AdmissionsClient() {
                 </p>
               </div>
             </div>
-            
+
             <div className="poster-feature-item">
               <div className="feature-icon-circle">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -254,7 +277,7 @@ export default function AdmissionsClient() {
                 </p>
               </div>
             </div>
-            
+
             <div className="poster-feature-item">
               <div className="feature-icon-circle">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -275,7 +298,7 @@ export default function AdmissionsClient() {
                 </p>
               </div>
             </div>
-            
+
             <div className="poster-feature-card-boxed">
               <div className="feature-icon-circle-dark">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -306,7 +329,7 @@ export default function AdmissionsClient() {
         {/* Right Side: Registration Form Card */}
         <div className="scholarship-right-form">
           <div className="registration-form-card">
-            
+
             <div className="form-card-header">
               <div className="form-header-icon">
                 <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#0257d0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -329,7 +352,7 @@ export default function AdmissionsClient() {
             </div>
 
             {submitStatus === "success" ? (
-              <motion.div 
+              <motion.div
                 className="success-feedback-container"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -346,13 +369,13 @@ export default function AdmissionsClient() {
                 </button>
               </motion.div>
             ) : (
-              <form 
-                onSubmit={handleFormSubmit} 
+              <form
+                onSubmit={handleFormSubmit}
                 className="register-exam-form"
                 onClickCapture={handleAuthInterceptor}
                 onFocusCapture={handleAuthInterceptor}
               >
-                
+
                 <div className="form-input-group">
                   <label className="form-label">Full Name (Student)</label>
                   <div className="input-with-icon">
@@ -360,11 +383,11 @@ export default function AdmissionsClient() {
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
-                    <input 
-                      type="text" 
-                      name="studentName" 
-                      placeholder="Enter student full name" 
-                      required 
+                    <input
+                      type="text"
+                      name="studentName"
+                      placeholder="Enter student full name"
+                      required
                       value={formData.studentName}
                       onChange={handleInputChange}
                       readOnly={isAuthenticated}
@@ -378,11 +401,11 @@ export default function AdmissionsClient() {
                     <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
-                    <input 
-                      type="tel" 
-                      name="studentPhone" 
-                      placeholder="Enter student mobile number" 
-                      required 
+                    <input
+                      type="tel"
+                      name="studentPhone"
+                      placeholder="Enter student mobile number"
+                      required
                       pattern="[0-9]{10}"
                       value={formData.studentPhone}
                       onChange={handleInputChange}
@@ -397,11 +420,11 @@ export default function AdmissionsClient() {
                     <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
-                    <input 
-                      type="tel" 
-                      name="parentPhone" 
-                      placeholder="Enter parent / guardian mobile number" 
-                      required 
+                    <input
+                      type="tel"
+                      name="parentPhone"
+                      placeholder="Enter parent / guardian mobile number"
+                      required
                       pattern="[0-9]{10}"
                       value={formData.parentPhone}
                       onChange={handleInputChange}
@@ -416,7 +439,7 @@ export default function AdmissionsClient() {
                       <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                       <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
                     </svg>
-                    <select 
+                    <select
                       name="studentClass"
                       value={formData.studentClass}
                       onChange={handleInputChange}
@@ -434,10 +457,10 @@ export default function AdmissionsClient() {
                     <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 22H2M20 22V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14M10 12h4" />
                     </svg>
-                    <input 
-                      type="text" 
-                      name="schoolName" 
-                      placeholder="Enter school or college name" 
+                    <input
+                      type="text"
+                      name="schoolName"
+                      placeholder="Enter school or college name"
                       required
                       value={formData.schoolName}
                       onChange={handleInputChange}
@@ -452,10 +475,10 @@ export default function AdmissionsClient() {
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    <input 
-                      type="text" 
-                      name="city" 
-                      placeholder="Enter your city" 
+                    <input
+                      type="text"
+                      name="city"
+                      placeholder="Enter your city"
                       required
                       value={formData.city}
                       onChange={handleInputChange}
@@ -470,10 +493,10 @@ export default function AdmissionsClient() {
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                     </svg>
-                    <input 
-                      type="text" 
-                      name="preferredCourse" 
-                      placeholder="Enter preferred course or batch" 
+                    <input
+                      type="text"
+                      name="preferredCourse"
+                      placeholder="Enter preferred course or batch"
                       required
                       value={formData.preferredCourse}
                       onChange={handleInputChange}
@@ -536,6 +559,35 @@ export default function AdmissionsClient() {
         /* ════════════════════════════════
            HERO BANNER — Admissions Poster Section
            ════════════════════════════════ */
+        .admissions-hero-banner {
+          position: relative;
+          background: #ffffff;
+          width: 100%;
+        }
+        .admissions-hero-container {
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .admissions-poster-wrapper {
+          width: 100% !important;
+          border-radius: 0 !important;
+          overflow: hidden;
+          box-shadow: none !important;
+          border: none !important;
+          background: #f8fafc;
+        }
+        .poster-img-container {
+          position: relative;
+          width: 100%;
+          display: block;
+        }
+        :global(.admissions-poster-img) {
+          width: 100% !important;
+          height: auto !important;
+          display: block !important;
+        }
         /* ════════════════════════════════
            SCHOLARSHIP GRID LAYOUT
            ════════════════════════════════ */

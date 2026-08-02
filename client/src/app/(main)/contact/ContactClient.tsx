@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Button from "@/components/ui/Button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
@@ -11,6 +12,13 @@ import SettingsEditor from "@/components/admin/SettingsEditor";
 const CAMPUS_NAME = "Success Code Academy, NEET Specialist, Baramati.";
 const DEFAULT_ADDRESS =
   "2nd Floor, Nanaware- Gadhave Pride, Baramati-Bhigwan Rd, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102, India";
+
+const DESTINATION = {
+  address:
+    "Success Code Academy, NEET Specialist, Baramati., 2nd Floor, Nanaware- Gadhave Pride, Baramati-Bhigwan Rd, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102",
+  lat: 17.9183,
+  lng: 74.5814,
+};
 
 /* ─── Math CAPTCHA ─── */
 type Op = "+" | "−" | "×";
@@ -44,6 +52,12 @@ export default function ContactClient() {
   const [captchaError, setCaptchaError] = useState("");
   const [editSettings, setEditSettings] = useState(false);
 
+  /* Distance Calculator States */
+  const [origin, setOrigin] = useState("");
+  const [distanceText, setDistanceText] = useState("");
+  const [distanceError, setDistanceError] = useState("");
+  const [isFindingDistance, setIsFindingDistance] = useState(false);
+
   const refreshCaptcha = useCallback(() => {
     setCaptcha(generateCaptcha());
     setCaptchaInput("");
@@ -57,6 +71,37 @@ export default function ContactClient() {
 
   const mapQuery = `${CAMPUS_NAME} ${settings.address1 || DEFAULT_ADDRESS}`;
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=m&z=17&ie=UTF8&iwloc=near&output=embed`;
+
+  async function handleDistanceCheck(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setDistanceText("");
+    setDistanceError("");
+    const trimmed = origin.trim();
+    if (!trimmed) {
+      setDistanceError("Please enter your starting location.");
+      return;
+    }
+    setIsFindingDistance(true);
+    try {
+      const geo = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trimmed)}`,
+        { headers: { Accept: "application/json" } }
+      ).then((r) => r.json());
+      if (!Array.isArray(geo) || geo.length === 0) throw new Error("Location not found.");
+      const { lat, lon } = geo[0];
+      const route = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${lon},${lat};${DESTINATION.lng},${DESTINATION.lat}?overview=false&alternatives=false`,
+        { headers: { Accept: "application/json" } }
+      ).then((r) => r.json());
+      if (!route.routes?.length) throw new Error("Unable to calculate route.");
+      const km = (route.routes[0].distance / 1000).toFixed(1);
+      setDistanceText(`Distance from "${trimmed}" to Success Code Academy: ${km} km`);
+    } catch (err) {
+      setDistanceError(err instanceof Error ? err.message : "Could not calculate distance.");
+    } finally {
+      setIsFindingDistance(false);
+    }
+  }
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -107,12 +152,34 @@ export default function ContactClient() {
       {/* ══════════════════════════════════════════
           HERO BANNER — Contact Poster Section
           ══════════════════════════════════════════ */}
+      <div className="contact-hero-banner">
+        <div className="contact-hero-container">
+          <motion.div
+            className="contact-poster-wrapper"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="poster-img-container">
+              <Image
+                src="/images/banners/ContactPoster.png"
+                alt="Contact Success Code Academy Poster"
+                width={800}
+                height={500}
+                className="contact-poster-img"
+                priority
+                unoptimized
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
       {/* ══════════════════════════════════════════
-          MAIN RE-DESIGNED CONTACT SECTION (THEME MATCHED LIGHT THEME)
+          MAIN RE-DESIGNED CONTACT SECTION
           ══════════════════════════════════════════ */}
       <div className="contact-premium-section">
         <div className="insights-premium-container">
-
           <div className="contact-grid-wrap">
             {/* Left side: Premium Contact Information List */}
             <div className="contact-left-details">
@@ -139,7 +206,6 @@ export default function ContactClient() {
                 onEdit={() => setEditSettings(true)}
               >
                 <div className="enhanced-contact-list">
-
                   {/* Address Item */}
                   <div className="contact-detail-item">
                     <div className="detail-icon-box contact-bg-blue">
@@ -222,13 +288,14 @@ export default function ContactClient() {
                       </p>
                     </div>
                   </div>
-
                 </div>
               </EditableSection>
             </div>
 
-            {/* Right side: Glassmorphic form container with grid mesh pattern (Theme Matched) */}
+            {/* Right side: Glassmorphic form container with grid mesh pattern */}
             <div className="contact-right-form">
+              <div className="form-grid-mesh"></div>
+
               <div className="form-inner-content">
                 {formStatus === "success" ? (
                   <div className="dark-success-view">
@@ -342,7 +409,6 @@ export default function ContactClient() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -352,18 +418,50 @@ export default function ContactClient() {
       <div className="contact-container">
         <motion.div
           className="map-container"
-          initial={false}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
         >
+          <div className="map-heading">
+            <span className="map-badge">📍 CAMPUS LOCATION</span>
+            <h3>Visit our campus or book a guided tour.</h3>
+          </div>
+
+          <div className="distance-box">
+            <form className="distance-form" onSubmit={handleDistanceCheck}>
+              <div className="field-group" style={{ flex: 1 }}>
+                <label htmlFor="dist-origin" className="dist-label-text">
+                  Check distance from your location
+                </label>
+                <input
+                  id="dist-origin"
+                  value={origin}
+                  onChange={(e) => setOrigin(e.target.value)}
+                  type="text"
+                  placeholder="E.g. Pune, Mumbai, Satara"
+                  className="dist-input-box"
+                />
+              </div>
+              <Button type="submit" variant="secondary" size="md">
+                Calculate Distance
+              </Button>
+            </form>
+            {isFindingDistance && <p className="dist-status">Calculating route distance…</p>}
+            {distanceText && <p className="dist-result">🚘 {distanceText}</p>}
+            {distanceError && <p className="dist-error">⚠ {distanceError}</p>}
+          </div>
+
           <div className="map-frame">
-            <iframe title="Success Code Academy location" src={mapSrc}
-              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            <iframe
+              title="Success Code Academy location"
+              src={mapSrc}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </motion.div>
       </div>
 
-      {/* ══ STYLES ══ */}
       <SettingsEditor
         open={editSettings}
         onClose={() => setEditSettings(false)}
@@ -393,8 +491,39 @@ export default function ContactClient() {
         /* ════════════════════════════════
            HERO BANNER
            ════════════════════════════════ */
+        .contact-hero-banner {
+          position: relative;
+          padding: 80px 0 0 0 !important;
+          background: #ffffff;
+          width: 100%;
+        }
+        .contact-hero-container {
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .contact-poster-wrapper {
+          width: 100% !important;
+          border-radius: 0 !important;
+          overflow: hidden;
+          box-shadow: none !important;
+          border: none !important;
+          background: #f8fafc;
+        }
+        .poster-img-container {
+          position: relative;
+          width: 100%;
+          display: block;
+        }
+        :global(.contact-poster-img) {
+          width: 100% !important;
+          height: auto !important;
+          display: block !important;
+        }
+
         /* ════════════════════════════════
-           ACETERNITY STYLE CONTACT (THEME MATCHED LIGHT THEME)
+           ACETERNITY STYLE CONTACT
            ════════════════════════════════ */
         .contact-premium-section {
           background: linear-gradient(180deg, #ffffff 0%, #f1f7fe 100%);
@@ -428,25 +557,6 @@ export default function ContactClient() {
           text-align: left;
         }
 
-        .mail-badge-icon {
-          width: 48px;
-          height: 48px;
-          border-radius: 12px;
-          background: rgba(30, 64, 175, 0.06);
-          border: 1px solid rgba(30, 64, 175, 0.15);
-          box-shadow: 0 4px 14px rgba(30, 64, 175, 0.05);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 24px;
-        }
-
-        .badge-mail-svg {
-          font-size: 1.15rem;
-          color: #1e40af;
-        }
-
-        /* Enhanced Left-side Contact details list styling */
         .contact-info-title {
           font-size: clamp(2rem, 3.5vw, 2.5rem);
           font-weight: 800;
@@ -489,25 +599,9 @@ export default function ContactClient() {
         .contact-detail-icon {
           object-fit: contain;
         }
-        .detail-icon-svg {
-          width: 20px;
-          height: 20px;
-        }
         .contact-bg-blue {
           background: #e0f2fe;
           color: #0284c7;
-        }
-        .contact-bg-green {
-          background: #dcfce7;
-          color: #15803d;
-        }
-        .contact-bg-purple {
-          background: #f3e8ff;
-          color: #7e22ce;
-        }
-        .contact-bg-orange {
-          background: #ffedd5;
-          color: #ea580c;
         }
         .detail-content-box {
           display: flex;
@@ -537,12 +631,7 @@ export default function ContactClient() {
           color: #0284c7;
         }
 
-        @keyframes pulseRingPin {
-          0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
-          100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-        }
-
-        /* Right Form: Glassmorphic with grid background pattern (Theme Matched) */
+        /* Right Form: Glassmorphic with grid background pattern */
         .contact-right-form {
           position: relative;
           background: #ffffff;
@@ -551,9 +640,20 @@ export default function ContactClient() {
           overflow: hidden;
           padding: 40px;
           box-sizing: border-box;
-          box-shadow: 
+          box-shadow:
             0 20px 40px rgba(15, 23, 42, 0.05),
             0 1px 3px rgba(0, 0, 0, 0.01);
+        }
+
+        .form-grid-mesh {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(15,23,42,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15,23,42,0.02) 1px, transparent 1px);
+          background-size: 24px 24px;
+          pointer-events: none;
+          z-index: 1;
         }
 
         .form-inner-content {
@@ -604,7 +704,7 @@ export default function ContactClient() {
           resize: vertical;
         }
 
-        /* CAPTCHA box inside light form */
+        /* CAPTCHA box */
         .dark-captcha-box {
           background: #f8fafc;
           border: 1.5px solid #cbd5e1;
@@ -690,7 +790,7 @@ export default function ContactClient() {
           box-shadow: 0 6px 20px rgba(64, 181, 193, 0.4);
         }
 
-        /* success container */
+        /* Success View */
         .dark-success-view {
           display: flex;
           flex-direction: column;
@@ -743,7 +843,7 @@ export default function ContactClient() {
         }
 
         /* ════════════════════════════════
-           MAP & DISTANCE BOX (LIGHT DESIGN COHESION)
+           MAP & DISTANCE BOX
            ════════════════════════════════ */
         .contact-container {
           width: 100%;
@@ -752,6 +852,76 @@ export default function ContactClient() {
           padding: 60px 24px 80px;
           box-sizing: border-box;
         }
+
+        .map-heading {
+          text-align: center;
+          margin-bottom: 30px;
+        }
+
+        .map-badge {
+          display: inline-block;
+          font-size: 0.72rem;
+          font-weight: 800;
+          color: #1e40af;
+          background: rgba(30, 64, 175, 0.06);
+          padding: 4px 12px;
+          border-radius: 99px;
+          letter-spacing: 0.05em;
+          margin-bottom: 12px;
+        }
+
+        .map-heading h3 {
+          font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+          color: #0f172a;
+          margin: 0 0 8px;
+          font-weight: 800;
+        }
+
+        .map-addr {
+          color: #64748b;
+          font-size: 0.9rem;
+          line-height: 1.7;
+          margin: 0;
+        }
+
+        .distance-box {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          padding: 24px;
+          margin-bottom: 24px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+          text-align: left;
+        }
+        .distance-form {
+          display: flex;
+          gap: 16px;
+          align-items: flex-end;
+          flex-wrap: wrap;
+        }
+
+        .dist-label-text {
+          font-size: 0.82rem;
+          font-weight: 750;
+          color: #64748b;
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .dist-input-box {
+          border: 1.5px solid #cbd5e1;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font-size: 0.92rem;
+          min-height: 42px;
+          box-sizing: border-box;
+          background: #ffffff;
+          width: 100%;
+        }
+
+        .dist-status { color: #64748b; font-size: 0.88rem; margin-top: 12px; font-weight: 600; }
+        .dist-result { color: #1e40af; font-size: 0.88rem; margin-top: 12px; font-weight: 750; }
+        .dist-error  { color: #dc2626; font-size: 0.88rem; margin-top: 12px; font-weight: 600; }
 
         .map-frame {
           border-radius: 20px;
@@ -772,12 +942,16 @@ export default function ContactClient() {
             grid-template-columns: 1fr;
             gap: 40px;
           }
-          .contact-big-title {
-            font-size: 2.5rem;
-          }
         }
 
         @media (max-width: 768px) {
+          .contact-hero-banner {
+            padding-top: 72px !important;
+            padding-bottom: 0 !important;
+          }
+          .contact-poster-wrapper {
+            border-radius: 0 !important;
+          }
           .contact-right-form {
             padding: 30px 20px;
           }
@@ -786,19 +960,6 @@ export default function ContactClient() {
         @media (max-width: 640px) {
           .contact-premium-section {
             padding: 50px 0;
-          }
-          .contact-big-title {
-            font-size: 2.1rem;
-          }
-          .contact-info-capsules {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-            width: 100%;
-          }
-          .info-capsule {
-            width: 100%;
-            box-sizing: border-box;
           }
         }
       `}</style>

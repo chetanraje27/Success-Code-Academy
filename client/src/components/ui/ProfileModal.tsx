@@ -47,7 +47,7 @@ export default function ProfileModal({ isOpen, onClose, user, onUpdateSuccess }:
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/auth/profile`, {
+      const response = await fetch("/api/public/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

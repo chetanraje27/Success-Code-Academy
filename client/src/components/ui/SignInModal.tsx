@@ -44,7 +44,7 @@ export default function SignInModal({ isOpen, onClose, onLoginSuccess }: SignInM
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/auth/verify-otp`, {
+        const response = await fetch("/api/public/auth/verify-otp", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function SignInModal({ isOpen, onClose, onLoginSuccess }: SignInM
 
     // Otherwise, check if user exists (first click)
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/auth/send-otp`, {
+      const response = await fetch("/api/public/auth/send-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

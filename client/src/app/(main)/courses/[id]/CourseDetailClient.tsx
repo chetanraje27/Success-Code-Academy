@@ -230,7 +230,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/v1/forms/course-register`,
+        "/api/public/forms/course-register",
         {
           method: "POST",
           headers: {

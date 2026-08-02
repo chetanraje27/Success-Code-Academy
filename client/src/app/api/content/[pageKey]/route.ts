@@ -7,10 +7,13 @@ function backendUrl(pageKey: string): string {
     "http://localhost:5000";
   const publicCollections = new Set([
     "banners",
+    "courses",
+    "news",
     "notifications",
     "results",
     "settings",
     "stars",
+    "videos",
   ]);
   const contentPath = publicCollections.has(pageKey)
     ? pageKey

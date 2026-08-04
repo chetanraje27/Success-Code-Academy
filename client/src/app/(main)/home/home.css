@@ -354,11 +354,11 @@
 .home-container .explore-card {
   position: relative;
   display: flex;
-  min-height: 338px;
+  min-height: 264px;
   height: 100%;
   padding: 0;
   overflow: hidden;
-  flex-direction: column;
+  flex-direction: row;
   isolation: isolate;
   background: #fff;
   border-color: #cbd7e4;
@@ -395,32 +395,36 @@
 .home-container .icon-box {
   position: relative;
   display: block;
-  width: 100%;
-  height: 158px;
-  flex: 0 0 158px;
+  order: 2;
+  width: 42%;
+  height: auto;
+  flex: 0 0 42%;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: transparent;
-  background-position: center;
+  background-position: 62% center;
   background-repeat: no-repeat;
   background-size: cover;
   border: 0;
-  border-radius: 11px 11px 0 0;
-  box-shadow: inset 0 -1px rgba(255, 255, 255, 0.18);
+  border-left: 1px solid rgba(203, 215, 228, 0.8);
+  border-radius: 0 11px 11px 0;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, 0.14);
+  filter: saturate(0.88) contrast(0.98);
   transition: filter 180ms ease, transform 180ms ease;
 }
 
 .home-container .content-box {
   display: flex;
   min-height: 0;
-  margin-top: -12px;
-  padding: 1.3rem 1.45rem 1.4rem;
+  order: 1;
+  margin: 0;
+  padding: 1.45rem 1.25rem 1.35rem;
   flex: 1;
   flex-direction: column;
   background: #fff;
   border: 0;
-  border-radius: 12px 12px 0 0;
+  border-radius: 11px 0 0 11px;
   box-shadow: none;
 }
 
@@ -463,7 +467,7 @@
 }
 
 .home-container .explore-card:hover .icon-box {
-  filter: saturate(1.05);
+  filter: saturate(0.96) contrast(1);
   transform: scale(1.01);
 }
 
@@ -2097,15 +2101,19 @@
   }
 
   .home-container .explore-card {
-    min-height: 322px;
+    min-height: 236px;
   }
 
   .home-container .icon-box {
-    width: 100%;
-    height: 146px;
-    flex-basis: 146px;
+    width: 39%;
+    height: auto;
+    flex-basis: 39%;
     margin: 0;
     padding: 0;
+  }
+
+  .home-container .content-box {
+    padding: 1.25rem 1rem 1.2rem;
   }
 
   .home-container .course-desc-text {

@@ -927,13 +927,13 @@
   }
 
   .public-shell .explore-section .explore-card {
-    min-height: 15rem !important;
+    min-height: 14.75rem !important;
     height: 100% !important;
     scroll-snap-align: none;
   }
 
   .public-shell .explore-section .content-box {
-    padding: 0 !important;
+    padding: 1.25rem 1rem 1.2rem !important;
   }
 
   .public-shell .explore-section .course-title-text {

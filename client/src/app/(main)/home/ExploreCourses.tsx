@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/admin/EditableText";
@@ -10,9 +10,16 @@ const courseStyles = [
   "/images/courses/test-series.png",
 ];
 
-export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
+type Course = {
+  id?: string | number;
+  title: string;
+  description: string;
+  slug: string;
+};
+
+export default function ExploreCourses({ courses = [] }: { courses?: Course[] }) {
   const { refreshKey } = useEditModeOptional();
-  const [localCourses, setLocalCourses] = useState<any[]>([]);
+  const [localCourses, setLocalCourses] = useState<Course[]>(courses);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaDna, FaArrowsRotate, FaClipboardCheck } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 
 const courseStyles = [
-  {
-    icon: <FaDna />,
-    color: "#e2eefa",
-    bg: "#e6fcf5",
-  },
-  {
-    icon: <FaArrowsRotate />,
-    color: "#e2eefa",
-    bg: "#f3f0ff",
-  },
-  {
-    icon: <FaClipboardCheck />,
-    color: "#e2eefa",
-    bg: "#fff9db",
-  },
+  "/images/courses/neet-foundation.png",
+  "/images/courses/neet-repeaters.png",
+  "/images/courses/test-series.png",
 ];
 
 export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
@@ -56,14 +43,11 @@ export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
   }, [refreshKey]);
 
   const displayCourses = localCourses.slice(0, 3).map((c, i) => {
-    const style = courseStyles[i] || courseStyles[0];
     return {
       id: c.id,
       name: c.title,
       description: c.description,
-      icon: style.icon,
-      color: style.color,
-      bg: style.bg,
+      image: courseStyles[i] || courseStyles[0],
       href: `/courses/${c.slug}`,
     };
   });
@@ -94,8 +78,8 @@ export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
           {isLoading && localCourses.length === 0 ? (
             [1, 2, 3].map((_, i) => (
               <div key={`skeleton-${i}`} className="explore-card-parent">
-                <div className="explore-card" style={{ "--card-color": "#f1f5f9", "--hover-bg-light": "#f8fafc" } as React.CSSProperties}>
-                  <div className="icon-box skeleton-pulse" style={{ width: 60, height: 60, borderRadius: 12, backgroundColor: "#e2e8f0" }}></div>
+                <div className="explore-card">
+                  <div className="icon-box skeleton-pulse"></div>
                   <div className="content-box">
                     <div className="skeleton-pulse" style={{ width: "70%", height: 24, borderRadius: 4, backgroundColor: "#e2e8f0", marginBottom: 12 }}></div>
                     <div className="skeleton-pulse" style={{ width: "100%", height: 16, borderRadius: 4, backgroundColor: "#e2e8f0", marginBottom: 8 }}></div>
@@ -119,16 +103,12 @@ export default function ExploreCourses({ courses = [] }: { courses?: any[] }) {
                 className="explore-card-parent"
               >
                 <Link href={c.href} className="course-card-link">
-                  <div
-                    className="explore-card"
-                    style={{
-                      "--card-color": c.color,
-                      "--hover-bg-light": c.bg,
-                    } as React.CSSProperties}
-                  >
-                    <div className="icon-box">
-                      <span className="course-icon">{c.icon}</span>
-                    </div>
+                  <div className="explore-card">
+                    <div
+                      className="icon-box"
+                      aria-hidden="true"
+                      style={{ backgroundImage: `url("${c.image}")` }}
+                    />
 
                     <div className="content-box">
                       <h3 className="course-title-text">

@@ -188,9 +188,6 @@ export default function ToppersCarousel() {
               
               return (
                 <article className="featured-card" key={featuredStudent.id}>
-                  <span className="featured-watermark" aria-hidden="true">{featuredResult.rank}</span>
-                  <span className="featured-orbit" aria-hidden="true" />
-
                   <div className="featured-copy">
                     <span className="result-year">{featuredStudent.year || "NEET UG 2025"}</span>
                     <div className="featured-rank">
@@ -222,9 +219,6 @@ export default function ToppersCarousel() {
 
               return (
                 <article className={`support-card support-${index + 1}`} key={student.id}>
-                  <span className="support-index" aria-hidden="true">{result.rank}</span>
-                  <span className="support-accent" aria-hidden="true" />
-
                   <div className="support-copy">
                     <span className="support-year">{student.year || "NEET UG 2025"}</span>
                     <div className="support-rank">{result.rankType} {result.rank}</div>

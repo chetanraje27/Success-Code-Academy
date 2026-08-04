@@ -531,158 +531,37 @@
 
 .home-container .featured-card,
 .home-container .support-card {
-  --star-accent: 8, 127, 131;
-  --star-secondary: 37, 89, 153;
+  --star-gold: #d9a51a;
   position: relative;
   overflow: hidden;
   color: var(--home-text);
-  background:
-    radial-gradient(circle at 82% 18%, rgba(var(--star-accent), 0.11), transparent 24%),
-    radial-gradient(circle at 96% 92%, rgba(var(--star-secondary), 0.09), transparent 34%),
-    linear-gradient(135deg, #ffffff 0 58%, #f8fbfd 100%);
-  border-color: rgba(var(--star-secondary), 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #f6f9fc 54%, #eaf3fa 100%);
+  border-color: #c9d8e8;
   isolation: isolate;
-}
-
-.home-container :where(.support-2, .support-4) {
-  --star-accent: 37, 89, 153;
-  --star-secondary: 84, 96, 164;
-}
-
-.home-container :where(.support-1, .support-3) {
-  --star-accent: 8, 127, 131;
-  --star-secondary: 32, 111, 139;
 }
 
 .home-container .featured-card {
   grid-column: span 6;
   min-height: 330px;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.78) 48%, rgba(255, 255, 255, 0.08) 72%),
+    url("/images/stars/achievement-featured.png");
+  background-position: center;
+  background-size: cover;
 }
 
 .home-container .support-card {
   grid-column: span 3;
   min-height: 205px;
-}
-
-.home-container .featured-card::before,
-.home-container .support-card::before {
-  position: absolute;
-  z-index: -1;
-  content: "";
-  pointer-events: none;
-}
-
-.home-container .featured-card::before {
-  right: -6%;
-  bottom: -34%;
-  width: 54%;
-  aspect-ratio: 1;
-  border: 1px solid rgba(var(--star-accent), 0.14);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.92), transparent 18%),
-    linear-gradient(155deg, rgba(var(--star-accent), 0.16), rgba(var(--star-secondary), 0.045));
-  box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.64);
-}
-
-.home-container .support-card::before {
-  right: -13%;
-  bottom: -34%;
-  width: 70%;
-  aspect-ratio: 1;
-  border: 1px solid rgba(var(--star-accent), 0.14);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 45% 28%, rgba(255, 255, 255, 0.92), transparent 20%),
-    linear-gradient(145deg, rgba(var(--star-accent), 0.17), rgba(var(--star-secondary), 0.05));
-}
-
-.home-container .featured-card::after,
-.home-container .support-card::after {
-  position: absolute;
-  z-index: 0;
-  right: 3%;
-  bottom: -8px;
-  content: "";
-  width: 48%;
-  height: 32px;
-  background: radial-gradient(ellipse, rgba(var(--star-secondary), 0.16), transparent 68%);
-  filter: blur(5px);
-  pointer-events: none;
-}
-
-.home-container .featured-watermark,
-.home-container .support-index {
-  position: absolute;
-  z-index: 0;
-  display: block;
-  color: rgba(var(--star-secondary), 0.062);
-  font-weight: 750;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-}
-
-.home-container .featured-watermark {
-  top: -0.45rem;
-  right: 0.75rem;
-  font-size: clamp(7rem, 11vw, 10rem);
-  letter-spacing: -0.08em;
-}
-
-.home-container .support-index {
-  top: 0.35rem;
-  right: 0.55rem;
-  font-size: 3.25rem;
-  letter-spacing: -0.06em;
-}
-
-.home-container .featured-orbit,
-.home-container .support-accent {
-  position: absolute;
-  z-index: 0;
-  display: block;
-  pointer-events: none;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 210deg,
-    rgba(var(--star-accent), 0.42),
-    rgba(var(--star-secondary), 0.08) 28%,
-    transparent 43%,
-    rgba(var(--star-secondary), 0.26) 70%,
-    rgba(var(--star-accent), 0.42)
-  );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
-  opacity: 0.7;
-  transition: transform 240ms ease;
-}
-
-.home-container .featured-orbit {
-  right: -4%;
-  bottom: -30%;
-  width: 50%;
-  aspect-ratio: 1;
-  transform: rotate(-12deg);
-}
-
-.home-container .support-accent {
-  right: 3%;
-  bottom: 9%;
-  width: 46%;
-  aspect-ratio: 1;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.93) 0%, rgba(255, 255, 255, 0.72) 52%, rgba(255, 255, 255, 0.04) 76%),
+    url("/images/stars/achievement-compact.png");
+  background-position: center;
+  background-size: cover;
 }
 
 .home-container :where(.featured-card, .support-card):hover {
-  border-color: rgba(var(--star-secondary), 0.32);
-}
-
-.home-container .featured-card:hover .featured-orbit {
-  transform: rotate(-8deg) scale(1.02);
-}
-
-.home-container .support-card:hover .support-accent {
-  transform: scale(1.03);
+  border-color: #aebfd2;
 }
 
 .home-container .featured-copy {
@@ -699,20 +578,23 @@
 .home-container :where(.result-year, .support-year) {
   align-self: flex-start;
   padding: 0.28rem 0.48rem;
-  color: var(--home-teal);
+  color: #fff;
   font-size: 0.68rem;
   font-weight: 650;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  background: rgba(var(--star-accent), 0.065);
-  border: 1px solid rgba(var(--star-accent), 0.11);
-  border-radius: 99px;
+  background: var(--home-navy);
+  border: 1px solid var(--home-navy);
+  border-radius: 6px;
+  box-shadow: inset 0 -2px var(--star-gold);
 }
 
 .home-container .featured-rank {
   display: flex;
-  margin-top: 2rem;
+  margin-top: 1.65rem;
+  padding-left: 0.7rem;
   flex-direction: column;
+  border-left: 3px solid var(--star-gold);
 }
 
 .home-container .featured-rank span {
@@ -746,7 +628,7 @@
 }
 
 .home-container .featured-score strong {
-  color: var(--home-teal);
+  color: #a66b00;
   font-size: 1.65rem;
   font-weight: 650;
 }
@@ -791,9 +673,11 @@
 
 .home-container .support-rank {
   margin-top: 1.5rem;
+  padding-left: 0.55rem;
   color: var(--home-navy);
   font-size: 1.25rem;
   font-weight: 650;
+  border-left: 3px solid var(--star-gold);
 }
 
 .home-container .support-copy h3 {
@@ -803,7 +687,7 @@
 
 .home-container .support-score {
   margin-top: auto;
-  color: var(--home-teal);
+  color: #a66b00;
   font-size: 1.2rem;
   font-weight: 650;
 }
@@ -2174,22 +2058,18 @@
     height: 82% !important;
   }
 
-  .home-container .featured-card::before {
-    right: -10%;
-    bottom: -25%;
-    width: 78%;
-  }
-
-  .home-container .featured-orbit {
-    right: -7%;
-    bottom: -22%;
-    width: 72%;
-  }
-
   .home-container .support-copy {
     width: 68%;
     min-height: 190px;
     padding: 0.9rem;
+  }
+
+  .home-container .support-year {
+    padding: 0.2rem 0.34rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.065em;
+    border-radius: 4px;
+    box-shadow: inset 0 -1px var(--star-gold);
   }
 
   .home-container .support-rank {

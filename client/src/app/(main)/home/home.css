@@ -55,6 +55,10 @@
   background: var(--home-surface);
 }
 
+.home-container .explore-section {
+  padding-top: clamp(2.5rem, 4vw, 3.25rem);
+}
+
 .home-container :where(.stars-section, .insights-outer-section) {
   background: var(--home-bg);
 }
@@ -182,9 +186,9 @@
 /* Hero */
 .home-container .hero-slider-section {
   width: 100%;
-  padding: 1.5rem 0 3.5rem;
+  padding: 1.5rem 0 1.25rem;
   overflow: hidden;
-  background: var(--home-bg);
+  background: var(--home-surface);
 }
 
 .home-container .hero-banner-wrap {
@@ -277,23 +281,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   margin-top: 1.25rem;
 }
 
 .home-container .banner-dot {
-  width: 32px;
-  height: 4px;
+  width: 7px;
+  height: 7px;
   padding: 0;
-  background: #c5d0db;
+  background: #b8c6d5;
   border: 0;
-  border-radius: 2px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .home-container .banner-dot.active {
   background: var(--home-navy);
+  transform: scale(1.2);
 }
 
 /* Section headings */
@@ -2046,7 +2051,11 @@
   }
 
   .home-container .hero-slider-section {
-    padding: 0.85rem 0 2.75rem;
+    padding: 0.85rem 0 1.25rem;
+  }
+
+  .home-container .explore-section {
+    padding-top: 2.25rem;
   }
 
   .home-container .hero-banner-wrap {

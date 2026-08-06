@@ -43,11 +43,22 @@ export async function GET(
       signal: AbortSignal.timeout(10_000),
     });
     const body = await response.text();
-    return new NextResponse(body, {
+    let payload: unknown;
+    try {
+      payload = body ? JSON.parse(body) : null;
+    } catch {
+      return NextResponse.json(
+        {
+          status: "error",
+          message: "The content service returned an invalid response.",
+        },
+        { status: response.ok ? 502 : response.status },
+      );
+    }
+
+    return NextResponse.json(payload, {
       status: response.status,
       headers: {
-        "Content-Type":
-          response.headers.get("content-type") || "application/json",
         "Cache-Control": "no-store",
       },
     });

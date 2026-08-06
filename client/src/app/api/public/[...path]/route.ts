@@ -52,11 +52,19 @@ async function proxy(request: Request, params: Promise<{ path: string[] }>) {
     });
 
     const responseBody = await response.text();
-    return new NextResponse(responseBody, {
+    let payload: unknown;
+    try {
+      payload = responseBody ? JSON.parse(responseBody) : null;
+    } catch {
+      return NextResponse.json(
+        { status: "error", message: "The backend returned an invalid response." },
+        { status: response.ok ? 502 : response.status },
+      );
+    }
+
+    return NextResponse.json(payload, {
       status: response.status,
       headers: {
-        "Content-Type":
-          response.headers.get("content-type") || "application/json",
         "Cache-Control": "no-store",
       },
     });

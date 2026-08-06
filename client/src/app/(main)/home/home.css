@@ -168,7 +168,7 @@
   overflow: hidden;
 }
 
-.home-container .notif-text {
+.home-container .notif-text-wrap {
   display: block;
   overflow: hidden;
   color: #fff;
@@ -178,7 +178,60 @@
   white-space: nowrap;
 }
 
-.home-container .notif-text :where(span, strong),
+.home-container .notif-link-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.home-container .notif-link-item:hover {
+  color: #93c5fd;
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home-container .notif-plain-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.home-container .notif-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.home-container .notif-link-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  transition: transform 0.2s ease;
+}
+
+.home-container .notif-link-item:hover .notif-link-badge {
+  background: rgba(59, 130, 246, 0.35);
+  transform: translateX(2px);
+}
+
+.home-container .notif-text-wrap :where(span, strong),
 .home-container .highlighted-word {
   color: inherit !important;
   font-weight: inherit !important;

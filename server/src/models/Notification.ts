@@ -6,12 +6,13 @@ export interface NotificationAttributes {
   isActive: boolean;
   orderIndex: number;
   link?: string;
+  icon?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface NotificationCreationAttributes
-  extends Optional<NotificationAttributes, 'id' | 'isActive' | 'orderIndex' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<NotificationAttributes, 'id' | 'isActive' | 'orderIndex' | 'createdAt' | 'updatedAt' | 'icon'> {}
 
 export class Notification
   extends Model<NotificationAttributes, NotificationCreationAttributes>
@@ -22,6 +23,7 @@ export class Notification
   declare public isActive: boolean;
   declare public orderIndex: number;
   declare public link?: string;
+  declare public icon?: string;
 
   declare public readonly createdAt: Date;
   declare public readonly updatedAt: Date;
@@ -50,6 +52,10 @@ export function initNotification(sequelize: Sequelize): void {
         defaultValue: 0,
       },
       link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      icon: {
         type: DataTypes.STRING,
         allowNull: true,
       },

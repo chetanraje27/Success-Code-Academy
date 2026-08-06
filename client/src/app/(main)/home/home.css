@@ -10,6 +10,7 @@
   --home-teal: #087f83;
   --home-radius: 12px;
   --home-lower-bg: #f4f8fb;
+  --home-content-width: min(calc(100% - clamp(3rem, 8vw, 8rem)), 96rem);
   --home-section-space: clamp(2.75rem, 4vw, 3.5rem);
   color: var(--home-text);
   background: var(--home-bg);
@@ -22,7 +23,7 @@
 }
 
 .home-container h2 {
-  font-size: clamp(1.85rem, 3vw, 2.35rem);
+  font-size: clamp(1.75rem, 2.6vw, 2.15rem);
   font-weight: 650 !important;
   line-height: 1.15;
 }
@@ -62,8 +63,15 @@
 }
 
 .home-container .explore-section > .container {
-  max-width: 96rem;
-  padding-inline: clamp(1.5rem, 4vw, 4rem);
+  width: var(--home-content-width);
+  max-width: none;
+  padding-inline: 0;
+}
+
+.home-container :where(.why-sca-section, .parents-trust-section) > .container {
+  width: var(--home-content-width);
+  max-width: none;
+  padding-inline: 0;
 }
 
 .home-container :where(.stars-section, .insights-outer-section) {
@@ -553,7 +561,7 @@
 }
 
 .home-container .stars-shell {
-  width: min(100% - 2.5rem, 1180px);
+  width: var(--home-content-width);
   margin-inline: auto;
 }
 
@@ -986,7 +994,7 @@
 }
 
 .home-container .insights-premium-container {
-  width: min(100% - 2.5rem, 1180px);
+  width: var(--home-content-width);
   margin-inline: auto;
 }
 
@@ -1012,6 +1020,10 @@
 .home-container .video-section-premium-wrap {
   padding-top: var(--home-section-space);
   background: var(--home-lower-bg);
+}
+
+.home-container .video-section-premium-wrap .insights-premium-container {
+  width: var(--home-content-width);
 }
 
 .home-container .insights-outer-section .section-header {
@@ -1181,22 +1193,27 @@
   display: none;
 }
 
-.home-container .apple-card-bg-img {
-  top: 0 !important;
-  bottom: auto !important;
-  width: 100% !important;
-  height: 184px !important;
-  object-fit: cover;
-  transition: transform 260ms ease;
-}
-
 .home-container .apple-video-card {
+  position: relative;
+  display: flex;
   width: 100%;
-  padding: 0;
+  box-sizing: border-box;
+  height: auto;
+  padding: 1rem;
+  flex-direction: column;
   color: inherit;
   text-align: left;
-  border-radius: 13px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: var(--home-radius);
+  box-shadow: none;
   appearance: none;
+}
+
+@media (max-width: 1280px) and (min-width: 1024px) {
+  .home-container .video-card-item-wrapper {
+    flex-basis: calc((100% - 2.5rem) / 3);
+  }
 }
 
 .home-container .apple-video-card:focus-visible {
@@ -1204,122 +1221,150 @@
   outline-offset: 3px;
 }
 
-.home-container .apple-card-gradient-overlay {
-  position: absolute;
+.home-container .academy-video-title-row {
+  position: relative;
   z-index: 1;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  height: 184px;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(5, 21, 39, 0.3), transparent 42%),
-    linear-gradient(0deg, rgba(5, 21, 39, 0.28), transparent 48%);
+  display: flex;
+  min-height: 50px;
+  padding: 0.1rem 0.2rem 0.8rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
 }
 
-.home-container .apple-card-content {
-  z-index: 2;
-  position: absolute;
-  inset: 0;
+.home-container .academy-video-title-row h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.98rem;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.home-container .apple-play-btn-wrap {
-  position: absolute;
-  z-index: 2;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.home-container .apple-play-pulse {
+.home-container .academy-video-spark {
   display: none;
 }
 
-.home-container .apple-play-btn-circle {
-  display: grid;
-  width: 44px;
-  height: 44px;
+.home-container .academy-video-media {
+  position: relative;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  overflow: hidden;
+  background: #eaf1f8;
+  border-radius: 10px;
+}
+
+.home-container .academy-video-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: 50% 50%;
+  transition: transform 260ms ease;
+}
+
+.home-container .apple-video-card:hover .academy-video-image {
+  transform: scale(1.02);
+}
+
+.home-container .academy-video-watch {
+  position: absolute;
+  z-index: 3;
+  top: 40%;
+  left: 50%;
+  display: inline-flex;
+  min-height: 42px;
+  padding: 0.45rem 0.85rem;
+  align-items: center;
   color: var(--home-navy);
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(7, 31, 57, 0.13);
+  backdrop-filter: blur(14px) saturate(130%);
+  font-size: 0.82rem;
+  font-weight: 650;
+  gap: 0.55rem;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.home-container .academy-video-play-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  color: #fff;
+  background: rgba(16, 47, 94, 0.92);
+  border-radius: 7px;
   place-items: center;
-  transition: transform 180ms ease, background-color 180ms ease;
 }
 
-.home-container .apple-video-card:hover .apple-play-btn-circle {
-  background: #fff;
-  transform: scale(1.06);
+.home-container .academy-video-play-icon svg {
+  width: 10px;
+  margin-left: 1px;
 }
 
-.home-container .apple-play-icon {
-  width: 13px;
+.home-container .academy-video-footer {
+  display: grid;
+  min-height: 70px;
+  padding: 0.8rem 0.15rem 0;
+  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.7rem;
+}
+
+.home-container .academy-video-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  color: var(--home-navy);
+  background: var(--home-surface-muted);
+  border: 1px solid var(--home-border);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.home-container .academy-video-avatar svg {
+  width: 12px;
   margin-left: 2px;
 }
 
-.home-container .apple-card-bottom-info {
-  position: absolute;
-  inset: auto 0 0;
-  min-height: 142px;
-  padding: 1.05rem;
-  color: var(--home-text);
-  background: var(--home-surface);
-  border-top: 1px solid var(--home-border);
-}
-
-.home-container .apple-card-meta-row {
-  position: absolute;
-  z-index: 3;
-  top: calc(-184px + 0.75rem);
-  right: 0.75rem;
-  left: 0.75rem;
+.home-container .academy-video-meta {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
-.home-container :where(.apple-card-category, .apple-duration-badge) {
-  display: inline-flex;
-  align-items: center;
-  min-height: 25px;
-  padding: 0.32rem 0.48rem;
-  color: #fff;
-  background: rgba(7, 31, 57, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  backdrop-filter: blur(8px);
-  font-size: 0.62rem;
-  font-weight: 650;
-  gap: 0.25rem;
-}
-
-.home-container .apple-card-category {
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
-}
-
-.home-container .apple-card-title {
-  display: -webkit-box;
-  margin-top: 0;
+.home-container .academy-video-meta strong {
   overflow: hidden;
-  color: var(--home-text);
-  font-size: 0.98rem;
-  font-weight: 620 !important;
-  line-height: 1.4;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  color: var(--home-navy);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.home-container .apple-card-title::after {
-  display: block;
-  width: 28px;
-  height: 2px;
-  margin-top: 0.75rem;
-  content: "";
-  background: var(--home-teal);
+.home-container .academy-video-meta > span {
+  overflow: hidden;
+  color: var(--home-muted);
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-container .academy-video-duration {
+  display: inline-flex;
+  min-height: 34px;
+  padding: 0.45rem 0.65rem;
+  align-items: center;
+  color: #fff;
+  background: var(--home-navy);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 0.35rem;
 }
 
 .home-container .video-modal {
@@ -1844,7 +1889,7 @@
   }
 
   .home-container .video-card-item-wrapper {
-    flex-basis: calc((100% - 2.5rem) / 3);
+    flex-basis: calc((100% - 1.25rem) / 2);
   }
 
   .home-container .ecosystem-container {
@@ -1873,7 +1918,7 @@
   }
 
   .home-container h2 {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
   }
 
   .home-container .notif-inner {
@@ -1968,7 +2013,7 @@
 
   .home-container .stars-shell,
   .home-container .insights-premium-container {
-    width: min(100% - 2rem, 1180px);
+    width: var(--home-content-width);
   }
 
   .home-container .stars-header,
@@ -2062,9 +2107,13 @@
     flex-basis: 100%;
   }
 
-  .home-container .blog-cover-card,
-  .home-container .apple-video-card {
+  .home-container .blog-cover-card {
     height: 326px;
+  }
+
+  .home-container .apple-video-card {
+    height: auto;
+    aspect-ratio: auto;
   }
 
   .home-container .desktop-title {

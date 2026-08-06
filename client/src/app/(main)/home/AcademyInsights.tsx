@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
-import { apiFetch } from "@/lib/api";
 
 interface BlogItem {
   id: number;
@@ -83,9 +82,14 @@ export default function AcademyInsights() {
       setIsLoading(true);
       setFetchError(false);
       try {
+        const [newsResponse, videoResponse] = await Promise.all([
+          fetch("/api/content/news", { cache: "no-store" }),
+          fetch("/api/content/videos", { cache: "no-store" })
+        ]);
+        if (!newsResponse.ok || !videoResponse.ok) throw new Error("Content request failed");
         const [newsRes, videoRes] = await Promise.all([
-          apiFetch<{ data: BlogItem[] }>("/api/v1/content/news"),
-          apiFetch<{ data: VideoItem[] }>("/api/v1/content/videos")
+          newsResponse.json() as Promise<{ data?: BlogItem[] }>,
+          videoResponse.json() as Promise<{ data?: VideoItem[] }>
         ]);
         if (newsRes && newsRes.data) setBlogItems(newsRes.data);
         if (videoRes && videoRes.data) setVideoItems(videoRes.data);
@@ -105,8 +109,11 @@ export default function AcademyInsights() {
         if (window.innerWidth <= 640) {
           setItemsPerView(1);
           setVideoItemsPerView(1);
-        } else if (window.innerWidth <= 1024) {
+        } else if (window.innerWidth <= 1023) {
           setItemsPerView(2);
+          setVideoItemsPerView(2);
+        } else if (window.innerWidth <= 1280) {
+          setItemsPerView(3);
           setVideoItemsPerView(3);
         } else {
           setItemsPerView(3);
@@ -311,7 +318,7 @@ export default function AcademyInsights() {
             {isLoading ? (
               <div className="video-cards-grid-layout">
                 {[1, 2, 3, 4].map(i => (
-                  <div key={`skel-vid-${i}`} className="video-card-item-wrapper skeleton-pulse" style={{ height: "460px", borderRadius: "16px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
+                  <div key={`skel-vid-${i}`} className="video-card-item-wrapper skeleton-pulse" style={{ aspectRatio: "0.72", borderRadius: "18px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
                 ))}
               </div>
             ) : fetchError ? (
@@ -335,37 +342,35 @@ export default function AcademyInsights() {
                       onClick={() => setActiveVideo(video.videoUrl)}
                       aria-label={`Play ${video.title}`}
                     >
-                      {/* Full Card Cover Image */}
-                      <LoadingImage
-                        src={video.image}
-                        alt={video.title}
-                        sizes="400px"
-                        className="apple-card-bg-img"
-                      />
-  
-                      {/* Top and bottom gradient overlays for text legibility */}
-                      <div className="apple-card-gradient-overlay" />
-  
-                      {/* Content Overlay */}
-                      <div className="apple-card-content">
-                        {/* Play Button Icon absolute centered */}
-                        <div className="apple-play-btn-wrap">
-                          <div className="apple-play-pulse"></div>
-                          <div className="apple-play-btn-circle">
-                            <FaPlay className="apple-play-icon" />
-                          </div>
-                        </div>
-  
-                        {/* Bottom Text and Duration row */}
-                        <div className="apple-card-bottom-info">
-                          <div className="apple-card-meta-row">
-                            <span className="apple-card-category">{video.category}</span>
-                            <div className="apple-duration-badge">
-                              <FaClock className="clock-icon-svg" /> <span>{video.duration}</span>
-                            </div>
-                          </div>
-                          <h3 className="apple-card-title">{video.title}</h3>
-                        </div>
+                      <div className="academy-video-title-row">
+                        <span className="academy-video-spark" aria-hidden="true" />
+                        <h3>{video.title}</h3>
+                        <span className="academy-video-spark" aria-hidden="true" />
+                      </div>
+                      <div className="academy-video-media">
+                        <LoadingImage
+                          src={video.image}
+                          alt={video.title}
+                          sizes="(max-width: 640px) 88vw, (max-width: 1024px) 32vw, 390px"
+                          className="academy-video-image"
+                        />
+                        <span className="academy-video-watch">
+                          <span className="academy-video-play-icon"><FaPlay /></span>
+                          Watch Video
+                        </span>
+                      </div>
+                      <div className="academy-video-footer">
+                        <span className="academy-video-avatar" aria-hidden="true">
+                          <FaPlay />
+                        </span>
+                        <span className="academy-video-meta">
+                          <strong>{video.category}</strong>
+                          <span>{video.date}</span>
+                        </span>
+                        <span className="academy-video-duration">
+                          <FaClock />
+                          {video.duration}
+                        </span>
                       </div>
                     </button>
                   </div>

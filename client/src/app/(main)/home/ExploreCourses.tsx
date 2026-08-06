@@ -115,7 +115,7 @@ export default function ExploreCourses({ courses = [] }: { courses?: Course[] })
                       className="icon-box"
                       aria-hidden="true"
                       style={{
-                        backgroundImage: `linear-gradient(rgba(219, 235, 255, 0.28), rgba(208, 228, 252, 0.22)), url("${c.image}")`,
+                        backgroundImage: `url("${c.image}")`,
                       }}
                     />
 

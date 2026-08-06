@@ -74,6 +74,7 @@ export const notificationCreateSchema = z
   .object({
     text: z.string().trim().min(2).max(280),
     link: optionalLink,
+    icon: z.string().trim().max(100).optional(),
     isActive: z.boolean().default(true),
     orderIndex,
   })

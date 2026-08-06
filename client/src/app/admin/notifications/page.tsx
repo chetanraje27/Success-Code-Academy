@@ -1,36 +1,93 @@
+"use client";
+
 import AdminContentManager from "@/components/admin/AdminContentManager";
+import {
+  FaBullhorn,
+  FaWandMagicSparkles,
+  FaBell,
+  FaTrophy,
+  FaStar,
+  FaFire,
+  FaGraduationCap,
+  FaCalendarDays,
+  FaGift,
+  FaTriangleExclamation,
+  FaArrowRight,
+  FaLink,
+} from "react-icons/fa6";
+
+const ICON_PRESETS: Record<string, { label: string; icon: React.ReactNode }> = {
+  megaphone: { label: "📢 Announcement", icon: <FaBullhorn style={{ color: "#3b82f6" }} /> },
+  sparkles: { label: "✨ New / Featured", icon: <FaWandMagicSparkles style={{ color: "#eab308" }} /> },
+  bell: { label: "🔔 Notice / Update", icon: <FaBell style={{ color: "#06b6d4" }} /> },
+  trophy: { label: "🏆 Achievement / Result", icon: <FaTrophy style={{ color: "#f59e0b" }} /> },
+  star: { label: "⭐ Important", icon: <FaStar style={{ color: "#eab308" }} /> },
+  flame: { label: "🔥 Hot / Trending", icon: <FaFire style={{ color: "#ef4444" }} /> },
+  "graduation-cap": { label: "🎓 Admissions / Batches", icon: <FaGraduationCap style={{ color: "#8b5cf6" }} /> },
+  calendar: { label: "📅 Date / Schedule", icon: <FaCalendarDays style={{ color: "#10b981" }} /> },
+  gift: { label: "🎁 Offer / Scholarship", icon: <FaGift style={{ color: "#ec4899" }} /> },
+  alert: { label: "⚠️ Urgent Notice", icon: <FaTriangleExclamation style={{ color: "#f97316" }} /> },
+};
+
+export function renderNotificationIcon(iconKey?: string) {
+  if (!iconKey) return <FaBullhorn style={{ color: "#3b82f6" }} />;
+  if (ICON_PRESETS[iconKey]) {
+    return ICON_PRESETS[iconKey].icon;
+  }
+  // Custom emoji or text icon
+  return <span style={{ fontSize: "1.1em" }}>{iconKey}</span>;
+}
 
 export default function AdminNotificationsPage() {
   return (
     <AdminContentManager
-      title="Announcements"
-      description="Create the short notices shown near the top of the home page. Keep each message focused on one action or deadline."
+      title="Announcements & Notifications"
+      description="Create and manage top notification bar announcements. Select an icon, enter your message text, and specify an optional link for user redirection."
       itemName="Announcement"
       resource="notifications"
       fields={[
+        {
+          name: "icon",
+          label: "Notification Icon",
+          kind: "select",
+          defaultValue: "megaphone",
+          options: [
+            { label: "📢 Megaphone (Announcement)", value: "megaphone" },
+            { label: "✨ Sparkles (New / Featured)", value: "sparkles" },
+            { label: "🔔 Bell (Notice / Update)", value: "bell" },
+            { label: "🏆 Trophy (Results)", value: "trophy" },
+            { label: "⭐ Star (Important)", value: "star" },
+            { label: "🔥 Flame (Hot / Trending)", value: "flame" },
+            { label: "🎓 Graduation Cap (Admissions)", value: "graduation-cap" },
+            { label: "📅 Calendar (Schedule)", value: "calendar" },
+            { label: "🎁 Gift (Scholarship)", value: "gift" },
+            { label: "⚠️ Alert (Urgent)", value: "alert" },
+          ],
+          help: "Choose an icon to display alongside the announcement.",
+        },
         {
           name: "text",
           label: "Announcement text",
           kind: "textarea",
           required: true,
           full: true,
-          placeholder: "Admissions open for the 2026–27 NEET batches.",
+          placeholder: "Admissions open for the 2026–27 NEET batches!",
           help: "Maximum 280 characters.",
         },
         {
           name: "link",
-          label: "Optional link",
+          label: "Optional Redirection Link",
           kind: "url",
           full: true,
           placeholder: "/admissions",
-          help: "Use a website path such as /admissions or a full HTTPS URL.",
+          help: "Use an internal path (e.g., /admissions or /courses) or full URL. Clicking the notification on the site will redirect users here.",
         },
         {
           name: "orderIndex",
           label: "Display order",
           kind: "number",
-          defaultValue: 0,
-          min: 0,
+          defaultValue: 1,
+          min: 1,
         },
         {
           name: "isActive",
@@ -41,8 +98,77 @@ export default function AdminNotificationsPage() {
         },
       ]}
       columns={[
-        { label: "Announcement", key: "text" },
-        { label: "Link", key: "link" },
+        {
+          label: "Announcement",
+          key: "text",
+          render: (item) => (
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "34px",
+                  height: "34px",
+                  borderRadius: "8px",
+                  background: "rgba(59, 130, 246, 0.1)",
+                  fontSize: "1.1rem",
+                  flexShrink: 0,
+                }}
+              >
+                {renderNotificationIcon(item.icon as string | undefined)}
+              </div>
+              <div>
+                <div style={{ fontWeight: 600, color: "var(--sca-admin-text, #1e293b)" }}>
+                  {String(item.text || "")}
+                </div>
+                {item.link ? (
+                  <div
+                    style={{
+                      fontSize: "0.78rem",
+                      color: "#2563eb",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      marginTop: "2px",
+                    }}
+                  >
+                    <FaLink style={{ fontSize: "0.7rem" }} />
+                    <span>Redirects to: <strong>{String(item.link)}</strong></span>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "2px" }}>
+                    No redirection link configured
+                  </div>
+                )}
+              </div>
+            </div>
+          ),
+        },
+        {
+          label: "Link Target",
+          key: "link",
+          render: (item) =>
+            item.link ? (
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "3px 8px",
+                  borderRadius: "4px",
+                  fontSize: "0.8rem",
+                  background: "#eff6ff",
+                  color: "#1d4ed8",
+                  fontWeight: 500,
+                }}
+              >
+                {String(item.link)} <FaArrowRight style={{ fontSize: "0.65rem" }} />
+              </span>
+            ) : (
+              <span style={{ color: "#94a3b8", fontSize: "0.8rem" }}>—</span>
+            ),
+        },
         { label: "Order", key: "orderIndex" },
         { label: "Status", key: "isActive", kind: "status" },
       ]}

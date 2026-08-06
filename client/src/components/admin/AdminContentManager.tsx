@@ -156,7 +156,15 @@ export default function AdminContentManager({
 
   function openCreate() {
     setEditing(null);
-    setValues(initialValues(fields));
+    const nextValues = initialValues(fields);
+    if ("orderIndex" in nextValues || fields.some((f) => f.name === "orderIndex")) {
+      const maxOrder = items.reduce((max, item) => {
+        const val = typeof item.orderIndex === "number" ? item.orderIndex : 0;
+        return Math.max(max, val);
+      }, 0);
+      nextValues.orderIndex = maxOrder > 0 ? maxOrder + 1 : 1;
+    }
+    setValues(nextValues);
     setImageFile(null);
     setVideoFile(null);
     setImagePreview("");
@@ -166,7 +174,12 @@ export default function AdminContentManager({
 
   function openEdit(item: ResourceItem) {
     const next = fields.reduce<Record<string, FieldValue>>((result, field) => {
-      result[field.name] = valueFromItem(item, field);
+      let val = valueFromItem(item, field);
+      if (field.name === "orderIndex") {
+        const numVal = typeof val === "number" ? val : parseInt(String(val), 10) || 0;
+        val = Math.max(1, numVal);
+      }
+      result[field.name] = val;
       return result;
     }, {});
     setEditing(item);

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import ExploreCourses, { type Course } from "./ExploreCourses";
 import ToppersCarousel from "./ToppersCarousel";
@@ -11,7 +12,19 @@ import AcademyInsights from "./AcademyInsights";
 import ParentsTrustUs from "./ParentsTrustUs";
 
 import {
-  FaChevronRight, FaChevronLeft
+  FaChevronRight,
+  FaChevronLeft,
+  FaBullhorn,
+  FaWandMagicSparkles,
+  FaBell,
+  FaTrophy,
+  FaStar,
+  FaFire,
+  FaGraduationCap,
+  FaCalendarDays,
+  FaGift,
+  FaTriangleExclamation,
+  FaArrowRight,
 } from "react-icons/fa6";
 import EditableSection from "@/components/admin/EditableSection";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
@@ -23,6 +36,7 @@ type Announcement = {
   id?: number;
   text: string;
   link?: string | null;
+  icon?: string | null;
 };
 
 type HomeBanner = {
@@ -40,8 +54,34 @@ type PublicContentResponse<T> = {
   data?: T[];
 };
 
-const removeAnnouncementEmoji = (text: string) =>
-  text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, "").replace(/\s{2,}/g, " ").trim();
+function renderAnnouncementIcon(iconKey?: string | null) {
+  switch (iconKey) {
+    case "sparkles":
+      return <FaWandMagicSparkles style={{ color: "#fde047" }} />;
+    case "bell":
+      return <FaBell style={{ color: "#38bdf8" }} />;
+    case "trophy":
+      return <FaTrophy style={{ color: "#fbbf24" }} />;
+    case "star":
+      return <FaStar style={{ color: "#fde047" }} />;
+    case "flame":
+      return <FaFire style={{ color: "#f87171" }} />;
+    case "graduation-cap":
+      return <FaGraduationCap style={{ color: "#c084fc" }} />;
+    case "calendar":
+      return <FaCalendarDays style={{ color: "#34d399" }} />;
+    case "gift":
+      return <FaGift style={{ color: "#f472b6" }} />;
+    case "alert":
+      return <FaTriangleExclamation style={{ color: "#fb923c" }} />;
+    case "megaphone":
+    default:
+      if (iconKey && iconKey.trim() && iconKey !== "megaphone") {
+        return <span style={{ fontSize: "1em", marginRight: "4px" }}>{iconKey}</span>;
+      }
+      return <FaBullhorn style={{ color: "#60a5fa" }} />;
+  }
+}
 
 function BannerImage({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -64,8 +104,6 @@ function BannerImage({ src, alt, priority = false }: { src: string; alt: string;
   );
 }
 
-
-
 export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
@@ -76,7 +114,7 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
   const { refreshKey } = useEditModeOptional();
 
   const tickerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const [shouldScroll, setShouldScroll] = useState(false);
 
   useEffect(() => {
@@ -118,9 +156,7 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
         const bannerData = await bannerRes.json() as PublicContentResponse<HomeBanner>;
 
         const nextAnnouncements = notifData.status === 'success'
-          ? (notifData.data || [])
-              .filter((item) => item?.text)
-              .map((item) => ({ ...item, text: removeAnnouncementEmoji(item.text) }))
+          ? (notifData.data || []).filter((item) => item?.text)
           : [];
         const homeBanners = bannerData.status === 'success'
           ? (bannerData.data || []).filter((banner) =>
@@ -161,6 +197,28 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
     const t = setInterval(() => setAnnounceIdx(p => (p + 1) % announcements.length), 3500);
     return () => clearInterval(t);
   }, [announcements.length]);
+
+  const currentNotif = announcements[announceIdx];
+  const linkUrl = currentNotif?.link?.trim() || "";
+  const hasLink = Boolean(linkUrl);
+  const isExternal = /^https?:\/\//i.test(linkUrl);
+
+  const announcementContent = (
+    <span className="notif-content-inner" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+      <span className="notif-icon-badge">
+        {renderAnnouncementIcon(currentNotif?.icon)}
+      </span>
+      <span className="notif-text-span">
+        {currentNotif ? highlightText(currentNotif.text) : ''}
+      </span>
+      {hasLink && (
+        <span className="notif-link-badge">
+          <span>Details</span>
+          <FaArrowRight style={{ fontSize: "0.65rem" }} />
+        </span>
+      )}
+    </span>
+  );
 
   return (
     <div className="home-container">
@@ -205,17 +263,34 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
               </div>
               <div className="notif-ticker" ref={tickerRef}>
                 <AnimatePresence mode="wait">
-                  <motion.span
+                  <motion.div
                     key={announceIdx}
                     ref={textRef}
                     initial={false}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className={`notif-text ${shouldScroll ? "scroll-active" : ""}`}
+                    className={`notif-text-wrap ${shouldScroll ? "scroll-active" : ""}`}
                   >
-                    {announcements[announceIdx] ? highlightText(announcements[announceIdx].text) : ''}
-                  </motion.span>
+                    {hasLink ? (
+                      isExternal ? (
+                        <a
+                          href={linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="notif-link-item"
+                        >
+                          {announcementContent}
+                        </a>
+                      ) : (
+                        <Link href={linkUrl} className="notif-link-item">
+                          {announcementContent}
+                        </Link>
+                      )
+                    ) : (
+                      <div className="notif-plain-item">{announcementContent}</div>
+                    )}
+                  </motion.div>
                 </AnimatePresence>
               </div>
               <div className="notif-right">

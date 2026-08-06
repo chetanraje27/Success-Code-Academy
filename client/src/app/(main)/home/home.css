@@ -9,6 +9,7 @@
   --home-navy: #102f5e;
   --home-teal: #087f83;
   --home-radius: 12px;
+  --home-lower-bg: #f4f8fb;
   --home-section-space: clamp(2.75rem, 4vw, 3.5rem);
   color: var(--home-text);
   background: var(--home-bg);
@@ -788,9 +789,7 @@
 .home-container .why-sca-section {
   overflow: hidden;
   padding-bottom: var(--home-section-space);
-  background:
-    linear-gradient(90deg, rgba(13, 75, 120, 0.035), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #f4f8fb 100%);
+  background: var(--home-lower-bg);
 }
 
 .home-container .why-story-content {
@@ -983,9 +982,7 @@
 .home-container .insights-outer-section {
   padding-bottom: 0;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(7, 141, 146, 0.035), transparent 20rem),
-    var(--home-bg);
+  background: var(--home-lower-bg);
 }
 
 .home-container .insights-premium-container {
@@ -1014,12 +1011,7 @@
 
 .home-container .video-section-premium-wrap {
   padding-top: var(--home-section-space);
-  background:
-    linear-gradient(90deg, rgba(10, 42, 78, 0.025) 1px, transparent 1px),
-    linear-gradient(rgba(10, 42, 78, 0.025) 1px, transparent 1px),
-    var(--home-surface);
-  background-size: 40px 40px;
-  border-top: 1px solid var(--home-border);
+  background: var(--home-lower-bg);
 }
 
 .home-container .insights-outer-section .section-header {
@@ -1381,9 +1373,7 @@
 
 /* Trust */
 .home-container .parents-trust-section {
-  background:
-    linear-gradient(90deg, rgba(13, 75, 120, 0.035), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #f4f8fb 100%);
+  background: var(--home-lower-bg);
 }
 
 .home-container .trust-grid-wrapper {

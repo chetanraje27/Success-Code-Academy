@@ -4,13 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import ExploreCourses from "./ExploreCourses";
+import ExploreCourses, { type Course } from "./ExploreCourses";
 import ToppersCarousel from "./ToppersCarousel";
 import WhySCA from "./WhySCA";
 import AcademyInsights from "./AcademyInsights";
 import ParentsTrustUs from "./ParentsTrustUs";
 
-import FAQAccordion from "./FAQAccordion";
 import {
   FaChevronRight, FaChevronLeft
 } from "react-icons/fa6";
@@ -67,7 +66,7 @@ function BannerImage({ src, alt, priority = false }: { src: string; alt: string;
 
 
 
-export default function HomeClient({ courses = [] }: { courses?: any[] }) {
+export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const [announceIdx, setAnnounceIdx] = useState(0);
@@ -349,7 +348,6 @@ export default function HomeClient({ courses = [] }: { courses?: any[] }) {
       {/* ══════════════════════════════════════════
           SECTION 12: FAQS SECTION
           ══════════════════════════════════════════ */}
-      <FAQAccordion />
     </div>
   );
 }

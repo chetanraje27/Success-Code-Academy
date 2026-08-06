@@ -10,7 +10,7 @@ const courseStyles = [
   "/images/courses/test-series.png",
 ];
 
-type Course = {
+export type Course = {
   id?: string | number;
   title: string;
   description: string;

@@ -16,7 +16,15 @@ import { EditableText } from "@/components/admin/EditableText";
 // import removed
 
 interface CourseDetailClientProps {
-  course: any;
+  course: {
+    id: string | number;
+    category: string;
+    type: string;
+    title: string;
+    description: string;
+    highlights: string[];
+    badge: string;
+  };
 }
 
 const timeSlots = [
@@ -38,8 +46,8 @@ const classroomFeatures = [
       "One of the best selection ratios in Maharashtra",
     ],
     image: "/images/crops/results_graphic.png",
-    width: 322,
-    height: 185,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Personalized Mentorship",
@@ -51,8 +59,8 @@ const classroomFeatures = [
       "Exam strategy guidance",
     ],
     image: "/images/crops/mentorship_graphic.png",
-    width: 322,
-    height: 158,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Concept-Driven Classroom Learning",
@@ -64,8 +72,8 @@ const classroomFeatures = [
       "Strong fundamentals over memorization",
     ],
     image: "/images/crops/learning_graphic.png",
-    width: 323,
-    height: 155,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Study Material & Daily Practice",
@@ -77,8 +85,8 @@ const classroomFeatures = [
       "Revision booklets & PYQs",
     ],
     image: "/images/crops/material_graphic.png",
-    width: 313,
-    height: 146,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Smart Assessment System",
@@ -91,8 +99,8 @@ const classroomFeatures = [
       "Time-management practice",
     ],
     image: "/images/crops/assessment_graphic.png",
-    width: 323,
-    height: 154,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Personalized Performance Analytics",
@@ -104,8 +112,8 @@ const classroomFeatures = [
       "Faculty feedback",
     ],
     image: "/images/crops/analytics_graphic.png",
-    width: 321,
-    height: 145,
+    width: 1672,
+    height: 941,
   },
   {
     title: "Student Wellness & Motivation",
@@ -116,8 +124,8 @@ const classroomFeatures = [
       "Continuous motivation",
     ],
     image: "/images/crops/wellness_graphic.png",
-    width: 273,
-    height: 105,
+    width: 1672,
+    height: 941,
   },
 ];
 

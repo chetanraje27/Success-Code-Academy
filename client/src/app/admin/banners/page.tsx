@@ -14,15 +14,15 @@ export default function AdminBannersPage() {
           className={`admin-tab ${activeTab === "HOME" ? "active" : ""}`}
           onClick={() => setActiveTab("HOME")}
           style={{
-            background: activeTab === "HOME" ? "var(--admin-surface)" : "transparent",
-            color: activeTab === "HOME" ? "var(--admin-brand)" : "var(--admin-muted)",
-            border: "none",
+            background: activeTab === "HOME" ? "var(--admin-brand)" : "var(--admin-surface)",
+            color: activeTab === "HOME" ? "#ffffff" : "var(--admin-muted)",
+            border: activeTab === "HOME" ? "1px solid var(--admin-brand)" : "1px solid var(--admin-border)",
             padding: "8px 16px",
             fontSize: "0.95rem",
             fontWeight: 500,
             cursor: "pointer",
             borderRadius: "var(--admin-radius)",
-            boxShadow: activeTab === "HOME" ? "0 1px 3px rgba(0,0,0,0.05)" : "none",
+            boxShadow: activeTab === "HOME" ? "0 2px 4px rgba(0,0,0,0.1)" : "none",
             transition: "all 0.2s ease"
           }}
         >
@@ -33,15 +33,15 @@ export default function AdminBannersPage() {
           className={`admin-tab ${activeTab === "RESULTS" ? "active" : ""}`}
           onClick={() => setActiveTab("RESULTS")}
           style={{
-            background: activeTab === "RESULTS" ? "var(--admin-surface)" : "transparent",
-            color: activeTab === "RESULTS" ? "var(--admin-brand)" : "var(--admin-muted)",
-            border: "none",
+            background: activeTab === "RESULTS" ? "var(--admin-brand)" : "var(--admin-surface)",
+            color: activeTab === "RESULTS" ? "#ffffff" : "var(--admin-muted)",
+            border: activeTab === "RESULTS" ? "1px solid var(--admin-brand)" : "1px solid var(--admin-border)",
             padding: "8px 16px",
             fontSize: "0.95rem",
             fontWeight: 500,
             cursor: "pointer",
             borderRadius: "var(--admin-radius)",
-            boxShadow: activeTab === "RESULTS" ? "0 1px 3px rgba(0,0,0,0.05)" : "none",
+            boxShadow: activeTab === "RESULTS" ? "0 2px 4px rgba(0,0,0,0.1)" : "none",
             transition: "all 0.2s ease"
           }}
         >

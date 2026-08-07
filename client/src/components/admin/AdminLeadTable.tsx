@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { Download, Search, Edit2, Trash2 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import {
@@ -53,7 +53,6 @@ export default function AdminLeadTable({
 }) {
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [query, setQuery] = useState("");
-  const [activeQuery, setActiveQuery] = useState("");
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -69,7 +68,6 @@ export default function AdminLeadTable({
       }
       setError("");
       const params = new URLSearchParams({ limit: "50" });
-      if (activeQuery) params.set("q", activeQuery);
       if (cursor) params.set("cursor", String(cursor));
 
       try {
@@ -90,18 +88,28 @@ export default function AdminLeadTable({
         setLoadingMore(false);
       }
     },
-    [activeQuery, endpoint, title],
+    [endpoint, title],
   );
 
   useEffect(() => {
-    // Load the remote lead resource when the endpoint or search changes.
+    // Load the remote lead resource when the endpoint changes.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadRows();
   }, [loadRows]);
 
+  const displayedRows = useMemo(() => {
+    const trimmed = query.trim();
+    if (!trimmed) return rows;
+    const lower = trimmed.toLowerCase();
+    return rows.filter((row) =>
+      Object.values(row).some(
+        (val) => typeof val === "string" && val.toLowerCase().includes(lower)
+      )
+    );
+  }, [rows, query]);
+
   function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setActiveQuery(query.trim());
   }
 
   function downloadCsv() {
@@ -174,19 +182,19 @@ export default function AdminLeadTable({
       <section className="admin-card">
         <header className="admin-card-header">
           <div>
-            <h2>{activeQuery ? `Results for “${activeQuery}”` : title}</h2>
-            <p>{rows.length} records currently loaded</p>
+            <h2>{query.trim() ? `Results for “${query.trim()}”` : title}</h2>
+            <p>{displayedRows.length} records currently loaded</p>
           </div>
         </header>
 
         {loading ? (
           <AdminLoadingState label="Loading records…" />
-        ) : rows.length === 0 ? (
+        ) : displayedRows.length === 0 ? (
           <AdminEmptyState
             title="No records found"
             message={
-              activeQuery
-                ? "Try a different name, phone number, email, or course."
+              query.trim()
+                ? "Try a different search term."
                 : "New submissions will appear here automatically."
             }
           />
@@ -203,7 +211,7 @@ export default function AdminLeadTable({
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((row) => (
+                  {displayedRows.map((row) => (
                     <tr key={row.id}>
                       {columns.map((column) => (
                         <td key={column.key}>

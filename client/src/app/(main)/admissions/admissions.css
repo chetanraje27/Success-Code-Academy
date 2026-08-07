@@ -1,7 +1,7 @@
 .public-shell .admissions-page-container {
   --admission-ink: #10233f;
   --admission-muted: #617087;
-  --admission-navy: #0a2d57;
+  --admission-navy: #102f5e;
   --admission-teal: #078d92;
   --admission-line: #d9e3ec;
   min-height: 100vh;
@@ -9,6 +9,43 @@
   color: var(--admission-ink);
   background: #f6f9fc !important;
   font-family: inherit !important;
+}
+
+/* Full-bleed hero: image anchors edge-to-edge, no side gutters */
+.public-shell .admissions-page-container .admissions-hero-banner {
+  padding: 76px 0 0 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+.public-shell .admissions-page-container .admissions-hero-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.public-shell .admissions-page-container .admissions-poster-wrapper {
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  overflow: hidden;
+}
+
+.public-shell .admissions-page-container .poster-img-container {
+  width: 100%;
+  padding: 0;
+}
+
+.public-shell .admissions-page-container .admissions-poster-img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  display: block !important;
 }
 
 .public-shell .admissions-page-container,
@@ -25,7 +62,7 @@
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
-  padding: calc(76px + 48px) max(24px, calc((100vw - 1160px) / 2)) 74px !important;
+  padding: clamp(2.5rem, 6vw, 4rem) max(24px, calc((100vw - 1160px) / 2)) 74px !important;
   box-sizing: border-box;
   align-items: start;
   background:
@@ -384,10 +421,16 @@
   }
 }
 
+@media (max-width: 1023px) {
+  .public-shell .admissions-page-container .admissions-hero-banner {
+    padding-top: 68px !important;
+  }
+}
+
 @media (max-width: 640px) {
   .public-shell .admissions-page-container .scholarship-grid-container {
     gap: 24px !important;
-    padding: calc(68px + 32px) 12px 54px !important;
+    padding: 2.5rem 12px 54px !important;
   }
 
   .public-shell .admissions-page-container .poster-header {

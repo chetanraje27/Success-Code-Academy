@@ -1,9 +1,11 @@
 .public-shell .admissions-page-container {
   --admission-ink: #10233f;
-  --admission-muted: #617087;
+  --admission-muted: #5d6c7e;
   --admission-navy: #102f5e;
-  --admission-teal: #078d92;
-  --admission-line: #d9e3ec;
+  --admission-blue: #1b4f86;
+  --admission-blue-strong: #0257d0;
+  --admission-line: #d7e0e9;
+  --admission-border-strong: #c2d0de;
   min-height: 100vh;
   padding-top: 0 !important;
   color: var(--admission-ink);
@@ -66,7 +68,7 @@
   box-sizing: border-box;
   align-items: start;
   background:
-    radial-gradient(circle at 7% 18%, rgba(7, 141, 146, 0.075), transparent 22rem),
+    radial-gradient(circle at 7% 18%, rgba(27, 79, 134, 0.06), transparent 22rem),
     radial-gradient(circle at 94% 54%, rgba(39, 104, 173, 0.07), transparent 25rem),
     linear-gradient(90deg, rgba(16, 35, 63, 0.022) 1px, transparent 1px),
     linear-gradient(rgba(16, 35, 63, 0.022) 1px, transparent 1px),
@@ -86,54 +88,65 @@
 .public-shell .admissions-page-container .poster-header {
   position: relative;
   display: grid !important;
-  grid-template-columns: 58px minmax(0, 1fr);
-  column-gap: 18px;
+  grid-template-columns: 52px minmax(0, 1fr);
+  column-gap: 16px;
   align-items: start !important;
 }
 
 .public-shell .admissions-page-container .poster-header-icon {
   display: grid !important;
   grid-row: 1 / span 2;
-  width: 58px;
-  height: 58px;
+  width: 52px;
+  height: 52px;
   margin: 0 !important;
   place-items: center;
-  color: var(--admission-navy);
-  background: #e9f5f6;
-  border: 1px solid #d1e9ea;
+  color: #fff;
+  background: var(--admission-ink);
+  border: 1px solid #1d3a63;
   border-radius: 13px;
 }
 
 .public-shell .admissions-page-container .poster-header-icon svg {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
+}
+.public-shell .admissions-page-container .poster-header-icon svg path,
+.public-shell .admissions-page-container .poster-header-icon svg polygon {
+  fill: #fff !important;
+}
+.public-shell .admissions-page-container .poster-header-icon svg path[fill="#0257d0"] {
+  fill: #fff !important;
+}
+.public-shell .admissions-page-container .poster-header-icon svg path[stroke="#0257d0"] {
+  stroke: #fff !important;
 }
 
 .public-shell .admissions-page-container .poster-main-title {
   grid-column: 2;
-  margin: 0 0 14px !important;
+  max-width: 600px;
+  margin: 2px 0 18px !important;
   color: var(--admission-ink) !important;
-  font-size: clamp(2.15rem, 4vw, 3.4rem) !important;
-  font-weight: 650 !important;
-  letter-spacing: -0.052em !important;
-  line-height: 1.04 !important;
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 1.15 !important;
 }
 
 .public-shell .admissions-page-container .blue-title-highlight {
-  color: var(--admission-teal) !important;
+  color: var(--admission-blue-strong) !important;
 }
 
 .public-shell .admissions-page-container .poster-badge-pill {
   grid-column: 2;
   justify-self: start;
   margin: 0 0 24px !important;
-  padding: 6px 10px !important;
-  color: var(--admission-teal) !important;
-  background: #eaf7f7 !important;
-  border: 1px solid #d2ecec;
+  padding: 6px 12px !important;
+  color: #fff !important;
+  background: var(--admission-ink) !important;
+  border: 1px solid #1d3a63;
   border-radius: 999px !important;
-  font-size: 0.64rem !important;
-  font-weight: 750 !important;
+  font-size: 0.66rem !important;
+  font-weight: 650 !important;
   letter-spacing: 0.07em !important;
 }
 
@@ -158,7 +171,7 @@
 }
 
 .public-shell .admissions-page-container .star-svg {
-  fill: var(--admission-teal) !important;
+  fill: var(--admission-blue-strong) !important;
 }
 
 .public-shell .admissions-page-container .poster-features-list {
@@ -171,62 +184,69 @@
 .public-shell .admissions-page-container .poster-feature-card-boxed {
   position: relative;
   min-width: 0;
-  min-height: 126px;
+  min-height: 0;
   margin: 0 !important;
-  padding: 18px !important;
+  padding: 17px 18px !important;
   align-items: flex-start !important;
   gap: 13px !important;
   background:
-    radial-gradient(circle at 100% 0%, rgba(7, 141, 146, 0.07), transparent 9rem),
+    radial-gradient(circle at 100% 0%, rgba(27, 79, 134, 0.06), transparent 9rem),
     #fff !important;
   border: 1px solid var(--admission-line) !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   box-shadow: none !important;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease !important;
+}
+
+.public-shell .admissions-page-container .poster-feature-item:hover,
+.public-shell .admissions-page-container .poster-feature-card-boxed:hover {
+  border-color: var(--admission-border-strong) !important;
+  transform: translateY(-1px);
 }
 
 .public-shell .admissions-page-container .feature-icon-circle,
 .public-shell .admissions-page-container .feature-icon-circle-dark {
   display: grid !important;
-  width: 38px !important;
-  height: 38px !important;
-  flex: 0 0 38px !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
   place-items: center;
-  color: var(--admission-navy) !important;
-  background: #edf6f8 !important;
-  border: 1px solid #d4e8eb !important;
-  border-radius: 9px !important;
+  color: var(--admission-ink) !important;
+  background: #eef1f6 !important;
+  border: 1px solid #dde3ec !important;
+  border-radius: 10px !important;
 }
 
 .public-shell .admissions-page-container .feature-icon-circle svg {
   width: 19px;
   height: 19px;
-  stroke: var(--admission-teal);
+  stroke: var(--admission-ink);
 }
 
 .public-shell .admissions-page-container .feature-title,
 .public-shell .admissions-page-container .feature-title-blue {
   margin: 0 !important;
   color: var(--admission-ink) !important;
-  font-size: 0.88rem !important;
+  font-size: 0.92rem !important;
   font-weight: 650 !important;
-  line-height: 1.25 !important;
+  line-height: 1.3 !important;
 }
 
 .public-shell .admissions-page-container .feature-description,
 .public-shell .admissions-page-container .feature-description-blue {
   margin: 5px 0 0 !important;
   color: var(--admission-muted) !important;
-  font-size: 0.74rem !important;
+  font-size: 0.76rem !important;
   line-height: 1.5 !important;
 }
 
 .public-shell .admissions-page-container .poster-feature-card-boxed {
   grid-column: 1 / -1;
-  min-height: 112px;
+  min-height: 0;
   color: #fff;
   background:
-    radial-gradient(circle at 100% 0%, rgba(42, 199, 202, 0.2), transparent 14rem),
-    linear-gradient(145deg, #0b315d, #092647) !important;
+    radial-gradient(circle at 100% 0%, rgba(104, 160, 226, 0.22), transparent 14rem),
+    linear-gradient(145deg, #123b6e, #0b2c58) !important;
   border-color: #214a76 !important;
 }
 
@@ -260,8 +280,8 @@
   width: 100% !important;
   padding: 30px !important;
   color: var(--admission-ink);
-  background: linear-gradient(180deg, #f1fafa 0, #fff 11rem) !important;
-  border: 1px solid #cfdee8 !important;
+  background: linear-gradient(180deg, #eef1f6 0, #fff 11rem) !important;
+  border: 1px solid #d4dbe6 !important;
   border-radius: 16px !important;
   box-shadow: none !important;
 }
@@ -271,7 +291,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
-  background: linear-gradient(90deg, var(--admission-teal), #4fbfc1);
+  background: linear-gradient(90deg, var(--admission-blue-strong), var(--admission-navy));
   pointer-events: none;
 }
 
@@ -298,16 +318,16 @@
   height: 48px !important;
   margin: 0 !important;
   place-items: center;
-  color: var(--admission-teal) !important;
-  background: #e6f5f5 !important;
-  border: 1px solid #cbe5e7 !important;
+  color: #fff !important;
+  background: var(--admission-ink) !important;
+  border: 1px solid #1d3a63 !important;
   border-radius: 11px !important;
 }
 
 .public-shell .admissions-page-container .form-header-icon svg {
   width: 25px;
   height: 25px;
-  stroke: var(--admission-teal);
+  stroke: #fff;
 }
 
 .public-shell .admissions-page-container .form-card-title {
@@ -334,8 +354,8 @@
 
 .public-shell .admissions-page-container .form-label {
   color: #41536a !important;
-  font-size: 0.7rem !important;
-  font-weight: 600 !important;
+  font-size: 0.72rem !important;
+  font-weight: 650 !important;
   letter-spacing: 0.012em;
 }
 
@@ -348,12 +368,13 @@
   border: 1px solid #cdd9e4 !important;
   border-radius: 9px !important;
   box-shadow: none !important;
+  transition: border-color 160ms ease, box-shadow 160ms ease !important;
 }
 
 .public-shell .admissions-page-container .input-with-icon input:focus,
 .public-shell .admissions-page-container .input-with-icon select:focus {
-  border-color: var(--admission-teal) !important;
-  box-shadow: 0 0 0 3px rgba(7, 141, 146, 0.11) !important;
+  border-color: var(--admission-blue-strong) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
 }
 
 .public-shell .admissions-page-container .input-with-icon input::placeholder {
@@ -382,13 +403,13 @@
   box-shadow: none !important;
   font-size: 0.88rem !important;
   font-weight: 700 !important;
-  transition: background 160ms ease, transform 160ms ease !important;
+  transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease !important;
 }
 
 .public-shell .admissions-page-container .register-submit-btn:hover {
   color: #fff !important;
-  background: #0d416f !important;
-  box-shadow: none !important;
+  background: var(--admission-blue) !important;
+  box-shadow: 0 12px 24px -12px rgba(16, 47, 94, 0.45) !important;
   transform: translateY(-1px);
 }
 
@@ -434,23 +455,23 @@
   }
 
   .public-shell .admissions-page-container .poster-header {
-    grid-template-columns: 46px minmax(0, 1fr);
-    column-gap: 13px;
+    grid-template-columns: 42px minmax(0, 1fr);
+    column-gap: 12px;
   }
 
   .public-shell .admissions-page-container .poster-header-icon {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     border-radius: 11px;
   }
 
   .public-shell .admissions-page-container .poster-header-icon svg {
-    width: 30px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
   }
 
   .public-shell .admissions-page-container .poster-main-title {
-    font-size: clamp(1.9rem, 9.5vw, 2.55rem) !important;
+    font-size: clamp(1.45rem, 7.5vw, 2rem) !important;
   }
 
   .public-shell .admissions-page-container .poster-features-list {

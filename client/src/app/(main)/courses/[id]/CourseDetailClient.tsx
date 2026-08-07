@@ -36,6 +36,12 @@ const timeSlots = [
   "06:00 PM - 07:00 PM",
 ];
 
+const courseVisuals: Record<string, string> = {
+  freshers: "/images/courses/neet-foundation.png",
+  repeaters: "/images/courses/neet-repeaters.png",
+  "test-series": "/images/courses/test-series.png",
+};
+
 const classroomFeatures = [
   {
     title: "Our Results Speak for Themselves",
@@ -128,36 +134,6 @@ const classroomFeatures = [
     height: 941,
   },
 ];
-
-function CourseEmblem({ category }: { category: string }) {
-  if (category === "freshers") {
-    return (
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M9 13h16a7 7 0 0 1 7 7v32a7 7 0 0 0-7-7H9z" />
-        <path d="M55 13H39a7 7 0 0 0-7 7v32a7 7 0 0 1 7-7h16z" />
-        <path d="M17 23h8M39 23h8M17 31h8M39 31h8" />
-      </svg>
-    );
-  }
-
-  if (category === "repeaters") {
-    return (
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="32" cy="32" r="23" />
-        <circle cx="32" cy="32" r="14" />
-        <circle cx="32" cy="32" r="5" />
-        <path d="m45 19 10-10M46 9h9v9" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="14" y="11" width="36" height="45" rx="4" />
-      <path d="M24 11V7h16v4M23 27l5 5 10-11M23 43h18" />
-    </svg>
-  );
-}
 
 export default function CourseDetailClient({ course }: CourseDetailClientProps) {
   const [formData, setFormData] = useState({
@@ -327,14 +303,15 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                   </li>
                 ))}
               </ul>
-            </div>
+</div>
 
-            <div className="course-detail-hero-visual">
-              <span className="course-detail-orbit course-detail-orbit-one" aria-hidden="true" />
-              <span className="course-detail-orbit course-detail-orbit-two" aria-hidden="true" />
-              <div className="course-detail-emblem" aria-hidden="true">
-                <CourseEmblem category={course.category} />
-              </div>
+            <div
+              className="course-detail-hero-visual"
+              aria-hidden="true"
+              style={{
+                backgroundImage: `url("${courseVisuals[course.category] || courseVisuals.freshers}")`,
+              }}
+            >
               <div className="course-detail-batch">
                 <EditableText
                   contentKey={`course-${course.id}.badge`}

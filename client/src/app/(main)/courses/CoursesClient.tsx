@@ -5,7 +5,18 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { EditableText } from "@/components/admin/EditableText";
 
-export default function CoursesClient({ courses }: { courses: any[] }) {
+type Course = {
+  id: string | number;
+  category: string;
+  slug: string;
+  type: string;
+  title: string;
+  description: string;
+  highlights: string[];
+  badge: string;
+};
+
+export default function CoursesClient({ courses }: { courses: Course[] }) {
   const categories = useMemo(() => {
     const unique = Array.from(new Set(courses.map((c) => c.category)));
     return unique.length > 0 ? unique : ["freshers"];
@@ -20,10 +31,6 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
 
   return (
     <div className="courses-page-container">
-      {/* Decorative background blobs */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
-
       {/* ─── HEADER & FILTERS SECTION ─── */}
       <section className="courses-hero-section">
         <div className="container">
@@ -298,8 +305,17 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
       {/* Styled JSX Styles */}
       <style jsx global>{`
         .courses-page-container {
+          --courses-bg: #f6f8fb;
+          --courses-surface: #ffffff;
+          --courses-border: #d7e0e9;
+          --courses-text: #14243a;
+          --courses-muted: #5d6c7e;
+          --courses-navy: #102f5e;
+          --courses-accent: #1b4f86;
           min-height: 100vh;
-          background-color: #f8fafc;
+          background: var(--courses-bg);
+          color: var(--courses-text);
+          font-family: var(--font-sans), Arial, sans-serif;
           position: relative;
           padding-top: 80px; /* Offset header height */
           overflow: hidden;
@@ -307,97 +323,71 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
         .course-card-anchor-link {
           text-decoration: none;
           color: inherit;
-          display: block;
-          width: calc(50% - 15px);
+          display: flex;
+          width: calc(50% - 0.625rem);
         }
 
-        /* Ambient background glow decoration */
-        .bg-blob {
-          position: absolute;
-          width: 500px;
-          height: 500px;
-          border-radius: 50%;
-          filter: blur(140px);
-          opacity: 0.05;
-          z-index: 0;
-          pointer-events: none;
-        }
-        .blob-1 {
-          top: 10%;
-          left: -10%;
-          background: #3b82f6;
-        }
-        .blob-2 {
-          bottom: 20%;
-          right: -10%;
-          background: #40b5c1;
-        }
-
-        .container {
-          max-width: 1200px;
+        .courses-page-container .container {
+          width: min(calc(100% - clamp(3rem, 8vw, 8rem)), 96rem);
           margin: 0 auto;
-          padding: 0 24px;
           box-sizing: border-box;
           width: 100%;
+          height: 100%;
         }
 
         /* ─── Hero Section ─── */
         .courses-hero-section {
-          padding: 60px 0 20px;
+          padding: clamp(2rem, 4vw, 3rem) 0 1.25rem;
           text-align: center;
           position: relative;
           z-index: 1;
         }
 
         .courses-hero-title {
-          font-size: 2.5rem;
-          font-weight: 850;
-          color: #0f172a;
-          margin: 0 0 40px;
+          font-size: clamp(1.85rem, 2.6vw, 2.15rem);
+          font-weight: 650;
+          color: var(--courses-text);
+          margin: 0 0 1.75rem;
           font-family: var(--font-sans);
           letter-spacing: -0.03em;
         }
 
         .courses-filter-tabs {
           display: inline-flex;
-          gap: 16px;
+          gap: 0.5rem;
           background: transparent;
           justify-content: center;
           align-items: center;
           flex-wrap: wrap;
+          box-sizing: border-box;
         }
 
         .filter-tab-btn {
           display: flex;
           align-items: center;
-          gap: 12px;
-          background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
-          border-radius: 12px;
-          padding: 14px 28px;
+          gap: 0.6rem;
+          background: var(--courses-surface);
+          border: 1px solid var(--courses-border);
+          border-radius: 10px;
+          padding: 0.7rem 1rem;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          color: #64748b;
+          color: var(--courses-muted);
           font-family: var(--font-sans);
           font-size: 1rem;
-          font-weight: 700;
-          box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+          font-weight: 600;
         }
 
         .filter-tab-btn:hover {
-          color: #1e1b4b;
-          border-color: #cbd5e1;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+          color: var(--courses-navy);
+          border-color: #bdcad7;
+          transform: translateY(-1px);
         }
 
         .filter-tab-btn.active {
-          background: #ffffff;
-          border-color: #0066cc;
-          color: #0066cc;
-          box-shadow:
-            0 10px 25px rgba(0, 102, 204, 0.1),
-            0 1px 2px rgba(0, 102, 204, 0.05);
+          background: var(--courses-navy);
+          border-color: var(--courses-navy);
+          color: #ffffff;
         }
 
         .filter-tab-btn .tab-icon {
@@ -408,7 +398,7 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
 
         /* ─── Grid Section ─── */
         .courses-grid-section {
-          padding: 30px 0 80px;
+          padding: 1.25rem 0 clamp(3rem, 6vw, 4.5rem);
           position: relative;
           z-index: 1;
         }
@@ -417,43 +407,33 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 30px;
-          max-width: 1200px;
+          align-items: stretch;
+          gap: 1.25rem;
           margin: 0 auto;
         }
 
         /* ─── Horizontal Course Card ─── */
         .course-horizontal-card {
           display: flex;
-          background: #ffffff;
-          border: 1px solid rgba(59, 130, 246, 0.15);
-          border-radius: 32px;
-          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+          background: var(--courses-surface);
+          border: 1px solid var(--courses-border);
+          border-radius: 12px;
           overflow: visible; /* Allows ribbon fold to extend behind card border */
-          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-          min-height: 400px;
+          transition: border-color 180ms ease, transform 180ms ease;
+          min-height: 380px;
           position: relative;
           box-sizing: border-box;
-          background-image: repeating-linear-gradient(
-            -45deg,
-            #f8fafc,
-            #f8fafc 4px,
-            #ffffff 4px,
-            #ffffff 12px
-          );
         }
 
         .course-horizontal-card:hover {
-          transform: translateY(-8px);
-          box-shadow:
-            0 20px 40px rgba(15, 23, 42, 0.08),
-            0 1px 3px rgba(15, 23, 42, 0.02);
-          border-color: rgba(59, 130, 246, 0.3);
+          transform: translateY(-2px);
+          border-color: #bdcad7;
         }
 
         .course-card-left {
           flex: 1;
-          padding: 32px;
+          min-width: 0;
+          padding: 1.75rem;
           display: flex;
           flex-direction: column;
           box-sizing: border-box;
@@ -463,12 +443,13 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #eff6ff;
-          color: #1d4ed8;
-          padding: 6px 16px;
+          background: #edf3fa;
+          color: var(--courses-accent);
+          padding: 0.4rem 0.7rem;
+          border: 1px solid #d7e2ef;
           border-radius: 100px;
           font-size: 0.85rem;
-          font-weight: 700;
+          font-weight: 650;
           font-family: var(--font-sans);
           align-self: flex-start;
           text-transform: uppercase;
@@ -480,9 +461,9 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
         }
 
         .course-card-title {
-          font-size: 1.75rem;
-          font-weight: 850;
-          color: #0f172a;
+          font-size: clamp(1.45rem, 2vw, 1.75rem);
+          font-weight: 650;
+          color: var(--courses-text);
           margin: 18px 0 10px;
           font-family: var(--font-sans);
           letter-spacing: -0.02em;
@@ -490,7 +471,7 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
 
         .course-card-desc {
           font-size: 0.92rem;
-          color: #475569;
+          color: var(--courses-muted);
           line-height: 1.5;
           margin: 0 0 20px;
           font-family: var(--font-sans);
@@ -499,7 +480,7 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
         .card-divider-line {
           width: 100%;
           height: 1px;
-          background-color: #f1f5f9;
+          background-color: var(--courses-border);
           margin: 8px 0;
         }
 
@@ -524,39 +505,42 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
           width: 34px;
           height: 34px;
           border-radius: 10px;
-          background: #eff6ff;
-          color: #1d4ed8;
+          background: #edf3fa;
+          color: var(--courses-accent);
           flex-shrink: 0;
         }
 
         .highlight-text {
+          min-width: 0;
           font-size: 0.92rem;
-          font-weight: 600;
-          color: #334155;
+          font-weight: 500;
+          color: var(--courses-text);
           font-family: var(--font-sans);
+          overflow-wrap: anywhere;
         }
 
         /* Action Know More link */
         .course-action-wrap {
           display: flex;
           justify-content: flex-end;
-          margin-top: 10px;
+          margin-top: auto;
+          padding-top: 10px;
         }
 
         .course-know-more-link {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          color: #1d4ed8;
+          color: var(--courses-navy);
           font-size: 0.95rem;
-          font-weight: 700;
+          font-weight: 650;
           text-decoration: none;
           font-family: var(--font-sans);
           transition: color 0.2s;
         }
 
         .course-know-more-link:hover {
-          color: #1e40af;
+          color: var(--courses-accent);
         }
 
         .course-know-more-link .arrow-symbol {
@@ -740,9 +724,20 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
         }
 
         @media (max-width: 600px) {
+          .courses-page-container .container {
+            width: min(calc(100% - 2rem), 96rem);
+          }
           .courses-hero-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
+            width: 100%;
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
+          }
+          .courses-hero-title .live-editable-text,
+          .courses-hero-title .live-editable-value {
+            white-space: normal;
+            overflow-wrap: anywhere;
           }
           .courses-filter-tabs {
             display: flex !important;
@@ -772,7 +767,18 @@ export default function CoursesClient({ courses }: { courses: any[] }) {
             height: 16px !important;
           }
           .course-card-left {
+            flex: 0 1 calc(100% - 90px) !important;
+            width: calc(100% - 90px) !important;
             padding: 20px 16px !important;
+          }
+          .course-card-right {
+            width: 90px !important;
+          }
+          .course-horizontal-card {
+            overflow: hidden !important;
+          }
+          .starts-ribbon-banner {
+            right: 0 !important;
           }
           .course-card-title {
             font-size: 1.35rem !important;

@@ -644,11 +644,11 @@ export default function AdmissionsClient() {
           letter-spacing: -0.03em;
         }
         .blue-title-highlight {
-          color: #0257d0;
+          color: #1e3a8a;
         }
         .poster-badge-pill {
           display: inline-block;
-          background: #0257d0;
+          background: #1e3a8a;
           color: #ffffff;
           font-size: 0.88rem;
           font-weight: 800;

@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Button from "@/components/ui/Button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
@@ -12,13 +11,6 @@ import SettingsEditor from "@/components/admin/SettingsEditor";
 const CAMPUS_NAME = "Success Code Academy, NEET Specialist, Baramati.";
 const DEFAULT_ADDRESS =
   "2nd Floor, Nanaware- Gadhave Pride, Baramati-Bhigwan Rd, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102, India";
-
-const DESTINATION = {
-  address:
-    "Success Code Academy, NEET Specialist, Baramati., 2nd Floor, Nanaware- Gadhave Pride, Baramati-Bhigwan Rd, near Pandharpur Bank, Pushpak Apartment, Baramati, Maharashtra 413102",
-  lat: 17.9183,
-  lng: 74.5814,
-};
 
 /* ─── Math CAPTCHA ─── */
 type Op = "+" | "−" | "×";
@@ -52,12 +44,6 @@ export default function ContactClient() {
   const [captchaError, setCaptchaError] = useState("");
   const [editSettings, setEditSettings] = useState(false);
 
-  /* Distance Calculator States */
-  const [origin, setOrigin] = useState("");
-  const [distanceText, setDistanceText] = useState("");
-  const [distanceError, setDistanceError] = useState("");
-  const [isFindingDistance, setIsFindingDistance] = useState(false);
-
   const refreshCaptcha = useCallback(() => {
     setCaptcha(generateCaptcha());
     setCaptchaInput("");
@@ -71,37 +57,6 @@ export default function ContactClient() {
 
   const mapQuery = `${CAMPUS_NAME} ${settings.address1 || DEFAULT_ADDRESS}`;
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=m&z=17&ie=UTF8&iwloc=near&output=embed`;
-
-  async function handleDistanceCheck(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setDistanceText("");
-    setDistanceError("");
-    const trimmed = origin.trim();
-    if (!trimmed) {
-      setDistanceError("Please enter your starting location.");
-      return;
-    }
-    setIsFindingDistance(true);
-    try {
-      const geo = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trimmed)}`,
-        { headers: { Accept: "application/json" } }
-      ).then((r) => r.json());
-      if (!Array.isArray(geo) || geo.length === 0) throw new Error("Location not found.");
-      const { lat, lon } = geo[0];
-      const route = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${lon},${lat};${DESTINATION.lng},${DESTINATION.lat}?overview=false&alternatives=false`,
-        { headers: { Accept: "application/json" } }
-      ).then((r) => r.json());
-      if (!route.routes?.length) throw new Error("Unable to calculate route.");
-      const km = (route.routes[0].distance / 1000).toFixed(1);
-      setDistanceText(`Distance from "${trimmed}" to Success Code Academy: ${km} km`);
-    } catch (err) {
-      setDistanceError(err instanceof Error ? err.message : "Could not calculate distance.");
-    } finally {
-      setIsFindingDistance(false);
-    }
-  }
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -183,14 +138,23 @@ export default function ContactClient() {
           <div className="contact-grid-wrap">
             {/* Left side: Premium Contact Information List */}
             <div className="contact-left-details">
-              <h2 className="contact-info-title">
-                <EditableText
-                  contentKey="contact.heading"
-                  label="contact information heading"
-                >
-                  Contact Information
-                </EditableText>
-              </h2>
+              <div className="contact-title-group">
+                <div className="title-icon-wrapper">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
+                <h2 className="contact-info-title">
+                  <EditableText
+                    contentKey="contact.heading"
+                    label="contact information heading"
+                  >
+                    Contact
+                  </EditableText>
+                  <span className="blue-title-highlight"> Information</span>
+                </h2>
+              </div>
+
               <p className="contact-info-subtitle-desc">
                 <EditableText
                   contentKey="contact.description"
@@ -207,26 +171,29 @@ export default function ContactClient() {
               >
                 <div className="enhanced-contact-list">
                   {/* Address Item */}
-                  <div className="contact-detail-item">
-                    <div className="detail-icon-box contact-bg-blue">
-                      <Image src="/images/ui/location.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  <div className="premium-contact-card">
+                    <div className="contact-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
                     </div>
-                    <div className="detail-content-box">
-                      <h4 className="detail-item-label">
+                    <div className="contact-text-block">
+                      <h4 className="contact-item-title">
                         <EditableText contentKey="contact.address-label" label="address label">
                           Address
                         </EditableText>
                       </h4>
-                      <div className="detail-item-text" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div className="contact-item-desc" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         {settings.address1 && (
                           <div>
-                            <strong style={{ color: '#1e293b' }}>Girls Branch:</strong><br />
+                            <strong style={{ color: '#0f172a' }}>Girls Branch:</strong><br />
                             {settings.address1}
                           </div>
                         )}
                         {settings.address2 && (
                           <div>
-                            <strong style={{ color: '#1e293b' }}>Boys Branch:</strong><br />
+                            <strong style={{ color: '#0f172a' }}>Boys Branch:</strong><br />
                             {settings.address2}
                           </div>
                         )}
@@ -235,35 +202,40 @@ export default function ContactClient() {
                   </div>
 
                   {/* Phone Item */}
-                  <div className="contact-detail-item">
-                    <div className="detail-icon-box contact-bg-blue">
-                      <Image src="/images/ui/phone-ringing.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  <div className="premium-contact-card">
+                    <div className="contact-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                      </svg>
                     </div>
-                    <div className="detail-content-box">
-                      <h4 className="detail-item-label">
+                    <div className="contact-text-block">
+                      <h4 className="contact-item-title">
                         <EditableText contentKey="contact.phone-label" label="phone label">
                           Phone
                         </EditableText>
                       </h4>
-                      <p className="detail-item-text">
-                        <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="detail-link">{settings.phone}</a>
+                      <p className="contact-item-desc">
+                        <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="contact-link">{settings.phone}</a>
                       </p>
                     </div>
                   </div>
 
                   {/* Email Item */}
-                  <div className="contact-detail-item">
-                    <div className="detail-icon-box contact-bg-blue">
-                      <Image src="/images/ui/email.png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  <div className="premium-contact-card">
+                    <div className="contact-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
                     </div>
-                    <div className="detail-content-box">
-                      <h4 className="detail-item-label">
+                    <div className="contact-text-block">
+                      <h4 className="contact-item-title">
                         <EditableText contentKey="contact.email-label" label="email label">
                           Email
                         </EditableText>
                       </h4>
-                      <p className="detail-item-text">
-                        <a href={`mailto:${settings.email}`} className="detail-link">
+                      <p className="contact-item-desc">
+                        <a href={`mailto:${settings.email}`} className="contact-link">
                           {settings.email}
                         </a>
                       </p>
@@ -271,17 +243,20 @@ export default function ContactClient() {
                   </div>
 
                   {/* Working Hours Item */}
-                  <div className="contact-detail-item">
-                    <div className="detail-icon-box contact-bg-blue">
-                      <Image src="/images/ui/clock (1).png" alt="" width={24} height={24} className="contact-detail-icon" />
+                  <div className="premium-contact-card">
+                    <div className="contact-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
                     </div>
-                    <div className="detail-content-box">
-                      <h4 className="detail-item-label">
+                    <div className="contact-text-block">
+                      <h4 className="contact-item-title">
                         <EditableText contentKey="contact.hours-label" label="working hours label">
                           Working Hours
                         </EditableText>
                       </h4>
-                      <p className="detail-item-text">
+                      <p className="contact-item-desc">
                         <EditableText contentKey="contact.hours" label="working hours">
                           Monday - Saturday: 9:00 AM - 6:00 PM
                         </EditableText>
@@ -308,40 +283,71 @@ export default function ContactClient() {
                   </div>
                 ) : (
                   <form onSubmit={handleFormSubmit} className="dark-form-element">
+                    <div className="form-card-header">
+                      <div className="form-header-icon">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
+                          <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                      </div>
+                      <h3 className="form-card-title">
+                        Send us a message and we&apos;ll get back to you shortly.
+                      </h3>
+                    </div>
                     <div className="form-input-group">
                       <label className="dark-form-label" htmlFor="cf-name">Full name</label>
-                      <input
-                        id="cf-name"
-                        name="name"
-                        type="text"
-                        placeholder="Manoj Kumar"
-                        className="dark-form-input"
-                        required
-                      />
+                      <div className="input-with-icon">
+                        <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <input
+                          id="cf-name"
+                          name="name"
+                          type="text"
+                          placeholder="Manoj Kumar"
+                          className="dark-form-input"
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div className="form-input-group">
                       <label className="dark-form-label" htmlFor="cf-email">Email Address</label>
-                      <input
-                        id="cf-email"
-                        name="email"
-                        type="email"
-                        placeholder="example@gmail.com"
-                        className="dark-form-input"
-                        required
-                      />
+                      <div className="input-with-icon">
+                        <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                          <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <input
+                          id="cf-email"
+                          name="email"
+                          type="email"
+                          placeholder="example@gmail.com"
+                          className="dark-form-input"
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div className="form-input-group">
                       <label className="dark-form-label" htmlFor="cf-phone">Contact Number</label>
-                      <input
-                        id="cf-phone"
-                        name="phone"
-                        type="tel"
-                        placeholder="E.g. +91 XXXXXXXXXX"
-                        className="dark-form-input"
-                        required
-                      />
+                      <div className="input-with-icon">
+                        <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <input
+                          id="cf-phone"
+                          name="phone"
+                          type="tel"
+                          placeholder="E.g. +91 XXXXXXXXXX"
+                          className="dark-form-input"
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div className="form-input-group">
@@ -422,34 +428,6 @@ export default function ContactClient() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
         >
-          <div className="map-heading">
-            <span className="map-badge">📍 CAMPUS LOCATION</span>
-            <h3>Visit our campus or book a guided tour.</h3>
-          </div>
-
-          <div className="distance-box">
-            <form className="distance-form" onSubmit={handleDistanceCheck}>
-              <div className="field-group" style={{ flex: 1 }}>
-                <label htmlFor="dist-origin" className="dist-label-text">
-                  Check distance from your location
-                </label>
-                <input
-                  id="dist-origin"
-                  value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
-                  type="text"
-                  placeholder="E.g. Pune, Mumbai, Satara"
-                  className="dist-input-box"
-                />
-              </div>
-              <Button type="submit" variant="secondary" size="md">
-                Calculate Distance
-              </Button>
-            </form>
-            {isFindingDistance && <p className="dist-status">Calculating route distance…</p>}
-            {distanceText && <p className="dist-result">🚘 {distanceText}</p>}
-            {distanceError && <p className="dist-error">⚠ {distanceError}</p>}
-          </div>
 
           <div className="map-frame">
             <iframe
@@ -474,49 +452,36 @@ export default function ContactClient() {
           background: #ffffff;
         }
 
-        /* Set Outfit font style for all elements */
+        /* Set consistent site font for all elements */
         .contact-page,
         .contact-premium-section,
-        .contact-premium-section h2,
-        .contact-premium-section p,
-        .contact-premium-section span,
-        .contact-premium-section label,
-        .contact-premium-section input,
-        .contact-premium-section textarea,
-        .contact-premium-section button,
+        .contact-premium-section :where(h1, h2, h3, h4, p, span, label, input, textarea, button),
         .map-tooltip-bubble {
-          font-family: 'Outfit', sans-serif !important;
+          font-family: var(--font-sans), "Inter", "Segoe UI", system-ui, sans-serif !important;
         }
 
         /* ════════════════════════════════
-           HERO BANNER
+           HERO BANNER — full-bleed, no gutters
            ════════════════════════════════ */
-        .contact-hero-banner {
-          position: relative;
-          padding: 80px 0 0 0 !important;
-          background: #ffffff;
-          width: 100%;
+        :global(.public-shell .contact-page .contact-hero-banner) {
+          padding: 76px 0 0 0 !important;
+          background: #ffffff !important;
         }
-        .contact-hero-container {
+        :global(.public-shell .contact-page .contact-hero-container) {
           width: 100% !important;
-          max-width: 100% !important;
+          max-width: none !important;
           margin: 0 !important;
           padding: 0 !important;
         }
-        .contact-poster-wrapper {
+        :global(.public-shell .contact-page .contact-poster-wrapper) {
           width: 100% !important;
           border-radius: 0 !important;
           overflow: hidden;
-          box-shadow: none !important;
           border: none !important;
-          background: #f8fafc;
+          box-shadow: none !important;
+          background: transparent !important;
         }
-        .poster-img-container {
-          position: relative;
-          width: 100%;
-          display: block;
-        }
-        :global(.contact-poster-img) {
+        :global(.public-shell .contact-page .contact-poster-img) {
           width: 100% !important;
           height: auto !important;
           display: block !important;
@@ -526,8 +491,8 @@ export default function ContactClient() {
            ACETERNITY STYLE CONTACT
            ════════════════════════════════ */
         .contact-premium-section {
-          background: linear-gradient(180deg, #ffffff 0%, #f1f7fe 100%);
-          padding: 80px 0;
+          background: linear-gradient(180deg, #ffffff 0%, #f4f8fb 100%);
+          padding: 64px 0;
           position: relative;
           width: 100%;
           overflow: hidden;
@@ -557,92 +522,179 @@ export default function ContactClient() {
           text-align: left;
         }
 
-        .contact-info-title {
-          font-size: clamp(2rem, 3.5vw, 2.5rem);
-          font-weight: 800;
-          color: #0f172a;
-          margin: 0 0 12px;
-          letter-spacing: -0.025em;
-        }
-        .contact-info-subtitle-desc {
-          font-size: 0.95rem;
-          color: #64748b;
-          line-height: 1.6;
-          margin: 0 0 36px;
-          max-width: 480px;
-        }
-        .enhanced-contact-list {
+        .contact-title-group {
           display: flex;
-          flex-direction: column;
-          gap: 28px;
-          width: 100%;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 16px;
         }
-        .contact-detail-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 20px;
-          text-align: left;
-        }
-        .detail-icon-box {
-          width: 46px;
-          height: 46px;
-          border-radius: 12px;
+        .title-icon-wrapper {
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          background: #1e3a8a;
+          color: #ffffff;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
         }
-        .detail-icon-box:hover {
-          transform: scale(1.05);
-        }
-        .contact-detail-icon {
-          object-fit: contain;
-        }
-        .contact-bg-blue {
-          background: #e0f2fe;
-          color: #0284c7;
-        }
-        .detail-content-box {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        .detail-item-label {
-          font-size: 1.05rem;
+        .contact-info-title {
+          font-size: clamp(1.75rem, 3.2vw, 2.25rem);
           font-weight: 800;
-          color: #1e293b;
+          color: #0f172a;
           margin: 0;
+          letter-spacing: -0.02em;
+          line-height: 1.15;
         }
-        .detail-item-text {
-          font-size: 0.92rem;
+        .blue-title-highlight {
+          color: #1e3a8a;
+        }
+        .contact-info-subtitle-desc {
+          font-size: 1rem;
           color: #475569;
           line-height: 1.6;
-          margin: 0;
-          max-width: 440px;
+          margin: 0 0 32px;
+          max-width: 520px;
         }
-        .detail-link {
+
+        .enhanced-contact-list {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          width: 100%;
+        }
+
+        .premium-contact-card {
+          display: flex;
+          align-items: flex-start;
+          gap: 18px;
+          padding: 22px 24px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .premium-contact-card:hover {
+          border-color: #cbd5e1;
+          box-shadow: 0 8px 24px -8px rgba(15, 23, 42, 0.08);
+          transform: translateY(-2px);
+        }
+        .contact-icon-circle {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          background: #1e3a8a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          color: #ffffff;
+        }
+        .contact-text-block {
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+        }
+        .contact-item-title {
+          margin: 0 0 6px 0;
+          color: #0f172a;
+          font-size: 1.05rem;
+          font-weight: 700;
+          line-height: 1.3;
+        }
+        .contact-item-desc {
+          margin: 0;
+          color: #64748b;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+        .contact-link {
           color: #475569;
           text-decoration: none;
           transition: color 0.2s;
-          font-weight: 700;
+          font-weight: 600;
         }
-        .detail-link:hover {
-          color: #0284c7;
+        .contact-link:hover {
+          color: #1e3a8a;
         }
 
-        /* Right Form: Glassmorphic with grid background pattern */
+        @media (max-width: 640px) {
+          .contact-title-group {
+            gap: 12px;
+          }
+          .title-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+          }
+          .title-icon-wrapper svg {
+            width: 24px;
+            height: 24px;
+          }
+          .premium-contact-card {
+            padding: 18px;
+          }
+        }
+
+        /* Right Form: consistent with admissions form */
         .contact-right-form {
           position: relative;
-          background: #ffffff;
-          border: 1px solid #cbd5e1;
-          border-radius: 30px;
           overflow: hidden;
-          padding: 40px;
+          width: 100%;
+          padding: 30px;
+          color: #10233f;
+          background: linear-gradient(180deg, #eef1f6 0, #fff 11rem);
+          border: 1px solid #d4dbe6;
+          border-radius: 16px;
           box-sizing: border-box;
-          box-shadow:
-            0 20px 40px rgba(15, 23, 42, 0.05),
-            0 1px 3px rgba(0, 0, 0, 0.01);
+        }
+        .contact-right-form::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 auto;
+          height: 3px;
+          background: linear-gradient(90deg, #0257d0, #102f5e);
+          pointer-events: none;
+          z-index: 2;
+        }
+        .contact-right-form .form-card-header,
+        .contact-right-form .form-inner-content,
+        .contact-right-form .dark-success-view {
+          position: relative;
+          z-index: 1;
+        }
+        .form-card-header {
+          display: grid;
+          grid-template-columns: 48px minmax(0, 1fr);
+          gap: 14px;
+          align-items: center;
+          margin-bottom: 23px;
+        }
+        .form-header-icon {
+          display: grid;
+          width: 48px;
+          height: 48px;
+          margin: 0;
+          place-items: center;
+          color: #fff;
+          background: #10233f;
+          border: 1px solid #1d3a63;
+          border-radius: 11px;
+        }
+        .form-header-icon svg {
+          width: 25px;
+          height: 25px;
+          stroke: #fff;
+        }
+        .form-card-title {
+          margin: 0;
+          color: #10233f;
+          font-size: 1.05rem;
+          font-weight: 650;
+          letter-spacing: -0.025em;
+          line-height: 1.35;
         }
 
         .form-grid-mesh {
@@ -674,28 +726,47 @@ export default function ContactClient() {
           gap: 8px;
         }
 
+        .input-with-icon {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+        }
+        .input-icon {
+          position: absolute;
+          left: 14px;
+          pointer-events: none;
+        }
+        .input-with-icon input,
+        .input-with-icon textarea {
+          width: 100%;
+          padding: 11px 13px 11px 46px;
+          box-sizing: border-box;
+        }
+
         .dark-form-label {
-          font-size: 0.85rem;
-          font-weight: 700;
-          color: #334155;
+          font-size: 0.72rem;
+          font-weight: 650;
+          color: #41536a;
         }
 
         .dark-form-input {
-          background: #f8fafc !important;
-          border: 1.5px solid #cbd5e1 !important;
-          border-radius: 10px;
-          padding: 12px 16px;
-          color: #0f172a !important;
-          font-size: 0.93rem;
+          background: #ffffff !important;
+          border: 1px solid #cdd9e4 !important;
+          border-radius: 9px;
+          padding: 11px 13px;
+          color: #10233f !important;
+          font-size: 0.9rem;
           width: 100%;
           box-sizing: border-box;
-          transition: all 0.2s ease;
+          min-height: 46px;
+          transition: border-color 160ms ease, box-shadow 160ms ease;
         }
 
         .dark-form-input:focus {
           outline: none;
-          border-color: #40b5c1 !important;
-          box-shadow: 0 0 0 3px rgba(64, 181, 193, 0.15);
+          border-color: #0257d0 !important;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
           background: #ffffff !important;
         }
 
@@ -707,8 +778,8 @@ export default function ContactClient() {
         /* CAPTCHA box */
         .dark-captcha-box {
           background: #f8fafc;
-          border: 1.5px solid #cbd5e1;
-          border-radius: 12px;
+          border: 1px solid #cdd9e4;
+          border-radius: 9px;
           padding: 16px;
           display: flex;
           flex-direction: column;
@@ -723,7 +794,7 @@ export default function ContactClient() {
 
         .captcha-label-txt {
           font-size: 0.72rem;
-          font-weight: 800;
+          font-weight: 750;
           color: #64748b;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -732,7 +803,7 @@ export default function ContactClient() {
         .dark-captcha-reload {
           background: none;
           border: none;
-          color: #40b5c1;
+          color: #102f5e;
           font-size: 1.15rem;
           cursor: pointer;
           padding: 0;
@@ -750,9 +821,9 @@ export default function ContactClient() {
 
         .dark-captcha-q {
           background: #ffffff;
-          border: 1.5px solid #cbd5e1;
+          border: 1px solid #cdd9e4;
           border-radius: 8px;
-          color: #0f172a;
+          color: #10233f;
           font-size: 1.05rem;
           font-weight: 800;
           padding: 8px 16px;
@@ -765,29 +836,31 @@ export default function ContactClient() {
 
         .dark-captcha-error-msg {
           font-size: 0.82rem;
-          color: #dc2626;
+          color: #a21f2d;
           margin: 0;
           font-weight: 600;
         }
 
         .dark-submit-btn {
           width: 100%;
-          background: #40b5c1;
+          background: #102f5e;
           color: #ffffff;
-          font-size: 0.95rem;
-          font-weight: 800;
+          font-size: 0.88rem;
+          font-weight: 700;
           padding: 14px 20px;
-          border-radius: 10px;
+          border-radius: 9px;
           border: none;
           cursor: pointer;
-          box-shadow: 0 4px 14px rgba(64, 181, 193, 0.25);
-          transition: all 0.2s ease;
+          min-height: 49px;
+          box-shadow: none;
+          transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
           margin-top: 10px;
         }
 
         .dark-submit-btn:hover {
-          background: #35a5b0;
-          box-shadow: 0 6px 20px rgba(64, 181, 193, 0.4);
+          background: #1b4f86;
+          box-shadow: 0 12px 24px -12px rgba(16, 47, 94, 0.45);
+          transform: translateY(-1px);
         }
 
         /* Success View */
@@ -843,27 +916,34 @@ export default function ContactClient() {
         }
 
         /* ════════════════════════════════
-           MAP & DISTANCE BOX
+           MAP — full-bleed, no gutters
            ════════════════════════════════ */
-        .contact-container {
-          width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 60px 24px 80px;
-          box-sizing: border-box;
+        :global(.public-shell .contact-page .contact-container) {
+          width: 100% !important;
+          max-width: none !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        :global(.public-shell .contact-page .map-container) {
+          padding: 0 !important;
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
         }
 
         .map-heading {
           text-align: center;
-          margin-bottom: 30px;
+          padding: 40px 16px 24px;
+          margin-bottom: 0;
         }
 
         .map-badge {
           display: inline-block;
           font-size: 0.72rem;
-          font-weight: 800;
-          color: #1e40af;
-          background: rgba(30, 64, 175, 0.06);
+          font-weight: 750;
+          color: #102f5e;
+          background: rgba(16, 47, 94, 0.06);
           padding: 4px 12px;
           border-radius: 99px;
           letter-spacing: 0.05em;
@@ -872,9 +952,10 @@ export default function ContactClient() {
 
         .map-heading h3 {
           font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-          color: #0f172a;
-          margin: 0 0 8px;
-          font-weight: 800;
+          color: #10233f;
+          margin: 0;
+          font-weight: 700;
+          letter-spacing: -0.02em;
         }
 
         .map-addr {
@@ -884,54 +965,15 @@ export default function ContactClient() {
           margin: 0;
         }
 
-        .distance-box {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 16px;
-          padding: 24px;
-          margin-bottom: 24px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-          text-align: left;
-        }
-        .distance-form {
-          display: flex;
-          gap: 16px;
-          align-items: flex-end;
-          flex-wrap: wrap;
-        }
-
-        .dist-label-text {
-          font-size: 0.82rem;
-          font-weight: 750;
-          color: #64748b;
-          margin-bottom: 8px;
-          display: block;
-        }
-
-        .dist-input-box {
-          border: 1.5px solid #cbd5e1;
-          border-radius: 10px;
-          padding: 10px 14px;
-          font-size: 0.92rem;
-          min-height: 42px;
-          box-sizing: border-box;
-          background: #ffffff;
-          width: 100%;
-        }
-
-        .dist-status { color: #64748b; font-size: 0.88rem; margin-top: 12px; font-weight: 600; }
-        .dist-result { color: #1e40af; font-size: 0.88rem; margin-top: 12px; font-weight: 750; }
-        .dist-error  { color: #dc2626; font-size: 0.88rem; margin-top: 12px; font-weight: 600; }
-
         .map-frame {
-          border-radius: 20px;
+          border-radius: 0;
           overflow: hidden;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+          border: none;
+          box-shadow: none;
         }
         .map-frame iframe {
           width: 100%;
-          height: 420px;
+          height: 460px;
           border: 0;
           display: block;
         }
@@ -945,9 +987,8 @@ export default function ContactClient() {
         }
 
         @media (max-width: 768px) {
-          .contact-hero-banner {
+          :global(.public-shell .contact-page .contact-hero-banner) {
             padding-top: 72px !important;
-            padding-bottom: 0 !important;
           }
           .contact-poster-wrapper {
             border-radius: 0 !important;
@@ -960,6 +1001,9 @@ export default function ContactClient() {
         @media (max-width: 640px) {
           .contact-premium-section {
             padding: 50px 0;
+          }
+          .map-frame iframe {
+            height: 360px;
           }
         }
       `}</style>

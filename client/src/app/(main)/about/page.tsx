@@ -23,15 +23,6 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="about-container about-hero-grid">
           <div className="about-hero-copy">
-            <div className="about-kicker">
-              <span>
-                <EditableText contentKey="hero.eyebrow" label="about eyebrow">
-                  ABOUT US
-                </EditableText>
-              </span>
-              <i aria-hidden="true" />
-            </div>
-
             <h1 className="about-hero-title">
               <EditableText contentKey="hero.heading" label="about page heading">
                 Empowering Dreams. Building Future Doctors.
@@ -92,13 +83,6 @@ export default function AboutPage() {
 
       <section className="about-impact about-section">
         <div className="about-container">
-          <header className="about-section-heading about-section-heading-centered">
-            <span className="about-section-label">Our NEET Achievements</span>
-            <span className="about-heading-rule" aria-hidden="true">
-              <i />
-            </span>
-          </header>
-
           <div className="about-achievement-grid">
             <article className="about-rank-card">
               <div className="about-rank-card-copy">
@@ -190,15 +174,6 @@ export default function AboutPage() {
           </div>
 
           <div className="about-story-copy">
-            <div className="about-kicker">
-              <span>
-                <EditableText contentKey="story.eyebrow" label="story eyebrow">
-                  OUR STORY
-                </EditableText>
-              </span>
-              <i aria-hidden="true" />
-            </div>
-
             <h2 className="about-section-title">
               <EditableText contentKey="story.heading" label="story heading">
                 Built on a Simple Belief
@@ -247,14 +222,6 @@ export default function AboutPage() {
         <div className="about-container">
           <div className="about-philosophy-grid">
             <article className="about-philosophy-card about-teaching-card">
-              <div className="about-philosophy-visual about-teaching-visual" aria-hidden="true">
-                <FaLightbulb />
-                <span className="about-open-book">
-                  <i />
-                  <i />
-                </span>
-              </div>
-
               <header className="about-philosophy-header">
                 <span className="about-philosophy-icon">
                   <FaLightbulb />
@@ -290,14 +257,6 @@ export default function AboutPage() {
             </article>
 
             <article className="about-philosophy-card about-mentorship-card">
-              <div className="about-philosophy-visual about-mentorship-visual" aria-hidden="true">
-                <FaUserTie className="about-mentor-figure" />
-                <span className="about-student-figure">
-                  <FaGraduationCap />
-                </span>
-                <i className="about-guidance-path" />
-              </div>
-
               <header className="about-philosophy-header">
                 <span className="about-philosophy-icon">
                   <FaUserTie />
@@ -339,17 +298,6 @@ export default function AboutPage() {
         <div className="about-container">
           <header className="about-infrastructure-heading">
             <div>
-              <div className="about-kicker">
-                <span>
-                  <EditableText
-                    contentKey="infrastructure.eyebrow"
-                    label="infrastructure eyebrow"
-                  >
-                    OUR INFRASTRUCTURE
-                  </EditableText>
-                </span>
-                <i aria-hidden="true" />
-              </div>
               <h2 className="about-section-title">
                 <EditableText
                   contentKey="infrastructure.heading"

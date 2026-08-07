@@ -197,7 +197,23 @@ export default function AcademyInsights() {
             {isLoading ? (
               <div className="cards-grid-layout">
                 {[1, 2, 3].map(i => (
-                  <div key={`skel-news-${i}`} className="card-item-wrapper skeleton-pulse" style={{ height: "420px", borderRadius: "16px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
+                  <div key={`skel-news-${i}`} className="card-item-wrapper">
+                    <article className="blog-cover-card skeleton-pulse" style={{ backgroundColor: "rgba(203, 213, 225, 0.2)" }}>
+                      <div className="blog-card-media" style={{ backgroundColor: "rgba(203, 213, 225, 0.28)" }} />
+                      <div className="blog-card-body">
+                        <div className="blog-card-topline">
+                          <span className="blog-category-badge" />
+                          <span className="blog-meta-text" />
+                        </div>
+                        <div className="blog-card-title skeleton-pulse" style={{ height: "20px", width: "90%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.4)" }} />
+                        <div className="blog-card-excerpt skeleton-pulse" style={{ height: "14px", width: "100%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
+                        <div className="blog-card-excerpt skeleton-pulse" style={{ height: "14px", width: "84%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
+                        <div className="blog-card-footer" style={{ paddingTop: 0 }}>
+                          <span className="blog-card-action" />
+                        </div>
+                      </div>
+                    </article>
+                  </div>
                 ))}
               </div>
             ) : fetchError ? (
@@ -218,40 +234,54 @@ export default function AcademyInsights() {
                     {blog.externalUrl ? (
                       <a href={blog.externalUrl} target="_blank" rel="noopener noreferrer" className="blog-card-link">
                         <article className="blog-cover-card">
-                          <div className="blog-image-overlay" />
-                          <LoadingImage
-                            src={blog.image}
-                            alt={blog.title}
-                            sizes="400px"
-                            className="blog-bg-img"
-                          />
-                          <span className="blog-category-badge">{blog.category}</span>
-                          <div className="blog-card-content">
-                            <span className="blog-meta-text">
-                              {blog.date} | BY {blog.author}
-                            </span>
-                            <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
-                            <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
+                          <div className="blog-card-media">
+                            <div className="blog-image-overlay" />
+                            <LoadingImage
+                              src={blog.image}
+                              alt={blog.title}
+                              sizes="400px"
+                              className="blog-bg-img"
+                            />
+                          </div>
+                          <div className="blog-card-body">
+                            <div className="blog-card-topline">
+                              <span className="blog-category-badge">{blog.category}</span>
+                              <span className="blog-meta-text">
+                                {blog.date} | BY {blog.author}
+                              </span>
+                            </div>
+                            <h3 className="blog-card-title-text">{blog.shortTitle || blog.title}</h3>
+                            <p className="blog-card-excerpt">{blog.excerpt}</p>
+                            <div className="blog-card-footer">
+                              <span className="blog-card-action">Read article</span>
+                            </div>
                           </div>
                         </article>
                       </a>
                     ) : (
                       <Link href={`/blogs/${blog.slug}`} className="blog-card-link">
                         <article className="blog-cover-card">
-                          <div className="blog-image-overlay" />
-                          <LoadingImage
-                            src={blog.image}
-                            alt={blog.title}
-                            sizes="400px"
-                            className="blog-bg-img"
-                          />
-                          <span className="blog-category-badge">{blog.category}</span>
-                          <div className="blog-card-content">
-                            <span className="blog-meta-text">
-                              {blog.date} | BY {blog.author}
-                            </span>
-                            <h3 className="blog-card-title-text desktop-title">{blog.title}</h3>
-                            <h3 className="blog-card-title-text mobile-title">{blog.shortTitle || blog.title}</h3>
+                          <div className="blog-card-media">
+                            <div className="blog-image-overlay" />
+                            <LoadingImage
+                              src={blog.image}
+                              alt={blog.title}
+                              sizes="400px"
+                              className="blog-bg-img"
+                            />
+                          </div>
+                          <div className="blog-card-body">
+                            <div className="blog-card-topline">
+                              <span className="blog-category-badge">{blog.category}</span>
+                              <span className="blog-meta-text">
+                                {blog.date} | BY {blog.author}
+                              </span>
+                            </div>
+                            <h3 className="blog-card-title-text">{blog.shortTitle || blog.title}</h3>
+                            <p className="blog-card-excerpt">{blog.excerpt}</p>
+                            <div className="blog-card-footer">
+                              <span className="blog-card-action">Read article</span>
+                            </div>
                           </div>
                         </article>
                       </Link>
@@ -318,7 +348,24 @@ export default function AcademyInsights() {
             {isLoading ? (
               <div className="video-cards-grid-layout">
                 {[1, 2, 3, 4].map(i => (
-                  <div key={`skel-vid-${i}`} className="video-card-item-wrapper skeleton-pulse" style={{ aspectRatio: "0.72", borderRadius: "18px", backgroundColor: "rgba(203, 213, 225, 0.2)" }} />
+                  <div key={`skel-vid-${i}`} className="video-card-item-wrapper">
+                    <div className="apple-video-card skeleton-pulse" style={{ backgroundColor: "rgba(203, 213, 225, 0.2)" }}>
+                      <div className="academy-video-media" style={{ backgroundColor: "rgba(203, 213, 225, 0.28)" }} />
+                      <div className="academy-video-content">
+                        <div className="academy-video-topline">
+                          <span className="academy-video-category" />
+                          <span className="academy-video-date" />
+                        </div>
+                        <div className="academy-video-title skeleton-pulse" style={{ height: "18px", width: "78%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.42)" }} />
+                        <div className="academy-video-excerpt skeleton-pulse" style={{ height: "14px", width: "100%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
+                        <div className="academy-video-excerpt skeleton-pulse" style={{ height: "14px", width: "88%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
+                        <div className="academy-video-footer" style={{ paddingTop: 0 }}>
+                          <span className="academy-video-avatar" />
+                          <span className="academy-video-meta" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : fetchError ? (
@@ -342,11 +389,6 @@ export default function AcademyInsights() {
                       onClick={() => setActiveVideo(video.videoUrl)}
                       aria-label={`Play ${video.title}`}
                     >
-                      <div className="academy-video-title-row">
-                        <span className="academy-video-spark" aria-hidden="true" />
-                        <h3>{video.title}</h3>
-                        <span className="academy-video-spark" aria-hidden="true" />
-                      </div>
                       <div className="academy-video-media">
                         <LoadingImage
                           src={video.image}
@@ -354,23 +396,32 @@ export default function AcademyInsights() {
                           sizes="(max-width: 640px) 88vw, (max-width: 1024px) 32vw, 390px"
                           className="academy-video-image"
                         />
+                        <div className="academy-video-media-overlay" aria-hidden="true" />
                         <span className="academy-video-watch">
                           <span className="academy-video-play-icon"><FaPlay /></span>
                           Watch Video
                         </span>
-                      </div>
-                      <div className="academy-video-footer">
-                        <span className="academy-video-avatar" aria-hidden="true">
-                          <FaPlay />
-                        </span>
-                        <span className="academy-video-meta">
-                          <strong>{video.category}</strong>
-                          <span>{video.date}</span>
-                        </span>
-                        <span className="academy-video-duration">
+                        <span className="academy-video-duration-chip">
                           <FaClock />
                           {video.duration}
                         </span>
+                      </div>
+                      <div className="academy-video-content">
+                        <div className="academy-video-topline">
+                          <span className="academy-video-category">{video.category}</span>
+                          <span className="academy-video-date">{video.date}</span>
+                        </div>
+                        <h3 className="academy-video-title">{video.title}</h3>
+                        <p className="academy-video-excerpt">{video.excerpt}</p>
+                        <div className="academy-video-footer">
+                          <span className="academy-video-avatar" aria-hidden="true">
+                            <FaPlay />
+                          </span>
+                          <span className="academy-video-meta">
+                            <strong>Watch now</strong>
+                            <span>Tap to play the full video</span>
+                          </span>
+                        </div>
                       </div>
                     </button>
                   </div>

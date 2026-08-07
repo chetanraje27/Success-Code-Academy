@@ -10,7 +10,6 @@ import SignInModal from "@/components/ui/SignInModal";
 import ProfileModal from "@/components/ui/ProfileModal";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import { FaPen, FaDatabase } from "react-icons/fa6";
-import { EditableText } from "@/components/admin/EditableText";
 
 type HeaderUser = {
   firstName?: string;
@@ -164,14 +163,7 @@ export default function Header() {
                 className={`nav-link ${isActivePath(link.href) ? "active" : ""}`}
                 aria-current={isActivePath(link.href) ? "page" : undefined}
               >
-                <EditableText
-                  contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
-                  label={`${link.label} navigation label`}
-                  scope="global"
-                  showInlineControls={false}
-                >
-                  {link.label}
-                </EditableText>
+                {link.label}
               </Link>
             ))}
           </nav>
@@ -357,14 +349,7 @@ export default function Header() {
               className={`mobile-nav-link ${isActivePath(link.href) ? "active" : ""}`}
               aria-current={isActivePath(link.href) ? "page" : undefined}
             >
-              <EditableText
-                contentKey={`navigation.${link.href === "/" ? "home" : link.href.slice(1).replace(/\//g, "-")}`}
-                label={`${link.label} navigation label`}
-                scope="global"
-                showInlineControls={false}
-              >
-                {link.label}
-              </EditableText>
+              {link.label}
             </Link>
           ))}
           <div className="mobile-actions">

@@ -290,8 +290,8 @@
 .course-detail-batch {
   position: absolute;
   z-index: 2;
-  top: 24px;
-  right: -1px;
+  top: 14px;
+  right: -8px;
   padding: 11px 18px;
   color: #fff;
   background: #ff5a00;

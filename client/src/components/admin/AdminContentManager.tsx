@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2, Search } from "lucide-react";
 import {
   adminApiFetch,
   AdminApiError,
@@ -102,6 +102,7 @@ export default function AdminContentManager({
   filterItems?: (item: ResourceItem) => boolean;
 }) {
   const [items, setItems] = useState<ResourceItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -124,8 +125,17 @@ export default function AdminContentManager({
   );
 
   const displayedItems = useMemo(() => {
-    return filterItems ? items.filter(filterItems) : items;
-  }, [items, filterItems]);
+    let filtered = filterItems ? items.filter(filterItems) : items;
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      filtered = filtered.filter((item) =>
+        Object.values(item).some(
+          (val) => typeof val === "string" && val.toLowerCase().includes(lower)
+        )
+      );
+    }
+    return filtered;
+  }, [items, filterItems, searchTerm]);
 
   const loadItems = useCallback(async () => {
     setLoading(true);
@@ -287,22 +297,37 @@ export default function AdminContentManager({
       <AdminPageHeader
         title={title}
         description={description}
-        action={
-          <div className="admin-header-actions">
-            {historyType && (
-              <RevisionHistoryButton
-                resourceType={historyType}
-                itemName={itemName}
-                onRestored={loadItems}
-              />
-            )}
-            <button className="admin-button" type="button" onClick={openCreate}>
-              <Plus size={17} />
-              Add {itemName.toLowerCase()}
-            </button>
-          </div>
-        }
       />
+
+      <div className="admin-toolbar">
+        <form className="admin-search-form" onSubmit={(e) => e.preventDefault()}>
+          <div className="admin-search-box">
+            <Search size={17} />
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={`Search ${itemName.toLowerCase()}s...`}
+              aria-label={`Search ${title}`}
+            />
+          </div>
+          <button className="admin-button secondary" type="submit">
+            Search
+          </button>
+        </form>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {historyType && (
+            <RevisionHistoryButton
+              resourceType={historyType}
+              itemName={itemName}
+              onRestored={loadItems}
+            />
+          )}
+          <button className="admin-button primary" type="button" onClick={openCreate}>
+            <Plus size={17} />
+            Add New Record
+          </button>
+        </div>
+      </div>
 
       {error && !modalOpen && (
         <AdminNotice>{error}</AdminNotice>

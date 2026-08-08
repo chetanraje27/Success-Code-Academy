@@ -121,7 +121,14 @@ export default function CourseEditor({
             <input
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) => {
+                const newTitle = e.target.value;
+                setFormData({
+                  ...formData,
+                  title: newTitle,
+                  slug: newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+                });
+              }}
               placeholder="e.g. NEET Freshers"
             />
           </div>
@@ -162,10 +169,9 @@ export default function CourseEditor({
         <div className="sca-admin-field">
           <label>Date Badge</label>
           <input
-            type="text"
+            type="date"
             value={formData.badge}
             onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-            placeholder="e.g. Starts: 9 July"
           />
         </div>
 

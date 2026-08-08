@@ -1,16 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import { FaXmark } from "react-icons/fa6";
 import { resultsData, type StudentResult } from "@/data/results";
+import { apiFetch } from "@/lib/api";
 import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import ResultEditor from "@/components/admin/ResultEditor";
 import { EditableText } from "@/components/admin/EditableText";
 import resultsHeroImage from "../../../../public/images/results/heroes/NeetUG2026AchiversShravani.png";
-
-const resultYears = [2026, 2025, 2024, 2023, 2022] as const;
 
 const videoStories = [
   {
@@ -190,13 +189,44 @@ function StoryCard({
 }
 
 export default function ResultsClient() {
-  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [editResults, setEditResults] = useState(false);
+  const [dynamicResults, setDynamicResults] = useState<StudentResult[]>([]);
+
+  useEffect(() => {
+    async function loadDynamicResults() {
+      try {
+        const response = await apiFetch("/api/v1/content/results");
+        if (response?.data) {
+          setDynamicResults(response.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch dynamic results:", err);
+      }
+    }
+    void loadDynamicResults();
+  }, []);
+
+  const allResults = useMemo(() => {
+    return [...resultsData, ...dynamicResults];
+  }, [dynamicResults]);
+
+  const allYears = useMemo(() => {
+    const years = new Set(allResults.map(r => r.year));
+    return Array.from(years).sort((a, b) => b - a);
+  }, [allResults]);
+
+  // Ensure selectedYear is valid
+  useEffect(() => {
+    if (allYears.length > 0 && !allYears.includes(selectedYear)) {
+      setSelectedYear(allYears[0]);
+    }
+  }, [allYears, selectedYear]);
 
   const filteredResults = useMemo(
-    () => resultsData.filter((result) => result.year === selectedYear),
-    [selectedYear],
+    () => allResults.filter((result) => result.year === selectedYear),
+    [allResults, selectedYear],
   );
   const displayedResults = useMemo(
     () =>
@@ -241,7 +271,7 @@ export default function ResultsClient() {
 
             <div className="results-year-navigation">
               <div className="results-year-tabs" role="tablist" aria-label="NEET result years">
-                {resultYears.map((year) => (
+                {allYears.slice(0, 4).map((year) => (
                   <button
                     key={year}
                     type="button"
@@ -253,6 +283,35 @@ export default function ResultsClient() {
                     NEET UG {year}
                   </button>
                 ))}
+                {allYears.length > 4 && (
+                  <div className="results-year-dropdown" style={{ display: "inline-flex", alignItems: "center", marginLeft: "4px" }}>
+                    <select
+                      value={allYears.slice(0, 4).includes(selectedYear) ? "" : selectedYear}
+                      onChange={(e) => setSelectedYear(Number(e.target.value))}
+                      style={{
+                        minHeight: "38px",
+                        padding: "0 24px 0 13px",
+                        color: allYears.slice(0, 4).includes(selectedYear) ? "#66758a" : "#fff",
+                        background: allYears.slice(0, 4).includes(selectedYear) ? "transparent" : "var(--results-ink)",
+                        border: "1px solid transparent",
+                        borderColor: allYears.slice(0, 4).includes(selectedYear) ? "transparent" : "var(--results-ink)",
+                        borderRadius: "7px",
+                        font: "inherit",
+                        fontSize: "0.69rem",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        outline: "none"
+                      }}
+                    >
+                      <option value="" disabled>More Years...</option>
+                      {allYears.slice(4).map((year) => (
+                        <option key={year} value={year}>
+                          NEET UG {year}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
 

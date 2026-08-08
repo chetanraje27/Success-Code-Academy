@@ -1051,8 +1051,26 @@ export const deleteContactMessage = asyncHandler(async (req: Request, res: Respo
 });
 
 export const getCourses = asyncHandler(async (req: Request, res: Response) => {
-  const courses = await Course.findAll({ order: [['id', 'ASC']] });
-  res.status(200).json({ status: 'success', data: courses });
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const courses = await Course.findAll({
+    where: {
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [
+              { title: like },
+              { slug: like },
+              { category: like },
+              { type: like },
+            ],
+          }
+        : {}),
+    },
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, courses, limit);
 });
 
 export const createCourse = asyncHandler(async (req: Request, res: Response) => {

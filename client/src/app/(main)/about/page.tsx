@@ -47,8 +47,8 @@ export default function AboutPage() {
                   <FaCalendarAlt />
                 </span>
                 <span className="about-metric-copy">
-                  <small>Founded in</small>
-                  <strong>2018</strong>
+                  <small><EditableText contentKey="hero.metric1.label" label="metric 1 label">Founded in</EditableText></small>
+                  <strong><EditableText contentKey="hero.metric1.value" label="metric 1 value">2018</EditableText></strong>
                 </span>
               </div>
 
@@ -57,9 +57,9 @@ export default function AboutPage() {
                   <FaTrophy />
                 </span>
                 <span className="about-metric-copy">
-                  <small>Students Admitted</small>
-                  <strong>36+</strong>
-                  <em>NEET 2025</em>
+                  <small><EditableText contentKey="hero.metric2.label" label="metric 2 label">Students Admitted</EditableText></small>
+                  <strong><EditableText contentKey="hero.metric2.value" label="metric 2 value">36+</EditableText></strong>
+                  <em><EditableText contentKey="hero.metric2.subtext" label="metric 2 subtext">NEET 2025</EditableText></em>
                 </span>
               </div>
             </div>
@@ -86,9 +86,9 @@ export default function AboutPage() {
           <div className="about-achievement-grid">
             <article className="about-rank-card">
               <div className="about-rank-card-copy">
-                <span className="about-achievement-year">NEET 2026</span>
-                <span className="about-rank-label">AIR</span>
-                <strong className="about-rank-value">5</strong>
+                <span className="about-achievement-year"><EditableText contentKey="impact.rank1.year" label="rank 1 year">NEET 2026</EditableText></span>
+                <span className="about-rank-label"><EditableText contentKey="impact.rank1.label" label="rank 1 label">AIR</EditableText></span>
+                <strong className="about-rank-value"><EditableText contentKey="impact.rank1.value" label="rank 1 value">5</EditableText></strong>
               </div>
               <div className="about-rank-emblem" aria-hidden="true">
                 <FaTrophy />
@@ -98,9 +98,9 @@ export default function AboutPage() {
 
             <article className="about-rank-card about-rank-card-accent">
               <div className="about-rank-card-copy">
-                <span className="about-achievement-year">NEET 2025</span>
-                <span className="about-rank-label">AIR</span>
-                <strong className="about-rank-value">26</strong>
+                <span className="about-achievement-year"><EditableText contentKey="impact.rank2.year" label="rank 2 year">NEET 2025</EditableText></span>
+                <span className="about-rank-label"><EditableText contentKey="impact.rank2.label" label="rank 2 label">AIR</EditableText></span>
+                <strong className="about-rank-value"><EditableText contentKey="impact.rank2.value" label="rank 2 value">26</EditableText></strong>
               </div>
               <div className="about-rank-emblem" aria-hidden="true">
                 <FaAward />
@@ -112,31 +112,31 @@ export default function AboutPage() {
               <span className="about-achievement-icon">
                 <FaUsers />
               </span>
-              <strong>36+</strong>
-              <p>Selections in<br />NEET 2025</p>
+              <strong><EditableText contentKey="impact.card1.value" label="impact card 1 value">36+</EditableText></strong>
+              <p><EditableText contentKey="impact.card1.text" label="impact card 1 text" kind="multiline">{"Selections in\nNEET 2025"}</EditableText></p>
             </article>
 
             <article className="about-achievement-card about-achievement-colleges">
               <span className="about-achievement-icon">
                 <FaUniversity />
               </span>
-              <h3>Admissions in<br />Top Government Colleges</h3>
-              <p>AIIMS &amp; State Government<br />Medical Colleges</p>
+              <h3><EditableText contentKey="impact.card2.title" label="impact card 2 title" kind="multiline">{"Admissions in\nTop Government Colleges"}</EditableText></h3>
+              <p><EditableText contentKey="impact.card2.text" label="impact card 2 text" kind="multiline">{"AIIMS & State Government\nMedical Colleges"}</EditableText></p>
             </article>
 
             <article className="about-achievement-card about-achievement-institutes">
               <span className="about-achievement-icon">
                 <FaBuilding />
               </span>
-              <h3>Admission in<br />Top Institutes</h3>
-              <p>AIIMS &amp; Other Premier<br />Institutes</p>
+              <h3><EditableText contentKey="impact.card3.title" label="impact card 3 title" kind="multiline">{"Admission in\nTop Institutes"}</EditableText></h3>
+              <p><EditableText contentKey="impact.card3.text" label="impact card 3 text" kind="multiline">{"AIIMS & Other Premier\nInstitutes"}</EditableText></p>
             </article>
 
             <article className="about-achievement-card about-achievement-ratio">
               <span className="about-achievement-icon">
                 <FaTrophy />
               </span>
-              <h3>Top<br />Selection Ratio</h3>
+              <h3><EditableText contentKey="impact.card4.title" label="impact card 4 title" kind="multiline">{"Top\nSelection Ratio"}</EditableText></h3>
               <div className="about-stars" aria-label="Five stars">
                 <FaStar />
                 <FaStar />
@@ -165,10 +165,9 @@ export default function AboutPage() {
             <blockquote className="about-story-quote">
               <span aria-hidden="true">“</span>
               <p>
-                Concept First.<br />
-                Clarity Always.<br />
-                Confidence<br />
-                Forever.
+                <EditableText contentKey="story.quote" label="story quote" kind="multiline">
+                  {"Concept First.\nClarity Always.\nConfidence\nForever."}
+                </EditableText>
               </p>
             </blockquote>
           </div>
@@ -239,19 +238,19 @@ export default function AboutPage() {
               <ul className="about-philosophy-list">
                 <li>
                   <FaCheck />
-                  <span>Conceptual clarity before moving to application-based problem solving.</span>
+                  <span><EditableText contentKey="philosophy.teaching.item1" label="teaching item 1">Conceptual clarity before moving to application-based problem solving.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>Focus on understanding, not memorizing.</span>
+                  <span><EditableText contentKey="philosophy.teaching.item2" label="teaching item 2">Focus on understanding, not memorizing.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>Builds analytical thinking and accuracy for NEET.</span>
+                  <span><EditableText contentKey="philosophy.teaching.item3" label="teaching item 3">Builds analytical thinking and accuracy for NEET.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>Preparing independent learners for life, not just exams.</span>
+                  <span><EditableText contentKey="philosophy.teaching.item4" label="teaching item 4">Preparing independent learners for life, not just exams.</EditableText></span>
                 </li>
               </ul>
             </article>
@@ -274,19 +273,19 @@ export default function AboutPage() {
               <ul className="about-philosophy-list">
                 <li>
                   <FaCheck />
-                  <span>Every student learns differently – we guide them individually.</span>
+                  <span><EditableText contentKey="philosophy.mentorship.item1" label="mentorship item 1">Every student learns differently – we guide them individually.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>Continuous support and doubt resolution.</span>
+                  <span><EditableText contentKey="philosophy.mentorship.item2" label="mentorship item 2">Continuous support and doubt resolution.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>Equal attention and encouragement for every learner.</span>
+                  <span><EditableText contentKey="philosophy.mentorship.item3" label="mentorship item 3">Equal attention and encouragement for every learner.</EditableText></span>
                 </li>
                 <li>
                   <FaCheck />
-                  <span>A friendly, disciplined, and motivating environment.</span>
+                  <span><EditableText contentKey="philosophy.mentorship.item4" label="mentorship item 4">A friendly, disciplined, and motivating environment.</EditableText></span>
                 </li>
               </ul>
             </article>
@@ -320,7 +319,7 @@ export default function AboutPage() {
               />
               <div className="about-infrastructure-overlay">
                 <span><FaBuilding /></span>
-                <p>Welcoming &amp;<br />Student-Friendly Campus</p>
+                <p><EditableText contentKey="infrastructure.card1" label="infra card 1" kind="multiline">{"Welcoming &\nStudent-Friendly Campus"}</EditableText></p>
               </div>
             </article>
 
@@ -334,7 +333,7 @@ export default function AboutPage() {
               />
               <div className="about-infrastructure-overlay">
                 <span><FaGraduationCap /></span>
-                <p>Smart Classrooms for<br />Focused Learning</p>
+                <p><EditableText contentKey="infrastructure.card2" label="infra card 2" kind="multiline">{"Smart Classrooms for\nFocused Learning"}</EditableText></p>
               </div>
             </article>
 
@@ -348,7 +347,7 @@ export default function AboutPage() {
               />
               <div className="about-infrastructure-overlay">
                 <span><FaUsers /></span>
-                <p>Engaging Environment<br />that Drives Success</p>
+                <p><EditableText contentKey="infrastructure.card3" label="infra card 3" kind="multiline">{"Engaging Environment\nthat Drives Success"}</EditableText></p>
               </div>
             </article>
 
@@ -362,7 +361,7 @@ export default function AboutPage() {
               />
               <div className="about-infrastructure-overlay">
                 <span><FaBookOpen /></span>
-                <p>Resources &amp; Facilities<br />That Support Growth</p>
+                <p><EditableText contentKey="infrastructure.card4" label="infra card 4" kind="multiline">{"Resources & Facilities\nThat Support Growth"}</EditableText></p>
               </div>
             </article>
           </div>
@@ -370,8 +369,9 @@ export default function AboutPage() {
           <blockquote className="about-closing-quote">
             <span aria-hidden="true">“</span>
             <p>
-              We don&apos;t just prepare students for exams, we prepare them for
-              their future.
+              <EditableText contentKey="closing.quote" label="closing quote" kind="multiline">
+                We don&apos;t just prepare students for exams, we prepare them for their future.
+              </EditableText>
             </p>
           </blockquote>
         </div>

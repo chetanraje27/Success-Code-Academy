@@ -56,14 +56,6 @@ function StudentResultCard({
         featured ? "result-card-featured" : "",
       ].filter(Boolean).join(" ")}
     >
-      <div className="result-card-art" aria-hidden="true">
-        <span className="result-card-arc result-card-arc-one" />
-        <span className="result-card-arc result-card-arc-two" />
-        <span className="result-card-dot-field" />
-        <span className="result-card-rank-watermark">
-          {String(result.year).slice(-2)}
-        </span>
-      </div>
 
       <div className="result-card-copy">
         <div className="result-card-year">NEET UG {result.year}</div>
@@ -82,7 +74,7 @@ function StudentResultCard({
             <strong>GMC {result.city?.toUpperCase()}</strong>
           </div>
         )}
-        <h3>{result.name}</h3>
+        <h3 className="student-name-chip" title={result.name}>{result.name}</h3>
       </div>
 
       <div className="result-student-portrait">
@@ -341,7 +333,7 @@ export default function ResultsClient() {
                           <span>AIR</span>
                           <strong>{result.rank}</strong>
                         </div>
-                        <h3>{result.name}</h3>
+        <h3 className="student-name-chip" title={result.name}>{result.name}</h3>
                         <p>{result.college} {result.city}</p>
                         <div className="results-featured-score">
                           <strong>{result.marks}</strong>
@@ -480,38 +472,7 @@ export default function ResultsClient() {
           </div>
         </div>
       )}
-
-      <section className="results-cta-section">
-        <div className="results-container">
-          <div className="results-cta-card">
-            <div>
-              <h2>
-                <EditableText contentKey="cta.heading" label="results CTA heading">
-                  Ready to Write Your Success Story?
-                </EditableText>
-              </h2>
-              <p>
-                <EditableText
-                  contentKey="cta.description"
-                  label="results CTA description"
-                  kind="multiline"
-                >
-                  Join Success Code Academy and start your customized learning path. Get expert mentorship, topic-wise tests, and targeted strategy guidance.
-                </EditableText>
-              </p>
-            </div>
-
-            <div className="results-cta-actions">
-              <Button href="/contact" variant="primary" size="lg">
-                Register for SCST (Scholarship Test) <span aria-hidden="true">→</span>
-              </Button>
-              <Button href="/contact" variant="outline" size="lg">
-                Talk to Advisor
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 }

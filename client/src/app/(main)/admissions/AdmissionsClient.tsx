@@ -561,8 +561,12 @@ export default function AdmissionsClient() {
            ════════════════════════════════ */
         .admissions-hero-banner {
           position: relative;
+          left: 50%;
           background: #ffffff;
-          width: 100%;
+          width: 100vw;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          overflow: hidden;
         }
         .admissions-hero-container {
           width: 100% !important;
@@ -582,11 +586,17 @@ export default function AdmissionsClient() {
           position: relative;
           width: 100%;
           display: block;
+          line-height: 0;
+          aspect-ratio: 1916 / 821;
+          overflow: hidden;
         }
         :global(.admissions-poster-img) {
           width: 100% !important;
-          height: auto !important;
+          height: 100% !important;
+          max-width: none !important;
           display: block !important;
+          object-fit: cover !important;
+          object-position: center center !important;
         }
         /* ════════════════════════════════
            SCHOLARSHIP GRID LAYOUT

@@ -464,8 +464,14 @@ export default function ContactClient() {
            HERO BANNER — full-bleed, no gutters
            ════════════════════════════════ */
         :global(.public-shell .contact-page .contact-hero-banner) {
+          position: relative;
+          left: 50%;
+          width: 100vw;
+          margin-left: -50vw;
+          margin-right: -50vw;
           padding: 76px 0 0 0 !important;
           background: #ffffff !important;
+          overflow: hidden;
         }
         :global(.public-shell .contact-page .contact-hero-container) {
           width: 100% !important;
@@ -481,10 +487,19 @@ export default function ContactClient() {
           box-shadow: none !important;
           background: transparent !important;
         }
+        :global(.public-shell .contact-page .poster-img-container) {
+          width: 100%;
+          line-height: 0;
+          aspect-ratio: 1916 / 821;
+          overflow: hidden;
+        }
         :global(.public-shell .contact-page .contact-poster-img) {
           width: 100% !important;
-          height: auto !important;
+          height: 100% !important;
+          max-width: none !important;
           display: block !important;
+          object-fit: cover !important;
+          object-position: center center !important;
         }
 
         /* ════════════════════════════════

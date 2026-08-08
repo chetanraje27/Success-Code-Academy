@@ -18,6 +18,7 @@
   padding: 76px 0 0 !important;
   background: #ffffff !important;
   background-image: none !important;
+  overflow: hidden;
 }
 
 .public-shell .admissions-page-container .admissions-hero-container {
@@ -39,13 +40,16 @@
 .public-shell .admissions-page-container .poster-img-container {
   width: 100%;
   padding: 0;
+  aspect-ratio: 1916 / 821;
+  overflow: hidden;
 }
 
 .public-shell .admissions-page-container .admissions-poster-img {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
   max-height: none !important;
   object-fit: cover !important;
+  object-position: center center !important;
   background: transparent !important;
   display: block !important;
 }

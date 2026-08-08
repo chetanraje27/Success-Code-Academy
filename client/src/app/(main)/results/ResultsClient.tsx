@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaXmark } from "react-icons/fa6";
 import { resultsData, type StudentResult } from "@/data/results";
@@ -185,6 +185,16 @@ export default function ResultsClient() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [editResults, setEditResults] = useState(false);
   const [dynamicResults, setDynamicResults] = useState<StudentResult[]>([]);
+  const storiesGridRef = useRef<HTMLDivElement>(null);
+
+  const scrollStories = (direction: 'left' | 'right') => {
+    if (storiesGridRef.current) {
+      const container = storiesGridRef.current;
+      const firstChild = container.children[0] as HTMLElement;
+      const scrollAmount = firstChild ? firstChild.offsetWidth + 16 : 296;
+      container.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     async function loadDynamicResults() {
@@ -324,9 +334,6 @@ export default function ResultsClient() {
                 <div className="results-featured-2025-grid">
                   {filteredResults.slice(0, 2).map((result) => (
                     <article key={result.id}>
-                      <span className="results-featured-watermark" aria-hidden="true">
-                        {result.rank}
-                      </span>
                       <div className="results-featured-copy">
                         <span className="results-featured-year">NEET UG 2025</span>
                         <div className="results-featured-rank">
@@ -391,50 +398,47 @@ export default function ResultsClient() {
       <section className="results-stories-section">
         <div className="results-container">
           <div className="results-stories-heading">
-            <div className="results-stories-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="10" y="14" width="44" height="36" rx="8" />
-                <path d="m27 24 14 8-14 8z" />
-                <path d="M19 8v6M45 8v6" />
-              </svg>
-            </div>
-
-            <div>
-              <h2>
-                <EditableText contentKey="stories.heading" label="success stories heading">
-                  Success Stories
-                </EditableText>
-              </h2>
-              <div className="results-stories-quote">
-                <p>
-                  <EditableText
-                    contentKey="stories.quote-line-1"
-                    label="success stories quote line 1"
-                  >
-                    “Different paths.
+            <div className="results-stories-heading-left">
+              <div className="results-stories-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="10" y="14" width="44" height="36" rx="8" />
+                  <path d="m27 24 14 8-14 8z" />
+                  <path d="M19 8v6M45 8v6" />
+                </svg>
+              </div>
+              <div>
+                <h2>
+                  <EditableText contentKey="stories.heading" label="success stories heading">
+                    Success Stories
                   </EditableText>
-                </p>
-                <p>
-                  <EditableText
-                    contentKey="stories.quote-line-2"
-                    label="success stories quote line 2"
-                  >
-                    One goal.
-                  </EditableText>
-                </p>
-                <p>
-                  <EditableText
-                    contentKey="stories.quote-line-3"
-                    label="success stories quote line 3"
-                  >
-                    Countless success stories.”
+                </h2>
+                <p className="results-stories-subtext">
+                  <EditableText contentKey="stories.quote-line-1" label="success stories subtitle">
+                    Different paths. One goal. Countless success stories.
                   </EditableText>
                 </p>
               </div>
             </div>
+
+            <div className="results-stories-controls">
+              <button 
+                onClick={() => scrollStories('left')} 
+                aria-label="Previous video" 
+                className="story-slider-btn"
+              >
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button 
+                onClick={() => scrollStories('right')} 
+                aria-label="Next video" 
+                className="story-slider-btn"
+              >
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
           </div>
 
-          <div className="results-stories-grid">
+          <div className="results-stories-grid" ref={storiesGridRef}>
             {videoStories.map((story) => (
               <StoryCard key={story.id} story={story} onPlay={setActiveVideo} />
             ))}

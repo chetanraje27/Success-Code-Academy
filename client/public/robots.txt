@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://successcodeacademy.in
+Host: https://www.successcodeacademy.in
 
 # Sitemaps
-Sitemap: https://successcodeacademy.in/sitemap.xml
+Sitemap: https://www.successcodeacademy.in/sitemap.xml

@@ -10,10 +10,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export const metadata: Metadata = {
-  title: "Success Code Academy",
-  description: "Premier educational institution",
-};
+
+export const metadata = {
+  title: 'Success Code Academy | NEET Coaching in Baramati',
+  description: "Baramati's top NEET coaching institute. Home to this year's AIR 5 NEET topper and outstanding medical entrance results.",
+}
 
 export default function RootLayout({
   children,

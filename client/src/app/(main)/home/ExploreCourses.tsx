@@ -29,12 +29,11 @@ export default function ExploreCourses({ courses = [] }: { courses?: Course[] })
       setLocalCourses([]); // Clear previous data to show skeleton loaders
       try {
         const res = await fetch('/api/content/courses', { cache: 'no-store' });
+        if (!res.ok) return;
         const data = await res.json();
         if (data.status === 'success' && isMounted) {
           setLocalCourses(data.data || []);
         }
-      } catch (err) {
-        console.error("Failed to fetch courses", err);
       } finally {
         if (isMounted) {
           setIsLoading(false);

@@ -152,13 +152,19 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
           fetch("/api/content/banners", { cache: "no-store" }),
         ]);
 
-        const notifData = await notifRes.json() as PublicContentResponse<Announcement>;
-        const bannerData = await bannerRes.json() as PublicContentResponse<HomeBanner>;
+        const [notifData, bannerData] = await Promise.all([
+          notifRes.ok
+            ? notifRes.json() as Promise<PublicContentResponse<Announcement>>
+            : Promise.resolve(null),
+          bannerRes.ok
+            ? bannerRes.json() as Promise<PublicContentResponse<HomeBanner>>
+            : Promise.resolve(null),
+        ]);
 
-        const nextAnnouncements = notifData.status === 'success'
+        const nextAnnouncements = notifData?.status === 'success'
           ? (notifData.data || []).filter((item) => item?.text)
           : [];
-        const homeBanners = bannerData.status === 'success'
+        const homeBanners = bannerData?.status === 'success'
           ? (bannerData.data || []).filter((banner) =>
               (banner?.type === 'HOME' || banner?.type === undefined) && banner?.image
             )
@@ -170,6 +176,9 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
         if (homeBanners && homeBanners.length > 0) {
           setCurrentSlide(0);
           setSlides(homeBanners);
+        }
+        if (!notifRes.ok && !bannerRes.ok) {
+          setFetchError(true);
         }
       } catch (err) {
         console.error("Failed to load content:", err);

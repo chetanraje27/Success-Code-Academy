@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import { sequelize } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
-import { env } from '../config/environment';
 
 /**
  * GET /health  and  GET /api/v1/health
@@ -21,22 +20,13 @@ export const getHealth = asyncHandler(
       dbStatus = 'disconnected';
     }
 
-    res.status(200).json({
+    res.status(dbStatus === 'connected' ? 200 : 503).json({
       status: 'success',
       data: {
         server: 'running',
         uptime: process.uptime(),
         timestamp: new Date().toISOString(),
         database: dbStatus,
-        environmentVariables: {
-          nodeEnv: env.NODE_ENV,
-          corsOrigin: env.CORS_ORIGIN,
-          dbHost: env.DB_HOST,
-          dbUser: env.DB_USER,
-          dbName: env.DB_NAME,
-          jwtConfigured: !!env.JWT_SECRET,
-          passwordConfigured: !!env.DB_PASSWORD,
-        }
       },
     });
   },

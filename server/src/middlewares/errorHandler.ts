@@ -51,7 +51,7 @@ export const errorHandler = (
   else if (err.name && err.name.startsWith('Sequelize')) {
     statusCode = 503; // Service Unavailable
     status = 'error';
-    message = 'Database connection failed. Please verify that your database credentials inside server/.env are valid and that your database is online.';
+    message = 'Database service is temporarily unavailable. Please try again shortly.';
   }
 
   // ── Zod validation errors ──

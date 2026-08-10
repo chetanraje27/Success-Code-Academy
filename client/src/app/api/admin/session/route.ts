@@ -84,8 +84,8 @@ export async function GET() {
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) {
     return NextResponse.json(
-      { status: "fail", message: "Admin sign-in required." },
-      { status: 401 },
+      { status: "success", data: { user: null } },
+      { headers: { "Cache-Control": "no-store" } },
     );
   }
 
@@ -99,15 +99,23 @@ export async function GET() {
 
     if (!response.ok || user?.role !== "admin") {
       cookieStore.delete(COOKIE_NAME);
+
+      if (response.status === 401 || response.status === 403 || response.ok) {
+        return NextResponse.json(
+          { status: "success", data: { user: null } },
+          { headers: { "Cache-Control": "no-store" } },
+        );
+      }
+
       return NextResponse.json(
         {
-          status: "fail",
+          status: "error",
           message:
             typeof payload.message === "string"
               ? payload.message
               : "Admin session is no longer valid.",
         },
-        { status: response.ok ? 403 : response.status },
+        { status: response.status },
       );
     }
 

@@ -5,6 +5,30 @@ import logger from './utils/logger';
 import { sequelize } from './models';
 import { seedDatabase } from './seedDatabase';
 
+function scheduleDatabaseReconnect(): void {
+  let delay = 3_000;
+
+  const reconnect = async (): Promise<void> => {
+    const connected = await testConnection();
+    if (connected) {
+      try {
+        await seedDatabase();
+        logger.info('Database connection restored.');
+        return;
+      } catch (error) {
+        logger.error('Database reconnected but content seeding failed.', { error });
+      }
+    }
+
+    const retryIn = delay;
+    delay = Math.min(delay * 2, 60_000);
+    logger.warn(`Database unavailable. Retrying connection in ${retryIn / 1_000}s.`);
+    setTimeout(() => void reconnect(), retryIn);
+  };
+
+  void reconnect();
+}
+
 /**
  * Server entry point.
  *
@@ -25,8 +49,9 @@ async function startServer(): Promise<void> {
 
   if (!dbConnected) {
     logger.warn(
-      'Server starting without database connection. Check your DB credentials.',
+      'Server starting without database connection. Retrying in the background.',
     );
+    scheduleDatabaseReconnect();
   }
 
   const server = app.listen(env.PORT, () => {

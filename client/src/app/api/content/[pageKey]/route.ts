@@ -1,5 +1,22 @@
 import { NextResponse } from "next/server";
 
+const STALE_CONTENT_TTL_MS = 5 * 60 * 1000;
+const latestContent = new Map<string, { payload: unknown; cachedAt: number }>();
+
+function staleContentResponse(pageKey: string): NextResponse | null {
+  const cached = latestContent.get(pageKey);
+  if (!cached || Date.now() - cached.cachedAt > STALE_CONTENT_TTL_MS) {
+    return null;
+  }
+
+  return NextResponse.json(cached.payload, {
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Content-Source": "stale-fallback",
+    },
+  });
+}
+
 function backendUrl(pageKey: string): string {
   const base =
     process.env.API_URL ||
@@ -47,6 +64,8 @@ export async function GET(
     try {
       payload = body ? JSON.parse(body) : null;
     } catch {
+      const stale = staleContentResponse(pageKey);
+      if (stale) return stale;
       return NextResponse.json(
         {
           status: "error",
@@ -56,6 +75,15 @@ export async function GET(
       );
     }
 
+    if (response.ok && payload && typeof payload === "object") {
+      latestContent.set(pageKey, { payload, cachedAt: Date.now() });
+    }
+
+    if (!response.ok) {
+      const stale = staleContentResponse(pageKey);
+      if (stale) return stale;
+    }
+
     return NextResponse.json(payload, {
       status: response.status,
       headers: {
@@ -63,6 +91,8 @@ export async function GET(
       },
     });
   } catch {
+    const stale = staleContentResponse(pageKey);
+    if (stale) return stale;
     return NextResponse.json(
       {
         status: "error",

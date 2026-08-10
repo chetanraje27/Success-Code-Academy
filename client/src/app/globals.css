@@ -184,6 +184,56 @@ textarea::placeholder {
   color: #94a3b8;
 }
 
+.legal-page {
+  min-height: 70vh;
+  padding: 5.5rem max(1.25rem, calc((100% - 72rem) / 2));
+  background: var(--bg-base);
+}
+
+.legal-page__content {
+  max-width: 48rem;
+  color: var(--text-secondary);
+}
+
+.legal-page__eyebrow {
+  margin: 0 0 0.75rem;
+  color: #0a6476;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.legal-page h1,
+.legal-page h2 {
+  color: var(--text-primary);
+}
+
+.legal-page h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.legal-page h2 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.legal-page p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.legal-page p + p {
+  margin-top: 0.75rem;
+}
+
+.legal-page a {
+  color: #123e7a;
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

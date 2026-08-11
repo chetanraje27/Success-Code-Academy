@@ -961,23 +961,6 @@ export default function AdmissionsClient() {
           }
         }
 
-        /* ─── Responsive Styles ─── */
-        @media (max-width: 992px) {
-          .scholarship-grid-container {
-            grid-template-columns: 1fr;
-            gap: 40px;
-            margin: 40px auto 60px;
-            padding: 32px 24px;
-            border-radius: 20px;
-          }
-          .scholarship-left-details {
-            border-right: none;
-            padding-right: 0;
-            border-bottom: 1.5px solid #edf2f9;
-            padding-bottom: 32px;
-          }
-        }
-
         @media (max-width: 768px) {
           .admissions-page-container {
             padding-top: 72px !important;
@@ -988,6 +971,69 @@ export default function AdmissionsClient() {
           .bg-pattern-dots-left,
           .bg-pattern-circles-right {
             display: none;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .scholarship-grid-container {
+            padding: 24px 16px;
+            margin: 24px auto 40px;
+            border-radius: 16px;
+            gap: 24px;
+          }
+          .poster-main-title {
+            font-size: clamp(1.75rem, 6vw, 2.25rem);
+          }
+          .poster-features-list {
+            gap: 16px;
+          }
+          .poster-feature-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #f8fafc;
+          }
+          .poster-feature-card-boxed {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+          }
+          .form-card-title {
+            font-size: 1.15rem;
+          }
+          .input-with-icon input,
+          .input-with-icon select {
+            padding: 10px 14px 10px 42px;
+            font-size: 0.9rem;
+          }
+          .input-icon {
+            left: 12px;
+            width: 16px;
+            height: 16px;
+          }
+          .register-submit-btn {
+            padding: 14px 20px;
+            font-size: 0.95rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .scholarship-grid-container {
+            padding: 16px 12px;
+          }
+          .poster-main-title {
+            font-size: 1.5rem;
+          }
+          .form-header-icon {
+            width: 48px;
+            height: 48px;
+          }
+          .form-header-icon svg {
+            width: 24px;
+            height: 24px;
           }
         }
       `}</style>

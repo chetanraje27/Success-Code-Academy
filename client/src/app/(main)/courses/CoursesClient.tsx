@@ -804,6 +804,20 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             font-size: 0.72rem !important;
           }
         }
+        @media (max-width: 375px) {
+          .course-card-left {
+            padding: 16px 12px !important;
+          }
+          .course-type-pill {
+            white-space: normal !important;
+            border-radius: 8px !important;
+            line-height: 1.2 !important;
+          }
+          .courses-page-container .container {
+            width: 100%;
+            padding: 0 10px;
+          }
+        }
       `}</style>
     </div>
   );

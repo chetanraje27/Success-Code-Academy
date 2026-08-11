@@ -1309,14 +1309,24 @@
     display: none;
   }
 
+  .results-student-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card-featured {
+    grid-column: span 1;
+  }
 
   .results-video-modal {
-    padding: 14px;
+    padding: 8px;
   }
 
   .results-video-close {
-    top: -10px;
-    right: -8px;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: rgba(16, 35, 63, 0.85);
   }
 }
 

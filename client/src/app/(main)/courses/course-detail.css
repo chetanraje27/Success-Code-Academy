@@ -971,7 +971,9 @@
   }
 
   .course-detail-hero-card {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   .course-detail-hero-visual {

@@ -1015,10 +1015,71 @@ export default function ContactClient() {
 
         @media (max-width: 640px) {
           .contact-premium-section {
-            padding: 50px 0;
+            padding: 40px 0;
+          }
+          .insights-premium-container {
+            padding: 0 16px;
           }
           .map-frame iframe {
-            height: 360px;
+            height: 300px;
+          }
+          .premium-contact-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+          }
+          .contact-icon-circle {
+            width: 40px;
+            height: 40px;
+          }
+          .contact-icon-circle svg {
+            width: 20px;
+            height: 20px;
+          }
+          .dark-captcha-row {
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+          .dark-captcha-input {
+            max-width: 100% !important;
+            flex: 1;
+            min-width: 100px;
+          }
+          .contact-right-form {
+            padding: 24px 16px;
+            border-radius: 12px;
+          }
+          .form-card-header {
+            grid-template-columns: 40px minmax(0, 1fr);
+            gap: 12px;
+          }
+          .form-header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 9px;
+          }
+          .form-header-icon svg {
+            width: 20px;
+            height: 20px;
+          }
+          .form-card-title {
+            font-size: 0.95rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .contact-title-group {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+          .dark-captcha-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .dark-captcha-q {
+            text-align: center;
           }
         }
       `}</style>

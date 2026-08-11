@@ -780,3 +780,44 @@
     transition: none;
   }
 }
+
+@media (max-width: 480px) {
+  .about-hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .about-hero-metric + .about-hero-metric {
+    border-left: 0;
+    border-top: 1px solid var(--about-border);
+  }
+
+  .about-achievement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-rank-card + .about-rank-card {
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    border-left: 0;
+  }
+
+  .about-achievement-card {
+    border-right: 0 !important;
+    border-top: 1px solid var(--about-border);
+  }
+
+  .about-story-media {
+    min-height: 280px;
+  }
+
+  .about-story-image {
+    inset: 0 0 5.5rem;
+  }
+
+  .about-story-quote {
+    padding: 0.85rem 1rem;
+  }
+
+  .about-map-card {
+    min-height: 240px;
+  }
+}

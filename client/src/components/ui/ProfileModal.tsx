@@ -87,7 +87,26 @@ export default function ProfileModal({ isOpen, onClose, user, onUpdateSuccess }:
   };
 
   return (
-    <AnimatePresence>
+    <>
+      <style>{`
+        @media (max-width: 767px) {
+          .profile-modal-card {
+            padding: 32px 20px !important;
+            border-radius: 20px !important;
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+          }
+          .modal-close-btn {
+            top: 12px !important;
+            right: 16px !important;
+          }
+          .form-row-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0 !important;
+          }
+        }
+      `}</style>
+      <AnimatePresence>
       {isOpen && (
         <div 
           className="profile-modal-overlay"
@@ -363,5 +382,6 @@ export default function ProfileModal({ isOpen, onClose, user, onUpdateSuccess }:
         </div>
       )}
     </AnimatePresence>
+    </>
   );
 }

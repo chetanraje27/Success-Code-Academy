@@ -172,6 +172,17 @@ export default function CookieConsent() {
               :global(.cookie-card) {
                 padding: var(--space-4);
               }
+
+              .cookie-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-3);
+              }
+
+              .cookie-actions > :global(*) {
+                width: 100%;
+                justify-content: center;
+              }
             }
           `}</style>
         </div>

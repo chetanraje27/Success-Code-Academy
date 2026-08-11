@@ -1844,6 +1844,31 @@ export default function GalleryPage() {
           }
         }
 
+        /* Very Small Devices (380px and below) */
+        @media (max-width: 380px) {
+          .hero-title {
+            font-size: 1.75rem;
+          }
+          .video-item-card {
+            flex: 0 0 85vw;
+          }
+          .card-thumb-wrap {
+            height: 50vw;
+          }
+          .toolbar-filters {
+            flex-direction: column;
+            gap: 12px;
+          }
+          .hero-ctas {
+            flex-direction: column;
+          }
+          .modal-specs {
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+          }
+        }
+
         /* prefers-reduced-motion settings */
         @media (prefers-reduced-motion: reduce) {
           .video-item-card, .featured-preview-card, .preview-img, .card-img, .card-play-btn-circle, .preview-play-glow {

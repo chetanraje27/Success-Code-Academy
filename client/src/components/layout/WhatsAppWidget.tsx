@@ -58,6 +58,16 @@ export default function WhatsAppWidget() {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
+
+        @media (max-width: 767px) {
+          .whatsapp-widget {
+            bottom: max(5.5rem, calc(1.5rem + env(safe-area-inset-bottom)));
+            right: max(1rem, env(safe-area-inset-right));
+            width: 3.5rem;
+            height: 3.5rem;
+            z-index: 90;
+          }
+        }
       `}</style>
     </>
   );

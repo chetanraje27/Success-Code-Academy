@@ -1120,13 +1120,58 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   background: var(--admin-surface-sunken);
 }
 
-.admin-check input,
-.sca-admin-check input {
-  width: 15px;
-  height: 15px;
-  margin-top: 1px;
-  accent-color: var(--admin-brand);
+.admin-check input[type="checkbox"],
+.sca-admin-check input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  padding: 0;
+  margin: 2px 0 0;
+  border: 1.5px solid var(--admin-border-strong);
+  border-radius: 4px;
+  background: var(--admin-surface);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition:
+    background var(--admin-dur-fast) var(--admin-ease),
+    border-color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-check input[type="checkbox"]:checked,
+.sca-admin-check input[type="checkbox"]:checked {
+  background: var(--admin-brand);
+  border-color: var(--admin-brand);
+}
+
+.admin-check input[type="checkbox"]:checked::after,
+.sca-admin-check input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.admin-check input[type="checkbox"]:focus-visible,
+.sca-admin-check input[type="checkbox"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2.5px var(--admin-focus-ring);
 }
 
 /* Shared compact CRUD controls used by on-page collection editors. */
@@ -1464,6 +1509,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
 
 .admin-modal-header h2 {
   margin: 0;
+  color: var(--admin-text);
   font-size: 0.92rem;
   font-weight: 650;
   letter-spacing: -0.01em;
@@ -2067,7 +2113,7 @@ html[data-admin-theme="dark"] {
   --admin-brand-strong: #7fb2ff;
   --admin-brand-soft: rgba(91, 157, 255, 0.14);
   --admin-brand-softer: rgba(91, 157, 255, 0.07);
-  --admin-brand-contrast: #08101c;
+  --admin-brand-contrast: #ffffff;
   --admin-accent: #2fd4c6;
   --admin-accent-soft: rgba(47, 212, 198, 0.14);
 

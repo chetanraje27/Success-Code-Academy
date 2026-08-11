@@ -112,7 +112,6 @@ export default function ContactMessageEditorModal({
             rows={5}
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            style={{ width: "100%", padding: "10px", border: "1px solid #ddd", borderRadius: "6px" }}
           />
         </div>
 

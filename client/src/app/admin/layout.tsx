@@ -17,9 +17,11 @@ import {
   LogOut,
   Menu,
   MessageSquareText,
+  Moon,
   Newspaper,
   Settings,
   Star,
+  Sun,
   Trophy,
   Users,
   Video,
@@ -28,6 +30,9 @@ import {
 import type { AdminUser } from "@/lib/admin-api";
 
 type SessionState = "loading" | "authenticated" | "guest";
+type AdminTheme = "light" | "dark";
+
+const THEME_STORAGE_KEY = "sca-admin-theme";
 
 const navigation = [
   {
@@ -96,6 +101,46 @@ export default function AdminLayout({
   );
   const [user, setUser] = useState<AdminUser | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  /*
+   * Starts null so the first client render matches the server exactly; the
+   * mount effect below fills it in. The visible icon never waits for this --
+   * it is swapped by CSS off the data-admin-theme attribute that the root
+   * layout script applies before first paint. This state only feeds the
+   * button's label and the next-value calculation.
+   */
+  const [theme, setTheme] = useState<AdminTheme | null>(null);
+
+  /*
+   * The attribute lives on <html> because admin.css is shared with the public
+   * site and AdminModal portals outside .admin-shell. Adding it on mount and
+   * removing it on unmount keeps dark theming confined to /admin routes.
+   */
+  useEffect(() => {
+    const root = document.documentElement;
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(THEME_STORAGE_KEY);
+    } catch {
+      saved = null;
+    }
+    const next: AdminTheme = saved === "dark" ? "dark" : "light";
+    root.setAttribute("data-admin-theme", next);
+    setTheme(next);
+    return () => root.removeAttribute("data-admin-theme");
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    const root = document.documentElement;
+    const next: AdminTheme =
+      root.getAttribute("data-admin-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-admin-theme", next);
+    setTheme(next);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      /* Private mode blocks writes; the theme still applies for this session. */
+    }
+  }, []);
 
   const verifySession = useCallback(async () => {
     try {
@@ -269,10 +314,31 @@ export default function AdminLayout({
               <strong>{currentPage}</strong>
             </div>
           </div>
-          <button className="admin-logout-button" onClick={handleLogout}>
-            <LogOut size={17} />
-            <span>Sign out</span>
-          </button>
+          <div className="admin-topbar-actions">
+            {/*
+              Both icons are always in the DOM and CSS shows one based on the
+              <html> attribute, so the correct glyph paints immediately instead
+              of flipping once React hydrates.
+            */}
+            <button
+              type="button"
+              className="admin-theme-toggle"
+              onClick={toggleTheme}
+              aria-label={
+                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+              }
+              title={
+                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+              }
+            >
+              <Moon size={17} className="admin-theme-icon-dark" aria-hidden="true" />
+              <Sun size={17} className="admin-theme-icon-light" aria-hidden="true" />
+            </button>
+            <button className="admin-logout-button" onClick={handleLogout}>
+              <LogOut size={17} />
+              <span>Sign out</span>
+            </button>
+          </div>
         </header>
         <main className="admin-content">{children}</main>
       </div>

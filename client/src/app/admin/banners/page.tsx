@@ -6,57 +6,35 @@ import AdminContentManager from "@/components/admin/AdminContentManager";
 export default function AdminBannersPage() {
   const [activeTab, setActiveTab] = useState<"HOME" | "RESULTS">("HOME");
 
-  return (
-    <div>
-      <div className="admin-tabs" style={{ marginBottom: "24px", display: "flex", gap: "8px", borderBottom: "1px solid var(--admin-border)", paddingBottom: "8px" }}>
-        <button
-          type="button"
-          className={`admin-tab ${activeTab === "HOME" ? "active" : ""}`}
-          onClick={() => setActiveTab("HOME")}
-          style={{
-            background: activeTab === "HOME" ? "var(--admin-brand)" : "var(--admin-surface)",
-            color: activeTab === "HOME" ? "#ffffff" : "var(--admin-muted)",
-            border: activeTab === "HOME" ? "1px solid var(--admin-brand)" : "1px solid var(--admin-border)",
-            padding: "8px 16px",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-            cursor: "pointer",
-            borderRadius: "var(--admin-radius)",
-            boxShadow: activeTab === "HOME" ? "0 2px 4px rgba(0,0,0,0.1)" : "none",
-            transition: "all 0.2s ease"
-          }}
-        >
-          Home Page Banners
-        </button>
-        <button
-          type="button"
-          className={`admin-tab ${activeTab === "RESULTS" ? "active" : ""}`}
-          onClick={() => setActiveTab("RESULTS")}
-          style={{
-            background: activeTab === "RESULTS" ? "var(--admin-brand)" : "var(--admin-surface)",
-            color: activeTab === "RESULTS" ? "#ffffff" : "var(--admin-muted)",
-            border: activeTab === "RESULTS" ? "1px solid var(--admin-brand)" : "1px solid var(--admin-border)",
-            padding: "8px 16px",
-            fontSize: "0.95rem",
-            fontWeight: 500,
-            cursor: "pointer",
-            borderRadius: "var(--admin-radius)",
-            boxShadow: activeTab === "RESULTS" ? "0 2px 4px rgba(0,0,0,0.1)" : "none",
-            transition: "all 0.2s ease"
-          }}
-        >
-          Results Page Banners
-        </button>
-      </div>
+  const tabs = (
+    <div className="admin-tabs" role="tablist" aria-label="Banner location">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeTab === "HOME"}
+        className={`admin-tab ${activeTab === "HOME" ? "is-active" : ""}`}
+        onClick={() => setActiveTab("HOME")}
+      >
+        Home page
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeTab === "RESULTS"}
+        className={`admin-tab ${activeTab === "RESULTS" ? "is-active" : ""}`}
+        onClick={() => setActiveTab("RESULTS")}
+      >
+        Results page
+      </button>
+    </div>
+  );
 
-      <AdminContentManager
+  return (
+    <AdminContentManager
         key={activeTab}
-        title={activeTab === "HOME" ? "Home Page Banners" : "Results Page Banners"}
-        description={
-          activeTab === "HOME" 
-            ? "Manage the large images shown on the home page. Use short, meaningful alternative text for accessibility."
-            : "Manage the large images shown on the results page. Use short, meaningful alternative text for accessibility."
-        }
+        headerAction={tabs}
+        title={activeTab === "HOME" ? "Home page banners" : "Results page banners"}
+        description="Large images shown on this page. Keep the description short and meaningful."
         itemName="Banner"
         resource="banners"
         historyType="banner"
@@ -122,7 +100,6 @@ export default function AdminBannersPage() {
           { label: "Order", key: "orderIndex" },
           { label: "Status", key: "isActive", kind: "status" },
         ]}
-      />
-    </div>
+    />
   );
 }

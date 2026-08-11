@@ -41,17 +41,10 @@ export default function AdminCoursesPage() {
           { key: "category", label: "Category", render: (row: any) => <span style={{textTransform: 'capitalize'}}>{row.category.replace('-', ' ')}</span> },
           { key: "type", label: "Type" },
           { key: "isActive", label: "Status", render: (row: any) => (
-              <span style={{ 
-                color: row.isActive ? '#10b981' : '#ef4444', 
-                fontWeight: 600,
-                fontSize: '12px',
-                padding: '4px 8px',
-                backgroundColor: row.isActive ? '#10b9811a' : '#ef44441a',
-                borderRadius: '999px'
-              }}>
-                {row.isActive ? 'Active' : 'Inactive'}
+              <span className={`admin-status ${row.isActive ? "" : "danger"}`}>
+                {row.isActive ? "Active" : "Inactive"}
               </span>
-            ) 
+            )
           }
         ]}
         onAdd={() => setEditingCourse({})} // empty object triggers isNew

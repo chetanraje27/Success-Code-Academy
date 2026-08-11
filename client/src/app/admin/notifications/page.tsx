@@ -102,44 +102,19 @@ export default function AdminNotificationsPage() {
           label: "Announcement",
           key: "text",
           render: (item) => (
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "8px",
-                  background: "rgba(59, 130, 246, 0.1)",
-                  fontSize: "1.1rem",
-                  flexShrink: 0,
-                }}
-              >
+            <div className="admin-cell-media">
+              <span className="admin-icon-tile">
                 {renderNotificationIcon(item.icon as string | undefined)}
-              </div>
+              </span>
               <div>
-                <div style={{ fontWeight: 600, color: "var(--sca-admin-text, #1e293b)" }}>
-                  {String(item.text || "")}
-                </div>
+                <span className="admin-table-title">{String(item.text || "")}</span>
                 {item.link ? (
-                  <div
-                    style={{
-                      fontSize: "0.78rem",
-                      color: "#2563eb",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      marginTop: "2px",
-                    }}
-                  >
-                    <FaLink style={{ fontSize: "0.7rem" }} />
-                    <span>Redirects to: <strong>{String(item.link)}</strong></span>
-                  </div>
+                  <span className="admin-inline-link">
+                    <FaLink aria-hidden="true" />
+                    <span>Redirects to {String(item.link)}</span>
+                  </span>
                 ) : (
-                  <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "2px" }}>
-                    No redirection link configured
-                  </div>
+                  <span className="admin-table-subtitle">No redirect link</span>
                 )}
               </div>
             </div>
@@ -150,23 +125,11 @@ export default function AdminNotificationsPage() {
           key: "link",
           render: (item) =>
             item.link ? (
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "4px",
-                  fontSize: "0.8rem",
-                  background: "#eff6ff",
-                  color: "#1d4ed8",
-                  fontWeight: 500,
-                }}
-              >
-                {String(item.link)} <FaArrowRight style={{ fontSize: "0.65rem" }} />
+              <span className="admin-inline-tag">
+                {String(item.link)} <FaArrowRight aria-hidden="true" />
               </span>
             ) : (
-              <span style={{ color: "#94a3b8", fontSize: "0.8rem" }}>—</span>
+              <span className="admin-cell-empty">—</span>
             ),
         },
         { label: "Order", key: "orderIndex" },

@@ -13,10 +13,11 @@ import {
 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import {
+  AdminCardsSkeleton,
   AdminEmptyState,
-  AdminLoadingState,
   AdminNotice,
   AdminPageHeader,
+  AdminTableSkeleton,
   formatAdminDate,
 } from "@/components/admin/AdminUi";
 
@@ -96,38 +97,42 @@ export default function AdminDashboardPage() {
         <AdminNotice>{error}</AdminNotice>
       )}
 
-      <section className="admin-stats-grid" aria-label="Registration totals">
-        {[
-          {
-            label: "Student accounts",
-            value: stats?.totalStudents,
-            icon: Users,
-          },
-          {
-            label: "Course enquiries",
-            value: stats?.totalCourseForms,
-            icon: ClipboardList,
-          },
-          {
-            label: "Scholarship forms",
-            value: stats?.totalScholarshipForms,
-            icon: GraduationCap,
-          },
-        ].map((item) => {
-          const Icon = item.icon;
-          return (
-            <div className="admin-card admin-stat-card" key={item.label}>
-              <span className="admin-stat-icon">
-                <Icon size={21} />
-              </span>
-              <div>
-                <strong>{item.value ?? "—"}</strong>
-                <span>{item.label}</span>
+      {!stats ? (
+        <AdminCardsSkeleton count={3} label="Loading registration totals" />
+      ) : (
+        <section className="admin-stats-grid" aria-label="Registration totals">
+          {[
+            {
+              label: "Student accounts",
+              value: stats.totalStudents,
+              icon: Users,
+            },
+            {
+              label: "Course enquiries",
+              value: stats.totalCourseForms,
+              icon: ClipboardList,
+            },
+            {
+              label: "Scholarship forms",
+              value: stats.totalScholarshipForms,
+              icon: GraduationCap,
+            },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div className="admin-card admin-stat-card" key={item.label}>
+                <span className="admin-stat-icon">
+                  <Icon size={21} />
+                </span>
+                <div>
+                  <strong>{item.value ?? "—"}</strong>
+                  <span>{item.label}</span>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </section>
+            );
+          })}
+        </section>
+      )}
 
       <section className="admin-card">
         <header className="admin-card-header">
@@ -165,7 +170,11 @@ export default function AdminDashboardPage() {
           </Link>
         </header>
         {!stats ? (
-          <AdminLoadingState label="Loading dashboard…" />
+          <AdminTableSkeleton
+            rows={5}
+            columns={3}
+            label="Loading recent registrations"
+          />
         ) : stats.recentStudents.length === 0 ? (
           <AdminEmptyState
             title="No student registrations yet"

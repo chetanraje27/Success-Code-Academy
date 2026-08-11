@@ -15,9 +15,16 @@ export default function AdminLoginPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/session", { cache: "no-store" }).then((response) => {
-      if (response.ok) router.replace("/admin");
-    });
+    fetch("/api/admin/session", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: { data?: { user?: { role?: string } } } | null) => {
+        if (payload?.data?.user?.role === "admin") {
+          router.replace("/admin");
+        }
+      })
+      .catch(() => {
+        /* session check failed — stay on login */
+      });
   }, [router]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

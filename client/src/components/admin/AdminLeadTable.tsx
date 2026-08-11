@@ -5,9 +5,9 @@ import { Download, Search, Edit2, Trash2 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import {
   AdminEmptyState,
-  AdminLoadingState,
   AdminNotice,
   AdminPageHeader,
+  AdminTableSkeleton,
   formatAdminDate,
 } from "./AdminUi";
 
@@ -188,7 +188,11 @@ export default function AdminLeadTable({
         </header>
 
         {loading ? (
-          <AdminLoadingState label="Loading records…" />
+          <AdminTableSkeleton
+            rows={6}
+            columns={columns.length + (onEdit || onDelete ? 1 : 0)}
+            label="Loading records"
+          />
         ) : displayedRows.length === 0 ? (
           <AdminEmptyState
             title="No records found"

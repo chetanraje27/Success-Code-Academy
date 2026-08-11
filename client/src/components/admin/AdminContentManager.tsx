@@ -10,10 +10,10 @@ import {
 import AdminModal from "./AdminModal";
 import {
   AdminEmptyState,
-  AdminLoadingState,
   AdminNotice,
   AdminPageHeader,
   AdminStatusBadge,
+  AdminTableSkeleton,
 } from "./AdminUi";
 import RevisionHistoryButton, {
   type MediaResourceType,
@@ -90,6 +90,7 @@ export default function AdminContentManager({
   uploadType,
   historyType,
   filterItems,
+  headerAction,
 }: {
   title: string;
   description: string;
@@ -100,6 +101,7 @@ export default function AdminContentManager({
   uploadType?: "banner" | "star" | "result" | "news" | "video";
   historyType?: MediaResourceType;
   filterItems?: (item: ResourceItem) => boolean;
+  headerAction?: React.ReactNode;
 }) {
   const [items, setItems] = useState<ResourceItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -297,6 +299,7 @@ export default function AdminContentManager({
       <AdminPageHeader
         title={title}
         description={description}
+        action={headerAction}
       />
 
       <div className="admin-toolbar">
@@ -344,7 +347,11 @@ export default function AdminContentManager({
         </header>
 
         {loading ? (
-          <AdminLoadingState label="Loading content…" />
+          <AdminTableSkeleton
+            rows={5}
+            columns={columns.length + 1}
+            label="Loading content"
+          />
         ) : displayedItems.length === 0 ? (
           <AdminEmptyState
             title={`No ${title.toLowerCase()} yet`}
@@ -500,7 +507,6 @@ export default function AdminContentManager({
                           }}
                           required={field.required && !imagePreview}
                         />
-                        {field.help && <small>{field.help}</small>}
                         {imagePreview && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -555,9 +561,8 @@ export default function AdminContentManager({
                             placeholder={field.placeholder || "https://youtube.com/..."}
                           />
                         </div>
-                        {field.help && <small style={{ marginTop: "8px", display: "block" }}>{field.help}</small>}
                         {!videoFile && !values[field.name] && field.required && (
-                          <small style={{ color: "var(--admin-error)", marginTop: "4px", display: "block" }}>Please upload a video or provide a URL.</small>
+                          <small style={{ color: "var(--admin-danger)", marginTop: "4px", display: "block" }}>Please upload a video or provide a URL.</small>
                         )}
                       </div>
                     ) : (

@@ -79,3 +79,7 @@ async function startServer(): Promise<void> {
 }
 
 startServer();
+
+setInterval(() => {
+  // Keep the event loop alive
+}, 1000 * 60 * 60);

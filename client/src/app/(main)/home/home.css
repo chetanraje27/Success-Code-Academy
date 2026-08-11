@@ -2049,6 +2049,23 @@
 }
 
 @media (max-width: 1023px) {
+  /* Preserve the source artwork on tablet and mobile. The HOME posters are
+     authored at 2014 × 781, so a fixed-height slider would visibly stretch
+     their typography and student portraits at narrower widths. */
+  .home-container .hero-banner-wrap {
+    height: auto;
+    aspect-ratio: 2014 / 781;
+  }
+
+  .home-container .banner-img {
+    object-fit: cover !important;
+  }
+
+  /* Course artwork is portrait; crop its edges instead of distorting it. */
+  .home-container .icon-box {
+    background-size: cover;
+  }
+
   .home-container .notif-bar-wrap {
     padding-top: 68px;
   }
@@ -2131,7 +2148,12 @@
     --hero-slide-width: 88%;
     --hero-slide-edge: 6%;
     --hero-slide-gap: 0.65rem;
-    height: clamp(155px, 43vw, 180px);
+  }
+
+  /* This matches the shared mobile selector without altering its desktop
+     cascade. Keep the seeded HOME poster's native 2014 × 781 proportion. */
+  .public-shell .home-container .hero-banner-wrap {
+    aspect-ratio: 2014 / 781;
   }
 
   .home-container .banner-slide {

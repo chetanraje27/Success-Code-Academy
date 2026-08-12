@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ADMIN, ADMIN_ROLES } from '../config/roles';
 
 const imageLocation = z
   .string()
@@ -246,18 +247,26 @@ export const adminUpdateUserSchema = adminCreateUserSchema.partial().strict();
 // Administrator accounts live in the separate `admins` table and do hold a
 // password. Rotation happens through a reset link, never by typing a new
 // password into this form, so update has no password field at all.
+//
+// `role` is a closed enum and defaults to the restricted level, so an omitted
+// or misspelled value can never produce a super administrator by accident.
+// These endpoints are already limited to super administrators by the router.
 export const adminAccountCreateSchema = z
   .object({
     name: z.string().trim().min(1).max(120),
     email: z.string().trim().toLowerCase().email(),
     mobileNumber: z.string().trim().regex(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
     password: z.string().min(6).max(128),
+    role: z.enum(ADMIN_ROLES).default(ADMIN),
   })
   .strict();
 
 export const adminAccountUpdateSchema = adminAccountCreateSchema
-  .omit({ password: true })
+  .omit({ password: true, role: true })
   .partial()
+  // Spelled out rather than left to `.partial()`: an absent role must mean
+  // "leave the current level alone", not "reset it to the default".
+  .extend({ role: z.enum(ADMIN_ROLES).optional() })
   .strict();
 
 export const adminCreateCourseFormSchema = z

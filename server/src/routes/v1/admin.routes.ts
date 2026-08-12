@@ -3,6 +3,7 @@ import * as adminController from '../../controllers/admin.controller';
 import { authenticate } from '../../middlewares/authenticate';
 import { authorize } from '../../middlewares/authorize';
 import { validate } from '../../middlewares/validate';
+import { ADMIN_ROLES, SUPER_ADMIN } from '../../config/roles';
 import {
   adminListQuerySchema,
   bannerCreateSchema,
@@ -43,14 +44,35 @@ import {
 
 const router = Router();
 
-// Apply authentication and admin authorization to all admin routes
+/*
+ * Authorization model for this router
+ * -----------------------------------
+ * Every route below requires a verified admin-purpose session. On top of that:
+ *
+ *   GET / PUT     — both roles. A standard administrator reads and updates
+ *                   existing records.
+ *   POST / DELETE — `superAdminOnly`. Creating and deleting records is
+ *                   reserved for a super administrator.
+ *   /database/admins — `superAdminOnly` on every verb, including GET. Managing
+ *                   who can sign in is never visible to a standard admin.
+ *
+ * The guards are attached per route rather than assumed by the dashboard, so
+ * a hand-crafted request to the API is refused exactly like a hidden button.
+ */
 router.use(authenticate);
-router.use(authorize('admin'));
+router.use(authorize(...ADMIN_ROLES));
+
+const superAdminOnly = authorize(SUPER_ADMIN);
 
 // Dashboard Stats
 router.get('/stats', adminController.getDashboardStats);
 
-// Signed URL Upload (Direct to Supabase)
+/*
+ * Uploads back the *update* of an existing record as often as the creation of
+ * a new one (replacing a banner image, swapping a student photo), so both roles
+ * may obtain an upload URL. The uploaded file only becomes public content
+ * through a POST or PUT that is itself authorized above.
+ */
 router.post('/upload/signed-url', adminController.getSignedUploadUrl);
 
 // Image Upload (Legacy/Memory)
@@ -63,7 +85,12 @@ router.post(
 
 // Banners
 router.get('/banners', adminController.getBanners);
-router.post('/banners', validate(bannerCreateSchema), adminController.createBanner);
+router.post(
+  '/banners',
+  superAdminOnly,
+  validate(bannerCreateSchema),
+  adminController.createBanner,
+);
 router.put(
   '/banners/:id',
   validate(idParamsSchema, 'params'),
@@ -72,6 +99,7 @@ router.put(
 );
 router.delete(
   '/banners/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteBanner,
 );
@@ -80,6 +108,7 @@ router.delete(
 router.get('/notifications', adminController.getNotifications);
 router.post(
   '/notifications',
+  superAdminOnly,
   validate(notificationCreateSchema),
   adminController.createNotification,
 );
@@ -91,13 +120,19 @@ router.put(
 );
 router.delete(
   '/notifications/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteNotification,
 );
 
 // Star Students
 router.get('/stars', adminController.getStarStudents);
-router.post('/stars', validate(starCreateSchema), adminController.createStarStudent);
+router.post(
+  '/stars',
+  superAdminOnly,
+  validate(starCreateSchema),
+  adminController.createStarStudent,
+);
 router.put(
   '/stars/:id',
   validate(idParamsSchema, 'params'),
@@ -106,6 +141,7 @@ router.put(
 );
 router.delete(
   '/stars/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteStarStudent,
 );
@@ -116,7 +152,12 @@ router.get(
   validate(resultListQuerySchema, 'query'),
   adminController.getResults,
 );
-router.post('/results', validate(resultCreateSchema), adminController.createResult);
+router.post(
+  '/results',
+  superAdminOnly,
+  validate(resultCreateSchema),
+  adminController.createResult,
+);
 router.put(
   '/results/:id',
   validate(idParamsSchema, 'params'),
@@ -125,13 +166,19 @@ router.put(
 );
 router.delete(
   '/results/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteResult,
 );
 
 // News Articles
 router.get('/news', adminController.getNewsArticles);
-router.post('/news', validate(newsCreateSchema), adminController.createNewsArticle);
+router.post(
+  '/news',
+  superAdminOnly,
+  validate(newsCreateSchema),
+  adminController.createNewsArticle,
+);
 router.put(
   '/news/:id',
   validate(idParamsSchema, 'params'),
@@ -140,13 +187,19 @@ router.put(
 );
 router.delete(
   '/news/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteNewsArticle,
 );
 
 // Academy Videos
 router.get('/videos', adminController.getAcademyVideos);
-router.post('/videos', validate(videoCreateSchema), adminController.createAcademyVideo);
+router.post(
+  '/videos',
+  superAdminOnly,
+  validate(videoCreateSchema),
+  adminController.createAcademyVideo,
+);
 router.put(
   '/videos/:id',
   validate(idParamsSchema, 'params'),
@@ -155,13 +208,19 @@ router.put(
 );
 router.delete(
   '/videos/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteAcademyVideo,
 );
 
 // Courses
 router.get('/courses', adminController.getCourses);
-router.post('/courses', validate(courseCreateSchema), adminController.createCourse);
+router.post(
+  '/courses',
+  superAdminOnly,
+  validate(courseCreateSchema),
+  adminController.createCourse,
+);
 router.put(
   '/courses/:id',
   validate(idParamsSchema, 'params'),
@@ -170,11 +229,13 @@ router.put(
 );
 router.delete(
   '/courses/:id',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.deleteCourse,
 );
 
-// Media history and rollback
+// Media history and rollback. Reading history is harmless, but restoring a
+// revision re-creates a record that was deleted, so it counts as a create.
 router.get(
   '/history/:resourceType',
   validate(mediaResourceParamsSchema, 'params'),
@@ -187,15 +248,17 @@ router.get(
 );
 router.post(
   '/history/:resourceType/:id/:revisionId/restore',
+  superAdminOnly,
   validate(mediaRestoreParamsSchema, 'params'),
   adminController.restoreMediaRevision,
 );
 
-// Site Settings
+// Site Settings. Read and update only — there is nothing to create or delete.
 router.get('/settings', adminController.getSettings);
 router.put('/settings', validate(settingsUpdateSchema), adminController.updateSettings);
 
-// On-page visual editor. Deleting an override restores the code default.
+// On-page visual editor. Deleting an override restores the code default, which
+// discards saved content, so it is treated as a delete.
 router.get(
   '/page-content/:pageKey',
   validate(pageContentParamsSchema, 'params'),
@@ -209,6 +272,7 @@ router.put(
 );
 router.delete(
   '/page-content/:pageKey/:contentKey',
+  superAdminOnly,
   validate(contentBlockParamsSchema, 'params'),
   adminController.deleteContentBlock,
 );
@@ -221,6 +285,7 @@ router.get(
 );
 router.get(
   '/database/admins',
+  superAdminOnly,
   validate(adminListQuerySchema, 'query'),
   adminController.getAdminAccounts,
 );
@@ -246,31 +311,34 @@ router.get(
 );
 
 // Database Management mutations
-router.post('/database/users', validate(adminCreateUserSchema), adminController.createUser);
+router.post('/database/users', superAdminOnly, validate(adminCreateUserSchema), adminController.createUser);
 router.put('/database/users/:id', validate(idParamsSchema, 'params'), validate(adminUpdateUserSchema), adminController.updateUser);
-router.delete('/database/users/:id', validate(idParamsSchema, 'params'), adminController.deleteUser);
+router.delete('/database/users/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteUser);
 
-// Administrator accounts. Passwords are set once at creation and afterwards
-// rotated only through a single-use reset link.
-router.post('/database/admins', validate(adminAccountCreateSchema), adminController.createAdminAccount);
-router.put('/database/admins/:id', validate(idParamsSchema, 'params'), validate(adminAccountUpdateSchema), adminController.updateAdminAccount);
-router.delete('/database/admins/:id', validate(idParamsSchema, 'params'), adminController.deleteAdminAccount);
+// Administrator accounts. Super administrators only, on every verb: this is
+// the endpoint that decides who can sign in and at what privilege level, so a
+// standard admin must not even be able to enumerate it. Passwords are set once
+// at creation and afterwards rotated only through a single-use reset link.
+router.post('/database/admins', superAdminOnly, validate(adminAccountCreateSchema), adminController.createAdminAccount);
+router.put('/database/admins/:id', superAdminOnly, validate(idParamsSchema, 'params'), validate(adminAccountUpdateSchema), adminController.updateAdminAccount);
+router.delete('/database/admins/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteAdminAccount);
 router.post(
   '/database/admins/:id/password-reset',
+  superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.sendAdminPasswordReset,
 );
 
-router.post('/database/course-forms', validate(adminCreateCourseFormSchema), adminController.createCourseForm);
+router.post('/database/course-forms', superAdminOnly, validate(adminCreateCourseFormSchema), adminController.createCourseForm);
 router.put('/database/course-forms/:id', validate(idParamsSchema, 'params'), validate(adminUpdateCourseFormSchema), adminController.updateCourseForm);
-router.delete('/database/course-forms/:id', validate(idParamsSchema, 'params'), adminController.deleteCourseForm);
+router.delete('/database/course-forms/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteCourseForm);
 
-router.post('/database/scholarship-forms', validate(adminCreateScholarshipFormSchema), adminController.createScholarshipForm);
+router.post('/database/scholarship-forms', superAdminOnly, validate(adminCreateScholarshipFormSchema), adminController.createScholarshipForm);
 router.put('/database/scholarship-forms/:id', validate(idParamsSchema, 'params'), validate(adminUpdateScholarshipFormSchema), adminController.updateScholarshipForm);
-router.delete('/database/scholarship-forms/:id', validate(idParamsSchema, 'params'), adminController.deleteScholarshipForm);
+router.delete('/database/scholarship-forms/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteScholarshipForm);
 
-router.post('/database/contact-messages', validate(adminCreateContactMessageSchema), adminController.createContactMessage);
+router.post('/database/contact-messages', superAdminOnly, validate(adminCreateContactMessageSchema), adminController.createContactMessage);
 router.put('/database/contact-messages/:id', validate(idParamsSchema, 'params'), validate(adminUpdateContactMessageSchema), adminController.updateContactMessage);
-router.delete('/database/contact-messages/:id', validate(idParamsSchema, 'params'), adminController.deleteContactMessage);
+router.delete('/database/contact-messages/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteContactMessage);
 
 export default router;

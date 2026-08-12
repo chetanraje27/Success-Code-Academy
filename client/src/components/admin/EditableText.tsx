@@ -27,7 +27,7 @@ export function EditableText({
   scope = "page",
   showInlineControls = true,
 }: EditableTextProps) {
-  const { editMode } = useEditModeOptional();
+  const { editMode, isSuperAdmin } = useEditModeOptional();
   const { getContent, hasOverride, saveContent, resetContent } =
     useLiveContent();
   const [open, setOpen] = useState(false);
@@ -80,7 +80,7 @@ export function EditableText({
             >
               <Pencil size={13} />
             </button>
-            {customized && (
+            {customized && isSuperAdmin && (
               <button
                 type="button"
                 className="live-edit-icon danger"
@@ -112,6 +112,7 @@ export function EditableText({
           defaultValue={children}
           kind={kind}
           customized={customized}
+          canReset={isSuperAdmin}
           onClose={() => setOpen(false)}
           onSave={(nextValue) =>
             saveContent(contentKey, nextValue, kind, scope)

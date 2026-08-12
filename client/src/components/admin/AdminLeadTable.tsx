@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { Download, Search, Edit2, Trash2 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useAdminSession } from "./AdminSessionContext";
 import {
   AdminEmptyState,
   AdminNotice,
@@ -60,6 +61,17 @@ export default function AdminLeadTable({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
+
+  /*
+   * A standard administrator reads and edits records but never creates or
+   * removes them, so those two controls are dropped from the toolbar and from
+   * every row. The API rejects the same two verbs for this role, so a restored
+   * button would only produce a 403.
+   */
+  const { isSuperAdmin } = useAdminSession();
+  const canAdd = Boolean(onAdd) && isSuperAdmin;
+  const canDelete = Boolean(onDelete) && isSuperAdmin;
+  const showActions = Boolean(onEdit) || canDelete;
 
   const loadRows = useCallback(
     async (append = false, cursor?: number) => {
@@ -160,7 +172,7 @@ export default function AdminLeadTable({
           </button>
         </form>
         <div style={{ display: 'flex', gap: '8px' }}>
-          {onAdd && (
+          {canAdd && (
             <button
               className="admin-button primary"
               type="button"
@@ -192,7 +204,7 @@ export default function AdminLeadTable({
         {loading ? (
           <AdminTableSkeleton
             rows={6}
-            columns={columns.length + (onEdit || onDelete ? 1 : 0)}
+            columns={columns.length + (showActions ? 1 : 0)}
             label="Loading records"
           />
         ) : displayedRows.length === 0 ? (
@@ -213,7 +225,7 @@ export default function AdminLeadTable({
                     {columns.map((column) => (
                       <th key={column.key}>{column.label}</th>
                     ))}
-                    {(onEdit || onDelete) && <th>Actions</th>}
+                    {showActions && <th>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -228,7 +240,7 @@ export default function AdminLeadTable({
                               : String(row[column.key] ?? "—")}
                         </td>
                       ))}
-                      {(onEdit || onDelete) && (
+                      {showActions && (
                         <td>
                           <div style={{ display: "flex", gap: "8px" }}>
                             {onEdit && (
@@ -240,12 +252,12 @@ export default function AdminLeadTable({
                                 <Edit2 size={16} />
                               </button>
                             )}
-                            {onDelete && (
+                            {canDelete && (
                               <button
                                 className="sca-admin-icon-btn danger"
                                 onClick={() => {
                                   if (confirm("Are you sure you want to delete this record?")) {
-                                    onDelete(row);
+                                    onDelete?.(row);
                                   }
                                 }}
                                 title="Delete"

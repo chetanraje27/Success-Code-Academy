@@ -2,6 +2,7 @@ import {
   adminApiFetch,
   uploadAdminImage as uploadThroughAdminGateway,
 } from "./admin-api";
+import { isAdminRole } from "./roles";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -24,12 +25,13 @@ export function getStoredUser<T = unknown>(): T | null {
   }
 }
 
+/** True for any administrator role, including a super administrator. */
 export function isAdminUser(user: unknown): boolean {
   return Boolean(
     user &&
       typeof user === "object" &&
       "role" in user &&
-      user.role === "admin",
+      isAdminRole((user as { role: unknown }).role),
   );
 }
 

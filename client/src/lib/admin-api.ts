@@ -1,12 +1,15 @@
 "use client";
 
+import type { AdminRole } from "./roles";
+
 export type AdminUser = {
   id: number;
   firstName?: string;
   lastName?: string;
   email?: string;
   mobileNumber: string;
-  role: "admin";
+  /** Privilege level reported by the API for the signed-in account. */
+  role: AdminRole;
 };
 
 export type ApiEnvelope<T> = {

@@ -28,6 +28,7 @@ import type { NewsArticleCreationAttributes } from '../models/NewsArticle';
 import type { AcademyVideoCreationAttributes } from '../models/AcademyVideo';
 import { restoreValues } from '../utils/mediaRevision';
 import { asyncHandler } from '../utils/asyncHandler';
+import { ADMIN, SUPER_ADMIN } from '../config/roles';
 import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import logger from '../utils/logger';
@@ -1010,6 +1011,7 @@ const ADMIN_PUBLIC_ATTRIBUTES = [
   'name',
   'email',
   'mobileNumber',
+  'role',
   'createdAt',
   'updatedAt',
 ] as const;
@@ -1020,12 +1022,44 @@ function publicAdminAccount(admin: Admin) {
     name: admin.name,
     email: admin.email,
     mobileNumber: admin.mobileNumber,
+    role: admin.role,
     // Two-factor authentication is not built yet. The field is reported so the
     // dashboard can show an honest status instead of implying it is on.
     totpEnabled: false,
     createdAt: admin.createdAt,
     updatedAt: admin.updatedAt,
   };
+}
+
+/** How many accounts can currently manage administrators and delete records. */
+function countSuperAdmins(): Promise<number> {
+  return Admin.count({ where: { role: SUPER_ADMIN } });
+}
+
+/**
+ * Refuses any change that would leave the system without a super administrator.
+ *
+ * Demoting or removing the last one is unrecoverable through the dashboard:
+ * nobody left could manage administrators, restore content, or promote a
+ * replacement. That includes a super administrator acting on their own account,
+ * which is the easiest version of this mistake to make.
+ */
+async function assertNotLastSuperAdmin(
+  target: Admin,
+  actorId: number | undefined,
+  action: 'demote' | 'delete',
+): Promise<void> {
+  if (target.role !== SUPER_ADMIN) return;
+  if ((await countSuperAdmins()) > 1) return;
+
+  const isSelf = actorId === target.id;
+  const subject = isSelf ? 'your own account' : 'this account';
+  throw new AppError(
+    action === 'demote'
+      ? `${target.name} is the only super administrator. Promote another account to super administrator before changing ${subject} to a standard administrator.`
+      : `${target.name} is the only super administrator. Promote another account to super administrator before removing ${subject}.`,
+    400,
+  );
 }
 
 /**
@@ -1081,7 +1115,7 @@ export const getAdminAccounts = asyncHandler(async (req: Request, res: Response)
 });
 
 export const createAdminAccount = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, mobileNumber, password } = req.body;
+  const { name, email, mobileNumber, password, role } = req.body;
   await assertAdminIdentityIsFree({ email, mobileNumber });
 
   const admin = await Admin.create({
@@ -1089,10 +1123,14 @@ export const createAdminAccount = asyncHandler(async (req: Request, res: Respons
     email,
     mobileNumber,
     passwordHash: await bcrypt.hash(password, 12),
+    // Validated against the role enum and defaulted to the restricted level by
+    // adminAccountCreateSchema. Only a super administrator reaches this line.
+    role,
   });
 
   logger.info('[Admin] Administrator account created', {
     adminId: admin.id,
+    role: admin.role,
     by: req.user?.id,
   });
   res.status(201).json({ status: 'success', data: { admin: publicAdminAccount(admin) } });
@@ -1105,17 +1143,23 @@ export const updateAdminAccount = asyncHandler(async (req: Request, res: Respons
 
   // Passwords are never set from this form; they are rotated through a reset
   // link so a plain-text password is never typed into the dashboard.
-  const { name, email, mobileNumber } = req.body;
+  const { name, email, mobileNumber, role } = req.body;
   await assertAdminIdentityIsFree({ email, mobileNumber }, id);
+
+  if (role !== undefined && role !== admin.role && role === ADMIN) {
+    await assertNotLastSuperAdmin(admin, req.user?.id, 'demote');
+  }
 
   await admin.update({
     ...(name === undefined ? {} : { name }),
     ...(email === undefined ? {} : { email }),
     ...(mobileNumber === undefined ? {} : { mobileNumber }),
+    ...(role === undefined ? {} : { role }),
   });
 
   logger.info('[Admin] Administrator account updated', {
     adminId: admin.id,
+    role: admin.role,
     by: req.user?.id,
   });
   res.status(200).json({ status: 'success', data: { admin: publicAdminAccount(admin) } });
@@ -1138,6 +1182,10 @@ export const deleteAdminAccount = asyncHandler(async (req: Request, res: Respons
       400,
     );
   }
+
+  // Losing the last *super* administrator is just as final: the remaining
+  // accounts could sign in but could not manage administrators again.
+  await assertNotLastSuperAdmin(admin, req.user?.id, 'delete');
 
   await admin.destroy();
   logger.info('[Admin] Administrator account deleted', {

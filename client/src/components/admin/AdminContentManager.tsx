@@ -8,6 +8,7 @@ import {
   uploadAdminImage,
 } from "@/lib/admin-api";
 import AdminModal from "./AdminModal";
+import { useAdminSession } from "./AdminSessionContext";
 import {
   AdminEmptyState,
   AdminNotice,
@@ -116,6 +117,14 @@ export default function AdminContentManager({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
+
+  /*
+   * A standard administrator may open any record and save changes to it, but
+   * not add a new one or remove an existing one. Restoring a saved revision is
+   * grouped with creation because it can bring a deleted record back, so the
+   * History button goes with them.
+   */
+  const { isSuperAdmin } = useAdminSession();
 
   const imageField = useMemo(
     () => fields.find((field) => field.kind === "image"),
@@ -318,17 +327,19 @@ export default function AdminContentManager({
           </button>
         </form>
         <div style={{ display: 'flex', gap: '8px' }}>
-          {historyType && (
+          {historyType && isSuperAdmin && (
             <RevisionHistoryButton
               resourceType={historyType}
               itemName={itemName}
               onRestored={loadItems}
             />
           )}
-          <button className="admin-button primary" type="button" onClick={openCreate}>
-            <Plus size={17} />
-            Add New Record
-          </button>
+          {isSuperAdmin && (
+            <button className="admin-button primary" type="button" onClick={openCreate}>
+              <Plus size={17} />
+              Add New Record
+            </button>
+          )}
         </div>
       </div>
 
@@ -407,15 +418,17 @@ export default function AdminContentManager({
                         >
                           <Pencil size={15} />
                         </button>
-                        <button
-                          className="admin-row-action danger"
-                          type="button"
-                          onClick={() => void handleDelete(item)}
-                          aria-label={`Delete ${itemName}`}
-                          title="Delete"
-                        >
-                          <Trash2 size={15} />
-                        </button>
+                        {isSuperAdmin && (
+                          <button
+                            className="admin-row-action danger"
+                            type="button"
+                            onClick={() => void handleDelete(item)}
+                            aria-label={`Delete ${itemName}`}
+                            title="Delete"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

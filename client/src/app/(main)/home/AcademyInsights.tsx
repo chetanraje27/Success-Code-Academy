@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
+import { parseVideoUrl } from "@/lib/video-utils";
 
 interface BlogItem {
   id: number;
@@ -434,33 +435,38 @@ export default function AcademyInsights() {
       </EditableSection>
 
       {/* Video Modal overlay */}
-      {activeVideo && (
-        <div className="video-modal" onClick={() => setActiveVideo(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={() => setActiveVideo(null)} aria-label="Close modal">
-              <FaXmark />
-            </button>
-            <div className="iframe-container">
-              {activeVideo.endsWith(".mp4") ? (
-                <video
-                  src={activeVideo}
-                  controls
-                  autoPlay
-                  style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: "#000000" }}
-                />
-              ) : (
-                <iframe
-                  src={activeVideo}
-                  title="SCA Video Player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-              )}
+      {activeVideo && (() => {
+        const parsed = parseVideoUrl(activeVideo);
+        return (
+          <div className="video-modal" onClick={() => setActiveVideo(null)}>
+            <div className={`modal-content ${parsed.isInstagram ? "is-instagram" : ""}`} onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={() => setActiveVideo(null)} aria-label="Close modal">
+                <FaXmark />
+              </button>
+              <div className={`iframe-container ${parsed.isInstagram ? "is-instagram" : ""}`}>
+                {parsed.type === "video" ? (
+                  <video
+                    src={parsed.embedUrl}
+                    controls
+                    autoPlay
+                    style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: "#000000" }}
+                  />
+                ) : (
+                  <iframe
+                    src={parsed.embedUrl}
+                    title="SCA Video Player"
+                    frameBorder="0"
+                    scrolling="no"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: parsed.isInstagram ? "#ffffff" : "#000000" }}
+                  ></iframe>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </section>
   );
 }

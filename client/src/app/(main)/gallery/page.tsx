@@ -4,19 +4,20 @@ import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  FaPlay, 
-  FaXmark, 
-  FaClock, 
-  FaMagnifyingGlass, 
-  FaX, 
-  FaCalendarDays, 
-  FaEye, 
-  FaShareNodes, 
+import {
+  FaPlay,
+  FaXmark,
+  FaClock,
+  FaMagnifyingGlass,
+  FaX,
+  FaCalendarDays,
+  FaEye,
+  FaShareNodes,
   FaChevronLeft,
   FaChevronRight
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
+import { parseVideoUrl } from "@/lib/video-utils";
 
 interface VideoItem {
   id: number;
@@ -36,12 +37,12 @@ const videoItems: VideoItem[] = [
   {
     id: 1,
     category: "Campus Tour",
-    title: "Success Code Academy Campus Tour & Facility Infrastructure Walkthrough",
-    excerpt: "Take an elite virtual tour of our state-of-the-art digital classrooms, advanced personal study cabins, smart labs, and student library resource center.",
+    title: "Success Code Academy Highlight Reel 1",
+    excerpt: "Special academy moments and student achievements.",
     date: "June 15, 2026",
-    duration: "4:02",
+    duration: "1:00",
     image: "/images/blogs/campus_tour.png",
-    videoUrl: "/videos/SCA_Campus_Tour.mp4",
+    videoUrl: "https://www.instagram.com/reel/DbN2KRvt-Jb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     timestamp: 1781481600,
     views: "2.4K",
     featured: true
@@ -54,7 +55,7 @@ const videoItems: VideoItem[] = [
     date: "May 12, 2026",
     duration: "0:58",
     image: "/images/results/2025/SiddhiBadhe.png",
-    videoUrl: "/videos/Siddhi_Journey_Video.mp4",
+    videoUrl: "https://youtu.be/CwjWjzuEJTY?si=CLMCSteRaXUqz8gh",
     timestamp: 1778630400,
     views: "5.8K"
   },
@@ -64,21 +65,21 @@ const videoItems: VideoItem[] = [
     title: "2025 Top Rankers & MBBS Scholars Felicitation Award Ceremony",
     excerpt: "Celebrate the outstanding achievements of our NEET aspirants with speeches from parents, instructors, and scholarship distributions.",
     date: "June 02, 2026",
-    duration: "2:21",
+    duration: "1:00",
     image: "/images/banners/Award_Cere_Cover.png",
-    videoUrl: "/videos/Award_Ceremony.mp4",
+    videoUrl: "https://www.instagram.com/reel/DKty1AZN0VQ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     timestamp: 1780358400,
     views: "1.9K"
   },
   {
     id: 4,
     category: "Student Journey",
-    title: "Samruddhi Lokhande: My Selection to AIIMS Nagpur",
+    title: "Samruddhi Lokhande: Selection Strategy",
     excerpt: "Her preparation plan, mock test corrections diary, drop year strategies, and advice for medical aspirants.",
     date: "June 08, 2026",
-    duration: "7:45",
+    duration: "1:00",
     image: "/images/results/2025/SamruddhiLokhande.png",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.instagram.com/reel/DRegEQnjQ1K/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     timestamp: 1780876800,
     views: "3.2K"
   },
@@ -100,9 +101,9 @@ const videoItems: VideoItem[] = [
     title: "Understanding Organic Chemistry Reaction Pathways & Mnemonics",
     excerpt: "Deep-dive lecture on electrophilic addition and visual mnemonic shortcuts to master high-weightage chapters easily.",
     date: "June 25, 2026",
-    duration: "22:15",
+    duration: "5:30",
     image: "/images/banners/upcoming_batches_hero.png",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://youtu.be/pvF-EySHwkw?si=o_FRxmMXzIGb5-1T",
     timestamp: 1782345600,
     views: "4.1K"
   },
@@ -112,9 +113,9 @@ const videoItems: VideoItem[] = [
     title: "Biology NCERT Fast Memorization Map & Flashcard Method",
     excerpt: "Discover how to retain complex plant taxonomies and biochemical loops using our standard retention methodologies.",
     date: "May 29, 2026",
-    duration: "12:40",
+    duration: "4:15",
     image: "/images/banners/student_banner.png",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://youtu.be/b4miUebvzDU?si=84yQIDqlOSASNehK",
     timestamp: 1780099200,
     views: "6.7K"
   }
@@ -239,7 +240,7 @@ export default function GalleryPage() {
       {/* Toast Notification */}
       <AnimatePresence>
         {toastMessage && (
-          <motion.div 
+          <motion.div
             className="toast-notification"
             initial={false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -281,8 +282,8 @@ export default function GalleryPage() {
           </div>
 
           <div className="hero-right-preview">
-            <div 
-              onClick={() => setActiveVideo(featuredVideo)} 
+            <div
+              onClick={() => setActiveVideo(featuredVideo)}
               className="featured-preview-card"
             >
               <Image
@@ -309,7 +310,7 @@ export default function GalleryPage() {
       {/* Main Content Area */}
       <section className="gallery-content">
         <div className="container max-width-wrapper">
-          
+
           {/* Search and Filters Toolbar */}
           <div className="toolbar-container">
             <div className="toolbar-search">
@@ -363,180 +364,180 @@ export default function GalleryPage() {
 
           {/* Catalog Layout logic */}
           <AnimatePresence mode="wait">
-              {isFilterActive ? (
-                /* 1. Filtered/Search Active View (Clean Grid Layout) */
-                <motion.div
-                  key="filtered-grid"
-                  className="filtered-results-wrap"
-                  initial={false}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 15 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="section-head-minimal">
-                    <h2 className="section-title">
-                      <EditableText
-                        contentKey="search.heading"
-                        label="gallery search heading"
+            {isFilterActive ? (
+              /* 1. Filtered/Search Active View (Clean Grid Layout) */
+              <motion.div
+                key="filtered-grid"
+                className="filtered-results-wrap"
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 15 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="section-head-minimal">
+                  <h2 className="section-title">
+                    <EditableText
+                      contentKey="search.heading"
+                      label="gallery search heading"
+                    >
+                      Search &amp; Filter Results
+                    </EditableText>
+                  </h2>
+                  <p className="sub-title">Found {processedVideos.length} matching resources in catalog.</p>
+                </div>
+
+                {processedVideos.length > 0 ? (
+                  <div className="filtered-grid">
+                    {processedVideos.map((video) => (
+                      <div
+                        key={video.id}
+                        onClick={() => setActiveVideo(video)}
+                        className="video-item-card"
                       >
-                        Search &amp; Filter Results
-                      </EditableText>
-                    </h2>
-                    <p className="sub-title">Found {processedVideos.length} matching resources in catalog.</p>
-                  </div>
-
-                  {processedVideos.length > 0 ? (
-                    <div className="filtered-grid">
-                      {processedVideos.map((video) => (
-                        <div 
-                          key={video.id} 
-                          onClick={() => setActiveVideo(video)}
-                          className="video-item-card"
-                        >
-                          <div className="card-thumb-wrap">
-                            <Image
-                              src={video.image}
-                              alt={video.title}
-                              fill
-                              unoptimized
-                              className="card-img"
-                            />
-                            <div className="card-thumb-overlay">
-                              <div className="card-play-btn-circle">
-                                <FaPlay className="card-play-ico" />
-                              </div>
-                              <span className="card-duration-badge">
-                                <FaClock /> {video.duration}
-                              </span>
+                        <div className="card-thumb-wrap">
+                          <Image
+                            src={video.image}
+                            alt={video.title}
+                            fill
+                            unoptimized
+                            className="card-img"
+                          />
+                          <div className="card-thumb-overlay">
+                            <div className="card-play-btn-circle">
+                              <FaPlay className="card-play-ico" />
                             </div>
-                          </div>
-
-                          <div className="card-details">
-                            <span className="card-category">{video.category}</span>
-                            <h3 className="card-title">
-                              <EditableText
-                                contentKey={`video-${video.id}.title`}
-                                label={`${video.title} video title`}
-                                showInlineControls={false}
-                              >
-                                {video.title}
-                              </EditableText>
-                            </h3>
-                            <div className="card-meta">
-                              <span><FaEye /> {video.views} Views</span>
-                              <span><FaCalendarDays /> {video.date}</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    /* Search return empty state screen */
-                    <div className="empty-results-box">
-                      <span className="empty-results-ico">🔍</span>
-                      <h3>No Videos Found</h3>
-                      <p>No results match &quot;{debouncedQuery}&quot;. Reset search query to browse Categories.</p>
-                      <button
-                        onClick={() => {
-                          setSearchQuery("");
-                          setActiveCategory("All");
-                        }}
-                        className="btn-primary-custom"
-                      >
-                        Reset All Filters
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              ) : (
-                /* 2. Standard Horizontal Carousels View */
-                <motion.div
-                  key="carousels-list"
-                  className="carousels-stack"
-                  initial={false}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {categoryConfig.filter((cat) => cat.id !== "All").map((cat) => {
-                    const categoryVideos = groupedCategories[cat.id] || [];
-                    if (categoryVideos.length === 0) return null;
-
-                    return (
-                      <div key={cat.id} className="carousel-row">
-                        {/* Carousel Header */}
-                        <div className="carousel-header">
-                          <h2 className="carousel-title">
-                            <span className="carousel-title-icon">{cat.icon}</span> {cat.label}
-                          </h2>
-                          <div className="carousel-controls">
-                            <button 
-                              onClick={() => handleScrollRow(cat.id, "left")} 
-                              className="carousel-arrow"
-                              aria-label={`Scroll ${cat.label} left`}
-                            >
-                              <FaChevronLeft />
-                            </button>
-                            <button 
-                              onClick={() => handleScrollRow(cat.id, "right")} 
-                              className="carousel-arrow"
-                              aria-label={`Scroll ${cat.label} right`}
-                            >
-                              <FaChevronRight />
-                            </button>
+                            <span className="card-duration-badge">
+                              <FaClock /> {video.duration}
+                            </span>
                           </div>
                         </div>
 
-                        {/* Horizontal Scroll Track */}
-                        <div id={cat.id} className="carousel-track">
-                          {categoryVideos.map((video) => (
-                            <div
-                              key={video.id}
-                              onClick={() => setActiveVideo(video)}
-                              className="video-item-card"
+                        <div className="card-details">
+                          <span className="card-category">{video.category}</span>
+                          <h3 className="card-title">
+                            <EditableText
+                              contentKey={`video-${video.id}.title`}
+                              label={`${video.title} video title`}
+                              showInlineControls={false}
                             >
-                              <div className="card-thumb-wrap">
-                                <Image
-                                  src={video.image}
-                                  alt={video.title}
-                                  fill
-                                  unoptimized
-                                  className="card-img"
-                                />
-                                <div className="card-thumb-overlay">
-                                  <div className="card-play-btn-circle">
-                                    <FaPlay className="card-play-ico" />
-                                  </div>
-                                  <span className="card-duration-badge">
-                                    <FaClock /> {video.duration}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="card-details">
-                                <span className="card-category">{video.category}</span>
-                                <h3 className="card-title">
-                                  <EditableText
-                                    contentKey={`video-${video.id}.title`}
-                                    label={`${video.title} video title`}
-                                    showInlineControls={false}
-                                  >
-                                    {video.title}
-                                  </EditableText>
-                                </h3>
-                                <div className="card-meta">
-                                  <span><FaEye /> {video.views} Views</span>
-                                  <span><FaCalendarDays /> {video.date}</span>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                              {video.title}
+                            </EditableText>
+                          </h3>
+                          <div className="card-meta">
+                            <span><FaEye /> {video.views} Views</span>
+                            <span><FaCalendarDays /> {video.date}</span>
+                          </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </motion.div>
-              )}
+                    ))}
+                  </div>
+                ) : (
+                  /* Search return empty state screen */
+                  <div className="empty-results-box">
+                    <span className="empty-results-ico">🔍</span>
+                    <h3>No Videos Found</h3>
+                    <p>No results match &quot;{debouncedQuery}&quot;. Reset search query to browse Categories.</p>
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setActiveCategory("All");
+                      }}
+                      className="btn-primary-custom"
+                    >
+                      Reset All Filters
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              /* 2. Standard Horizontal Carousels View */
+              <motion.div
+                key="carousels-list"
+                className="carousels-stack"
+                initial={false}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {categoryConfig.filter((cat) => cat.id !== "All").map((cat) => {
+                  const categoryVideos = groupedCategories[cat.id] || [];
+                  if (categoryVideos.length === 0) return null;
+
+                  return (
+                    <div key={cat.id} className="carousel-row">
+                      {/* Carousel Header */}
+                      <div className="carousel-header">
+                        <h2 className="carousel-title">
+                          <span className="carousel-title-icon">{cat.icon}</span> {cat.label}
+                        </h2>
+                        <div className="carousel-controls">
+                          <button
+                            onClick={() => handleScrollRow(cat.id, "left")}
+                            className="carousel-arrow"
+                            aria-label={`Scroll ${cat.label} left`}
+                          >
+                            <FaChevronLeft />
+                          </button>
+                          <button
+                            onClick={() => handleScrollRow(cat.id, "right")}
+                            className="carousel-arrow"
+                            aria-label={`Scroll ${cat.label} right`}
+                          >
+                            <FaChevronRight />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Horizontal Scroll Track */}
+                      <div id={cat.id} className="carousel-track">
+                        {categoryVideos.map((video) => (
+                          <div
+                            key={video.id}
+                            onClick={() => setActiveVideo(video)}
+                            className="video-item-card"
+                          >
+                            <div className="card-thumb-wrap">
+                              <Image
+                                src={video.image}
+                                alt={video.title}
+                                fill
+                                unoptimized
+                                className="card-img"
+                              />
+                              <div className="card-thumb-overlay">
+                                <div className="card-play-btn-circle">
+                                  <FaPlay className="card-play-ico" />
+                                </div>
+                                <span className="card-duration-badge">
+                                  <FaClock /> {video.duration}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="card-details">
+                              <span className="card-category">{video.category}</span>
+                              <h3 className="card-title">
+                                <EditableText
+                                  contentKey={`video-${video.id}.title`}
+                                  label={`${video.title} video title`}
+                                  showInlineControls={false}
+                                >
+                                  {video.title}
+                                </EditableText>
+                              </h3>
+                              <div className="card-meta">
+                                <span><FaEye /> {video.views} Views</span>
+                                <span><FaCalendarDays /> {video.date}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            )}
           </AnimatePresence>
 
         </div>
@@ -573,25 +574,31 @@ export default function GalleryPage() {
                 <div className="modal-inner-split">
                   {/* Left: Video Player */}
                   <div className="modal-player-side">
-                    <div className="lightbox-video-frame">
-                      {activeVideo.videoUrl.includes("youtube.com") || activeVideo.videoUrl.includes("youtu.be") ? (
-                        <iframe
-                          src={`${activeVideo.videoUrl}?autoplay=1`}
-                          title={activeVideo.title}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          className="embedded-player"
-                        />
-                      ) : (
-                        <video
-                          src={activeVideo.videoUrl}
-                          controls
-                          autoPlay
-                          className="embedded-player"
-                        />
-                      )}
-                    </div>
+                    {(() => {
+                      const parsed = parseVideoUrl(activeVideo.videoUrl);
+                      return (
+                        <div className={`lightbox-video-frame ${parsed.isInstagram ? "is-instagram" : ""}`}>
+                          {parsed.type === "video" ? (
+                            <video
+                              src={parsed.embedUrl}
+                              controls
+                              autoPlay
+                              className="embedded-player"
+                            />
+                          ) : (
+                            <iframe
+                              src={parsed.embedUrl}
+                              title={activeVideo.title}
+                              frameBorder="0"
+                              scrolling="no"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                              className="embedded-player"
+                            />
+                          )}
+                        </div>
+                      );
+                    })()}
                     <div className="modal-text-content">
                       <span className="modal-tag">{activeVideo.category}</span>
                       <h2 className="modal-title">
@@ -617,8 +624,8 @@ export default function GalleryPage() {
                         <span><FaCalendarDays /> {activeVideo.date}</span>
                         <span><FaEye /> {activeVideo.views} Views</span>
                         <span><FaClock /> {activeVideo.duration} Duration</span>
-                        <button 
-                          onClick={(e) => triggerShare(activeVideo.title, e)} 
+                        <button
+                          onClick={(e) => triggerShare(activeVideo.title, e)}
                           className="modal-share-btn"
                           title="Copy video share link"
                         >
@@ -636,7 +643,7 @@ export default function GalleryPage() {
                         .filter((v) => v.id !== activeVideo.id)
                         .slice(0, 3)
                         .map((rec) => (
-                          <div 
+                          <div
                             key={rec.id}
                             onClick={() => setActiveVideo(rec)}
                             className="related-item-row"
@@ -1421,6 +1428,13 @@ export default function GalleryPage() {
           position: relative;
           padding-top: 56.25%; /* 16:9 Aspect Ratio */
           background: #000000;
+        }
+
+        .lightbox-video-frame.is-instagram {
+          padding-top: 0;
+          height: 660px;
+          max-height: 80vh;
+          background: #ffffff;
         }
 
         .embedded-player {

@@ -114,13 +114,16 @@
   width: 34px;
   height: 34px;
 }
+
 .public-shell .admissions-page-container .poster-header-icon svg path,
 .public-shell .admissions-page-container .poster-header-icon svg polygon {
   fill: #fff !important;
 }
+
 .public-shell .admissions-page-container .poster-header-icon svg path[fill="#0257d0"] {
   fill: #fff !important;
 }
+
 .public-shell .admissions-page-container .poster-header-icon svg path[stroke="#0257d0"] {
   stroke: #fff !important;
 }

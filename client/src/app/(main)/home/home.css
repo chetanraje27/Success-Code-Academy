@@ -1979,17 +1979,23 @@
     display: none;
   }
 
-  /* The ticker used to hard-clip mid-sentence ("Book your slot t"):
-     `text-overflow: ellipsis` cannot apply to the inline-flex child, so long
-     notifications were simply cut off with no ellipsis and no marquee. Allow
-     the text to wrap onto a second line instead -- .notif-bar is min-height,
-     so the bar grows to fit. */
+  /* The user explicitly requested announcements to be on a single line. 
+     We will allow them to truncate with an ellipsis instead of wrapping. */
   .home-container .notif-text-wrap {
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .home-container .notif-text-span {
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .home-container .notif-link-item,
+  .home-container .notif-plain-item {
+    max-width: 100%;
   }
 
   /* .notif-text-wrap, not .notif-text -- the latter matches no element, so this

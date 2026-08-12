@@ -28,7 +28,7 @@
 
 /* Header */
 .public-shell header.header {
-  height: 76px;
+  height: var(--header-h);
   background: #fff;
   border-bottom: 1px solid rgba(195, 207, 218, 0.72);
   box-shadow: 0 1px 0 rgba(16, 47, 94, 0.02);
@@ -42,7 +42,7 @@
 
 .public-shell .header .header-container,
 .public-shell .header.scrolled .header-container {
-  height: 76px;
+  height: var(--header-h);
 }
 
 .public-shell .header .logo-group {
@@ -51,8 +51,11 @@
 
 .public-shell .header .logo-image {
   width: auto;
-  max-width: 176px;
-  max-height: 52px;
+  /* Height governs (the source art is ~3.4:1). At 390px this yields ~115x34
+     inside a 68px header instead of the old 161x52, which ate 46% of the
+     usable header width on a phone. */
+  max-width: clamp(118px, 34vw, 176px);
+  max-height: clamp(34px, 6.5vw, 52px);
 }
 
 .public-shell .header .desktop-nav {
@@ -62,7 +65,7 @@
 .public-shell .header .nav-link {
   padding: 0.7rem 0;
   color: #405169;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   font-weight: 650;
   letter-spacing: -0.01em;
 }
@@ -221,7 +224,7 @@
 
 .public-shell .footer .footer-desc {
   max-width: 28rem;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   line-height: 1.7;
 }
 
@@ -253,7 +256,7 @@
 }
 
 .public-shell .footer .footer-heading {
-  font-size: 0.76rem;
+  font-size: var(--font-size-micro);
   font-weight: 650;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -264,7 +267,7 @@
 }
 
 .public-shell .footer .footer-link {
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
 }
 
 .public-shell .footer .footer-link:hover,
@@ -286,7 +289,7 @@
   background: rgba(112, 209, 206, 0.08);
   border: 1px solid rgba(112, 209, 206, 0.14);
   border-radius: 7px;
-  font-size: 0.82rem;
+  font-size: var(--font-size-caption);
 }
 
 .public-shell .footer .footer-contact .footer-link {
@@ -294,7 +297,7 @@
 }
 
 .public-shell .footer .footer-bottom-content {
-  font-size: 0.8rem;
+  font-size: var(--font-size-caption);
 }
 
 /* Shared public patterns */
@@ -304,7 +307,6 @@
   .why-sca-section,
   .insights-outer-section,
   .parents-trust-section,
-  .faq-section,
   .impact-section,
   .philosophy-section,
   .story-section,
@@ -359,7 +361,6 @@
   .apple-video-card,
   .blog-cover-card,
   .trust-card,
-  .faq-question-btn,
   .philosophy-card,
   .infra-card-new,
   .course-horizontal-card,
@@ -466,7 +467,7 @@
 }
 
 .public-shell .admissions-page-container .admissions-hero-banner {
-  padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem);
+  padding: calc(var(--header-h) + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem);
   background:
     linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
     linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
@@ -585,7 +586,7 @@
 }
 
 .public-shell .contact-page .contact-hero-banner {
-  padding: calc(76px + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem) !important;
+  padding: calc(var(--header-h) + 1.5rem) var(--page-gutter) clamp(2rem, 5vw, 4rem) !important;
   background:
     linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
     linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
@@ -719,7 +720,7 @@
 
 .public-shell .gallery-page-container .gallery-hero {
   min-height: auto;
-  padding: clamp(8rem, 11vw, 9.5rem) 0 clamp(4rem, 7vw, 5.5rem);
+  padding: calc(var(--header-h) + var(--section-space)) 0 var(--section-space);
   background:
     linear-gradient(90deg, rgba(10, 42, 78, 0.022) 1px, transparent 1px),
     linear-gradient(rgba(10, 42, 78, 0.022) 1px, transparent 1px),
@@ -743,7 +744,7 @@
 
 .public-shell .gallery-page-container .hero-title {
   color: var(--text-primary);
-  font-size: clamp(3rem, 4.8vw, 4.35rem);
+  font-size: var(--font-size-heading-1);
   font-weight: 650;
   line-height: 1.02;
   letter-spacing: -0.045em;
@@ -808,16 +809,16 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Responsive */
-@media (max-width: 1023px) {
-  .public-shell .header .header-container,
-  .public-shell .header.scrolled .header-container,
-  .public-shell header.header {
-    height: 68px;
-  }
+/* ===========================================================================
+ * Responsive -- four tiers only. See the RESPONSIVE CONTRACT in tokens.css.
+ * Header height and section rhythm are handled by --header-h and
+ * --section-space, so they no longer need per-tier overrides here.
+ * ======================================================================== */
 
+/* Tablet and below (iPad portrait, Android tabs, phones) */
+@media (max-width: 1023px) {
   .public-shell .home-container .notif-bar-wrap {
-    padding-top: 68px;
+    padding-top: var(--header-h);
   }
 
   .public-shell .explore-section .explore-grid,
@@ -834,43 +835,49 @@
     grid-row: 1;
   }
 
-  .public-shell .faq-section .faq-header-column {
-    position: static;
+}
+
+/* Tablet only (768-1023). Previously this band inherited the PHONE rules at
+   double the width, which left single-column cards stretched across an iPad
+   and phone-sized type on a 10" screen. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Two-up wherever the phone tier collapses to one column, so a tablet is
+     never a stretched phone. */
+  .public-shell .contact-page .contact-grid-wrap,
+  .public-shell .admissions-page-container .scholarship-grid-container,
+  .public-shell .gallery-page-container .hero-grid-split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
   }
 
+  /* Cards get room to breathe rather than filling the full 1024px width */
+  .public-shell .gallery-page-container .filtered-grid,
+  .public-shell .gallery-page-container .carousels-stack {
+    gap: 1.5rem;
+  }
+
+  /* Forms stay comfortable instead of spanning the whole tablet */
+  .public-shell .contact-page .contact-right-form,
+  .public-shell .admissions-page-container .registration-form-card {
+    padding: clamp(1.75rem, 3.5vw, 2.25rem);
+  }
+
+  /* The poster art is authored wide; cap it so it does not dominate the fold */
+  .public-shell .admissions-page-container .admissions-poster-img,
+  .public-shell .contact-page .contact-poster-img {
+    max-height: 26rem;
+  }
 }
 
 @media (max-width: 767px) {
-  .public-shell :where(
-    .explore-section,
-    .stars-section,
-    .why-sca-section,
-    .insights-outer-section,
-    .parents-trust-section,
-    .faq-section,
-    .impact-section,
-    .philosophy-section,
-    .story-section,
-    .infra-section,
-    .courses-grid-section,
-    .grid-section,
-    .success-stories-section,
-    .results-cta,
-    .contact-premium-section,
-    .contact-container,
-    .scholarship-grid-container,
-    .gallery-content
-  ) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-
   .public-shell .home-container .notif-bar {
-    height: 42px;
+    /* min-height, not height: the ticker wraps to two lines on narrow phones
+       rather than clipping, so the bar has to be able to grow. */
+    min-height: 42px;
+    height: auto;
     padding-inline: 0.85rem;
   }
 
-  .public-shell .home-container .notif-icon,
   .public-shell .home-container .notif-right {
     display: none;
   }
@@ -881,11 +888,7 @@
 
   .public-shell .home-container .notif-label {
     padding: 0.3rem 0.55rem;
-    font-size: 0.62rem;
-  }
-
-  .public-shell .home-container .notif-text {
-    font-size: 0.76rem;
+    font-size: var(--font-size-micro);
   }
 
   .public-shell .home-container .hero-slider-section {
@@ -982,29 +985,20 @@
     flex-direction: column;
   }
 
-  .public-shell .faq-section .faq-grid-layout,
   .public-shell .contact-page .contact-grid-wrap,
   .public-shell .admissions-page-container .scholarship-grid-container,
   .public-shell .gallery-page-container .hero-grid-split {
     grid-template-columns: 1fr;
   }
 
-  .public-shell .gallery-page-container .gallery-hero {
-    padding-top: 7.25rem;
-  }
-
-  .public-shell .gallery-page-container .hero-title {
-    font-size: clamp(2.6rem, 12vw, 3.75rem);
+  .public-shell .admissions-page-container .admissions-hero-banner,
+  .public-shell .contact-page .contact-hero-banner {
+    padding-top: calc(var(--header-h) + 1rem) !important;
   }
 
   .public-shell .contact-page .contact-right-form,
   .public-shell .admissions-page-container .registration-form-card {
     padding: 1.25rem;
-  }
-
-  .public-shell .admissions-page-container .admissions-hero-banner,
-  .public-shell .contact-page .contact-hero-banner {
-    padding-top: calc(68px + 1rem) !important;
   }
 
   .public-shell .admissions-page-container .admissions-poster-wrapper,
@@ -1045,59 +1039,9 @@
   }
 }
 
-/* Legal Pages (.legal-page) */
-.legal-page {
-  padding-top: calc(76px + 4rem); /* Header height + spacing */
-  padding-bottom: 4rem;
-  background: var(--color-background);
-}
-
-.legal-page__content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-.legal-page__eyebrow {
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--brand-primary);
-  margin-bottom: 0.5rem;
-}
-
-.legal-page__content h1 {
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 2rem;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.legal-page__content h2 {
-  font-size: clamp(1.4rem, 3.5vw, 1.85rem);
-  font-weight: 650;
-  color: var(--text-primary);
-  margin: 2.5rem 0 1rem;
-  line-height: 1.25;
-}
-
-.legal-page__content p {
-  margin-bottom: 1.25rem;
-}
-
-@media (max-width: 767px) {
-  .legal-page {
-    padding-top: calc(68px + 2.5rem); /* Mobile header height + spacing */
-    padding-bottom: 3rem;
-  }
-  .legal-page__content {
-    padding: 0 1.25rem;
-    line-height: 1.6;
-  }
-}
+/*
+ * NOTE: `.legal-page` rules used to live here too, but /privacy-policy and
+ * /terms sit outside the (main) route group and therefore never load this
+ * stylesheet. The live definition is in globals.css -- edit it there.
+ */
 

@@ -245,7 +245,7 @@
   margin-right: auto;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .live-editor-toolbar {
     left: 12px;
     right: 12px;

@@ -375,7 +375,6 @@ export default function Footer() {
 
         .newsletter-form {
           display: flex;
-          flex-direction: column;
           width: 100%;
           gap: var(--space-3);
         }
@@ -394,9 +393,11 @@ export default function Footer() {
           text-align: left;
         }
 
-        @media (min-width: 480px) {
+        /* Only the smallest phones stack the field and the button. 480px was not
+           a tier, and from 381px up there is room for them side by side. */
+        @media (max-width: 380px) {
           .newsletter-form {
-            flex-direction: row;
+            flex-direction: column;
           }
         }
 
@@ -568,7 +569,7 @@ export default function Footer() {
           font-size: 0.875rem;
         }
 
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
           .footer-bottom-content {
             flex-direction: row;
             justify-content: space-between;
@@ -581,7 +582,7 @@ export default function Footer() {
           justify-content: center;
           gap: var(--space-4);
         }
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
           .footer-legal {
             gap: var(--space-6);
           }

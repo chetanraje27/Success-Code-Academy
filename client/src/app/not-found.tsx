@@ -90,7 +90,7 @@ export default function NotFound() {
           gap: var(--spacing-4);
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 767px) {
           .error-code {
             font-size: 6rem;
           }

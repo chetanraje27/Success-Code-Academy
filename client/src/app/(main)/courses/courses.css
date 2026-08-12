@@ -151,7 +151,7 @@
   gap: 0.45rem;
   padding: 0.4rem 0.65rem;
   color: var(--courses-teal);
-  font-size: 0.67rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.075em;
   text-transform: uppercase;
@@ -189,9 +189,11 @@
   line-height: 1.6;
 }
 
+/* auto-fit replaces a 900px "go single column" override: three pills on a
+ * tablet, one on a phone, no breakpoint. */
 .course-catalog-highlights {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 0.55rem;
   padding: 0;
   margin: 1.35rem 0 0;
@@ -278,7 +280,7 @@
   z-index: 2;
   padding: 0.42rem 0.65rem;
   color: #fff;
-  font-size: 0.63rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -322,7 +324,7 @@
   border-style: dashed;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .course-catalog-hero-inner {
     align-items: flex-start;
     flex-direction: column;
@@ -332,23 +334,19 @@
   .course-catalog-card {
     grid-template-columns: minmax(0, 1fr) 13rem;
   }
-
-  .course-catalog-highlights {
-    grid-template-columns: 1fr;
-  }
-
-  .course-catalog-highlights li {
-    min-height: 0;
-  }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .course-catalog-container {
     width: min(100% - 1.5rem, 1180px);
   }
 
   .course-catalog-hero {
-    padding: calc(68px + 2rem) 0 2rem;
+    padding: calc(var(--header-h) + 2rem) 0 2rem;
+  }
+
+  .course-catalog-highlights li {
+    min-height: 0;
   }
 
   .course-catalog-title {

@@ -123,7 +123,7 @@
 .about-metric-copy small,
 .about-metric-copy em {
   color: var(--about-muted);
-  font-size: 0.62rem;
+  font-size: var(--font-size-micro);
   font-style: normal;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -177,13 +177,17 @@
   background: var(--about-surface);
 }
 
+/* Same 1px-gap separator technique as .about-hero-metrics -- it replaces six
+ * border rules plus their per-tier `nth-of-type` flips, and stays correct at
+ * 6, 2 or 1 columns without knowing which. */
 .about-achievement-grid {
   display: grid;
   grid-template-columns: 1.05fr 1.05fr 0.8fr 1.2fr 1.05fr 0.8fr;
+  gap: 1px;
   overflow: hidden;
   border: 1px solid var(--about-border);
   border-radius: var(--about-radius);
-  background: var(--about-surface);
+  background: var(--about-border);
   margin-bottom: -84px;
   transform: translateY(-50%);
 }
@@ -199,10 +203,6 @@
   overflow: hidden;
   background: linear-gradient(118deg, #102f5e 0%, #0f4d76 62%, #087f83 100%);
   color: #ffffff;
-}
-
-.about-rank-card + .about-rank-card {
-  border-left: 1px solid rgb(255 255 255 / 18%);
 }
 
 .about-rank-card-accent {
@@ -222,13 +222,13 @@
   border: 1px solid rgb(255 255 255 / 24%);
   border-radius: 999px;
   background: rgb(255 255 255 / 10%);
-  font-size: 0.66rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.08em;
 }
 
 .about-rank-label {
-  font-size: 0.68rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -264,13 +264,7 @@
   padding: 1rem;
   flex-direction: column;
   justify-content: center;
-  border-top: 0;
-  border-right: 1px solid var(--about-border);
   background: var(--about-surface);
-}
-
-.about-achievement-card:last-child {
-  border-right: 0;
 }
 
 .about-achievement-icon {
@@ -581,7 +575,7 @@
   font-weight: 600;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1023px) {
   .about-hero-grid,
   .about-story-grid {
     grid-template-columns: 1fr;
@@ -604,26 +598,13 @@
     min-height: clamp(330px, 62vw, 480px);
   }
 
+  /* One rule covers 1023px down to 320px: ~6 columns on a tablet, 2 on a
+   * phone, 1 below ~19rem of container width. Desktop keeps the bespoke fr
+   * ratios from the base rule. */
   .about-achievement-grid {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     margin-bottom: -48px;
     transform: translateY(-48px);
-  }
-
-  .about-achievement-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .about-rank-card,
-  .about-achievement-card {
-    grid-column: auto;
-  }
-
-  .about-achievement-card {
-    border-top: 1px solid var(--about-border);
-  }
-
-  .about-achievement-card:nth-of-type(even) {
-    border-right: 0;
   }
 
   .about-philosophy-grid {
@@ -636,7 +617,7 @@
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 767px) {
   .about-page {
     --about-content-width: calc(100% - 2rem);
     --about-section-space: 2.5rem;
@@ -675,26 +656,16 @@
   }
 
   .about-map-card {
-    min-height: 285px;
+    min-height: clamp(240px, 55vw, 285px);
   }
 
   .about-map-img {
     transform: scale(1.04) translateY(1.5%);
   }
 
-  .about-achievement-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .about-rank-card {
-    grid-column: auto;
     min-height: 142px;
     padding: 0.9rem;
-  }
-
-  .about-rank-card + .about-rank-card {
-    border-top: 0;
-    border-left: 1px solid rgb(255 255 255 / 18%);
   }
 
   .about-rank-emblem {
@@ -705,7 +676,7 @@
   .about-achievement-year {
     margin-bottom: 0.65rem;
     padding: 0.25rem 0.42rem;
-    font-size: 0.58rem;
+    font-size: var(--font-size-micro);
   }
 
   .about-rank-value {
@@ -713,14 +684,8 @@
   }
 
   .about-achievement-card {
-    grid-column: auto;
     min-height: 145px;
     padding: 0.85rem;
-    border-right: 1px solid var(--about-border);
-  }
-
-  .about-achievement-card:nth-of-type(even) {
-    border-right: 0;
   }
 
   .about-achievement-icon {
@@ -738,11 +703,13 @@
   }
 
   .about-story-media {
-    min-height: 390px;
+    min-height: clamp(280px, 62vw, 390px);
   }
 
+  /* Clears the absolutely-positioned quote, which grows taller as it narrows,
+   * hence the negative slope: more clearance on the smallest screens. */
   .about-story-image {
-    inset: 0 0 4.5rem;
+    inset: 0 0 clamp(4.5rem, 8.5rem - 12.5vw, 5.5rem);
   }
 
   .about-story-quote {
@@ -778,46 +745,5 @@
 @media (prefers-reduced-motion: reduce) {
   .about-infrastructure-img {
     transition: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .about-hero-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .about-hero-metric + .about-hero-metric {
-    border-left: 0;
-    border-top: 1px solid var(--about-border);
-  }
-
-  .about-achievement-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about-rank-card + .about-rank-card {
-    border-top: 1px solid rgb(255 255 255 / 18%);
-    border-left: 0;
-  }
-
-  .about-achievement-card {
-    border-right: 0 !important;
-    border-top: 1px solid var(--about-border);
-  }
-
-  .about-story-media {
-    min-height: 280px;
-  }
-
-  .about-story-image {
-    inset: 0 0 5.5rem;
-  }
-
-  .about-story-quote {
-    padding: 0.85rem 1rem;
-  }
-
-  .about-map-card {
-    min-height: 240px;
   }
 }

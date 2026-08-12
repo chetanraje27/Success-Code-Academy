@@ -822,7 +822,7 @@ export default function GalleryPage() {
           left: 14px;
           background: #f5b700;
           color: #0b1f4d;
-          font-size: 0.68rem;
+          font-size: var(--font-size-micro);
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.08em;
@@ -1002,10 +1002,16 @@ export default function GalleryPage() {
           width: 100%;
         }
 
+        /* auto-fill reproduces the old 4/3/2/1 column steps on its own: a 17rem
+           minimum lands on 4 columns at desktop width, 3 on a laptop, 2 on an
+           iPad portrait and 1 on a phone, so six grid-template-columns
+           overrides in the tier blocks are gone. auto-fill, not auto-fit --
+           the item count is dynamic, and auto-fit would stretch two results
+           into two half-page-wide cards. */
         .filtered-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
+          grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+          gap: clamp(1rem, 2vw, 1.5rem);
           width: 100%;
         }
 
@@ -1101,7 +1107,7 @@ export default function GalleryPage() {
           color: #ffffff;
           padding: 4px 8px;
           border-radius: 6px;
-          font-size: 0.68rem;
+          font-size: var(--font-size-micro);
           font-weight: 700;
           display: flex;
           align-items: center;
@@ -1300,10 +1306,12 @@ export default function GalleryPage() {
         }
 
         /* Skeleton loader shimmer elements */
+        /* Same track definition as .filtered-grid so the skeletons occupy the
+           exact slots the real cards will. */
         .skeleton-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
+          grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+          gap: clamp(1rem, 2vw, 1.5rem);
         }
 
         .skeleton-card {
@@ -1550,7 +1558,7 @@ export default function GalleryPage() {
         }
 
         .mini-ico {
-          font-size: 0.65rem;
+          font-size: var(--font-size-micro);
           color: #ffffff;
         }
 
@@ -1560,7 +1568,7 @@ export default function GalleryPage() {
         }
 
         .related-tag {
-          font-size: 0.68rem;
+          font-size: var(--font-size-micro);
           font-weight: 800;
           color: #2ca8e0;
           text-transform: uppercase;
@@ -1607,8 +1615,8 @@ export default function GalleryPage() {
           }
         }
 
-        /* Responsive Breakpoint: Tablet Landscape / Laptop (992px - 1199px) */
-        @media (min-width: 992px) and (max-width: 1199px) {
+        /* Laptop (1024px - 1199px). 992-1023 moved down to the tablet tier. */
+        @media (min-width: 1024px) and (max-width: 1199px) {
           .container {
             max-width: 960px;
             padding: 0 32px; /* Container padding tablet */
@@ -1638,21 +1646,18 @@ export default function GalleryPage() {
             font-size: 1rem; /* 16px tablet */
           }
           .filtered-grid {
-            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-          }
-          .skeleton-grid {
-            grid-template-columns: repeat(3, 1fr);
           }
           .lightbox-modal-content {
             width: 90%; /* 90% viewport width tablet */
           }
         }
 
-        /* Responsive Breakpoint: Tablet Portrait (768px - 991px) */
-        @media (min-width: 768px) and (max-width: 991px) {
+        /* Tablet, portrait and landscape (768px - 1023px). The container is
+           fluid here -- a fixed 720px left ~300px of dead gutter at 1023px. */
+        @media (min-width: 768px) and (max-width: 1023px) {
           .container {
-            max-width: 720px;
+            max-width: 100%;
             padding: 0 32px;
           }
           .gallery-content {
@@ -1693,11 +1698,7 @@ export default function GalleryPage() {
             font-size: 1rem;
           }
           .filtered-grid {
-            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-          }
-          .skeleton-grid {
-            grid-template-columns: repeat(2, 1fr);
           }
           .lightbox-modal-content {
             width: 90%;
@@ -1777,13 +1778,6 @@ export default function GalleryPage() {
           }
           .card-excerpt-text {
             display: none; /* Hide description on mobile to save space */
-          }
-          .filtered-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-          .skeleton-grid {
-            grid-template-columns: 1fr;
           }
           .toolbar-container {
             flex-direction: column;

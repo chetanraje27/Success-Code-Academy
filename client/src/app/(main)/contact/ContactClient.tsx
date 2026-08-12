@@ -463,12 +463,11 @@ export default function ContactClient() {
         /* ════════════════════════════════
            HERO BANNER — full-bleed, no gutters
            ════════════════════════════════ */
+        /* Same as the admissions hero: .site-main and .contact-page add no
+           horizontal padding, so this spans the viewport without the
+           left:50% / 100vw / -50vw hack that shifted it ~4px left. */
         :global(.public-shell .contact-page .contact-hero-banner) {
           position: relative;
-          left: 50%;
-          width: 100vw;
-          margin-left: -50vw;
-          margin-right: -50vw;
           padding: 76px 0 0 0 !important;
           background: #ffffff !important;
           overflow: hidden;
@@ -635,7 +634,7 @@ export default function ContactClient() {
           color: #1e3a8a;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 767px) {
           .contact-title-group {
             gap: 12px;
           }
@@ -993,17 +992,19 @@ export default function ContactClient() {
           display: block;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
+        /* Responsive. All three of these were 992/768/640 -- collapsed onto the
+           phone tier. 768-1023 is owned by the tablet rules in public.css,
+           which keep .contact-grid-wrap at two columns. */
+        @media (max-width: 767px) {
           .contact-grid-wrap {
             grid-template-columns: 1fr;
             gap: 40px;
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           :global(.public-shell .contact-page .contact-hero-banner) {
-            padding-top: 72px !important;
+            padding-top: calc(var(--header-h) + 4px) !important;
           }
           .contact-poster-wrapper {
             border-radius: 0 !important;
@@ -1013,7 +1014,7 @@ export default function ContactClient() {
           }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 767px) {
           .contact-premium-section {
             padding: 40px 0;
           }

@@ -87,7 +87,7 @@
   border: 1px solid transparent;
   border-radius: 7px;
   font: inherit;
-  font-size: 0.69rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
@@ -188,7 +188,7 @@
   background: #eff6ff;
   border: 1px solid #bfdbfe;
   border-radius: 999px;
-  font-size: 0.66rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.08em;
 }
@@ -388,7 +388,7 @@
   background: rgba(255, 255, 255, 0.76);
   border: 1px solid color-mix(in srgb, var(--card-accent) 20%, white);
   border-radius: 999px;
-  font-size: 0.58rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -405,13 +405,13 @@
   order: 2;
   margin-top: 2px;
   color: #718095;
-  font-size: 0.58rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.12em;
 }
 
 .result-card-achievement strong {
-  font-size: clamp(2.4rem, 4.2vw, 3.4rem);
+  font-size: clamp(1.9rem, 4.2vw, 3.4rem);
   font-weight: 650;
   letter-spacing: -0.065em;
   line-height: 0.92;
@@ -419,7 +419,7 @@
 }
 
 .result-card-featured .result-card-achievement strong {
-  font-size: clamp(4rem, 7vw, 5.8rem);
+  font-size: clamp(2.75rem, 7vw, 5.8rem);
 }
 
 .result-card-college {
@@ -429,7 +429,7 @@
   gap: 7px;
   margin-top: auto;
   color: var(--card-accent-dark);
-  font-size: 0.68rem;
+  font-size: var(--font-size-micro);
   line-height: 1.35;
 }
 
@@ -1030,7 +1030,7 @@
   display: none;
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1023px) {
   .results-catalog-header {
     margin-bottom: 0;
   }
@@ -1055,13 +1055,13 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .results-container {
     width: min(100% - 32px, 1160px);
   }
 
   .results-main-poster-section {
-    padding-top: 68px;
+    padding-top: var(--header-h);
   }
 
   .results-catalog-section {
@@ -1074,7 +1074,7 @@
   }
 
   .results-catalog-header h1 {
-    font-size: clamp(2.2rem, 11vw, 3rem);
+    font-size: var(--font-size-heading-1);
   }
 
   .results-year-tabs {
@@ -1082,7 +1082,7 @@
   }
 
   .results-year-navigation {
-    top: 76px;
+    top: calc(var(--header-h) + 8px);
   }
 
   .results-year-tabs button {
@@ -1108,8 +1108,11 @@
     height: 92%;
   }
 
+  /* auto-fit drops to one card below ~426px on its own, so the old 420px
+     breakpoint is gone. `1 / -1` spans the whole row whatever the column
+     count -- `span 2` would have created a phantom column at one column. */
   .results-student-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
     gap: 10px;
   }
 
@@ -1119,7 +1122,7 @@
   }
 
   .result-card-featured {
-    grid-column: span 2;
+    grid-column: 1 / -1;
     min-height: 306px;
   }
 
@@ -1135,22 +1138,19 @@
 
   .result-card-year {
     padding: 4px 6px;
-    font-size: 0.5rem;
+    font-size: var(--font-size-micro);
   }
 
-  .result-card-achievement strong {
-    font-size: clamp(2rem, 9vw, 2.65rem);
-  }
-
-  .result-card-featured .result-card-achievement strong {
-    font-size: clamp(3.6rem, 17vw, 4.9rem);
-  }
+  /* The mobile overrides here used to INFLATE these numerals (17vw reached
+     ~73px on a 430px phone, larger than the base rule would give) while the
+     labels beside them shrank to 8px. The base clamps below now cover every
+     width, so there is nothing to override. */
 
 
   .result-card-college {
     max-width: 120px;
     gap: 5px;
-    font-size: 0.58rem;
+    font-size: var(--font-size-micro);
   }
 
   .result-card-pin {
@@ -1247,7 +1247,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 380px) {
   .results-container {
     width: min(100% - 24px, 1160px);
   }
@@ -1302,19 +1302,11 @@
   .result-card-college {
     max-width: 102px;
     align-items: flex-start;
-    font-size: 0.53rem;
+    font-size: var(--font-size-micro);
   }
 
   .result-card-featured .result-card-seal {
     display: none;
-  }
-
-  .results-student-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .result-card-featured {
-    grid-column: span 1;
   }
 
   .results-video-modal {

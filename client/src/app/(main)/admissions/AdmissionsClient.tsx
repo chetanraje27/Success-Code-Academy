@@ -559,13 +559,14 @@ export default function AdmissionsClient() {
         /* ════════════════════════════════
            HERO BANNER — Admissions Poster Section
            ════════════════════════════════ */
+        /* No full-bleed hack needed: .site-main and .admissions-page-container
+           apply no horizontal padding, so this block already spans the viewport.
+           The old left:50% + width:100vw + -50vw margins shifted it ~4px left of
+           the viewport edge and made it a scrollbar-width too wide, which
+           html { overflow-x: clip } was quietly hiding. */
         .admissions-hero-banner {
           position: relative;
-          left: 50%;
           background: #ffffff;
-          width: 100vw;
-          margin-left: -50vw;
-          margin-right: -50vw;
           overflow: hidden;
         }
         .admissions-hero-container {
@@ -945,7 +946,10 @@ export default function AdmissionsClient() {
         }
 
         /* ─── Responsive Styles ─── */
-        @media (max-width: 992px) {
+        /* Was 992/768/640 -- all three are phone-tier intent. 768-1023 belongs
+           to the tablet rules in public.css, which hold this grid at two
+           columns; 767 also stops these overlapping min-width:768 rules. */
+        @media (max-width: 767px) {
           .scholarship-grid-container {
             grid-template-columns: 1fr;
             gap: 40px;
@@ -961,9 +965,9 @@ export default function AdmissionsClient() {
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           .admissions-page-container {
-            padding-top: 72px !important;
+            padding-top: calc(var(--header-h) + 4px) !important;
           }
           .registration-form-card {
             padding: 0;
@@ -974,7 +978,7 @@ export default function AdmissionsClient() {
           }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 767px) {
           .scholarship-grid-container {
             padding: 24px 16px;
             margin: 24px auto 40px;

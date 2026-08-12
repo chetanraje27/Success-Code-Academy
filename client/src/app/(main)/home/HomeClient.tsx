@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -113,16 +113,6 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
   const [editStars, setEditStars] = useState(false);
   const { refreshKey } = useEditModeOptional();
 
-  const tickerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const [shouldScroll, setShouldScroll] = useState(false);
-
-  useEffect(() => {
-    if (tickerRef.current && textRef.current) {
-      setShouldScroll(textRef.current.offsetWidth > tickerRef.current.offsetWidth);
-    }
-  }, [announceIdx]);
-
   const highlightText = (text: string) => {
     const highlights = ["NEET & JEE", "NEET", "JEE", "SCST", "100% fee waiver", "Admissions Open", "Admissions Open 2026-27", "Limited seats!", "Free Demo Classes", "July 15"];
     const regex = new RegExp(`(${highlights.map(h => h.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'gi');
@@ -213,7 +203,7 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
   const isExternal = /^https?:\/\//i.test(linkUrl);
 
   const announcementContent = (
-    <span className="notif-content-inner" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+    <span className="notif-content-inner" style={{ display: "inline-flex", alignItems: "center", gap: "8px", flexWrap: "wrap", rowGap: "2px", minWidth: 0 }}>
       <span className="notif-icon-badge">
         {renderAnnouncementIcon(currentNotif?.icon)}
       </span>
@@ -270,16 +260,15 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
               <div className="notif-left">
                 <span className="notif-label">Latest Updates</span>
               </div>
-              <div className="notif-ticker" ref={tickerRef}>
+              <div className="notif-ticker">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={announceIdx}
-                    ref={textRef}
                     initial={false}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className={`notif-text-wrap ${shouldScroll ? "scroll-active" : ""}`}
+                    className="notif-text-wrap"
                   >
                     {hasLink ? (
                       isExternal ? (
@@ -426,12 +415,6 @@ export default function HomeClient({ courses = [] }: { courses?: Course[] }) {
           SECTION 7: PARENTS TRUST US
           ══════════════════════════════════════════ */}
       <ParentsTrustUs />
-
-
-
-      {/* ══════════════════════════════════════════
-          SECTION 12: FAQS SECTION
-          ══════════════════════════════════════════ */}
     </div>
   );
 }

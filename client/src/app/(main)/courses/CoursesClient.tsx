@@ -662,7 +662,10 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
         }
 
         /* ─── Responsive Styles ─── */
-        @media (max-width: 1024px) {
+        /* One tier: the stack is already capped at 600px across this range, so
+           the compact card is the right layout throughout -- not just below
+           900px. 1023 also stops this overlapping the min-width:1024 rules. */
+        @media (max-width: 1023px) {
           .courses-list-stack {
             flex-direction: column;
             align-items: center;
@@ -672,9 +675,6 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           .course-card-anchor-link {
             width: 100%;
           }
-        }
-
-        @media (max-width: 900px) {
           .course-horizontal-card {
             flex-direction: row !important;
             min-height: auto;
@@ -691,7 +691,7 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             top: 16px !important;
             right: -8px !important; /* Extend past border on mobile */
             padding: 5px 8px !important;
-            font-size: 0.6rem !important;
+            font-size: var(--font-size-micro) !important;
             border-radius: 6px 6px 0 6px !important;
           }
           .ribbon-fold-corner {
@@ -723,13 +723,13 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 767px) {
           .courses-page-container .container {
             width: min(calc(100% - 2rem), 96rem);
           }
           .courses-hero-title {
             width: 100%;
-            font-size: 1.75rem;
+            font-size: var(--font-size-heading-1);
             margin-bottom: 1.25rem;
             line-height: 1.15;
             overflow-wrap: anywhere;
@@ -804,7 +804,7 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             font-size: 0.72rem !important;
           }
         }
-        @media (max-width: 375px) {
+        @media (max-width: 380px) {
           .course-card-left {
             padding: 16px 12px !important;
           }

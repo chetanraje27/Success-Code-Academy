@@ -149,7 +149,7 @@
   background: var(--admission-ink) !important;
   border: 1px solid #1d3a63;
   border-radius: 999px !important;
-  font-size: 0.66rem !important;
+  font-size: var(--font-size-micro) !important;
   font-weight: 650 !important;
   letter-spacing: 0.07em !important;
 }
@@ -420,7 +420,7 @@
 .public-shell .admissions-page-container .form-card-footer {
   margin-top: 17px !important;
   color: #718096 !important;
-  font-size: 0.68rem !important;
+  font-size: var(--font-size-micro) !important;
 }
 
 .public-shell .admissions-page-container .form-card-footer svg {
@@ -435,27 +435,18 @@
   color: var(--admission-muted) !important;
 }
 
-@media (max-width: 1000px) {
+/* Phones only. 768-1023 belongs to the tablet tier in public.css, which keeps
+ * this grid at two columns -- these `!important` single-column rules used to
+ * reach up to 1000px and silently beat it. */
+@media (max-width: 767px) {
   .public-shell .admissions-page-container .scholarship-grid-container {
     grid-template-columns: 1fr !important;
-    padding-inline: max(24px, calc((100vw - 760px) / 2)) !important;
+    gap: 24px !important;
+    padding: 2.5rem var(--page-gutter) 54px !important;
   }
 
   .public-shell .admissions-page-container .scholarship-right-form {
     position: static;
-  }
-}
-
-@media (max-width: 1023px) {
-  .public-shell .admissions-page-container .admissions-hero-banner {
-    padding-top: 68px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .public-shell .admissions-page-container .scholarship-grid-container {
-    gap: 24px !important;
-    padding: 2.5rem 12px 54px !important;
   }
 
   .public-shell .admissions-page-container .poster-header {
@@ -478,8 +469,9 @@
     font-size: clamp(1.45rem, 7.5vw, 2rem) !important;
   }
 
+  /* Wraps on its own: two cards on a 700px phablet, one on a 390px phone. */
   .public-shell .admissions-page-container .poster-features-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
 
   .public-shell .admissions-page-container .poster-feature-card-boxed {
@@ -495,5 +487,11 @@
   .public-shell .admissions-page-container .registration-form-card {
     padding: 22px !important;
     border-radius: 13px !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .public-shell .admissions-page-container .admissions-hero-banner {
+    padding-top: var(--header-h) !important;
   }
 }

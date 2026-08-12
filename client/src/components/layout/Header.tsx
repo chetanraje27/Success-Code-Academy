@@ -467,12 +467,11 @@ export default function Header() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 80px;
+          /* Single source of truth (tokens.css): 68px on tablet/phone, 76px on
+             desktop. public.css used to override this with its own 76px/68px
+             literals, so the 80px/64px written here never actually applied. */
+          height: var(--header-h);
           transition: height var(--duration-normal) var(--ease-standard);
-        }
-
-        .header.scrolled .header-container {
-          height: 64px;
         }
 
         .logo-group {
@@ -488,7 +487,7 @@ export default function Header() {
 
         :global(.logo-image) {
           object-fit: contain;
-          max-height: 48px;
+          max-height: clamp(34px, 6.5vw, 48px);
           width: auto;
         }
 
@@ -877,7 +876,7 @@ export default function Header() {
           box-shadow: var(--shadow-subtle);
         }
 
-        @media (max-width: 360px) {
+        @media (max-width: 380px) {
           .mobile-account-actions {
             flex-direction: column;
           }

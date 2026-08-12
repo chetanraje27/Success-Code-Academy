@@ -149,7 +149,7 @@
 .admin-nav-group>p {
   margin: 0 8px 4px;
   color: var(--admin-faint);
-  font-size: 0.66rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -297,7 +297,7 @@
 
 .admin-topbar-title span {
   color: var(--admin-faint);
-  font-size: 0.64rem;
+  font-size: var(--font-size-micro);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -450,7 +450,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   display: block;
   margin-bottom: 4px;
   color: var(--admin-accent);
-  font-size: 0.66rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -693,7 +693,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   border-bottom: 1px solid var(--admin-border);
   background: var(--admin-surface-sunken);
   color: var(--admin-muted);
-  font-size: 0.66rem;
+  font-size: var(--font-size-micro);
   font-weight: 650;
   letter-spacing: 0.05em;
   text-align: left;
@@ -851,7 +851,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   border-radius: var(--admin-radius-xs);
   background: var(--admin-success-soft);
   color: var(--admin-success);
-  font-size: 0.68rem;
+  font-size: var(--font-size-micro);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -1732,7 +1732,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
 
 .admin-login-card>span {
   color: var(--admin-accent);
-  font-size: 0.68rem;
+  font-size: var(--font-size-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1858,7 +1858,10 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   }
 }
 
-@media (max-width: 980px) {
+/* Tablet and below: the sidebar becomes a touch drawer. 1023 rather than 980,
+ * so an iPad landscape at 1024 keeps the persistent rail and everything
+ * narrower gets the drawer. */
+@media (max-width: 1023px) {
   .admin-sidebar {
     width: min(280px, 84vw);
     box-shadow: var(--admin-shadow-lg);
@@ -1923,7 +1926,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .admin-topbar {
     padding: 8px 14px;
   }

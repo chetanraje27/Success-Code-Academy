@@ -277,7 +277,7 @@
   background: #ff5a00;
   border-radius: 8px 0 0 8px;
   box-shadow: 0 8px 18px rgba(255, 90, 0, 0.2);
-  font-size: 0.68rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.015em;
   text-transform: uppercase;
@@ -407,7 +407,7 @@
   background: var(--course-accent-soft);
   border: 1px solid color-mix(in srgb, var(--course-accent) 20%, white);
   border-radius: 5px;
-  font-size: 0.62rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.08em;
 }
@@ -567,7 +567,7 @@
 .course-registration-field label {
   display: block;
   color: #6b788a;
-  font-size: 0.64rem;
+  font-size: var(--font-size-micro);
   font-weight: 750;
   letter-spacing: 0.1em;
   line-height: 1.35;
@@ -793,7 +793,7 @@
   border-color: var(--course-border);
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1023px) {
   .course-detail-hero-card {
     grid-template-columns: minmax(0, 1fr) 240px;
   }
@@ -802,8 +802,10 @@
     padding: 40px;
   }
 
+  /* The sidebar narrows instead of dropping below the body: a fixed 380px rail
+     left only ~336px for the content on a 768px tablet. */
   .course-detail-layout {
-    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
     gap: 20px;
   }
 
@@ -816,7 +818,19 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
+  .course-detail-container {
+    width: min(100% - 32px, 1160px);
+  }
+
+  .course-detail-hero {
+    padding: calc(var(--header-h) + 24px) 0 30px;
+  }
+
+  .course-detail-back {
+    margin-bottom: 16px;
+  }
+
   .course-detail-layout {
     grid-template-columns: 1fr;
   }
@@ -826,23 +840,12 @@
     width: min(100%, 560px);
     margin: 10px auto 0;
   }
-}
 
-@media (max-width: 720px) {
-  .course-detail-container {
-    width: min(100% - 32px, 1160px);
-  }
-
-  .course-detail-hero {
-    padding: calc(68px + 24px) 0 30px;
-  }
-
-  .course-detail-back {
-    margin-bottom: 16px;
-  }
-
+  /* Two columns left the copy at ~200px on a 390px phone, so the hero stacks
+     across the whole phone tier -- image first. */
   .course-detail-hero-card {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   .course-detail-hero-copy {
@@ -852,7 +855,7 @@
   .course-detail-type {
     margin-bottom: 8px;
     padding: 4px 8px;
-    font-size: 0.58rem;
+    font-size: var(--font-size-micro);
     letter-spacing: 0.08em;
   }
 
@@ -875,7 +878,7 @@
   }
 
   .course-detail-highlights li {
-    font-size: 0.68rem;
+    font-size: var(--font-size-micro);
     gap: 6px;
     line-height: 1.4;
   }
@@ -900,17 +903,11 @@
   }
 
   .course-detail-batch {
-    top: 12px;
-    right: -1px;
-    padding: 7px 11px;
-    font-size: 0.6rem;
-  }
-
-  .course-detail-batch {
     top: 14px;
     right: -1px;
     bottom: auto;
     padding: 9px 13px;
+    font-size: var(--font-size-micro);
   }
 
   .course-detail-body {
@@ -961,7 +958,7 @@
   }
 }
 
-@media (max-width: 460px) {
+@media (max-width: 380px) {
   .course-detail-container {
     width: min(100% - 24px, 1160px);
   }
@@ -970,29 +967,16 @@
     padding: 16px 14px;
   }
 
-  .course-detail-hero-card {
-    grid-template-columns: 1fr;
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
   .course-detail-hero-visual {
     min-height: 200px;
-    border-left: 0;
   }
 
   .course-detail-title {
     font-size: clamp(1.1rem, 4.2vw, 1.45rem);
   }
 
-  .course-detail-description {
-    font-size: 0.72rem;
-  }
-
-  .course-detail-highlights li {
-    font-size: 0.64rem;
-  }
-
+  /* Below ~380px the 128px visual rail leaves too little for the copy, so the
+     feature cards stack. Above it they stay side by side. */
   .course-detail-feature-card,
   .course-detail-feature-card[data-feature="1"] {
     grid-template-columns: 1fr;

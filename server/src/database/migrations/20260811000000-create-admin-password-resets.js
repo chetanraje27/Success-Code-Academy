@@ -8,6 +8,9 @@
  */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // In case a previous deployment failed midway, ensure a clean slate
+    await queryInterface.sequelize.query('DROP TABLE IF EXISTS "admin_password_resets" CASCADE;');
+
     await queryInterface.createTable('admin_password_resets', {
       id: {
         type: Sequelize.INTEGER,

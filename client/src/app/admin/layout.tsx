@@ -29,6 +29,8 @@ import {
   X,
 } from "lucide-react";
 import type { AdminUser } from "@/lib/admin-api";
+import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
+import { AdminSessionProvider } from "@/components/admin/AdminSessionContext";
 
 type SessionState = "loading" | "authenticated" | "guest";
 type AdminTheme = "light" | "dark";
@@ -83,6 +85,10 @@ const navigation = [
   },
   {
     label: "Access & security",
+    // Managing who can sign in belongs to super administrators only. The API
+    // refuses /database/admins for anyone else, so this group would be a dead
+    // end for a standard administrator.
+    superAdminOnly: true,
     items: [
       {
         label: "Administrators",
@@ -173,7 +179,7 @@ export default function AdminLayout({
       const payload = (await response.json()) as {
         data?: { user?: AdminUser };
       };
-      if (!payload.data?.user || payload.data.user.role !== "admin") {
+      if (!payload.data?.user || !isAdminRole(payload.data.user.role)) {
         setUser(null);
         setSession("guest");
         return false;
@@ -217,6 +223,30 @@ export default function AdminLayout({
     [pathname],
   );
 
+  const isSuperAdmin = isSuperAdminRole(user?.role);
+
+  const visibleNavigation = useMemo(
+    () =>
+      navigation.filter(
+        (group) =>
+          !("superAdminOnly" in group && group.superAdminOnly) || isSuperAdmin,
+      ),
+    [isSuperAdmin],
+  );
+
+  /*
+   * A standard administrator who reaches a super-admin-only page directly — a
+   * bookmark, a shared link, a typed URL — is sent back to the dashboard. The
+   * API would refuse the page's requests anyway; this avoids showing a screen
+   * made entirely of permission errors.
+   */
+  useEffect(() => {
+    if (session !== "authenticated" || isSuperAdmin) return;
+    if (pathname.startsWith("/admin/database/administrators")) {
+      router.replace("/admin");
+    }
+  }, [isSuperAdmin, pathname, router, session]);
+
   async function handleLogout() {
     await fetch("/api/admin/session", {
       method: "DELETE",
@@ -242,6 +272,7 @@ export default function AdminLayout({
   }
 
   return (
+    <AdminSessionProvider user={user}>
     <div className="admin-shell">
       <button
         className={`admin-sidebar-backdrop ${sidebarOpen ? "is-open" : ""}`}
@@ -273,7 +304,7 @@ export default function AdminLayout({
         </div>
 
         <nav className="admin-navigation" aria-label="Admin navigation">
-          {navigation.map((group) => (
+          {visibleNavigation.map((group) => (
             <div className="admin-nav-group" key={group.label}>
               <p>{group.label}</p>
               {group.items.map((item) => {
@@ -311,6 +342,7 @@ export default function AdminLayout({
             <div>
               <strong>{user?.firstName || "Administrator"}</strong>
               <span>{user?.email}</span>
+              <span>{adminRoleLabel(user?.role)}</span>
             </div>
           </div>
         </div>
@@ -360,5 +392,6 @@ export default function AdminLayout({
         <main className="admin-content">{children}</main>
       </div>
     </div>
+    </AdminSessionProvider>
   );
 }

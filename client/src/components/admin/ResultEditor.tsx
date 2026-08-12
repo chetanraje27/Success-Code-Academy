@@ -26,7 +26,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
   const [editingResult, setEditingResult] = useState<Result | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { bumpRefresh } = useEditMode();
+  const { bumpRefresh, isSuperAdmin } = useEditMode();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -155,20 +155,27 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
       
       {!isFormOpen ? (
         <>
-          <div className="sca-admin-toolbar">
-            <RevisionHistoryButton
-              resourceType="result"
-              itemName="Result"
-              className="sca-admin-btn ghost"
-              onRestored={async () => {
-                bumpRefresh();
-                await loadResults();
-              }}
-            />
-            <button className="sca-admin-btn primary" onClick={handleAddNew}>
-              <FaPlus style={{ marginRight: 6 }} /> Add Result
-            </button>
-          </div>
+          {/*
+            Adding a result and restoring older revisions are create-style
+            actions reserved for super administrators. Standard administrators
+            still see the list and can edit existing results.
+          */}
+          {isSuperAdmin && (
+            <div className="sca-admin-toolbar">
+              <RevisionHistoryButton
+                resourceType="result"
+                itemName="Result"
+                className="sca-admin-btn ghost"
+                onRestored={async () => {
+                  bumpRefresh();
+                  await loadResults();
+                }}
+              />
+              <button className="sca-admin-btn primary" onClick={handleAddNew}>
+                <FaPlus style={{ marginRight: 6 }} /> Add Result
+              </button>
+            </div>
+          )}
           
           {loading ? (
             <p>Loading results...</p>
@@ -192,7 +199,9 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
                   </div>
                   <div className="sca-admin-list-actions">
                     <button className="sca-admin-icon-btn" onClick={() => handleEdit(r)}><FaPen /></button>
-                    <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(r.id)}><FaTrash /></button>
+                    {isSuperAdmin && (
+                      <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(r.id)}><FaTrash /></button>
+                    )}
                   </div>
                 </div>
               ))}

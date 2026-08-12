@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 import { parseVideoUrl } from "@/lib/video-utils";
+import InstagramEmbed from "@/components/InstagramEmbed";
 
 interface VideoItem {
   id: number;
@@ -585,6 +586,8 @@ export default function GalleryPage() {
                               autoPlay
                               className="embedded-player"
                             />
+                          ) : parsed.isInstagram ? (
+                            <InstagramEmbed url={parsed.embedUrl} />
                           ) : (
                             <iframe
                               src={parsed.embedUrl}
@@ -1432,8 +1435,8 @@ export default function GalleryPage() {
 
         .lightbox-video-frame.is-instagram {
           padding-top: 0;
-          height: 660px;
-          max-height: 80vh;
+          height: auto;
+          min-height: 500px;
           background: #ffffff;
         }
 

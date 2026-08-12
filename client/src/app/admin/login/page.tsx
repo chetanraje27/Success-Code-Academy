@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, LockKeyhole, LogIn } from "lucide-react";
 import { AdminNotice } from "@/components/admin/AdminUi";
+import { isAdminRole } from "@/lib/roles";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function AdminLoginPage() {
     fetch("/api/admin/session", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((payload: { data?: { user?: { role?: string } } } | null) => {
-        if (payload?.data?.user?.role === "admin") {
+        if (isAdminRole(payload?.data?.user?.role)) {
           router.replace("/admin");
         }
       })

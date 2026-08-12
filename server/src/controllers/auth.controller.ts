@@ -53,7 +53,9 @@ function publicAdmin(admin: Admin) {
     lastName: '',
     mobileNumber: admin.mobileNumber,
     email: admin.email,
-    role: 'admin',
+    // The real privilege level, so the dashboard can hide what this account
+    // cannot do. The API enforces the same role independently.
+    role: admin.role,
   };
 }
 

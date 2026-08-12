@@ -23,7 +23,7 @@ interface BannerEditorProps {
 }
 
 export default function BannerEditor({ open, onClose }: BannerEditorProps) {
-  const { bumpRefresh } = useEditMode();
+  const { bumpRefresh, isSuperAdmin } = useEditMode();
   const [items, setItems] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -160,20 +160,27 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       
       {!showForm ? (
         <>
-          <div className="sca-admin-toolbar">
-            <RevisionHistoryButton
-              resourceType="banner"
-              itemName="Banner"
-              className="sca-admin-btn ghost"
-              onRestored={async () => {
-                bumpRefresh();
-                await fetchItems();
-              }}
-            />
-            <button type="button" className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
-              <FaPlus /> Add Banner
-            </button>
-          </div>
+          {/*
+            Create-style actions — adding a banner and restoring an older
+            revision — belong to super administrators only. A standard
+            administrator still sees the list and can edit existing banners.
+          */}
+          {isSuperAdmin && (
+            <div className="sca-admin-toolbar">
+              <RevisionHistoryButton
+                resourceType="banner"
+                itemName="Banner"
+                className="sca-admin-btn ghost"
+                onRestored={async () => {
+                  bumpRefresh();
+                  await fetchItems();
+                }}
+              />
+              <button type="button" className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
+                <FaPlus /> Add Banner
+              </button>
+            </div>
+          )}
           
           {loading ? (
             <div>Loading...</div>
@@ -199,9 +206,11 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
                     <button type="button" className="sca-admin-icon-btn" onClick={() => handleEdit(item)} aria-label={`Edit ${item.altText || "banner"}`}>
                       <FaPen />
                     </button>
-                    <button type="button" className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)} aria-label={`Delete ${item.altText || "banner"}`}>
-                      <FaTrash />
-                    </button>
+                    {isSuperAdmin && (
+                      <button type="button" className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)} aria-label={`Delete ${item.altText || "banner"}`}>
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

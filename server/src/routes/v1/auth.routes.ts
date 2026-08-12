@@ -17,6 +17,7 @@ import {
   submissionLimiter,
 } from '../../middlewares/rateLimiter';
 import { authorize } from '../../middlewares/authorize';
+import { ADMIN_ROLES } from '../../config/roles';
 
 const router = Router();
 
@@ -106,7 +107,7 @@ router.get('/me', authenticate, getCurrentUser);
 router.put(
   '/admin/password',
   authenticate,
-  authorize('admin'),
+  authorize(...ADMIN_ROLES),
   validate(adminPasswordSchema),
   changeAdminPassword,
 );

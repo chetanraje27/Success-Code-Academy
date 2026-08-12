@@ -57,7 +57,7 @@ export function renderIconByKey(iconKey?: string) {
 }
 
 export default function NotificationEditor({ open, onClose }: NotificationEditorProps) {
-  const { bumpRefresh } = useEditMode();
+  const { bumpRefresh, isSuperAdmin } = useEditMode();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -177,9 +177,14 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
       {!showForm ? (
         <>
           <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
-              <FaPlus /> Add Notification
-            </button>
+            {/* Creating announcements is a super-admin action. */}
+            {isSuperAdmin ? (
+              <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
+                <FaPlus /> Add Notification
+              </button>
+            ) : (
+              <span />
+            )}
             <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
               Total: {items.length} announcement{items.length === 1 ? "" : "s"}
             </span>
@@ -254,9 +259,11 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
                     <button className="sca-admin-icon-btn" onClick={() => handleEdit(item)} title="Edit">
                       <FaPen />
                     </button>
-                    <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)} title="Delete">
-                      <FaTrash />
-                    </button>
+                    {isSuperAdmin && (
+                      <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)} title="Delete">
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

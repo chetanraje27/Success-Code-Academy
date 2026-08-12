@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdminRole } from "@/lib/roles";
 
 const COOKIE_NAME = "sca_admin_session";
 const COOKIE_MAX_AGE = 8 * 60 * 60;
@@ -51,7 +52,9 @@ export async function POST(request: NextRequest) {
     const data = payload.data as
       | { token?: string; user?: { role?: string } }
       | undefined;
-    if (!data?.token || data.user?.role !== "admin") {
+    // Either administrator role may open a dashboard session; what each one is
+    // allowed to do afterwards is decided by the API on every request.
+    if (!data?.token || !isAdminRole(data.user?.role)) {
       return NextResponse.json(
         { status: "error", message: "The server returned an invalid admin session." },
         { status: 502 },
@@ -97,7 +100,7 @@ export async function GET() {
     const payload = await parseBackendResponse(response);
     const user = (payload.data as { user?: { role?: string } } | undefined)?.user;
 
-    if (!response.ok || user?.role !== "admin") {
+    if (!response.ok || !isAdminRole(user?.role)) {
       cookieStore.delete(COOKIE_NAME);
 
       if (response.status === 401 || response.status === 403 || response.ok) {

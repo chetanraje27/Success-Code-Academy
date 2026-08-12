@@ -46,6 +46,15 @@ const envSchema = z.object({
     .default('60')
     .transform((val) => parseInt(val, 10)),
 
+  // First super administrator, created by the seeder when the `admins` table
+  // has no super administrator yet. Set SUPER_ADMIN_PASSWORD in the deployment
+  // environment to avoid relying on the built-in bootstrap password, which is
+  // logged on startup and must be changed after the first sign-in.
+  SUPER_ADMIN_EMAIL: z.string().default('ubermanorshaikh@gmail.com'),
+  SUPER_ADMIN_PASSWORD: z.string().default('Password@123'),
+  SUPER_ADMIN_MOBILE_NUMBER: z.string().default('9000000001'),
+  SUPER_ADMIN_NAME: z.string().default('Super Administrator'),
+
   // CORS
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
 

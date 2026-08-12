@@ -14,6 +14,7 @@ import {
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
 import { parseVideoUrl } from "@/lib/video-utils";
+import InstagramEmbed from "@/components/InstagramEmbed";
 
 interface BlogItem {
   id: number;
@@ -443,6 +444,8 @@ export default function AcademyInsights() {
                     autoPlay
                     style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: "#000000" }}
                   />
+                ) : parsed.isInstagram ? (
+                  <InstagramEmbed url={parsed.embedUrl} />
                 ) : (
                   <iframe
                     src={parsed.embedUrl}
@@ -451,7 +454,7 @@ export default function AcademyInsights() {
                     scrolling="no"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
-                    style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: parsed.isInstagram ? "#ffffff" : "#000000" }}
+                    style={{ width: "100%", height: "100%", borderRadius: "12px", border: "none", outline: "none", background: "#000000" }}
                   ></iframe>
                 )}
               </div>

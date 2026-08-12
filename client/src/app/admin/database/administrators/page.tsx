@@ -4,6 +4,7 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import AdministratorEditorModal from "./AdministratorEditorModal";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { adminRoleLabel } from "@/lib/roles";
 
 export default function AdminAdministratorsPage() {
   const [editingAdmin, setEditingAdmin] = useState<any>(null);
@@ -61,6 +62,13 @@ export default function AdminAdministratorsPage() {
             ),
           },
           { key: "mobileNumber", label: "Mobile" },
+          {
+            key: "role",
+            label: "Access level",
+            render: (row) => (
+              <span className="admin-status">{adminRoleLabel(row.role)}</span>
+            ),
+          },
           { key: "createdAt", label: "Added" },
         ]}
         onAdd={() => setEditingAdmin({})}

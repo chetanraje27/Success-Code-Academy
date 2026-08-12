@@ -1,7 +1,114 @@
-import { Banner, Notification, StarStudent, NewsArticle, AcademyVideo } from './models';
+import bcrypt from 'bcrypt';
+import {
+  Admin,
+  Banner,
+  Notification,
+  StarStudent,
+  NewsArticle,
+  AcademyVideo,
+} from './models';
+import { env } from './config/environment';
+import { ADMIN, SUPER_ADMIN } from './config/roles';
+import logger from './utils/logger';
+
+/**
+ * Finds a mobile number that no administrator holds yet.
+ *
+ * `admins.mobileNumber` is unique, so a bootstrap that collides with an
+ * existing account would fail outright. Walking forward from the configured
+ * number keeps the first boot working on a database that already has staff in
+ * it, without touching anyone else's record.
+ */
+async function claimMobileNumber(preferred: string): Promise<string> {
+  const digits = /^[0-9]{10}$/.test(preferred) ? preferred : '9000000001';
+
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    const candidate = String(Number(digits) + attempt).padStart(10, '0');
+    const taken = await Admin.findOne({ where: { mobileNumber: candidate } });
+    if (!taken) return candidate;
+  }
+
+  throw new Error(
+    'Unable to find a free mobile number for the super administrator. Set SUPER_ADMIN_MOBILE_NUMBER.',
+  );
+}
+
+/**
+ * Makes sure exactly one account starts out able to manage the others.
+ *
+ * On a brand-new database this creates the first super administrator. On a
+ * database that already has staff but no super administrator — the state every
+ * existing deployment lands in the first time it runs the role migration — it
+ * promotes the configured email instead, so nobody is locked out of
+ * administrator management. Every other account keeps the restricted `admin`
+ * role it was migrated with.
+ *
+ * Once a super administrator exists this function does nothing at all: it never
+ * resets a password and never re-elevates an account that was deliberately
+ * demoted.
+ */
+async function seedSuperAdmin(): Promise<void> {
+  const email = env.SUPER_ADMIN_EMAIL.trim().toLowerCase();
+  if (!email) return;
+
+  if ((await Admin.count({ where: { role: SUPER_ADMIN } })) > 0) return;
+
+  const totalAdmins = await Admin.count();
+  const existing = await Admin.findOne({ where: { email } });
+
+  if (existing) {
+    await existing.update({ role: SUPER_ADMIN });
+    logger.warn(
+      `[Seed] Promoted the existing account ${email} to ${SUPER_ADMIN}. Its password is unchanged.`,
+    );
+    return;
+  }
+
+  const password = env.SUPER_ADMIN_PASSWORD;
+  const admin = await Admin.create({
+    name: env.SUPER_ADMIN_NAME.trim() || 'Super Administrator',
+    email,
+    mobileNumber: await claimMobileNumber(env.SUPER_ADMIN_MOBILE_NUMBER.trim()),
+    passwordHash: await bcrypt.hash(password, 12),
+    role: SUPER_ADMIN,
+  });
+
+  // The password is echoed only when it is the built-in bootstrap value, which
+  // is public in the repository anyway. A password supplied through
+  // SUPER_ADMIN_PASSWORD is a real secret and stays out of the log files.
+  const usesBootstrapPassword = password === 'Password@123';
+
+  logger.warn(
+    [
+      '',
+      '='.repeat(72),
+      ' FIRST SUPER ADMINISTRATOR CREATED',
+      '='.repeat(72),
+      `  Sign-in email : ${admin.email}`,
+      `  Mobile number : ${admin.mobileNumber}`,
+      `  Password      : ${
+        usesBootstrapPassword
+          ? password
+          : '(the value of SUPER_ADMIN_PASSWORD in this environment)'
+      }`,
+      `  Role          : ${admin.role}`,
+      '',
+      '  Change this password immediately after the first sign-in.',
+      totalAdmins > 0
+        ? `  ${totalAdmins} existing administrator account(s) were left at the restricted '${ADMIN}' role.`
+        : '  This is the only administrator account on this database.',
+      '='.repeat(72),
+      '',
+    ].join('\n'),
+  );
+}
 
 export async function seedDatabase() {
   try {
+    // Access control comes first: a database without a super administrator has
+    // nobody who can manage accounts or content, whatever else is seeded.
+    await seedSuperAdmin();
+
     // Check if banners exist
     const bannerCount = await Banner.count();
     if (bannerCount === 0) {

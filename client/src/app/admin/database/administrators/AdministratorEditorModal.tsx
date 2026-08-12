@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Copy, KeyRound, RefreshCw, ShieldAlert } from "lucide-react";
 import AdminModal from "@/components/admin/AdminModal";
 import { adminApiFetch } from "@/lib/admin-api";
+import { ADMIN, ADMIN_ROLES, adminRoleLabel, type AdminRole } from "@/lib/roles";
 
 type ResetLink = {
   emailed: boolean;
@@ -41,6 +42,7 @@ export default function AdministratorEditorModal({
     email: "",
     mobileNumber: "",
     password: "",
+    role: ADMIN as AdminRole,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,6 +60,7 @@ export default function AdministratorEditorModal({
       email: admin?.email || "",
       mobileNumber: admin?.mobileNumber || "",
       password: "",
+      role: (admin?.role as AdminRole) || ADMIN,
     });
     setError("");
     setResetError("");
@@ -75,6 +78,7 @@ export default function AdministratorEditorModal({
         name: formData.name.trim(),
         email: formData.email.trim(),
         mobileNumber: formData.mobileNumber.trim(),
+        role: formData.role,
       };
       // A password is set once, when the account is created. Afterwards it is
       // only ever changed through a reset link.
@@ -189,6 +193,27 @@ export default function AdministratorEditorModal({
             />
             <small>Exactly 10 digits.</small>
           </div>
+        </div>
+
+        <div className="sca-admin-field">
+          <label>Access level</label>
+          <select
+            value={formData.role}
+            onChange={(e) =>
+              setFormData({ ...formData, role: e.target.value as AdminRole })
+            }
+          >
+            {ADMIN_ROLES.map((role) => (
+              <option key={role} value={role}>
+                {adminRoleLabel(role)}
+              </option>
+            ))}
+          </select>
+          <small>
+            Super administrators can add and delete records and manage other
+            administrators. Administrators can view and edit existing content
+            only.
+          </small>
         </div>
 
         {isNew ? (

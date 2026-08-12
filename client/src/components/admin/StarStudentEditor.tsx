@@ -26,7 +26,7 @@ interface StarStudentEditorProps {
 }
 
 export default function StarStudentEditor({ open, onClose }: StarStudentEditorProps) {
-  const { bumpRefresh } = useEditMode();
+  const { bumpRefresh, isSuperAdmin } = useEditMode();
   const [items, setItems] = useState<StarStudent[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -182,20 +182,27 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       
       {!showForm ? (
         <>
-          <div className="sca-admin-toolbar">
-            <RevisionHistoryButton
-              resourceType="star"
-              itemName="Star student"
-              className="sca-admin-btn ghost"
-              onRestored={async () => {
-                bumpRefresh();
-                await fetchItems();
-              }}
-            />
-            <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
-              <FaPlus /> Add Star Student
-            </button>
-          </div>
+          {/*
+            Adding a star student and restoring older revisions are create-style
+            actions reserved for super administrators. Standard administrators
+            still see the list and can edit existing entries.
+          */}
+          {isSuperAdmin && (
+            <div className="sca-admin-toolbar">
+              <RevisionHistoryButton
+                resourceType="star"
+                itemName="Star student"
+                className="sca-admin-btn ghost"
+                onRestored={async () => {
+                  bumpRefresh();
+                  await fetchItems();
+                }}
+              />
+              <button className="sca-admin-btn primary" onClick={() => setShowForm(true)}>
+                <FaPlus /> Add Star Student
+              </button>
+            </div>
+          )}
           
           {loading ? (
             <div>Loading...</div>
@@ -220,9 +227,11 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
                     <button className="sca-admin-icon-btn" onClick={() => handleEdit(item)}>
                       <FaPen />
                     </button>
-                    <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)}>
-                      <FaTrash />
-                    </button>
+                    {isSuperAdmin && (
+                      <button className="sca-admin-icon-btn danger" onClick={() => handleDelete(item.id)}>
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

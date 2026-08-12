@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError } from '../utils/AppError';
 import { env } from '../config/environment';
+import { isAdminRole } from '../config/roles';
 import { User, Admin } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 
@@ -11,6 +12,11 @@ import { asyncHandler } from '../utils/asyncHandler';
  * Expects an `Authorization: Bearer <token>` header.  Verifies the
  * token against JWT_SECRET and attaches the decoded payload to
  * `req.user` so downstream handlers can identify the caller.
+ *
+ * The privilege level on `req.user.role` is always the one stored on the
+ * account row, never the `role` claim carried by the token. A token minted
+ * before a demotion therefore loses its access on the very next request, and
+ * a tampered claim is ignored outright.
  *
  * Must be placed before any route that requires authentication.
  */
@@ -57,11 +63,8 @@ export const authenticate = asyncHandler(async (
 
     if (decoded.purpose === 'admin') {
       account = await Admin.findByPk(decoded.id, {
-        attributes: ['id', 'email', 'mobileNumber'],
+        attributes: ['id', 'email', 'mobileNumber', 'role'],
       });
-      if (account) {
-        account.role = 'admin'; // For compatibility with the req.user type
-      }
     } else {
       account = await User.findByPk(decoded.id, {
         attributes: ['id', 'email', 'mobileNumber', 'role'],
@@ -74,6 +77,12 @@ export const authenticate = asyncHandler(async (
 
     if (decoded.purpose === 'student' && account.role !== 'student') {
       throw new AppError('Please use the admin sign-in page.', 403);
+    }
+
+    // An administrator row with an unrecognised role is treated as broken
+    // rather than as a default-privileged account.
+    if (decoded.purpose === 'admin' && !isAdminRole(account.role)) {
+      throw new AppError('This account has no valid admin role assigned.', 403);
     }
 
     req.user = {

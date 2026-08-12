@@ -9,9 +9,12 @@ import {
   useState,
 } from "react";
 import type { AdminUser } from "@/lib/admin-api";
+import { isAdminRole, isSuperAdminRole } from "@/lib/roles";
 
 type EditModeContextValue = {
   isAdmin: boolean;
+  /** True only when the signed-in account may create and delete content. */
+  isSuperAdmin: boolean;
   editMode: boolean;
   setEditMode: (on: boolean) => void;
   toggleEditMode: () => void;
@@ -42,8 +45,8 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
         const payload = (await response.json()) as {
           data?: { user?: AdminUser };
         };
-        return payload.data?.user?.role === "admin"
-          ? payload.data.user
+        return isAdminRole(payload.data?.user?.role)
+          ? payload.data!.user!
           : null;
       })
       .then((nextUser) => {
@@ -118,6 +121,7 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       isAdmin: Boolean(user),
+      isSuperAdmin: isSuperAdminRole(user?.role),
       editMode: Boolean(user) && editMode,
       setEditMode,
       toggleEditMode,
@@ -159,6 +163,7 @@ export function useEditModeOptional(): EditModeContextValue {
   return (
     useContext(EditModeContext) || {
       isAdmin: false,
+      isSuperAdmin: false,
       editMode: false,
       setEditMode: () => undefined,
       toggleEditMode: () => undefined,

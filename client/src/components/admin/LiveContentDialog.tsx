@@ -12,6 +12,12 @@ type LiveContentDialogProps = {
   defaultValue: string;
   kind: ContentKind;
   customized: boolean;
+  /**
+   * Restoring the original text deletes the saved override, which the API
+   * allows for super administrators only. Standard administrators can still
+   * edit the text; they just cannot revert it.
+   */
+  canReset?: boolean;
   onClose: () => void;
   onSave: (value: string) => Promise<void>;
   onReset: () => Promise<void>;
@@ -24,6 +30,7 @@ export function LiveContentDialog({
   defaultValue,
   kind,
   customized,
+  canReset = true,
   onClose,
   onSave,
   onReset,
@@ -110,7 +117,7 @@ export function LiveContentDialog({
         <small>{draft.length.toLocaleString()} characters</small>
       </div>
       <div className="admin-form-actions live-editor-dialog-actions">
-        {customized && (
+        {customized && canReset && (
           <button
             className="admin-button danger"
             type="button"

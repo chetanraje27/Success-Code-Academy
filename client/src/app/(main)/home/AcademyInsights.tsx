@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -398,10 +399,10 @@ export default function AcademyInsights() {
                           className="academy-video-image"
                         />
                         <div className="academy-video-media-overlay" aria-hidden="true" />
-                        <span className="academy-video-watch">
-                          <span className="academy-video-play-icon"><FaPlay /></span>
-                          Watch Video
-                        </span>
+                        <span className="academy-video-category-badge">{video.category}</span>
+                        <div className="academy-video-play-center">
+                          <FaPlay />
+                        </div>
                         <span className="academy-video-duration-chip">
                           <FaClock />
                           {video.duration}
@@ -409,20 +410,10 @@ export default function AcademyInsights() {
                       </div>
                       <div className="academy-video-content">
                         <div className="academy-video-topline">
-                          <span className="academy-video-category">{video.category}</span>
                           <span className="academy-video-date">{video.date}</span>
                         </div>
                         <h3 className="academy-video-title">{video.title}</h3>
                         <p className="academy-video-excerpt">{video.excerpt}</p>
-                        <div className="academy-video-footer">
-                          <span className="academy-video-avatar" aria-hidden="true">
-                            <FaPlay />
-                          </span>
-                          <span className="academy-video-meta">
-                            <strong>Watch now</strong>
-                            <span>Tap to play the full video</span>
-                          </span>
-                        </div>
                       </div>
                     </button>
                   </div>
@@ -435,10 +426,11 @@ export default function AcademyInsights() {
       </EditableSection>
 
       {/* Video Modal overlay */}
-      {activeVideo && (() => {
-        const parsed = parseVideoUrl(activeVideo);
-        return (
-          <div className="video-modal" onClick={() => setActiveVideo(null)}>
+      {activeVideo && typeof document !== "undefined" && createPortal(
+        (() => {
+          const parsed = parseVideoUrl(activeVideo);
+          return (
+            <div className="video-modal" onClick={() => setActiveVideo(null)}>
             <div className={`modal-content ${parsed.isInstagram ? "is-instagram" : ""}`} onClick={(e) => e.stopPropagation()}>
               <button className="close-btn" onClick={() => setActiveVideo(null)} aria-label="Close modal">
                 <FaXmark />
@@ -466,7 +458,7 @@ export default function AcademyInsights() {
             </div>
           </div>
         );
-      })()}
+      })(), document.body)}
     </section>
   );
 }

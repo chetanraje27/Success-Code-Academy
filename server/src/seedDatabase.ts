@@ -57,18 +57,45 @@ export async function seedDatabase() {
       ]);
     }
 
-    // Check if videos exist
+    // Sync or update existing academy videos with new URLs
+    const initialVideos = [
+      { category: "Instagram Reel", title: "Success Code Academy Highlight Reel 1", excerpt: "Special academy moments and student achievements.", date: "June 15, 2026", duration: "1:00", image: "/images/about/infra.png", videoUrl: "https://www.instagram.com/reel/DbN2KRvt-Jb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", isActive: true, orderIndex: 1 },
+      { category: "Student Journey", title: "Siddhi Badhe: My Journey to AIIMS Delhi", excerpt: "Siddhi shares her study schedule, organic chemistry notes, and biology charts.", date: "May 12, 2026", duration: "0:58", image: "/images/results/heroes/HoneSiddhi.png", videoUrl: "https://youtu.be/CwjWjzuEJTY?si=CLMCSteRaXUqz8gh", isActive: true, orderIndex: 2 },
+      { category: "Instagram Reel", title: "Success Code Academy Highlight Reel 2", excerpt: "Hear from our top rankers about their daily revision habits.", date: "June 02, 2026", duration: "1:00", image: "/videos/Cover/Award_Cere_Cover.png", videoUrl: "https://www.instagram.com/reel/DKty1AZN0VQ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", isActive: true, orderIndex: 3 },
+      { category: "Instagram Reel", title: "Success Code Academy Highlight Reel 3", excerpt: "Formula flashcard strategies and mock test practices.", date: "June 08, 2026", duration: "1:00", image: "/images/results/heroes/HomeSamruddhi.png", videoUrl: "https://www.instagram.com/reel/DRegEQnjQ1K/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", isActive: true, orderIndex: 4 },
+      { category: "Study Tips", title: "Mastering Physics Numericals", excerpt: "Expert faculty breaks down the approach to solve complex physics problems quickly.", date: "July 10, 2026", duration: "12:15", image: "/images/blogs/classroom_doubts.png", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", isActive: true, orderIndex: 5 },
+      { category: "YouTube Feature", title: "Success Code Academy Feature Video 1", excerpt: "An inspiring talk by our founder on staying focused and motivated.", date: "August 01, 2026", duration: "5:30", image: "/images/banners/upcoming_batches_hero.png", videoUrl: "https://youtu.be/pvF-EySHwkw?si=o_FRxmMXzIGb5-1T", isActive: true, orderIndex: 6 },
+      { category: "YouTube Feature", title: "Success Code Academy Feature Video 2", excerpt: "Deep dive into exam preparation and classroom environment.", date: "August 05, 2026", duration: "4:15", image: "/images/about/infra.png", videoUrl: "https://youtu.be/b4miUebvzDU?si=84yQIDqlOSASNehK", isActive: true, orderIndex: 7 }
+    ];
+
     const videoCount = await AcademyVideo.count();
     if (videoCount === 0) {
       console.log('Seeding initial academy videos...');
-      await AcademyVideo.bulkCreate([
-        { category: "Campus Tour", title: "Success Code Academy Campus Tour", excerpt: "Take a virtual tour of our state-of-the-art digital classrooms, advanced study cabins, and library resource center.", date: "June 15, 2026", duration: "4:02", image: "/images/about/infra.png", videoUrl: "/videos/SCA_Campus_Tour.mp4", isActive: true, orderIndex: 1 },
-        { category: "Student Journey", title: "Siddhi Badhe: My Journey to AIIMS Delhi", excerpt: "Siddhi shares her study schedule, organic chemistry notes, and biology charts that led her to secure a seat at AIIMS Delhi.", date: "May 12, 2026", duration: "0:58", image: "/images/results/heroes/HoneSiddhi.png", videoUrl: "/videos/Siddhi_Journey_Video.mp4", isActive: true, orderIndex: 2 },
-        { category: "Award Ceremony", title: "2025 Students Award Ceremony", excerpt: "Hear from our top rankers about their daily revision habits, NCERT reading tricks, and how they managed exam-day stress.", date: "June 02, 2026", duration: "2:21", image: "/videos/Cover/Award_Cere_Cover.png", videoUrl: "/videos/Award_Ceremony.mp4", isActive: true, orderIndex: 3 },
-        { category: "Student Journey", title: "Samruddhi Lokhande : My Journey to AIIMS Nagpur", excerpt: "Her formula flashcard strategy, mock test timing practices, and advice for fellow repeaters.", date: "June 08, 2026", duration: "7:45", image: "/images/results/heroes/HomeSamruddhi.png", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", isActive: true, orderIndex: 4 },
-        { category: "Study Tips", title: "Mastering Physics Numericals", excerpt: "Expert faculty breaks down the approach to solve complex physics problems quickly.", date: "July 10, 2026", duration: "12:15", image: "/images/blogs/classroom_doubts.png", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", isActive: true, orderIndex: 5 },
-        { category: "Motivation", title: "Never Give Up - Director's Message", excerpt: "An inspiring talk by our founder on staying focused and motivated during tough times.", date: "August 01, 2026", duration: "5:30", image: "/images/banners/upcoming_batches_hero.png", videoUrl: "/videos/SCA_Campus_Tour.mp4", isActive: true, orderIndex: 6 }
-      ]);
+      await AcademyVideo.bulkCreate(initialVideos);
+    } else {
+      // Update existing records for orderIndex 1 through 7 with the specific links provided
+      const existing = await AcademyVideo.findAll();
+      const updatesMap: Record<number, string> = {
+        1: "https://www.instagram.com/reel/DbN2KRvt-Jb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+        2: "https://youtu.be/CwjWjzuEJTY?si=CLMCSteRaXUqz8gh",
+        3: "https://www.instagram.com/reel/DKty1AZN0VQ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+        4: "https://www.instagram.com/reel/DRegEQnjQ1K/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+        6: "https://youtu.be/pvF-EySHwkw?si=o_FRxmMXzIGb5-1T",
+        7: "https://youtu.be/b4miUebvzDU?si=84yQIDqlOSASNehK"
+      };
+
+      for (const v of existing) {
+        const targetUrl = updatesMap[v.orderIndex];
+        if (targetUrl) {
+          await v.update({ videoUrl: targetUrl });
+        }
+      }
+
+      // Check if orderIndex 7 exists, if not, create it
+      const order7Exists = existing.some((v) => v.orderIndex === 7);
+      if (!order7Exists) {
+        await AcademyVideo.create(initialVideos[6]);
+      }
     }
 
     console.log('Database seeding complete.');

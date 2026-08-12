@@ -62,12 +62,11 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
       ref={containerRef}
       style={{
         width: "100%",
-        height: "100%",
+        minHeight: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        overflowY: "auto",
         background: "#0f172a",
         borderRadius: "12px",
         padding: "1rem",

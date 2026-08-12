@@ -1435,8 +1435,8 @@ export default function GalleryPage() {
 
         .lightbox-video-frame.is-instagram {
           padding-top: 0;
-          height: 660px;
-          max-height: 80vh;
+          height: auto;
+          min-height: 500px;
           background: #ffffff;
         }
 

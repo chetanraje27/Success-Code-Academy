@@ -6,6 +6,7 @@ const sequelize = new Sequelize(dbConfig);
 
 // Import models and initialize them to ensure they are registered on the sequelize instance
 import Admin, { initAdmin } from './Admin';
+import AdminPasswordReset, { initAdminPasswordReset } from './AdminPasswordReset';
 import ScholarshipRegistration, { initScholarshipRegistration } from './ScholarshipRegistration';
 import User, { initUser } from './User';
 import OtpVerification, { initOtpVerification } from './OtpVerification';
@@ -23,6 +24,7 @@ import AcademyVideo, { initAcademyVideo } from './AcademyVideo';
 import Course, { initCourse } from './Course';
 
 initAdmin(sequelize);
+initAdminPasswordReset(sequelize);
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
 initOtpVerification(sequelize);
@@ -64,6 +66,7 @@ export async function testConnection(): Promise<boolean> {
 export {
   sequelize,
   Admin,
+  AdminPasswordReset,
   ScholarshipRegistration,
   User,
   OtpVerification,

@@ -29,6 +29,8 @@ import {
   mediaRestoreParamsSchema,
   adminCreateUserSchema,
   adminUpdateUserSchema,
+  adminAccountCreateSchema,
+  adminAccountUpdateSchema,
   adminCreateCourseFormSchema,
   adminUpdateCourseFormSchema,
   adminCreateScholarshipFormSchema,
@@ -218,6 +220,11 @@ router.get(
   adminController.getUsers,
 );
 router.get(
+  '/database/admins',
+  validate(adminListQuerySchema, 'query'),
+  adminController.getAdminAccounts,
+);
+router.get(
   '/database/course-forms',
   validate(adminListQuerySchema, 'query'),
   adminController.getCourseForms,
@@ -242,6 +249,17 @@ router.get(
 router.post('/database/users', validate(adminCreateUserSchema), adminController.createUser);
 router.put('/database/users/:id', validate(idParamsSchema, 'params'), validate(adminUpdateUserSchema), adminController.updateUser);
 router.delete('/database/users/:id', validate(idParamsSchema, 'params'), adminController.deleteUser);
+
+// Administrator accounts. Passwords are set once at creation and afterwards
+// rotated only through a single-use reset link.
+router.post('/database/admins', validate(adminAccountCreateSchema), adminController.createAdminAccount);
+router.put('/database/admins/:id', validate(idParamsSchema, 'params'), validate(adminAccountUpdateSchema), adminController.updateAdminAccount);
+router.delete('/database/admins/:id', validate(idParamsSchema, 'params'), adminController.deleteAdminAccount);
+router.post(
+  '/database/admins/:id/password-reset',
+  validate(idParamsSchema, 'params'),
+  adminController.sendAdminPasswordReset,
+);
 
 router.post('/database/course-forms', validate(adminCreateCourseFormSchema), adminController.createCourseForm);
 router.put('/database/course-forms/:id', validate(idParamsSchema, 'params'), validate(adminUpdateCourseFormSchema), adminController.updateCourseForm);

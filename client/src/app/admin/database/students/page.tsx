@@ -23,7 +23,7 @@ export default function AdminStudentsPage() {
     <AdminLeadTable
       key={refreshKey}
       title="Student accounts"
-      description="View registered student profiles. Password and authentication data are never exposed in this table."
+      description="View and manage registered student profiles. Students sign in with their mobile number and a one-time code, so no password is stored for them."
       endpoint="database/users"
       searchPlaceholder="Search name, email, or mobile number"
       exportName="student-accounts"

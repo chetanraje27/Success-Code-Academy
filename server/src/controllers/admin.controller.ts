@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import {
   User,
+  Admin,
   CourseRegistration,
   ScholarshipRegistration,
   Banner,
@@ -29,6 +30,12 @@ import { restoreValues } from '../utils/mediaRevision';
 import { asyncHandler } from '../utils/asyncHandler';
 import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
+import logger from '../utils/logger';
+import { sendMail } from '../utils/mailer';
+import {
+  buildResetUrl,
+  issueAdminPasswordReset,
+} from '../utils/adminPasswordReset';
 import multer from 'multer';
 import { createClient } from '@supabase/supabase-js';
 import { Op } from 'sequelize';
@@ -955,37 +962,247 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
 // --- Database Management CRUD ---
 
 
+// The dormant `users.passwordHash` column is never written, but it would still
+// be serialized by a bare `res.json(user)`. Every student response goes through
+// this whitelist instead.
+function publicStudent(user: User) {
+  return {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    mobileNumber: user.mobileNumber,
+    age: user.age,
+    role: user.role,
+    createdAt: user.createdAt,
+  };
+}
+
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
-  const data = req.body;
-  if (data.password) {
-    data.passwordHash = await bcrypt.hash(data.password, 10);
-    delete data.password;
-  }
-  const user = await User.create(data);
-  res.status(201).json({ status: 'success', data: { user } });
+  // Students authenticate with a mobile number and an OTP, so no password is
+  // accepted or stored here. `role` is pinned rather than taken from input:
+  // administrators are managed through /database/admins.
+  const user = await User.create({ ...req.body, role: 'student' });
+  res.status(201).json({ status: 'success', data: { user: publicStudent(user) } });
 });
 
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   const id = req.params.id as string;
-  const data = req.body;
   const user = await User.findByPk(id);
-  if (!user) throw new AppError('User not found', 404);
+  if (!user || user.role !== 'student') throw new AppError('Student not found', 404);
 
-  if (data.password) {
-    data.passwordHash = await bcrypt.hash(data.password, 10);
-    delete data.password;
-  }
-  await user.update(data);
-  res.status(200).json({ status: 'success', data: { user } });
+  await user.update(req.body);
+  res.status(200).json({ status: 'success', data: { user: publicStudent(user) } });
 });
 
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   const id = req.params.id as string;
   const user = await User.findByPk(id);
-  if (!user) throw new AppError('User not found', 404);
+  if (!user || user.role !== 'student') throw new AppError('Student not found', 404);
   await user.destroy();
   res.status(200).json({ status: 'success', data: null });
 });
+
+/* --- Administrator accounts (the `admins` table backing admin sign-in) --- */
+
+const ADMIN_PUBLIC_ATTRIBUTES = [
+  'id',
+  'name',
+  'email',
+  'mobileNumber',
+  'createdAt',
+  'updatedAt',
+] as const;
+
+function publicAdminAccount(admin: Admin) {
+  return {
+    id: admin.id,
+    name: admin.name,
+    email: admin.email,
+    mobileNumber: admin.mobileNumber,
+    // Two-factor authentication is not built yet. The field is reported so the
+    // dashboard can show an honest status instead of implying it is on.
+    totpEnabled: false,
+    createdAt: admin.createdAt,
+    updatedAt: admin.updatedAt,
+  };
+}
+
+/**
+ * Rejects an email or mobile number already held by a different administrator.
+ * The unique indexes would also catch this, but a checked 409 reads better in
+ * the dashboard than a raw constraint error.
+ */
+async function assertAdminIdentityIsFree(
+  fields: { email?: string; mobileNumber?: string },
+  excludeId?: number,
+): Promise<void> {
+  const candidates = [
+    fields.email ? { email: fields.email } : null,
+    fields.mobileNumber ? { mobileNumber: fields.mobileNumber } : null,
+  ].filter(Boolean) as Array<Record<string, string>>;
+
+  if (candidates.length === 0) return;
+
+  const clash = await Admin.findOne({
+    where: {
+      [Op.or]: candidates,
+      ...(excludeId ? { id: { [Op.ne]: excludeId } } : {}),
+    },
+  });
+
+  if (!clash) return;
+
+  throw new AppError(
+    clash.email === fields.email
+      ? 'Another administrator already uses that email address.'
+      : 'Another administrator already uses that mobile number.',
+    409,
+  );
+}
+
+export const getAdminAccounts = asyncHandler(async (req: Request, res: Response) => {
+  const { q, cursor, limit } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const admins = await Admin.findAll({
+    where: {
+      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(like
+        ? {
+            [Op.or]: [{ name: like }, { email: like }, { mobileNumber: like }],
+          }
+        : {}),
+    },
+    attributes: [...ADMIN_PUBLIC_ATTRIBUTES],
+    order: [['id', 'DESC']],
+    limit: limit + 1,
+  });
+  sendPaginated(res, admins.map(publicAdminAccount), limit);
+});
+
+export const createAdminAccount = asyncHandler(async (req: Request, res: Response) => {
+  const { name, email, mobileNumber, password } = req.body;
+  await assertAdminIdentityIsFree({ email, mobileNumber });
+
+  const admin = await Admin.create({
+    name,
+    email,
+    mobileNumber,
+    passwordHash: await bcrypt.hash(password, 12),
+  });
+
+  logger.info('[Admin] Administrator account created', {
+    adminId: admin.id,
+    by: req.user?.id,
+  });
+  res.status(201).json({ status: 'success', data: { admin: publicAdminAccount(admin) } });
+});
+
+export const updateAdminAccount = asyncHandler(async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const admin = await Admin.findByPk(id);
+  if (!admin) throw new AppError('Administrator not found', 404);
+
+  // Passwords are never set from this form; they are rotated through a reset
+  // link so a plain-text password is never typed into the dashboard.
+  const { name, email, mobileNumber } = req.body;
+  await assertAdminIdentityIsFree({ email, mobileNumber }, id);
+
+  await admin.update({
+    ...(name === undefined ? {} : { name }),
+    ...(email === undefined ? {} : { email }),
+    ...(mobileNumber === undefined ? {} : { mobileNumber }),
+  });
+
+  logger.info('[Admin] Administrator account updated', {
+    adminId: admin.id,
+    by: req.user?.id,
+  });
+  res.status(200).json({ status: 'success', data: { admin: publicAdminAccount(admin) } });
+});
+
+export const deleteAdminAccount = asyncHandler(async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const admin = await Admin.findByPk(id);
+  if (!admin) throw new AppError('Administrator not found', 404);
+
+  if (req.user?.id === id) {
+    throw new AppError('You cannot delete the account you are signed in with.', 400);
+  }
+
+  // Losing the last administrator would lock everyone out of the dashboard.
+  const remaining = await Admin.count();
+  if (remaining <= 1) {
+    throw new AppError(
+      'At least one administrator account must remain. Add another administrator first.',
+      400,
+    );
+  }
+
+  await admin.destroy();
+  logger.info('[Admin] Administrator account deleted', {
+    adminId: id,
+    by: req.user?.id,
+  });
+  res.status(200).json({ status: 'success', data: null });
+});
+
+/**
+ * POST /database/admins/:id/password-reset
+ *
+ * Issues a single-use reset link. When no email transport is configured the
+ * link comes back in the response so the signed-in administrator can copy it
+ * and pass it on directly.
+ */
+export const sendAdminPasswordReset = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const admin = await Admin.findByPk(id);
+    if (!admin) throw new AppError('Administrator not found', 404);
+
+    const { rawToken, expiresAt, ttlMinutes } = await issueAdminPasswordReset({
+      adminId: admin.id,
+      requestedByAdminId: req.user?.id ?? null,
+    });
+    const resetUrl = buildResetUrl(rawToken);
+
+    const mail = await sendMail({
+      to: admin.email,
+      subject: 'Reset your Success Code Academy admin password',
+      text: [
+        `Hello ${admin.name},`,
+        '',
+        'Use the link below to choose a new admin password.',
+        `It expires in ${ttlMinutes} minutes and can only be used once.`,
+        '',
+        resetUrl,
+        '',
+        'If you did not expect this email, you can ignore it.',
+      ].join('\n'),
+    });
+
+    logger.info('[Admin] Password reset link issued', {
+      adminId: admin.id,
+      by: req.user?.id,
+      emailed: mail.delivered,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: mail.delivered
+        ? `A reset link was emailed to ${admin.email}.`
+        : 'A reset link was created. Copy it and share it with the administrator directly.',
+      data: {
+        emailed: mail.delivered,
+        // Returned only because email is not wired up yet. Once a transport is
+        // configured, drop this field so the raw token stays in the mailbox.
+        resetUrl,
+        expiresAt,
+        ttlMinutes,
+      },
+    });
+  },
+);
 
 export const createCourseForm = asyncHandler(async (req: Request, res: Response) => {
   const form = await CourseRegistration.create(req.body);

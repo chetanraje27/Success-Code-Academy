@@ -20,6 +20,7 @@ import {
   Moon,
   Newspaper,
   Settings,
+  ShieldCheck,
   Star,
   Sun,
   Trophy,
@@ -80,6 +81,16 @@ const navigation = [
       },
     ],
   },
+  {
+    label: "Access & security",
+    items: [
+      {
+        label: "Administrators",
+        href: "/admin/database/administrators",
+        icon: ShieldCheck,
+      },
+    ],
+  },
 ] as const;
 
 const routeNames = new Map<string, string>(
@@ -95,9 +106,15 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const isLogin = pathname === "/admin/login";
+  /*
+   * Routes that must render without an admin session. Sign-in obviously needs
+   * one, and so does the password reset page: whoever follows a reset link is
+   * by definition locked out.
+   */
+  const isPublicRoute =
+    pathname === "/admin/login" || pathname === "/admin/reset-password";
   const [session, setSession] = useState<SessionState>(
-    isLogin ? "guest" : "loading",
+    isPublicRoute ? "guest" : "loading",
   );
   const [user, setUser] = useState<AdminUser | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -172,12 +189,12 @@ export default function AdminLayout({
   }, []);
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isPublicRoute) {
       // Remote session verification is the external system synchronized here.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       void verifySession();
     }
-  }, [isLogin, verifySession]);
+  }, [isPublicRoute, verifySession]);
 
   useEffect(() => {
     const expire = () => {
@@ -190,10 +207,10 @@ export default function AdminLayout({
   }, [router]);
 
   useEffect(() => {
-    if (!isLogin && session === "guest") {
+    if (!isPublicRoute && session === "guest") {
       router.replace("/admin/login");
     }
-  }, [isLogin, router, session]);
+  }, [isPublicRoute, router, session]);
 
   const currentPage = useMemo(
     () => routeNames.get(pathname) || "Administration",
@@ -210,7 +227,7 @@ export default function AdminLayout({
     router.replace("/admin/login");
   }
 
-  if (isLogin) {
+  if (isPublicRoute) {
     return <>{children}</>;
   }
 

@@ -6,7 +6,9 @@ import {
   getCurrentUser,
   loginAdmin,
   registerUser,
+  resetAdminPassword,
   updateProfile,
+  verifyAdminPasswordReset,
 } from '../../controllers/auth.controller';
 import { validate } from '../../middlewares/validate';
 import { authenticate } from '../../middlewares/authenticate';
@@ -66,10 +68,40 @@ const adminPasswordSchema = z
     message: 'New password must be different from the current password',
   });
 
+const adminResetTokenQuerySchema = z
+  .object({
+    token: z.string().trim().min(1, 'A reset token is required').max(256),
+  })
+  .strict();
+
+const adminResetPasswordSchema = z
+  .object({
+    token: z.string().trim().min(1, 'A reset token is required').max(256),
+    newPassword: z
+      .string()
+      .min(6, 'New password must be at least 6 characters')
+      .max(128),
+  })
+  .strict();
+
 router.post('/send-otp', submissionLimiter, validate(sendOtpSchema), checkMobileOrLogin);
 router.post('/verify-otp', submissionLimiter, validate(verifyOtpSchema), registerUser);
 router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile);
 router.post('/admin/login', adminLoginLimiter, validate(adminLoginSchema), loginAdmin);
+// Public, token-gated password reset. Rate limited like sign-in because a
+// reset token is a credential and these are the endpoints that test one.
+router.get(
+  '/admin/reset-password',
+  adminLoginLimiter,
+  validate(adminResetTokenQuerySchema, 'query'),
+  verifyAdminPasswordReset,
+);
+router.post(
+  '/admin/reset-password',
+  adminLoginLimiter,
+  validate(adminResetPasswordSchema),
+  resetAdminPassword,
+);
 router.get('/me', authenticate, getCurrentUser);
 router.put(
   '/admin/password',

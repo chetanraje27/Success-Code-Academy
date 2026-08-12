@@ -1,10 +1,12 @@
 import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { type SignOptions } from 'jsonwebtoken';
-import { User, Admin } from '../models';
+import { Op } from 'sequelize';
+import { User, Admin, AdminPasswordReset, sequelize } from '../models';
 import { env } from '../config/environment';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
+import { hashResetToken } from '../utils/adminPasswordReset';
 import logger from '../utils/logger';
 
 type AuthPurpose = 'student' | 'admin';
@@ -321,6 +323,98 @@ export const changeAdminPassword = asyncHandler(
     res.status(200).json({
       status: 'success',
       message: 'Password changed successfully. Please sign in again.',
+    });
+  },
+);
+
+/**
+ * Every rejection of a reset token says the same thing. Whether a token is
+ * unknown, expired, or already spent is not information a caller needs, and
+ * withholding it removes a way to probe for live tokens.
+ */
+const INVALID_RESET_MESSAGE =
+  'This password reset link is invalid or has expired. Ask an administrator for a new one.';
+
+/**
+ * GET /api/v1/auth/admin/reset-password?token=...
+ *
+ * Lets the reset page tell a stale link apart from a good one before the
+ * administrator types a new password. It deliberately returns nothing about
+ * the account itself.
+ */
+export const verifyAdminPasswordReset = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const token = String(req.query.token || '');
+    if (!token) {
+      throw new AppError(INVALID_RESET_MESSAGE, 400);
+    }
+
+    const reset = await AdminPasswordReset.findOne({
+      where: {
+        tokenHash: hashResetToken(token),
+        usedAt: { [Op.is]: null },
+        expiresAt: { [Op.gt]: new Date() },
+      },
+    });
+
+    if (!reset) {
+      throw new AppError(INVALID_RESET_MESSAGE, 400);
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: { valid: true, expiresAt: reset.expiresAt },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/auth/admin/reset-password
+ *
+ * Consumes a single-use token and sets a new password. The lookup, the
+ * password write, and marking the token spent share one transaction with a
+ * row lock, so two submissions of the same link cannot both succeed.
+ */
+export const resetAdminPassword = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { token, newPassword } = req.body as {
+      token: string;
+      newPassword: string;
+    };
+    const tokenHash = hashResetToken(token);
+
+    const adminId = await sequelize.transaction(async (transaction) => {
+      const reset = await AdminPasswordReset.findOne({
+        where: {
+          tokenHash,
+          usedAt: { [Op.is]: null },
+          expiresAt: { [Op.gt]: new Date() },
+        },
+        lock: transaction.LOCK.UPDATE,
+        transaction,
+      });
+
+      if (!reset) {
+        throw new AppError(INVALID_RESET_MESSAGE, 400);
+      }
+
+      const admin = await Admin.findByPk(reset.adminId, { transaction });
+      if (!admin) {
+        throw new AppError(INVALID_RESET_MESSAGE, 400);
+      }
+
+      admin.passwordHash = await bcrypt.hash(newPassword, 12);
+      await admin.save({ transaction });
+      await reset.update({ usedAt: new Date() }, { transaction });
+
+      return admin.id;
+    });
+
+    logger.info('[Auth] Admin password reset via link', { userId: adminId });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Your password has been updated. You can now sign in.',
     });
   },
 );

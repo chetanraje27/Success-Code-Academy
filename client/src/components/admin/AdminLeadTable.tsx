@@ -33,6 +33,7 @@ function csvCell(value: unknown): string {
 export default function AdminLeadTable({
   title,
   description,
+  eyebrow = "Enquiries & records",
   endpoint,
   searchPlaceholder,
   columns,
@@ -43,6 +44,7 @@ export default function AdminLeadTable({
 }: {
   title: string;
   description: string;
+  eyebrow?: string;
   endpoint: string;
   searchPlaceholder: string;
   columns: LeadColumn[];
@@ -133,7 +135,7 @@ export default function AdminLeadTable({
   return (
     <div className="admin-page">
       <AdminPageHeader
-        eyebrow="Enquiries & records"
+        eyebrow={eyebrow}
         title={title}
         description={description}
       />

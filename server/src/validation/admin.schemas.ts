@@ -228,6 +228,9 @@ export const contentBlockUpdateSchema = z
     value: z.string().max(20_000),
   })
   .strict();
+// Student accounts never hold a password: sign-in is mobile number + OTP.
+// `.strict()` makes a stray `password` or `role` an explicit 400 rather than a
+// silently ignored field.
 export const adminCreateUserSchema = z
   .object({
     firstName: z.string().trim().min(1),
@@ -235,14 +238,27 @@ export const adminCreateUserSchema = z
     mobileNumber: z.string().trim().min(10).max(15),
     email: z.string().email(),
     age: z.coerce.number().int().min(5).max(100),
-    role: z.enum(['student', 'admin']).default('student'),
-    password: z.string().min(6),
   })
   .strict();
 
-export const adminUpdateUserSchema = adminCreateUserSchema.extend({
-  password: z.string().min(6).optional().or(z.literal('')),
-}).partial().strict();
+export const adminUpdateUserSchema = adminCreateUserSchema.partial().strict();
+
+// Administrator accounts live in the separate `admins` table and do hold a
+// password. Rotation happens through a reset link, never by typing a new
+// password into this form, so update has no password field at all.
+export const adminAccountCreateSchema = z
+  .object({
+    name: z.string().trim().min(1).max(120),
+    email: z.string().trim().toLowerCase().email(),
+    mobileNumber: z.string().trim().regex(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
+    password: z.string().min(6).max(128),
+  })
+  .strict();
+
+export const adminAccountUpdateSchema = adminAccountCreateSchema
+  .omit({ password: true })
+  .partial()
+  .strict();
 
 export const adminCreateCourseFormSchema = z
   .object({

@@ -20,9 +20,7 @@ export default function StudentEditorModal({
     lastName: "",
     email: "",
     mobileNumber: "",
-    age: "",
-    role: "student",
-    password: ""
+    age: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,9 +35,7 @@ export default function StudentEditorModal({
           lastName: student.lastName || "",
           email: student.email || "",
           mobileNumber: student.mobileNumber || "",
-          age: student.age || "",
-          role: student.role || "student",
-          password: ""
+          age: student.age || ""
         });
       } else {
         setFormData({
@@ -47,9 +43,7 @@ export default function StudentEditorModal({
           lastName: "",
           email: "",
           mobileNumber: "",
-          age: "",
-          role: "student",
-          password: ""
+          age: ""
         });
       }
       setError("");
@@ -63,21 +57,20 @@ export default function StudentEditorModal({
 
     try {
       const payload = { ...formData };
-      if (!payload.password) delete payload.password;
       if (!payload.age) delete payload.age;
       else payload.age = Number(payload.age);
 
-      const endpoint = isNew 
-        ? `/api/v1/admin/database/users` 
+      const endpoint = isNew
+        ? `/api/v1/admin/database/users`
         : `/api/v1/admin/database/users/${student.id}`;
-      
+
       const method = isNew ? "POST" : "PUT";
 
       await adminApiFetch(endpoint, {
         method,
         body: JSON.stringify(payload)
       });
-      
+
       onSaved();
       onClose();
     } catch (e: any) {
@@ -91,7 +84,7 @@ export default function StudentEditorModal({
     <AdminModal open={open} onClose={onClose} title={isNew ? "Add New Student" : "Edit Student Profile"} width={560}>
       <div className="sca-admin-form" style={{ padding: "20px" }}>
         {error && <div className="sca-admin-error">{error}</div>}
-        
+
         <div className="sca-admin-row">
           <div className="sca-admin-field" style={{ flex: 1 }}>
             <label>First Name</label>
@@ -119,6 +112,7 @@ export default function StudentEditorModal({
               value={formData.mobileNumber}
               onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
             />
+            <small>Students sign in with this number and an OTP.</small>
           </div>
           <div className="sca-admin-field" style={{ flex: 1 }}>
             <label>Email Address</label>
@@ -139,26 +133,6 @@ export default function StudentEditorModal({
               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
             />
           </div>
-          <div className="sca-admin-field" style={{ flex: 1 }}>
-            <label>System Role</label>
-            <select
-              value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            >
-              <option value="student">Student</option>
-              <option value="admin">Administrator</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="sca-admin-field" style={{ marginTop: 12 }}>
-          <label>{isNew ? "Password" : "Reset Password"}</label>
-          <input
-            type="text"
-            placeholder={isNew ? "Required for new accounts" : "Leave blank to keep current password"}
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          />
         </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 24 }}>

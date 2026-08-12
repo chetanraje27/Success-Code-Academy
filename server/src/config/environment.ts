@@ -37,6 +37,15 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('7d'),
   ADMIN_JWT_EXPIRES_IN: z.string().default('8h'),
 
+  // Public base URL of the website, used to build admin password reset links.
+  // Falls back to the first CORS origin so local development needs no extra
+  // configuration.
+  APP_BASE_URL: z.string().default(''),
+  ADMIN_RESET_TTL_MINUTES: z
+    .string()
+    .default('60')
+    .transform((val) => parseInt(val, 10)),
+
   // CORS
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
 
@@ -64,6 +73,18 @@ if (!parsed.success) {
 
 /** Validated and typed environment configuration. */
 export const env = parsed.data;
+
+/**
+ * Public origin of the website. Reset links must point at the Next.js app, not
+ * at this API, so it prefers APP_BASE_URL and falls back to the first
+ * configured CORS origin.
+ */
+export function appBaseUrl(): string {
+  const explicit = env.APP_BASE_URL.trim();
+  if (explicit) return explicit.replace(/\/$/, '');
+  const firstOrigin = env.CORS_ORIGIN.split(',')[0]?.trim() || '';
+  return firstOrigin.replace(/\/$/, '');
+}
 
 /** TypeScript type inferred from the environment schema. */
 export type Env = z.infer<typeof envSchema>;

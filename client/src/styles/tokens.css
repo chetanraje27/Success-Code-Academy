@@ -47,15 +47,23 @@
    * lower these -- that is the bug this scale replaces (labels were reaching
    * 8px on phones while numerals inflated to 17vw).
    */
-  --font-size-micro: clamp(0.6875rem, 0.65rem + 0.19vw, 0.8rem); /* 11 -> 12.8px */
-  --font-size-caption: clamp(0.75rem, 0.71rem + 0.2vw, 0.875rem); /* 12 -> 14px */
-  --font-size-small: clamp(0.8125rem, 0.79rem + 0.12vw, 0.9375rem); /* 13 -> 15px */
+  --font-size-micro: clamp(0.6875rem, 0.65rem + 0.19vw, 0.8rem);
+  /* 11 -> 12.8px */
+  --font-size-caption: clamp(0.75rem, 0.71rem + 0.2vw, 0.875rem);
+  /* 12 -> 14px */
+  --font-size-small: clamp(0.8125rem, 0.79rem + 0.12vw, 0.9375rem);
+  /* 13 -> 15px */
   --font-size-body: 1rem;
-  --font-size-lead: clamp(1rem, 0.958rem + 0.208vw, 1.125rem); /* 16 -> 18px */
-  --font-size-heading-4: clamp(1rem, 0.917rem + 0.417vw, 1.25rem); /* 16 -> 20px */
-  --font-size-heading-3: clamp(1.125rem, 0.917rem + 1.042vw, 1.75rem); /* 18 -> 28px */
-  --font-size-heading-2: clamp(1.375rem, 0.917rem + 2.292vw, 2.75rem); /* 22 -> 44px */
-  --font-size-heading-1: clamp(1.75rem, 1.083rem + 3.333vw, 3.75rem); /* 28 -> 60px */
+  --font-size-lead: clamp(1rem, 0.958rem + 0.208vw, 1.125rem);
+  /* 16 -> 18px */
+  --font-size-heading-4: clamp(1rem, 0.917rem + 0.417vw, 1.25rem);
+  /* 16 -> 20px */
+  --font-size-heading-3: clamp(1.125rem, 0.917rem + 1.042vw, 1.75rem);
+  /* 18 -> 28px */
+  --font-size-heading-2: clamp(1.375rem, 0.917rem + 2.292vw, 2.75rem);
+  /* 22 -> 44px */
+  --font-size-heading-1: clamp(1.75rem, 1.083rem + 3.333vw, 3.75rem);
+  /* 28 -> 60px */
 
   --line-height-tight: 1.06;
   --line-height-heading: 1.15;

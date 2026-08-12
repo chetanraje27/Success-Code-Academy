@@ -56,7 +56,7 @@ export function parseVideoUrl(rawUrl: string): ParsedVideoInfo {
     const postId = instagramMatch[1];
     return {
       type: "iframe",
-      embedUrl: `https://www.instagram.com/reel/${postId}/embed`,
+      embedUrl: `https://www.instagram.com/reel/${postId}/`,
       isInstagram: true,
       isYoutube: false,
     };

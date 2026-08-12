@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
 import { parseVideoUrl } from "@/lib/video-utils";
+import InstagramEmbed from "@/components/InstagramEmbed";
 
 interface VideoItem {
   id: number;
@@ -585,6 +586,8 @@ export default function GalleryPage() {
                               autoPlay
                               className="embedded-player"
                             />
+                          ) : parsed.isInstagram ? (
+                            <InstagramEmbed url={parsed.embedUrl} />
                           ) : (
                             <iframe
                               src={parsed.embedUrl}

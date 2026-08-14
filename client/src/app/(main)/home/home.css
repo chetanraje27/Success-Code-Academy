@@ -2001,7 +2001,7 @@
   }
 
   .home-container .hero-slider-section {
-    padding: 0.85rem 0 0.75rem;
+    padding: 0.75rem 0 0.6rem;
   }
 
   .home-container .explore-section {
@@ -2009,32 +2009,59 @@
   }
 
   .home-container .hero-banner-wrap {
-    --hero-slide-width: 88%;
-    --hero-slide-edge: 6%;
-    --hero-slide-gap: 0.65rem;
+    --hero-slide-width: 100%;
+    --hero-slide-edge: 0px;
+    --hero-slide-gap: 0.5rem;
+    width: calc(100% - 2rem);
+    margin-inline: auto;
   }
 
-  /* This matches the shared mobile selector without altering its desktop
-     cascade. Keep the seeded HOME poster's native 2014 × 781 proportion. */
+  /* Keep the seeded HOME posters at their authored proportion. */
   .public-shell .home-container .hero-banner-wrap {
     aspect-ratio: 2014 / 781;
   }
 
   .home-container .banner-slide {
-    border-radius: 9px;
+    border-radius: 7px;
   }
 
   .home-container .banner-arrow {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    background: rgba(16, 47, 94, 0.76);
+    border-color: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(16, 47, 94, 0.2);
+    backdrop-filter: blur(4px);
+  }
+
+  .home-container .banner-arrow svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .home-container .banner-arrow:hover {
+    background: rgba(16, 47, 94, 0.9);
+    border-color: rgba(255, 255, 255, 0.7);
   }
 
   .home-container .banner-arrow.left {
-    left: calc(var(--hero-slide-edge) + 0.5rem);
+    left: calc(var(--hero-slide-edge) + 0.4rem);
   }
 
   .home-container .banner-arrow.right {
-    right: calc(var(--hero-slide-edge) + 0.5rem);
+    right: calc(var(--hero-slide-edge) + 0.4rem);
+  }
+
+  .home-container .banner-dots {
+    gap: 7px;
+    margin-top: 0.75rem;
+  }
+
+  .home-container .banner-dot {
+    width: 6px;
+    height: 6px;
   }
 
   .home-container :where(.explore-header,
@@ -2197,6 +2224,29 @@
   .home-container .featured-teal-card,
   .home-container .standard-white-card {
     min-height: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-container .hero-banner-wrap {
+    width: calc(100% - 1.5rem);
+  }
+
+  .home-container .banner-arrow {
+    width: 22px;
+    height: 22px;
+  }
+
+  .home-container .banner-arrow.left {
+    left: 0.35rem;
+  }
+
+  .home-container .banner-arrow.right {
+    right: 0.35rem;
+  }
+
+  .home-container .banner-dots {
+    margin-top: 0.6rem;
   }
 }
 

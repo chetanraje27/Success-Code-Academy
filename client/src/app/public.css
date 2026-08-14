@@ -892,7 +892,7 @@
   }
 
   .public-shell .home-container .hero-slider-section {
-    padding: 0.8rem 0.75rem 0.75rem;
+    padding: 0.75rem 0 0.6rem;
   }
 
   .public-shell .home-container .explore-section {
@@ -900,13 +900,12 @@
   }
 
   .public-shell .home-container .hero-banner-wrap {
-    aspect-ratio: 16 / 8.8;
-    border-radius: 1rem;
+    aspect-ratio: 2014 / 781;
   }
 
   .public-shell .home-container .banner-arrow {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .public-shell .explore-section .explore-grid,

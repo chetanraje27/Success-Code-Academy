@@ -6,7 +6,6 @@
       "server_src_config_roles_admin_roles",
       "server_src_config_roles_adminrole",
       "server_src_config_roles_isadminrole",
-      "server_src_middlewares_authenticate",
       "server_src_middlewares_authenticate_authenticate",
       "server_src_middlewares_authorize",
       "server_src_middlewares_authorize_admin_role_set",
@@ -66,162 +65,6 @@
       "server_src_validation_admin_schemas_videoupdateschema"
     ],
     "1": [
-      "server_src_controllers_auth_controller",
-      "server_src_controllers_auth_controller_authpurpose",
-      "server_src_controllers_auth_controller_changeadminpassword",
-      "server_src_controllers_auth_controller_checkmobileorlogin",
-      "server_src_controllers_auth_controller_createtoken",
-      "server_src_controllers_auth_controller_getcurrentuser",
-      "server_src_controllers_auth_controller_loginadmin",
-      "server_src_controllers_auth_controller_publicadmin",
-      "server_src_controllers_auth_controller_publicuser",
-      "server_src_controllers_auth_controller_registeruser",
-      "server_src_controllers_auth_controller_resetadminpassword",
-      "server_src_controllers_auth_controller_updateprofile",
-      "server_src_controllers_auth_controller_verifyadminpasswordreset",
-      "server_src_controllers_form_controller",
-      "server_src_controllers_form_controller_submitcontactform",
-      "server_src_controllers_form_controller_submitcourseregistration",
-      "server_src_controllers_health_controller",
-      "server_src_controllers_health_controller_gethealth",
-      "server_src_controllers_scholarship_controller",
-      "server_src_controllers_scholarship_controller_createregistration",
-      "server_src_middlewares_ratelimiter",
-      "server_src_middlewares_ratelimiter_adminloginlimiter",
-      "server_src_middlewares_ratelimiter_defaultlimiter",
-      "server_src_middlewares_ratelimiter_submissionlimiter",
-      "server_src_middlewares_validate",
-      "server_src_middlewares_validate_validate",
-      "server_src_middlewares_validate_validationtarget",
-      "server_src_routes_index",
-      "server_src_routes_index_router",
-      "server_src_routes_v1_admin_routes_router",
-      "server_src_routes_v1_auth_routes",
-      "server_src_routes_v1_auth_routes_adminloginschema",
-      "server_src_routes_v1_auth_routes_adminpasswordschema",
-      "server_src_routes_v1_auth_routes_adminresetpasswordschema",
-      "server_src_routes_v1_auth_routes_adminresettokenqueryschema",
-      "server_src_routes_v1_auth_routes_router",
-      "server_src_routes_v1_auth_routes_sendotpschema",
-      "server_src_routes_v1_auth_routes_updateprofileschema",
-      "server_src_routes_v1_auth_routes_verifyotpschema",
-      "server_src_routes_v1_content_routes",
-      "server_src_routes_v1_content_routes_router",
-      "server_src_routes_v1_form_routes",
-      "server_src_routes_v1_form_routes_contactformschema",
-      "server_src_routes_v1_form_routes_courseregistrationschema",
-      "server_src_routes_v1_form_routes_router",
-      "server_src_routes_v1_health_routes",
-      "server_src_routes_v1_health_routes_router",
-      "server_src_routes_v1_index",
-      "server_src_routes_v1_index_v1router",
-      "server_src_routes_v1_scholarship_routes",
-      "server_src_routes_v1_scholarship_routes_registerscholarshipschema",
-      "server_src_routes_v1_scholarship_routes_router",
-      "server_src_utils_adminpasswordreset_hashresettoken",
-      "server_src_utils_asynchandler",
-      "server_src_utils_asynchandler_asynchandler",
-      "server_src_utils_asynchandler_asyncroutehandler",
-      "server_src_utils_databaseread",
-      "server_src_utils_databaseread_istransientdatabaseerror",
-      "server_src_utils_databaseread_readfromdatabase",
-      "server_src_utils_databaseread_transient_database_errors"
-    ],
-    "2": [
-      "server_scratch_check_users",
-      "server_scratch_check_users_main",
-      "server_scratch_update_videos",
-      "server_scratch_update_videos_main",
-      "server_src_app",
-      "server_src_app_app",
-      "server_src_config_cors",
-      "server_src_config_cors_corsoptions",
-      "server_src_config_database",
-      "server_src_config_database_dbconfig",
-      "server_src_config_environment",
-      "server_src_config_environment_appbaseurl",
-      "server_src_config_environment_env",
-      "server_src_config_environment_envschema",
-      "server_src_config_environment_parsed",
-      "server_src_config_roles_super_admin",
-      "server_src_controllers_admin_controller_sendadminpasswordreset",
-      "server_src_index",
-      "server_src_index_scheduledatabasereconnect",
-      "server_src_index_startserver",
-      "server_src_middlewares_errorhandler",
-      "server_src_middlewares_errorhandler_errorhandler",
-      "server_src_middlewares_errorhandler_iszoderror",
-      "server_src_middlewares_notfound",
-      "server_src_middlewares_notfound_notfound",
-      "server_src_middlewares_requestlogger",
-      "server_src_middlewares_requestlogger_requestlogger",
-      "server_src_models_index_sequelize",
-      "server_src_models_index_testconnection",
-      "server_src_seeddatabase",
-      "server_src_seeddatabase_claimmobilenumber",
-      "server_src_seeddatabase_seeddatabase",
-      "server_src_seeddatabase_seedsuperadmin",
-      "server_src_utils_adminpasswordreset",
-      "server_src_utils_adminpasswordreset_buildreseturl",
-      "server_src_utils_adminpasswordreset_issueadminpasswordreset",
-      "server_src_utils_apperror",
-      "server_src_utils_apperror_apperror",
-      "server_src_utils_apperror_apperror_constructor",
-      "server_src_utils_logger",
-      "server_src_utils_logger_devformat",
-      "server_src_utils_logger_logger",
-      "server_src_utils_mailer",
-      "server_src_utils_mailer_deliver",
-      "server_src_utils_mailer_ismailerconfigured",
-      "server_src_utils_mailer_mailmessage",
-      "server_src_utils_mailer_mailresult",
-      "server_src_utils_mailer_rationale_43",
-      "server_src_utils_mailer_sendmail"
-    ],
-    "3": [
-      "client_src_app_main_courses_coursesclient",
-      "client_src_app_main_courses_coursesclient_course",
-      "client_src_app_main_courses_coursesclient_coursesclient",
-      "client_src_app_main_courses_id_coursedetailclient",
-      "client_src_app_main_courses_id_coursedetailclient_classroomfeatures",
-      "client_src_app_main_courses_id_coursedetailclient_coursedetailclient",
-      "client_src_app_main_courses_id_coursedetailclient_coursedetailclientprops",
-      "client_src_app_main_courses_id_coursedetailclient_coursevisuals",
-      "client_src_app_main_courses_id_coursedetailclient_timeslots",
-      "client_src_app_main_courses_id_page",
-      "client_src_app_main_courses_id_page_coursedetailpage",
-      "client_src_app_main_courses_id_page_generatemetadata",
-      "client_src_app_main_courses_page",
-      "client_src_app_main_courses_page_coursespage",
-      "client_src_app_main_courses_page_metadata",
-      "client_src_app_main_results_page",
-      "client_src_app_main_results_page_metadata",
-      "client_src_app_main_results_page_resultspage",
-      "client_src_app_main_results_resultsclient",
-      "client_src_app_main_results_resultsclient_resultsclient",
-      "client_src_app_main_results_resultsclient_storycard",
-      "client_src_app_main_results_resultsclient_studentresultcard",
-      "client_src_app_main_results_resultsclient_videostories",
-      "client_src_components_admin_leadsdrawer",
-      "client_src_components_admin_leadsdrawer_leadsdrawer",
-      "client_src_components_admin_notificationeditor",
-      "client_src_components_admin_notificationeditor_icon_presets",
-      "client_src_components_admin_notificationeditor_notification",
-      "client_src_components_admin_notificationeditor_notificationeditor",
-      "client_src_components_admin_notificationeditor_notificationeditorprops",
-      "client_src_components_admin_notificationeditor_rendericonbykey",
-      "client_src_data_results",
-      "client_src_data_results_resultsdata",
-      "client_src_data_results_studentresult",
-      "client_src_lib_api",
-      "client_src_lib_api_apifetch",
-      "client_src_lib_api_getapibase",
-      "client_src_lib_api_getauthtoken",
-      "client_src_lib_api_getstoreduser",
-      "client_src_lib_api_isadminuser",
-      "client_src_lib_api_uploadadminimage"
-    ],
-    "4": [
       "server_src_controllers_admin_controller",
       "server_src_controllers_admin_controller_admin_public_attributes",
       "server_src_controllers_admin_controller_createacademyvideo",
@@ -263,7 +106,7 @@
       "server_src_controllers_admin_controller_updatenotification",
       "server_src_controllers_admin_controller_updatescholarshipform"
     ],
-    "5": [
+    "2": [
       "client_src_app_admin_database_administrators_administratoreditormodal",
       "client_src_app_admin_database_administrators_administratoreditormodal_administratoreditormodal",
       "client_src_app_admin_database_administrators_administratoreditormodal_generatepassword",
@@ -291,7 +134,8 @@
       "client_src_components_admin_adminsessioncontext_adminsessionprovider",
       "client_src_components_admin_adminsessioncontext_adminsessionvalue",
       "client_src_components_admin_adminsessioncontext_fallback",
-      "client_src_lib_admin_api_adminuser",
+      "client_src_components_admin_editmodecontext_editmodeprovider",
+      "client_src_lib_api_isadminuser",
       "client_src_lib_roles",
       "client_src_lib_roles_admin",
       "client_src_lib_roles_admin_roles",
@@ -301,7 +145,45 @@
       "client_src_lib_roles_issuperadminrole",
       "client_src_lib_roles_super_admin"
     ],
-    "6": [
+    "3": [
+      "server_backend_layout_files_info",
+      "server_backend_layout_files_info_backend_foundation_complete_file_by_file_summary",
+      "server_backend_layout_files_info_commit_1_2_typescript_config_fix_environment_configuration",
+      "server_backend_layout_files_info_commit_3_logger_setup",
+      "server_backend_layout_files_info_commit_4_error_handling_infrastructure",
+      "server_backend_layout_files_info_commit_5_database_connection",
+      "server_backend_layout_files_info_commit_6_core_middleware_stack",
+      "server_backend_layout_files_info_commit_7_authentication_middleware",
+      "server_backend_layout_files_info_commit_8_routes_controllers_app_assembly",
+      "server_backend_layout_files_info_env_example_file_d_a_success_code_success_code_academy_server_env_example_new",
+      "server_backend_layout_files_info_sequelize_config_js_file_d_a_success_code_success_code_academy_server_sequelize_config_js_new",
+      "server_backend_layout_files_info_sequelizerc_file_d_a_success_code_success_code_academy_server_sequelizerc_new",
+      "server_backend_layout_files_info_src_app_ts_file_d_a_success_code_success_code_academy_server_src_app_ts_new",
+      "server_backend_layout_files_info_src_config_cors_ts_file_d_a_success_code_success_code_academy_server_src_config_cors_ts_new",
+      "server_backend_layout_files_info_src_config_database_ts_file_d_a_success_code_success_code_academy_server_src_config_database_ts_new",
+      "server_backend_layout_files_info_src_config_environment_ts_file_d_a_success_code_success_code_academy_server_src_config_environment_ts_new",
+      "server_backend_layout_files_info_src_controllers_health_controller_ts_file_d_a_success_code_success_code_academy_server_src_controllers_health_controller_ts_new",
+      "server_backend_layout_files_info_src_database_migrations_gitkeep_and_src_database_seeders_gitkeep_new",
+      "server_backend_layout_files_info_src_index_ts_file_d_a_success_code_success_code_academy_server_src_index_ts_modified_was_empty",
+      "server_backend_layout_files_info_src_middlewares_authenticate_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_authenticate_ts_new",
+      "server_backend_layout_files_info_src_middlewares_authorize_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_authorize_ts_new",
+      "server_backend_layout_files_info_src_middlewares_errorhandler_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_errorhandler_ts_new",
+      "server_backend_layout_files_info_src_middlewares_notfound_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_notfound_ts_new",
+      "server_backend_layout_files_info_src_middlewares_ratelimiter_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_ratelimiter_ts_new",
+      "server_backend_layout_files_info_src_middlewares_requestlogger_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_requestlogger_ts_new",
+      "server_backend_layout_files_info_src_middlewares_validate_ts_file_d_a_success_code_success_code_academy_server_src_middlewares_validate_ts_new",
+      "server_backend_layout_files_info_src_models_index_ts_file_d_a_success_code_success_code_academy_server_src_models_index_ts_new",
+      "server_backend_layout_files_info_src_routes_index_ts_file_d_a_success_code_success_code_academy_server_src_routes_index_ts_new",
+      "server_backend_layout_files_info_src_routes_v1_health_routes_ts_file_d_a_success_code_success_code_academy_server_src_routes_v1_health_routes_ts_new",
+      "server_backend_layout_files_info_src_routes_v1_index_ts_file_d_a_success_code_success_code_academy_server_src_routes_v1_index_ts_new",
+      "server_backend_layout_files_info_src_types_environment_d_ts_file_d_a_success_code_success_code_academy_server_src_types_environment_d_ts_new",
+      "server_backend_layout_files_info_src_types_express_d_ts_file_d_a_success_code_success_code_academy_server_src_types_express_d_ts_new",
+      "server_backend_layout_files_info_src_utils_apperror_ts_file_d_a_success_code_success_code_academy_server_src_utils_apperror_ts_new",
+      "server_backend_layout_files_info_src_utils_asynchandler_ts_file_d_a_success_code_success_code_academy_server_src_utils_asynchandler_ts_new",
+      "server_backend_layout_files_info_src_utils_logger_ts_file_d_a_success_code_success_code_academy_server_src_utils_logger_ts_new",
+      "server_backend_layout_files_info_tsconfig_json_file_d_a_success_code_success_code_academy_server_tsconfig_json_modified"
+    ],
+    "4": [
       "nodemon",
       "server_package",
       "server_package_author",
@@ -330,42 +212,12 @@
       "ts_node",
       "types_multer"
     ],
-    "7": [
-      "client_src_app_admin_banners_page",
-      "client_src_app_admin_banners_page_adminbannerspage",
-      "client_src_app_admin_content_news_page",
-      "client_src_app_admin_content_news_page_adminnewspage",
-      "client_src_app_admin_content_stars_page",
-      "client_src_app_admin_content_stars_page_adminstarspage",
-      "client_src_app_admin_content_videos_page",
-      "client_src_app_admin_content_videos_page_adminvideospage",
-      "client_src_app_admin_notifications_page",
-      "client_src_app_admin_notifications_page_adminnotificationspage",
-      "client_src_app_admin_notifications_page_icon_presets",
-      "client_src_app_admin_notifications_page_rendernotificationicon",
-      "client_src_app_admin_results_page",
-      "client_src_app_admin_results_page_adminresultspage",
-      "client_src_components_admin_admincontentmanager",
-      "client_src_components_admin_admincontentmanager_admincontentcolumn",
-      "client_src_components_admin_admincontentmanager_admincontentfield",
-      "client_src_components_admin_admincontentmanager_admincontentmanager",
-      "client_src_components_admin_admincontentmanager_fieldvalue",
-      "client_src_components_admin_admincontentmanager_initialvalues",
-      "client_src_components_admin_admincontentmanager_resourceitem",
-      "client_src_components_admin_admincontentmanager_valuefromitem",
-      "client_src_components_admin_adminsessioncontext_useadminsession",
-      "client_src_components_admin_adminui_adminstatusbadge",
-      "client_src_lib_admin_api_adminapierror",
-      "client_src_lib_admin_api_adminapierror_constructor"
-    ],
-    "8": [
+    "5": [
       "client_src_app_admin_content_courses_page",
       "client_src_app_admin_content_courses_page_admincoursespage",
-      "client_src_app_admin_database_contact_messages_contactmessageeditormodal",
       "client_src_app_admin_database_contact_messages_contactmessageeditormodal_contactmessageeditormodal",
       "client_src_app_admin_database_contact_messages_page",
       "client_src_app_admin_database_contact_messages_page_admincontactmessagespage",
-      "client_src_app_admin_database_course_forms_courseformeditormodal",
       "client_src_app_admin_database_course_forms_courseformeditormodal_courseformeditormodal",
       "client_src_app_admin_database_course_forms_page",
       "client_src_app_admin_database_course_forms_page_admincourseformspage",
@@ -375,18 +227,44 @@
       "client_src_app_admin_database_scholarship_forms_scholarshipformeditormodal_scholarshipformeditormodal",
       "client_src_app_admin_database_students_page",
       "client_src_app_admin_database_students_page_adminstudentspage",
-      "client_src_app_admin_database_students_studenteditormodal",
       "client_src_app_admin_database_students_studenteditormodal_studenteditormodal",
+      "client_src_components_admin_adminleadtable",
       "client_src_components_admin_adminleadtable_adminleadtable",
       "client_src_components_admin_adminleadtable_csvcell",
-      "client_src_components_admin_courseeditor",
+      "client_src_components_admin_adminleadtable_leadcolumn",
+      "client_src_components_admin_adminleadtable_leadrow",
+      "client_src_components_admin_adminsessioncontext_useadminsession",
       "client_src_components_admin_courseeditor_courseeditor",
-      "client_src_lib_admin_api",
       "client_src_lib_admin_api_adminapifetch",
-      "client_src_lib_admin_api_adminpath",
-      "client_src_lib_admin_api_apienvelope"
+      "client_src_lib_admin_api_adminpath"
     ],
-    "9": [
+    "6": [
+      "client_src_app_main_about_page",
+      "client_src_app_main_about_page_aboutpage",
+      "client_src_app_main_admissions_admissionsclient",
+      "client_src_app_main_admissions_admissionsclient_admissionsclient",
+      "client_src_app_main_admissions_page",
+      "client_src_app_main_admissions_page_admissionspage",
+      "client_src_app_main_admissions_page_metadata",
+      "client_src_app_main_home_parentstrustus",
+      "client_src_app_main_home_parentstrustus_parentstrustus",
+      "client_src_app_main_home_parentstrustus_statcounter",
+      "client_src_app_main_home_topperscarousel",
+      "client_src_app_main_home_topperscarousel_parsedresult",
+      "client_src_app_main_home_topperscarousel_parseresult",
+      "client_src_app_main_home_topperscarousel_resolveimagesource",
+      "client_src_app_main_home_topperscarousel_starstudent",
+      "client_src_app_main_home_topperscarousel_studentimage",
+      "client_src_app_main_home_topperscarousel_topperscarousel",
+      "client_src_app_main_home_whysca",
+      "client_src_app_main_home_whysca_learningpath",
+      "client_src_app_main_home_whysca_proofpoints",
+      "client_src_app_main_home_whysca_whysca",
+      "client_src_components_admin_editabletext",
+      "client_src_components_admin_editabletext_editabletext",
+      "client_src_components_admin_editabletext_editabletextprops"
+    ],
+    "7": [
       "client_package",
       "client_package_dependencies",
       "client_package_dependencies_framer_motion",
@@ -411,7 +289,128 @@
       "react_dom",
       "react_icons"
     ],
+    "8": [
+      "server_src_app",
+      "server_src_app_app",
+      "server_src_config_cors",
+      "server_src_config_cors_corsoptions",
+      "server_src_config_environment",
+      "server_src_config_environment_env",
+      "server_src_config_environment_envschema",
+      "server_src_config_environment_parsed",
+      "server_src_middlewares_authenticate",
+      "server_src_middlewares_errorhandler",
+      "server_src_middlewares_errorhandler_errorhandler",
+      "server_src_middlewares_errorhandler_iszoderror",
+      "server_src_middlewares_notfound",
+      "server_src_middlewares_notfound_notfound",
+      "server_src_middlewares_requestlogger",
+      "server_src_middlewares_requestlogger_requestlogger",
+      "server_src_routes_index_router",
+      "server_src_utils_apperror",
+      "server_src_utils_apperror_apperror",
+      "server_src_utils_apperror_apperror_constructor",
+      "server_src_utils_logger",
+      "server_src_utils_logger_devformat",
+      "server_src_utils_logger_logger"
+    ],
+    "9": [
+      "client_src_app_admin_banners_page",
+      "client_src_app_admin_banners_page_adminbannerspage",
+      "client_src_app_admin_content_news_page",
+      "client_src_app_admin_content_news_page_adminnewspage",
+      "client_src_app_admin_content_stars_page",
+      "client_src_app_admin_content_stars_page_adminstarspage",
+      "client_src_app_admin_content_videos_page",
+      "client_src_app_admin_content_videos_page_adminvideospage",
+      "client_src_app_admin_notifications_page",
+      "client_src_app_admin_notifications_page_adminnotificationspage",
+      "client_src_app_admin_notifications_page_icon_presets",
+      "client_src_app_admin_notifications_page_rendernotificationicon",
+      "client_src_app_admin_results_page",
+      "client_src_app_admin_results_page_adminresultspage",
+      "client_src_components_admin_admincontentmanager",
+      "client_src_components_admin_admincontentmanager_admincontentcolumn",
+      "client_src_components_admin_admincontentmanager_admincontentfield",
+      "client_src_components_admin_admincontentmanager_admincontentmanager",
+      "client_src_components_admin_admincontentmanager_fieldvalue",
+      "client_src_components_admin_admincontentmanager_initialvalues",
+      "client_src_components_admin_admincontentmanager_resourceitem",
+      "client_src_components_admin_admincontentmanager_valuefromitem"
+    ],
     "10": [
+      "readme_10_seo_performance_technical_requirements",
+      "readme_11_design_branding_guidelines",
+      "readme_16_testing_quality_checklist",
+      "readme_18_ai_agent_implementation_instructions",
+      "readme_19_definition_of_done",
+      "readme_1_project_overview",
+      "readme_20_final_product_direction",
+      "readme_3_repository_structure",
+      "readme_4_website_sitemap",
+      "readme_5_10_contact_request_a_callback",
+      "readme_5_11_faqs",
+      "readme_5_1_home_page_high_conversion_landing_page",
+      "readme_5_6_results_toppers_page",
+      "readme_5_8_gallery",
+      "readme_5_9_about_us_page",
+      "readme_5_page_by_page_implementation_plan",
+      "readme_6_interactive_engagement_features",
+      "readme_essential_elements_of_your_contact_page",
+      "readme_required_sections",
+      "readme_seo_page_targets",
+      "readme_success_code_academy_neet_coaching_website_project_master_context",
+      "readme_ui_tone"
+    ],
+    "11": [
+      "server_src_controllers_auth_controller",
+      "server_src_controllers_auth_controller_authpurpose",
+      "server_src_controllers_auth_controller_changeadminpassword",
+      "server_src_controllers_auth_controller_checkmobileorlogin",
+      "server_src_controllers_auth_controller_createtoken",
+      "server_src_controllers_auth_controller_getcurrentuser",
+      "server_src_controllers_auth_controller_loginadmin",
+      "server_src_controllers_auth_controller_publicadmin",
+      "server_src_controllers_auth_controller_publicuser",
+      "server_src_controllers_auth_controller_registeruser",
+      "server_src_controllers_auth_controller_resetadminpassword",
+      "server_src_controllers_auth_controller_updateprofile",
+      "server_src_controllers_auth_controller_verifyadminpasswordreset",
+      "server_src_routes_v1_auth_routes",
+      "server_src_routes_v1_auth_routes_adminloginschema",
+      "server_src_routes_v1_auth_routes_adminpasswordschema",
+      "server_src_routes_v1_auth_routes_adminresetpasswordschema",
+      "server_src_routes_v1_auth_routes_adminresettokenqueryschema",
+      "server_src_routes_v1_auth_routes_sendotpschema",
+      "server_src_routes_v1_auth_routes_updateprofileschema",
+      "server_src_routes_v1_auth_routes_verifyotpschema",
+      "server_src_utils_adminpasswordreset_hashresettoken"
+    ],
+    "12": [
+      "server_src_controllers_form_controller",
+      "server_src_controllers_form_controller_submitcontactform",
+      "server_src_controllers_form_controller_submitcourseregistration",
+      "server_src_controllers_scholarship_controller",
+      "server_src_controllers_scholarship_controller_createregistration",
+      "server_src_middlewares_ratelimiter",
+      "server_src_middlewares_ratelimiter_adminloginlimiter",
+      "server_src_middlewares_ratelimiter_defaultlimiter",
+      "server_src_middlewares_ratelimiter_submissionlimiter",
+      "server_src_middlewares_validate",
+      "server_src_middlewares_validate_validate",
+      "server_src_middlewares_validate_validationtarget",
+      "server_src_routes_v1_form_routes",
+      "server_src_routes_v1_form_routes_contactformschema",
+      "server_src_routes_v1_form_routes_courseregistrationschema",
+      "server_src_routes_v1_form_routes_router",
+      "server_src_routes_v1_scholarship_routes",
+      "server_src_routes_v1_scholarship_routes_registerscholarshipschema",
+      "server_src_routes_v1_scholarship_routes_router",
+      "server_src_utils_asynchandler",
+      "server_src_utils_asynchandler_asynchandler",
+      "server_src_utils_asynchandler_asyncroutehandler"
+    ],
+    "13": [
       "client_src_app_admin_page",
       "client_src_app_admin_page_admindashboardpage",
       "client_src_app_admin_page_dashboardstats",
@@ -424,19 +423,17 @@
       "client_src_app_admin_settings_page_adminsettingspage",
       "client_src_app_admin_settings_page_initialsettings",
       "client_src_app_admin_settings_page_sitesettings",
-      "client_src_components_admin_adminleadtable",
-      "client_src_components_admin_adminleadtable_leadcolumn",
-      "client_src_components_admin_adminleadtable_leadrow",
       "client_src_components_admin_adminui",
       "client_src_components_admin_adminui_admincardsskeleton",
       "client_src_components_admin_adminui_adminemptystate",
       "client_src_components_admin_adminui_adminloadingstate",
       "client_src_components_admin_adminui_adminnotice",
       "client_src_components_admin_adminui_adminpageheader",
+      "client_src_components_admin_adminui_adminstatusbadge",
       "client_src_components_admin_adminui_admintableskeleton",
       "client_src_components_admin_adminui_formatadmindate"
     ],
-    "11": [
+    "14": [
       "client_src_app_main_contact_contactclient",
       "client_src_app_main_contact_contactclient_contactclient",
       "client_src_app_main_contact_contactclient_generatecaptcha",
@@ -448,8 +445,6 @@
       "client_src_components_admin_editablesection",
       "client_src_components_admin_editablesection_editablesection",
       "client_src_components_admin_editablesection_editablesectionprops",
-      "client_src_components_admin_settingseditor",
-      "client_src_components_admin_settingseditor_settingseditor",
       "client_src_components_layout_footer",
       "client_src_components_layout_footer_footer",
       "client_src_components_layout_whatsappwidget",
@@ -461,33 +456,8 @@
       "client_src_lib_site_settings_usesitesettings",
       "client_src_lib_site_settings_whatsapphref"
     ],
-    "12": [
-      "client_src_components_admin_adminmodal",
-      "client_src_components_admin_adminmodal_adminmodal",
-      "client_src_components_admin_bannereditor",
-      "client_src_components_admin_bannereditor_banner",
-      "client_src_components_admin_bannereditor_bannereditor",
-      "client_src_components_admin_bannereditor_bannereditorprops",
-      "client_src_components_admin_editmodecontext_useeditmode",
-      "client_src_components_admin_livecontentdialog",
-      "client_src_components_admin_livecontentdialog_livecontentdialogprops",
-      "client_src_components_admin_resulteditor",
-      "client_src_components_admin_resulteditor_result",
-      "client_src_components_admin_resulteditor_resulteditor",
-      "client_src_components_admin_revisionhistorybutton",
-      "client_src_components_admin_revisionhistorybutton_action_labels",
-      "client_src_components_admin_revisionhistorybutton_mediaresourcetype",
-      "client_src_components_admin_revisionhistorybutton_revision",
-      "client_src_components_admin_revisionhistorybutton_revisionhistorybutton",
-      "client_src_components_admin_revisionhistorybutton_revisionname",
-      "client_src_components_admin_starstudenteditor",
-      "client_src_components_admin_starstudenteditor_starstudent",
-      "client_src_components_admin_starstudenteditor_starstudenteditor",
-      "client_src_components_admin_starstudenteditor_starstudenteditorprops",
-      "client_src_lib_admin_api_uploadadminimage"
-    ],
-    "13": [
-      "ref_node",
+    "15": [
+      "ref_es2022",
       "server_tsconfig_compileroptions",
       "server_tsconfig_compileroptions_declaration",
       "server_tsconfig_compileroptions_declarationmap",
@@ -495,6 +465,7 @@
       "server_tsconfig_compileroptions_exactoptionalpropertytypes",
       "server_tsconfig_compileroptions_forceconsistentcasinginfilenames",
       "server_tsconfig_compileroptions_isolatedmodules",
+      "server_tsconfig_compileroptions_lib",
       "server_tsconfig_compileroptions_module",
       "server_tsconfig_compileroptions_moduleresolution",
       "server_tsconfig_compileroptions_nouncheckedindexedaccess",
@@ -505,68 +476,85 @@
       "server_tsconfig_compileroptions_skiplibcheck",
       "server_tsconfig_compileroptions_sourcemap",
       "server_tsconfig_compileroptions_strict",
-      "server_tsconfig_compileroptions_target",
-      "server_tsconfig_compileroptions_types"
-    ],
-    "14": [
-      "client_src_app_main_about_page",
-      "client_src_app_main_about_page_aboutpage",
-      "client_src_app_main_home_explorecourses",
-      "client_src_app_main_home_explorecourses_coursestyles",
-      "client_src_app_main_home_explorecourses_explorecourses",
-      "client_src_app_main_home_topperscarousel",
-      "client_src_app_main_home_topperscarousel_parsedresult",
-      "client_src_app_main_home_topperscarousel_parseresult",
-      "client_src_app_main_home_topperscarousel_resolveimagesource",
-      "client_src_app_main_home_topperscarousel_starstudent",
-      "client_src_app_main_home_topperscarousel_studentimage",
-      "client_src_app_main_home_topperscarousel_topperscarousel",
-      "client_src_components_admin_editabletext",
-      "client_src_components_admin_editabletext_editabletext",
-      "client_src_components_admin_editabletext_editabletextprops",
-      "client_src_components_admin_editmodecontext_useeditmodeoptional",
-      "client_src_components_admin_livecontentcontext_contentscope",
-      "client_src_components_admin_livecontentdialog_livecontentdialog"
-    ],
-    "15": [
-      "client_src_app_main_home_explorecourses_course",
-      "client_src_app_main_home_homeclient",
-      "client_src_app_main_home_homeclient_announcement",
-      "client_src_app_main_home_homeclient_bannerimage",
-      "client_src_app_main_home_homeclient_homebanner",
-      "client_src_app_main_home_homeclient_homeclient",
-      "client_src_app_main_home_homeclient_publiccontentresponse",
-      "client_src_app_main_home_homeclient_renderannouncementicon",
-      "client_src_app_main_home_parentstrustus",
-      "client_src_app_main_home_parentstrustus_parentstrustus",
-      "client_src_app_main_home_parentstrustus_statcounter",
-      "client_src_app_main_home_whysca",
-      "client_src_app_main_home_whysca_learningpath",
-      "client_src_app_main_home_whysca_proofpoints",
-      "client_src_app_main_home_whysca_whysca",
-      "client_src_app_main_page",
-      "client_src_app_main_page_home"
+      "server_tsconfig_compileroptions_target"
     ],
     "16": [
-      "client_src_app_not_found",
-      "client_src_app_not_found_notfound",
-      "client_src_components_layout_cookieconsent",
-      "client_src_components_layout_cookieconsent_cookieconsent",
-      "client_src_components_layout_header",
-      "client_src_components_layout_header_header",
-      "client_src_components_layout_header_headeruser",
-      "client_src_components_ui_button",
-      "client_src_components_ui_button_button",
-      "client_src_components_ui_button_buttonprops",
-      "client_src_components_ui_profilemodal",
-      "client_src_components_ui_profilemodal_profilemodal",
-      "client_src_components_ui_profilemodal_profilemodalprops",
-      "client_src_components_ui_signinmodal",
-      "client_src_components_ui_signinmodal_signinmodal",
-      "client_src_components_ui_signinmodal_signinmodalprops",
-      "client_src_data_home_navlinks"
+      "client_src_components_admin_editmodecontext",
+      "client_src_components_admin_editmodecontext_editmodecontext",
+      "client_src_components_admin_editmodecontext_editmodecontextvalue",
+      "client_src_components_admin_editmodecontext_useeditmode",
+      "client_src_components_admin_leadsdrawer",
+      "client_src_components_admin_leadsdrawer_leadsdrawer",
+      "client_src_components_admin_notificationeditor",
+      "client_src_components_admin_notificationeditor_icon_presets",
+      "client_src_components_admin_notificationeditor_notification",
+      "client_src_components_admin_notificationeditor_notificationeditor",
+      "client_src_components_admin_notificationeditor_notificationeditorprops",
+      "client_src_components_admin_notificationeditor_rendericonbykey",
+      "client_src_components_admin_settingseditor_settingseditor",
+      "client_src_lib_admin_api_adminuser",
+      "client_src_lib_api",
+      "client_src_lib_api_apifetch",
+      "client_src_lib_api_getauthtoken",
+      "client_src_lib_api_getstoreduser",
+      "client_src_lib_api_uploadadminimage"
     ],
     "17": [
+      "client_package_devdependencies",
+      "client_package_devdependencies_eslint",
+      "client_package_devdependencies_eslint_config_next",
+      "client_package_devdependencies_next_sitemap",
+      "client_package_devdependencies_types_node",
+      "client_package_devdependencies_types_react",
+      "client_package_devdependencies_types_react_dom",
+      "client_package_devdependencies_typescript",
+      "client_package_json_next_sitemap",
+      "eslint",
+      "eslint_config_next",
+      "server_package_dependencies_types_node",
+      "server_package_dependencies_typescript",
+      "server_package_json_types_node",
+      "server_package_json_typescript",
+      "types_react",
+      "types_react_dom"
+    ],
+    "18": [
+      "agents_skills_supabase_postgres_best_practices_references_contributing",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_1_concrete_transformation_patterns",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_2_error_first_structure",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_3_quantified_impact",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_4_self_contained_examples",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_5_semantic_naming",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_code_example_standards",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_comments",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_impact_level_guidelines",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_key_principles",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_language_tags",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_reference_standards",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_review_checklist",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_sql_formatting",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_when_to_include_application_code",
+      "agents_skills_supabase_postgres_best_practices_references_contributing_writing_guidelines_for_postgres_references"
+    ],
+    "19": [
+      "client_src_app_main_courses_coursesclient",
+      "client_src_app_main_courses_coursesclient_course",
+      "client_src_app_main_courses_coursesclient_coursesclient",
+      "client_src_app_main_courses_id_coursedetailclient",
+      "client_src_app_main_courses_id_coursedetailclient_classroomfeatures",
+      "client_src_app_main_courses_id_coursedetailclient_coursedetailclient",
+      "client_src_app_main_courses_id_coursedetailclient_coursedetailclientprops",
+      "client_src_app_main_courses_id_coursedetailclient_coursevisuals",
+      "client_src_app_main_courses_id_coursedetailclient_timeslots",
+      "client_src_app_main_courses_id_page",
+      "client_src_app_main_courses_id_page_coursedetailpage",
+      "client_src_app_main_courses_id_page_generatemetadata",
+      "client_src_app_main_courses_page",
+      "client_src_app_main_courses_page_coursespage",
+      "client_src_app_main_courses_page_metadata",
+      "client_src_lib_api_getapibase"
+    ],
+    "20": [
       "client_src_app_main_gallery_page",
       "client_src_app_main_gallery_page_categoryconfig",
       "client_src_app_main_gallery_page_gallerypage",
@@ -584,7 +572,24 @@
       "client_src_lib_video_utils_parsedvideoinfo",
       "client_src_lib_video_utils_parsevideourl"
     ],
-    "18": [
+    "21": [
+      "client_src_app_main_home_explorecourses",
+      "client_src_app_main_home_explorecourses_course",
+      "client_src_app_main_home_explorecourses_coursestyles",
+      "client_src_app_main_home_explorecourses_explorecourses",
+      "client_src_app_main_layout",
+      "client_src_app_main_layout_metadata",
+      "client_src_app_main_layout_rootlayout",
+      "client_src_components_admin_editmodecontext_useeditmodeoptional",
+      "client_src_components_admin_livecontentcontext_uselivecontent",
+      "client_src_components_admin_liveeditortoolbar",
+      "client_src_components_admin_liveeditortoolbar_liveeditortoolbar",
+      "client_src_components_admin_liveeditortoolbar_pagename",
+      "client_src_components_layout_cookieconsent",
+      "client_src_components_layout_cookieconsent_cookieconsent",
+      "client_src_components_layout_header_header"
+    ],
+    "22": [
       "client_tsconfig_compileroptions",
       "client_tsconfig_compileroptions_allowjs",
       "client_tsconfig_compileroptions_esmoduleinterop",
@@ -601,38 +606,101 @@
       "client_tsconfig_compileroptions_strict",
       "client_tsconfig_compileroptions_target"
     ],
-    "19": [
-      "client_package_devdependencies",
-      "client_package_devdependencies_eslint",
-      "client_package_devdependencies_eslint_config_next",
-      "client_package_devdependencies_next_sitemap",
-      "client_package_devdependencies_types_react",
-      "client_package_devdependencies_types_react_dom",
-      "client_package_devdependencies_typescript",
-      "client_package_json_next_sitemap",
-      "client_package_json_typescript",
-      "eslint",
-      "eslint_config_next",
-      "server_package_dependencies_typescript",
-      "types_react",
-      "types_react_dom"
+    "23": [
+      "client_src_app_admin_database_contact_messages_contactmessageeditormodal",
+      "client_src_app_admin_database_course_forms_courseformeditormodal",
+      "client_src_app_admin_database_students_studenteditormodal",
+      "client_src_components_admin_adminmodal",
+      "client_src_components_admin_adminmodal_adminmodal",
+      "client_src_components_admin_courseeditor",
+      "client_src_components_admin_settingseditor",
+      "client_src_components_admin_starstudenteditor",
+      "client_src_components_admin_starstudenteditor_starstudent",
+      "client_src_components_admin_starstudenteditor_starstudenteditorprops",
+      "client_src_lib_admin_api",
+      "client_src_lib_admin_api_adminapierror",
+      "client_src_lib_admin_api_adminapierror_constructor",
+      "client_src_lib_admin_api_apienvelope"
     ],
-    "20": [
+    "24": [
+      "client_src_app_not_found",
+      "client_src_app_not_found_notfound",
+      "client_src_components_layout_header",
+      "client_src_components_layout_header_headeruser",
+      "client_src_components_ui_button",
+      "client_src_components_ui_button_button",
+      "client_src_components_ui_button_buttonprops",
+      "client_src_components_ui_profilemodal",
+      "client_src_components_ui_profilemodal_profilemodal",
+      "client_src_components_ui_profilemodal_profilemodalprops",
+      "client_src_components_ui_signinmodal",
+      "client_src_components_ui_signinmodal_signinmodal",
+      "client_src_components_ui_signinmodal_signinmodalprops",
+      "client_src_data_home_navlinks"
+    ],
+    "25": [
+      "client_src_components_admin_bannereditor",
+      "client_src_components_admin_bannereditor_banner",
+      "client_src_components_admin_bannereditor_bannereditor",
+      "client_src_components_admin_bannereditor_bannereditorprops",
+      "client_src_components_admin_resulteditor",
+      "client_src_components_admin_resulteditor_result",
+      "client_src_components_admin_resulteditor_resulteditor",
+      "client_src_components_admin_revisionhistorybutton",
+      "client_src_components_admin_revisionhistorybutton_action_labels",
+      "client_src_components_admin_revisionhistorybutton_mediaresourcetype",
+      "client_src_components_admin_revisionhistorybutton_revision",
+      "client_src_components_admin_revisionhistorybutton_revisionhistorybutton",
+      "client_src_components_admin_revisionhistorybutton_revisionname",
+      "client_src_lib_admin_api_uploadadminimage"
+    ],
+    "26": [
+      "server_scratch_check_users",
+      "server_scratch_check_users_main",
+      "server_scratch_update_videos",
+      "server_scratch_update_videos_main",
+      "server_src_config_roles_super_admin",
+      "server_src_index",
+      "server_src_index_scheduledatabasereconnect",
+      "server_src_index_startserver",
+      "server_src_models_index_sequelize",
+      "server_src_models_index_testconnection",
+      "server_src_seeddatabase",
+      "server_src_seeddatabase_claimmobilenumber",
+      "server_src_seeddatabase_seeddatabase",
+      "server_src_seeddatabase_seedsuperadmin"
+    ],
+    "27": [
       "bcrypt",
-      "dotenv",
+      "cors",
       "express_rate_limit",
+      "multer",
       "server_package_dependencies",
       "server_package_dependencies_bcrypt",
-      "server_package_dependencies_dotenv",
+      "server_package_dependencies_cors",
       "server_package_dependencies_express_rate_limit",
+      "server_package_dependencies_multer",
       "server_package_dependencies_types_cors",
-      "server_package_dependencies_types_express",
-      "server_package_dependencies_zod",
+      "server_package_dependencies_winston",
       "types_cors",
-      "types_express",
-      "zod"
+      "winston"
     ],
-    "21": [
+    "28": [
+      "client_src_components_admin_livecontentcontext",
+      "client_src_components_admin_livecontentcontext_contentkind",
+      "client_src_components_admin_livecontentcontext_contentmap",
+      "client_src_components_admin_livecontentcontext_contentoverride",
+      "client_src_components_admin_livecontentcontext_contentscope",
+      "client_src_components_admin_livecontentcontext_fetchcontentmap",
+      "client_src_components_admin_livecontentcontext_livecontentcontext",
+      "client_src_components_admin_livecontentcontext_livecontentcontextvalue",
+      "client_src_components_admin_livecontentcontext_livecontentprovider",
+      "client_src_components_admin_livecontentcontext_pathnametopagekey",
+      "client_src_components_admin_livecontentdialog",
+      "client_src_components_admin_livecontentdialog_livecontentdialog",
+      "client_src_components_admin_livecontentdialog_livecontentdialogprops"
+    ],
+    "29": [
       "server_src_controllers_admin_controller_restoremediarevision",
       "server_src_models_mediarevision",
       "server_src_models_mediarevision_initmediarevision",
@@ -647,20 +715,20 @@
       "server_src_utils_mediarevision_test_restored",
       "server_src_utils_mediarevision_writable_fields"
     ],
-    "22": [
-      "client_src_app_main_layout",
-      "client_src_app_main_layout_metadata",
-      "client_src_app_main_layout_rootlayout",
-      "client_src_components_admin_editmodecontext",
-      "client_src_components_admin_editmodecontext_editmodecontext",
-      "client_src_components_admin_editmodecontext_editmodecontextvalue",
-      "client_src_components_admin_editmodecontext_editmodeprovider",
-      "client_src_components_admin_livecontentcontext_uselivecontent",
-      "client_src_components_admin_liveeditortoolbar",
-      "client_src_components_admin_liveeditortoolbar_liveeditortoolbar",
-      "client_src_components_admin_liveeditortoolbar_pagename"
+    "30": [
+      "client_src_app_main_results_page",
+      "client_src_app_main_results_page_metadata",
+      "client_src_app_main_results_page_resultspage",
+      "client_src_app_main_results_resultsclient",
+      "client_src_app_main_results_resultsclient_resultsclient",
+      "client_src_app_main_results_resultsclient_storycard",
+      "client_src_app_main_results_resultsclient_studentresultcard",
+      "client_src_app_main_results_resultsclient_videostories",
+      "client_src_data_results",
+      "client_src_data_results_resultsdata",
+      "client_src_data_results_studentresult"
     ],
-    "23": [
+    "31": [
       "client_src_data_home",
       "client_src_data_home_course",
       "client_src_data_home_courses",
@@ -673,7 +741,20 @@
       "client_src_data_home_testimonial",
       "client_src_data_home_testimonials"
     ],
-    "24": [
+    "32": [
+      "server_src_config_database",
+      "server_src_config_database_dbconfig",
+      "server_src_models_course",
+      "server_src_models_course_course",
+      "server_src_models_course_initcourse",
+      "server_src_models_index",
+      "server_src_models_topperresult",
+      "server_src_models_topperresult_inittopperresult",
+      "server_src_models_topperresult_topperresult",
+      "server_src_models_topperresult_topperresultattributes",
+      "server_src_models_topperresult_topperresultcreationattributes"
+    ],
+    "33": [
       "server_src_controllers_admin_controller_deleteacademyvideo",
       "server_src_controllers_admin_controller_deletebanner",
       "server_src_controllers_admin_controller_deletenewsarticle",
@@ -686,7 +767,19 @@
       "server_src_controllers_admin_controller_updateresult",
       "server_src_controllers_admin_controller_updatestarstudent"
     ],
-    "25": [
+    "34": [
+      "agents_skills_supabase_postgres_best_practices_references_sections",
+      "agents_skills_supabase_postgres_best_practices_references_sections_1_query_performance_query",
+      "agents_skills_supabase_postgres_best_practices_references_sections_2_connection_management_conn",
+      "agents_skills_supabase_postgres_best_practices_references_sections_3_security_rls_security",
+      "agents_skills_supabase_postgres_best_practices_references_sections_4_schema_design_schema",
+      "agents_skills_supabase_postgres_best_practices_references_sections_5_concurrency_locking_lock",
+      "agents_skills_supabase_postgres_best_practices_references_sections_6_data_access_patterns_data",
+      "agents_skills_supabase_postgres_best_practices_references_sections_7_monitoring_diagnostics_monitor",
+      "agents_skills_supabase_postgres_best_practices_references_sections_8_advanced_features_advanced",
+      "agents_skills_supabase_postgres_best_practices_references_sections_section_definitions"
+    ],
+    "35": [
       "client_src_app_api_admin_path_route",
       "client_src_app_api_admin_path_route_backendbase",
       "client_src_app_api_admin_path_route_delete",
@@ -698,41 +791,66 @@
       "client_src_app_api_admin_path_route_post",
       "client_src_app_api_admin_path_route_put"
     ],
-    "26": [
+    "36": [
+      "client_src_app_main_home_homeclient",
+      "client_src_app_main_home_homeclient_announcement",
+      "client_src_app_main_home_homeclient_bannerimage",
+      "client_src_app_main_home_homeclient_homebanner",
+      "client_src_app_main_home_homeclient_homeclient",
+      "client_src_app_main_home_homeclient_publiccontentresponse",
+      "client_src_app_main_home_homeclient_renderannouncementicon",
+      "client_src_app_main_page",
+      "client_src_app_main_page_home",
+      "client_src_components_admin_starstudenteditor_starstudenteditor"
+    ],
+    "37": [
       "client_tsconfig",
       "client_tsconfig_exclude",
-      "client_tsconfig_json_ref_node_modules",
       "ref_dist",
       "ref_src",
       "server_tsconfig",
       "server_tsconfig_exclude",
       "server_tsconfig_include",
+      "server_tsconfig_json_ref_node_modules",
       "server_tsconfig_ts_node",
       "server_tsconfig_ts_node_files"
     ],
-    "27": [
-      "client_src_components_admin_livecontentcontext",
-      "client_src_components_admin_livecontentcontext_contentkind",
-      "client_src_components_admin_livecontentcontext_contentmap",
-      "client_src_components_admin_livecontentcontext_contentoverride",
-      "client_src_components_admin_livecontentcontext_fetchcontentmap",
-      "client_src_components_admin_livecontentcontext_livecontentcontext",
-      "client_src_components_admin_livecontentcontext_livecontentcontextvalue",
-      "client_src_components_admin_livecontentcontext_livecontentprovider",
-      "client_src_components_admin_livecontentcontext_pathnametopagekey"
+    "38": [
+      "server_src_controllers_health_controller",
+      "server_src_controllers_health_controller_gethealth",
+      "server_src_routes_index",
+      "server_src_routes_v1_admin_routes_router",
+      "server_src_routes_v1_auth_routes_router",
+      "server_src_routes_v1_content_routes_router",
+      "server_src_routes_v1_health_routes",
+      "server_src_routes_v1_health_routes_router",
+      "server_src_routes_v1_index",
+      "server_src_routes_v1_index_v1router"
     ],
-    "28": [
-      "server_src_models_course",
-      "server_src_models_course_course",
-      "server_src_models_course_initcourse",
-      "server_src_models_index",
-      "server_src_models_notification",
-      "server_src_models_notification_initnotification",
-      "server_src_models_notification_notification",
-      "server_src_models_notification_notificationattributes",
-      "server_src_models_notification_notificationcreationattributes"
+    "39": [
+      "server_src_models_sitesetting",
+      "server_src_models_sitesetting_initsitesetting",
+      "server_src_models_sitesetting_sitesetting",
+      "server_src_models_sitesetting_sitesettingattributes",
+      "server_src_models_sitesetting_sitesettingcreationattributes",
+      "server_src_routes_v1_content_routes",
+      "server_src_utils_databaseread",
+      "server_src_utils_databaseread_istransientdatabaseerror",
+      "server_src_utils_databaseread_readfromdatabase",
+      "server_src_utils_databaseread_transient_database_errors"
     ],
-    "29": [
+    "40": [
+      "admin_guide",
+      "admin_guide_admin_dashboard",
+      "admin_guide_safe_editing_habits",
+      "admin_guide_sign_in",
+      "admin_guide_success_code_academy_admin_guide",
+      "admin_guide_troubleshooting",
+      "admin_guide_two_ways_to_update_the_website",
+      "admin_guide_visual_website_editor",
+      "readme"
+    ],
+    "41": [
       "server_src_controllers_admin_controller_assertadminidentityisfree",
       "server_src_controllers_admin_controller_assertnotlastsuperadmin",
       "server_src_controllers_admin_controller_countsuperadmins",
@@ -742,7 +860,7 @@
       "server_src_controllers_admin_controller_publicadminaccount",
       "server_src_controllers_admin_controller_updateadminaccount"
     ],
-    "30": [
+    "42": [
       "server_src_controllers_admin_controller_getcontactmessages",
       "server_src_controllers_admin_controller_getcourseforms",
       "server_src_controllers_admin_controller_getcourses",
@@ -752,7 +870,7 @@
       "server_src_controllers_admin_controller_searchleads",
       "server_src_controllers_admin_controller_sendpaginated"
     ],
-    "31": [
+    "43": [
       "client_tsconfig_include",
       "ref_mts",
       "ref_next_dev_types_ts",
@@ -761,7 +879,32 @@
       "ref_ts",
       "ref_tsx"
     ],
-    "32": [
+    "44": [
+      "server_src_utils_mailer",
+      "server_src_utils_mailer_deliver",
+      "server_src_utils_mailer_ismailerconfigured",
+      "server_src_utils_mailer_mailmessage",
+      "server_src_utils_mailer_mailresult",
+      "server_src_utils_mailer_rationale_43",
+      "server_src_utils_mailer_sendmail"
+    ],
+    "45": [
+      "agents_skills_supabase_postgres_best_practices_changelog",
+      "agents_skills_supabase_postgres_best_practices_changelog_1_2_0_https_github_com_supabase_agent_skills_compare_v1_1_1_v1_2_0_2026_06_02",
+      "agents_skills_supabase_postgres_best_practices_changelog_1_3_0_https_github_com_supabase_agent_skills_compare_v1_2_0_v1_3_0_2026_06_05",
+      "agents_skills_supabase_postgres_best_practices_changelog_bug_fixes",
+      "agents_skills_supabase_postgres_best_practices_changelog_changelog",
+      "agents_skills_supabase_postgres_best_practices_changelog_features"
+    ],
+    "46": [
+      "agents_skills_supabase_postgres_best_practices_skill",
+      "agents_skills_supabase_postgres_best_practices_skill_how_to_use",
+      "agents_skills_supabase_postgres_best_practices_skill_references",
+      "agents_skills_supabase_postgres_best_practices_skill_rule_categories_by_priority",
+      "agents_skills_supabase_postgres_best_practices_skill_supabase_postgres_best_practices",
+      "agents_skills_supabase_postgres_best_practices_skill_when_to_apply"
+    ],
+    "47": [
       "client_replacepaths",
       "client_replacepaths_directorymap",
       "client_replacepaths_fs",
@@ -769,7 +912,7 @@
       "client_replacepaths_processfile",
       "client_replacepaths_walkdir"
     ],
-    "33": [
+    "48": [
       "client_src_app_api_public_path_route",
       "client_src_app_api_public_path_route_backendbase",
       "client_src_app_api_public_path_route_get",
@@ -777,7 +920,7 @@
       "client_src_app_api_public_path_route_proxy",
       "client_src_app_api_public_path_route_put"
     ],
-    "34": [
+    "49": [
       "client_src_app_layout",
       "client_src_app_layout_inter",
       "client_src_app_layout_metadata",
@@ -785,7 +928,15 @@
       "client_src_app_registry",
       "client_src_app_registry_styledjsxregistry"
     ],
-    "35": [
+    "50": [
+      "readme_5_3_scholarships_page",
+      "readme_scholarship_achievements",
+      "readme_scholarship_exam_detail_page",
+      "readme_scholarship_faqs",
+      "readme_scholarship_listing",
+      "readme_scholarship_preparation"
+    ],
+    "51": [
       "server_src_models_contentblock",
       "server_src_models_contentblock_contentblock",
       "server_src_models_contentblock_contentblockattributes",
@@ -793,443 +944,721 @@
       "server_src_models_contentblock_contentblockkind",
       "server_src_models_contentblock_initcontentblock"
     ],
-    "36": [
+    "52": [
       "client_src_app_api_content_pagekey_route",
       "client_src_app_api_content_pagekey_route_backendurl",
       "client_src_app_api_content_pagekey_route_get",
       "client_src_app_api_content_pagekey_route_latestcontent",
       "client_src_app_api_content_pagekey_route_stalecontentresponse"
     ],
-    "37": [
-      "client_src_app_main_admissions_admissionsclient",
-      "client_src_app_main_admissions_admissionsclient_admissionsclient",
-      "client_src_app_main_admissions_page",
-      "client_src_app_main_admissions_page_admissionspage",
-      "client_src_app_main_admissions_page_metadata"
+    "53": [
+      "readme_14_implementation_phases",
+      "readme_phase_1_build_order",
+      "readme_phase_2_build_order",
+      "readme_phase_3_build_order",
+      "readme_phase_4_build_order"
     ],
-    "38": [
+    "54": [
+      "readme_2_1_deployment_environment_current_phase",
+      "readme_2_2_core_technology_stack",
+      "readme_2_architecture_technology_stack",
+      "readme_backend_server",
+      "readme_frontend_client"
+    ],
+    "55": [
+      "readme_5_5_student_hub",
+      "readme_ncert_solutions",
+      "readme_neet_answer_key",
+      "readme_study_material",
+      "readme_success_code_academy_g_books"
+    ],
+    "56": [
+      "server_src_config_environment_appbaseurl",
+      "server_src_controllers_admin_controller_sendadminpasswordreset",
+      "server_src_utils_adminpasswordreset",
+      "server_src_utils_adminpasswordreset_buildreseturl",
+      "server_src_utils_adminpasswordreset_issueadminpasswordreset"
+    ],
+    "57": [
       "server_src_models_academyvideo",
       "server_src_models_academyvideo_academyvideo",
       "server_src_models_academyvideo_academyvideoattributes",
       "server_src_models_academyvideo_academyvideocreationattributes",
       "server_src_models_academyvideo_initacademyvideo"
     ],
-    "39": [
+    "58": [
       "server_src_models_adminpasswordreset",
       "server_src_models_adminpasswordreset_adminpasswordreset",
       "server_src_models_adminpasswordreset_adminpasswordresetattributes",
       "server_src_models_adminpasswordreset_adminpasswordresetcreationattributes",
       "server_src_models_adminpasswordreset_initadminpasswordreset"
     ],
-    "40": [
+    "59": [
       "server_src_models_banner",
       "server_src_models_banner_banner",
       "server_src_models_banner_bannerattributes",
       "server_src_models_banner_bannercreationattributes",
       "server_src_models_banner_initbanner"
     ],
-    "41": [
+    "60": [
       "server_src_models_contactmessage",
       "server_src_models_contactmessage_contactmessage",
       "server_src_models_contactmessage_contactmessageattributes",
       "server_src_models_contactmessage_contactmessagecreationattributes",
       "server_src_models_contactmessage_initcontactmessage"
     ],
-    "42": [
+    "61": [
       "server_src_models_courseregistration",
       "server_src_models_courseregistration_courseregistration",
       "server_src_models_courseregistration_courseregistrationattributes",
       "server_src_models_courseregistration_courseregistrationcreationattributes",
       "server_src_models_courseregistration_initcourseregistration"
     ],
-    "43": [
+    "62": [
       "server_src_models_newsarticle",
       "server_src_models_newsarticle_initnewsarticle",
       "server_src_models_newsarticle_newsarticle",
       "server_src_models_newsarticle_newsarticleattributes",
       "server_src_models_newsarticle_newsarticlecreationattributes"
     ],
-    "44": [
+    "63": [
+      "server_src_models_notification",
+      "server_src_models_notification_initnotification",
+      "server_src_models_notification_notification",
+      "server_src_models_notification_notificationattributes",
+      "server_src_models_notification_notificationcreationattributes"
+    ],
+    "64": [
       "server_src_models_otpverification",
       "server_src_models_otpverification_initotpverification",
       "server_src_models_otpverification_otpverification",
       "server_src_models_otpverification_otpverificationattributes",
       "server_src_models_otpverification_otpverificationcreationattributes"
     ],
-    "45": [
+    "65": [
       "server_src_models_scholarshipregistration",
       "server_src_models_scholarshipregistration_initscholarshipregistration",
       "server_src_models_scholarshipregistration_scholarshipregistration",
       "server_src_models_scholarshipregistration_scholarshipregistrationattributes",
       "server_src_models_scholarshipregistration_scholarshipregistrationcreationattributes"
     ],
-    "46": [
-      "server_src_models_sitesetting",
-      "server_src_models_sitesetting_initsitesetting",
-      "server_src_models_sitesetting_sitesetting",
-      "server_src_models_sitesetting_sitesettingattributes",
-      "server_src_models_sitesetting_sitesettingcreationattributes"
-    ],
-    "47": [
+    "66": [
       "server_src_models_starstudent",
       "server_src_models_starstudent_initstarstudent",
       "server_src_models_starstudent_starstudent",
       "server_src_models_starstudent_starstudentattributes",
       "server_src_models_starstudent_starstudentcreationattributes"
     ],
-    "48": [
-      "server_src_models_topperresult",
-      "server_src_models_topperresult_inittopperresult",
-      "server_src_models_topperresult_topperresult",
-      "server_src_models_topperresult_topperresultattributes",
-      "server_src_models_topperresult_topperresultcreationattributes"
-    ],
-    "49": [
+    "67": [
       "server_src_models_user",
       "server_src_models_user_inituser",
       "server_src_models_user_user",
       "server_src_models_user_userattributes",
       "server_src_models_user_usercreationattributes"
     ],
-    "50": [
+    "68": [
       "server_test_render",
       "server_test_render_data",
       "server_test_render_https",
       "server_test_render_options",
       "server_test_render_req"
     ],
-    "51": [
+    "69": [
+      "client_readme",
+      "client_readme_deploy_on_vercel",
+      "client_readme_getting_started",
+      "client_readme_learn_more"
+    ],
+    "70": [
       "client_src_components_ui_card",
       "client_src_components_ui_card_card",
       "client_src_components_ui_card_cardprops",
       "client_src_components_ui_card_paddingclasses"
     ],
-    "52": [
+    "71": [
       "client_tsconfig_compileroptions_lib",
       "ref_dom",
       "ref_dom_iterable",
       "ref_esnext"
     ],
-    "53": [
+    "72": [
+      "readme_12_forms_leads_conversion_rules",
+      "readme_conversion_rules",
+      "readme_form_requirements",
+      "readme_public_forms"
+    ],
+    "73": [
+      "readme_13_payment_access_control",
+      "readme_access_control",
+      "readme_payment_use_cases",
+      "readme_required_flow"
+    ],
+    "74": [
+      "readme_15_development_standards",
+      "readme_backend_standards",
+      "readme_frontend_standards",
+      "readme_security_standards"
+    ],
+    "75": [
+      "readme_5_2_courses_page",
+      "readme_course_categories",
+      "readme_course_detail_page_requirements",
+      "readme_course_listing_requirements"
+    ],
+    "76": [
+      "readme_5_4_test_series_page",
+      "readme_student_test_dashboard",
+      "readme_test_series_categories",
+      "readme_test_series_detail_page"
+    ],
+    "77": [
+      "readme_9_backend_modules_data_models",
+      "readme_api_design_rules",
+      "readme_core_models",
+      "readme_example_api_routes"
+    ],
+    "78": [
       "server_src_controllers_admin_controller_getsigneduploadurl",
       "server_src_controllers_admin_controller_getsupabase",
       "server_src_controllers_admin_controller_upload",
       "server_src_controllers_admin_controller_uploadimage"
     ],
-    "54": [
-      "client_package_devdependencies_types_node",
-      "client_package_json_types_node",
-      "server_package_dependencies_types_node"
-    ],
-    "55": [
+    "79": [
       "client_src_components_ui_iconbutton",
       "client_src_components_ui_iconbutton_iconbutton",
       "client_src_components_ui_iconbutton_iconbuttonprops"
     ],
-    "56": [
+    "80": [
       "client_src_components_ui_pageheader",
       "client_src_components_ui_pageheader_pageheader",
       "client_src_components_ui_pageheader_pageheaderprops"
     ],
-    "57": [
+    "81": [
       "client_src_components_ui_sectionheading",
       "client_src_components_ui_sectionheading_sectionheading",
       "client_src_components_ui_sectionheading_sectionheadingprops"
     ],
-    "58": [
+    "82": [
       "client_src_lib_utils",
       "client_src_lib_utils_cn",
       "client_src_lib_utils_formatdate"
     ],
-    "59": [
+    "83": [
       "client_src_middleware",
       "client_src_middleware_config",
       "client_src_middleware_middleware"
     ],
-    "60": [
+    "84": [
       "opencode_plugins_graphify",
       "opencode_plugins_graphify_graphifyplugin",
       "opencode_plugins_graphify_rationale_4"
     ],
-    "61": [
+    "85": [
+      "readme_17_environment_variables",
+      "readme_client",
+      "readme_server"
+    ],
+    "86": [
+      "readme_5_7_blogs_reviews",
+      "readme_blog_section",
+      "readme_student_reviews"
+    ],
+    "87": [
+      "readme_7_student_login_portal",
+      "readme_authentication",
+      "readme_student_dashboard_features"
+    ],
+    "88": [
+      "readme_8_admin_cms_requirements",
+      "readme_admin_roles",
+      "readme_cms_features"
+    ],
+    "89": [
       "server_src_controllers_admin_controller_createuser",
       "server_src_controllers_admin_controller_publicstudent",
       "server_src_controllers_admin_controller_updateuser"
     ],
-    "62": [
+    "90": [
       "server_src_controllers_admin_controller_getsettings",
       "server_src_controllers_admin_controller_loadsettingsmap",
       "server_src_controllers_admin_controller_updatesettings"
     ],
-    "63": [
+    "91": [
       "server_src_database_migrations_20260729081403_create_admins_table",
       "server_src_database_migrations_20260729081403_create_admins_table_down",
       "server_src_database_migrations_20260729081403_create_admins_table_up"
     ],
-    "64": [
+    "92": [
       "server_src_database_migrations_20260811000000_create_admin_password_resets",
       "server_src_database_migrations_20260811000000_create_admin_password_resets_down",
       "server_src_database_migrations_20260811000000_create_admin_password_resets_up"
     ],
-    "65": [
+    "93": [
       "server_src_database_migrations_20260812000000_add_admin_role",
       "server_src_database_migrations_20260812000000_add_admin_role_down",
       "server_src_database_migrations_20260812000000_add_admin_role_up"
     ],
-    "66": [
+    "94": [
       "server_src_types_environment_d",
       "server_src_types_environment_d_nodejs",
       "server_src_types_environment_d_processenv"
     ],
-    "67": [
+    "95": [
       "server_src_types_express_d",
       "server_src_types_express_d_express",
       "server_src_types_express_d_request"
     ],
-    "68": [
+    "96": [
       "server_test_db",
       "server_test_db_sequelize",
       "server_test_db_testconnection"
     ],
-    "69": [
+    "97": [
+      "agents",
+      "agents_graphify"
+    ],
+    "98": [
+      "agents_skills_supabase_postgres_best_practices_references_advanced_full_text_search",
+      "agents_skills_supabase_postgres_best_practices_references_advanced_full_text_search_use_tsvector_for_full_text_search"
+    ],
+    "99": [
+      "agents_skills_supabase_postgres_best_practices_references_advanced_jsonb_indexing",
+      "agents_skills_supabase_postgres_best_practices_references_advanced_jsonb_indexing_index_jsonb_columns_for_efficient_querying"
+    ],
+    "100": [
+      "agents_skills_supabase_postgres_best_practices_references_conn_idle_timeout",
+      "agents_skills_supabase_postgres_best_practices_references_conn_idle_timeout_configure_idle_connection_timeouts"
+    ],
+    "101": [
+      "agents_skills_supabase_postgres_best_practices_references_conn_limits",
+      "agents_skills_supabase_postgres_best_practices_references_conn_limits_set_appropriate_connection_limits"
+    ],
+    "102": [
+      "agents_skills_supabase_postgres_best_practices_references_conn_pooling",
+      "agents_skills_supabase_postgres_best_practices_references_conn_pooling_use_connection_pooling_for_all_applications"
+    ],
+    "103": [
+      "agents_skills_supabase_postgres_best_practices_references_conn_prepared_statements",
+      "agents_skills_supabase_postgres_best_practices_references_conn_prepared_statements_use_prepared_statements_correctly_with_pooling"
+    ],
+    "104": [
+      "agents_skills_supabase_postgres_best_practices_references_data_batch_inserts",
+      "agents_skills_supabase_postgres_best_practices_references_data_batch_inserts_batch_insert_statements_for_bulk_data"
+    ],
+    "105": [
+      "agents_skills_supabase_postgres_best_practices_references_data_n_plus_one",
+      "agents_skills_supabase_postgres_best_practices_references_data_n_plus_one_eliminate_n_1_queries_with_batch_loading"
+    ],
+    "106": [
+      "agents_skills_supabase_postgres_best_practices_references_data_pagination",
+      "agents_skills_supabase_postgres_best_practices_references_data_pagination_use_cursor_based_pagination_instead_of_offset"
+    ],
+    "107": [
+      "agents_skills_supabase_postgres_best_practices_references_data_upsert",
+      "agents_skills_supabase_postgres_best_practices_references_data_upsert_use_upsert_for_insert_or_update_operations"
+    ],
+    "108": [
+      "agents_skills_supabase_postgres_best_practices_references_lock_advisory",
+      "agents_skills_supabase_postgres_best_practices_references_lock_advisory_use_advisory_locks_for_application_level_locking"
+    ],
+    "109": [
+      "agents_skills_supabase_postgres_best_practices_references_lock_deadlock_prevention",
+      "agents_skills_supabase_postgres_best_practices_references_lock_deadlock_prevention_prevent_deadlocks_with_consistent_lock_ordering"
+    ],
+    "110": [
+      "agents_skills_supabase_postgres_best_practices_references_lock_short_transactions",
+      "agents_skills_supabase_postgres_best_practices_references_lock_short_transactions_keep_transactions_short_to_reduce_lock_contention"
+    ],
+    "111": [
+      "agents_skills_supabase_postgres_best_practices_references_lock_skip_locked",
+      "agents_skills_supabase_postgres_best_practices_references_lock_skip_locked_use_skip_locked_for_non_blocking_queue_processing"
+    ],
+    "112": [
+      "agents_skills_supabase_postgres_best_practices_references_monitor_explain_analyze",
+      "agents_skills_supabase_postgres_best_practices_references_monitor_explain_analyze_use_explain_analyze_to_diagnose_slow_queries"
+    ],
+    "113": [
+      "agents_skills_supabase_postgres_best_practices_references_monitor_pg_stat_statements",
+      "agents_skills_supabase_postgres_best_practices_references_monitor_pg_stat_statements_enable_pg_stat_statements_for_query_analysis"
+    ],
+    "114": [
+      "agents_skills_supabase_postgres_best_practices_references_monitor_vacuum_analyze",
+      "agents_skills_supabase_postgres_best_practices_references_monitor_vacuum_analyze_maintain_table_statistics_with_vacuum_and_analyze"
+    ],
+    "115": [
+      "agents_skills_supabase_postgres_best_practices_references_query_composite_indexes",
+      "agents_skills_supabase_postgres_best_practices_references_query_composite_indexes_create_composite_indexes_for_multi_column_queries"
+    ],
+    "116": [
+      "agents_skills_supabase_postgres_best_practices_references_query_covering_indexes",
+      "agents_skills_supabase_postgres_best_practices_references_query_covering_indexes_use_covering_indexes_to_avoid_table_lookups"
+    ],
+    "117": [
+      "agents_skills_supabase_postgres_best_practices_references_query_index_types",
+      "agents_skills_supabase_postgres_best_practices_references_query_index_types_choose_the_right_index_type_for_your_data"
+    ],
+    "118": [
+      "agents_skills_supabase_postgres_best_practices_references_query_missing_indexes",
+      "agents_skills_supabase_postgres_best_practices_references_query_missing_indexes_add_indexes_on_where_and_join_columns"
+    ],
+    "119": [
+      "agents_skills_supabase_postgres_best_practices_references_query_partial_indexes",
+      "agents_skills_supabase_postgres_best_practices_references_query_partial_indexes_use_partial_indexes_for_filtered_queries"
+    ],
+    "120": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_constraints",
+      "agents_skills_supabase_postgres_best_practices_references_schema_constraints_add_constraints_safely_in_migrations"
+    ],
+    "121": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_data_types",
+      "agents_skills_supabase_postgres_best_practices_references_schema_data_types_choose_appropriate_data_types"
+    ],
+    "122": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_foreign_key_indexes",
+      "agents_skills_supabase_postgres_best_practices_references_schema_foreign_key_indexes_index_foreign_key_columns"
+    ],
+    "123": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_lowercase_identifiers",
+      "agents_skills_supabase_postgres_best_practices_references_schema_lowercase_identifiers_use_lowercase_identifiers_for_compatibility"
+    ],
+    "124": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_partitioning",
+      "agents_skills_supabase_postgres_best_practices_references_schema_partitioning_partition_large_tables_for_better_performance"
+    ],
+    "125": [
+      "agents_skills_supabase_postgres_best_practices_references_schema_primary_keys",
+      "agents_skills_supabase_postgres_best_practices_references_schema_primary_keys_select_optimal_primary_key_strategy"
+    ],
+    "126": [
+      "agents_skills_supabase_postgres_best_practices_references_security_privileges",
+      "agents_skills_supabase_postgres_best_practices_references_security_privileges_apply_principle_of_least_privilege"
+    ],
+    "127": [
+      "agents_skills_supabase_postgres_best_practices_references_security_rls_basics",
+      "agents_skills_supabase_postgres_best_practices_references_security_rls_basics_enable_row_level_security_for_multi_tenant_data"
+    ],
+    "128": [
+      "agents_skills_supabase_postgres_best_practices_references_security_rls_performance",
+      "agents_skills_supabase_postgres_best_practices_references_security_rls_performance_optimize_rls_policies_for_performance"
+    ],
+    "129": [
+      "agents_skills_supabase_postgres_best_practices_references_template",
+      "agents_skills_supabase_postgres_best_practices_references_template_rule_title"
+    ],
+    "130": [
+      "client_agents",
+      "client_agents_this_is_not_the_next_js_you_know"
+    ],
+    "131": [
       "client_eslint_config",
       "client_eslint_config_eslintconfig"
     ],
-    "70": [
+    "132": [
       "client_next_config",
       "client_next_config_nextconfig"
     ],
-    "71": [
+    "133": [
       "client_src_app_loading",
       "client_src_app_loading_loading"
     ],
-    "72": [
+    "134": [
       "client_src_app_main_courses_id_not_found",
       "client_src_app_main_courses_id_not_found_coursenotfound"
     ],
-    "73": [
+    "135": [
       "client_src_app_maintenance_page",
       "client_src_app_maintenance_page_maintenancepage"
     ],
-    "74": [
+    "136": [
       "client_src_app_privacy_policy_page",
       "client_src_app_privacy_policy_page_privacypolicypage"
     ],
-    "75": [
+    "137": [
       "client_src_app_terms_page",
       "client_src_app_terms_page_termspage"
     ],
-    "76": [
+    "138": [
       "client_src_components_layout_animatedbackground",
       "client_src_components_layout_animatedbackground_animatedbackground"
     ],
-    "77": [
-      "cors",
-      "server_package_dependencies_cors"
+    "139": [
+      "dotenv",
+      "server_package_dependencies_dotenv"
     ],
-    "78": [
+    "140": [
       "express",
       "server_package_dependencies_express"
     ],
-    "79": [
+    "141": [
       "helmet",
       "server_package_dependencies_helmet"
     ],
-    "80": [
+    "142": [
       "jsonwebtoken",
       "server_package_dependencies_jsonwebtoken"
     ],
-    "81": [
-      "multer",
-      "server_package_dependencies_multer"
-    ],
-    "82": [
+    "143": [
       "pg",
       "server_package_dependencies_pg"
     ],
-    "83": [
+    "144": [
       "pg_hstore",
       "server_package_dependencies_pg_hstore"
     ],
-    "84": [
-      "ref_es2022",
-      "server_tsconfig_compileroptions_lib"
+    "145": [
+      "ref_node",
+      "server_tsconfig_compileroptions_types"
     ],
-    "85": [
+    "146": [
       "sequelize",
       "server_package_dependencies_sequelize"
     ],
-    "86": [
+    "147": [
       "server_check",
       "server_check_sequelize"
     ],
-    "87": [
+    "148": [
       "server_package_dependencies_supabase_supabase_js",
       "supabase_supabase_js"
     ],
-    "88": [
+    "149": [
       "server_package_dependencies_types_bcrypt",
       "types_bcrypt"
     ],
-    "89": [
+    "150": [
+      "server_package_dependencies_types_express",
+      "types_express"
+    ],
+    "151": [
       "server_package_dependencies_types_jsonwebtoken",
       "types_jsonwebtoken"
     ],
-    "90": [
-      "server_package_dependencies_winston",
-      "winston"
+    "152": [
+      "server_package_dependencies_zod",
+      "zod"
     ],
-    "91": [
+    "153": [
+      "client_claude"
+    ],
+    "154": [
       "client_next_sitemap_config"
     ],
-    "92": [
+    "155": [
       "server_sequelize_config"
     ],
-    "93": [
+    "156": [
       "server_src_database_migrations_20260708000000_create_scholarship_registrations"
     ],
-    "94": [
+    "157": [
       "server_src_database_migrations_20260708000001_create_users"
     ],
-    "95": [
+    "158": [
       "server_src_database_migrations_20260708000002_create_otp_verifications"
     ],
-    "96": [
+    "159": [
       "server_src_database_migrations_20260725000000_secure_admin_auth"
     ],
-    "97": [
+    "160": [
       "server_src_database_migrations_20260725000001_create_cms_and_lead_tables"
     ],
-    "98": [
+    "161": [
       "server_src_database_migrations_20260725000002_create_content_blocks"
     ],
-    "99": [
+    "162": [
       "server_src_database_migrations_20260725000003_add_banner_target_url"
     ],
-    "100": [
+    "163": [
       "server_src_database_migrations_20260726000000_create_media_revisions"
     ],
-    "101": [
+    "164": [
       "server_src_database_migrations_20260730000001_add_banner_alt_text"
     ],
-    "102": [
+    "165": [
       "server_src_database_migrations_20260801000000_fix_missing_banner_columns"
     ],
-    "103": [
+    "166": [
       "server_src_database_migrations_20260806000000_add_notification_icon"
     ]
   },
   "cohesion": {
-    "0": 0.0629800307219662,
-    "1": 0.06327683615819209,
-    "2": 0.07908163265306123,
-    "3": 0.07073170731707316,
-    "4": 0.05128205128205128,
-    "5": 0.1126984126984127,
-    "6": 0.07407407407407407,
-    "7": 0.1076923076923077,
-    "8": 0.18461538461538463,
-    "9": 0.08695652173913043,
-    "10": 0.15019762845849802,
-    "11": 0.16600790513833993,
-    "12": 0.17391304347826086,
-    "13": 0.1,
-    "14": 0.17647058823529413,
-    "15": 0.14705882352941177,
-    "16": 0.18382352941176472,
-    "17": 0.18333333333333332,
-    "18": 0.13333333333333333,
-    "19": 0.14285714285714285,
-    "20": 0.15384615384615385,
-    "21": 0.19230769230769232,
-    "22": 0.2727272727272727,
-    "23": 0.18181818181818182,
-    "24": 0.18181818181818182,
-    "25": 0.24444444444444444,
-    "26": 0.2,
-    "27": 0.2777777777777778,
-    "28": 0.3611111111111111,
-    "29": 0.2857142857142857,
-    "30": 0.39285714285714285,
-    "31": 0.2857142857142857,
-    "32": 0.3333333333333333,
-    "33": 0.6,
-    "34": 0.4,
-    "35": 0.4,
-    "36": 0.6,
-    "37": 0.5,
-    "38": 0.5,
-    "39": 0.5,
-    "40": 0.5,
-    "41": 0.5,
-    "42": 0.5,
-    "43": 0.5,
-    "44": 0.5,
-    "45": 0.5,
-    "46": 0.5,
-    "47": 0.5,
-    "48": 0.5,
-    "49": 0.5,
-    "50": 0.4,
-    "51": 0.5,
-    "52": 0.5,
-    "53": 0.5,
-    "54": 0.6666666666666666,
-    "55": 0.6666666666666666,
-    "56": 0.6666666666666666,
-    "57": 0.6666666666666666,
-    "58": 0.6666666666666666,
-    "59": 0.6666666666666666,
-    "60": 0.6666666666666666,
-    "61": 0.6666666666666666,
-    "62": 0.6666666666666666,
-    "63": 0.6666666666666666,
-    "64": 0.6666666666666666,
-    "65": 0.6666666666666666,
-    "66": 0.6666666666666666,
-    "67": 0.6666666666666666,
-    "68": 0.6666666666666666,
-    "69": 1.0,
-    "70": 1.0,
-    "71": 1.0,
-    "72": 1.0,
-    "73": 1.0,
-    "74": 1.0,
-    "75": 1.0,
-    "76": 1.0,
-    "77": 1.0,
-    "78": 1.0,
-    "79": 1.0,
-    "80": 1.0,
-    "81": 1.0,
-    "82": 1.0,
-    "83": 1.0,
-    "84": 1.0,
-    "85": 1.0,
-    "86": 1.0,
-    "87": 1.0,
-    "88": 1.0,
-    "89": 1.0,
-    "90": 1.0,
-    "91": 1.0,
-    "92": 1.0,
-    "93": 1.0,
-    "94": 1.0,
-    "95": 1.0,
-    "96": 1.0,
+    "0": 0.06240084611316764,
+    "1": 0.05128205128205128,
+    "2": 0.10810810810810811,
+    "3": 0.05555555555555555,
+    "4": 0.07407407407407407,
+    "5": 0.17028985507246377,
+    "6": 0.11231884057971014,
+    "7": 0.08695652173913043,
+    "8": 0.16205533596837945,
+    "9": 0.12987012987012986,
+    "10": 0.09090909090909091,
+    "11": 0.17316017316017315,
+    "12": 0.13852813852813853,
+    "13": 0.14761904761904762,
+    "14": 0.1619047619047619,
+    "15": 0.1,
+    "16": 0.1695906432748538,
+    "17": 0.11764705882352941,
+    "18": 0.125,
+    "19": 0.16666666666666666,
+    "20": 0.18333333333333332,
+    "21": 0.21904761904761905,
+    "22": 0.13333333333333333,
+    "23": 0.27472527472527475,
+    "24": 0.23076923076923078,
+    "25": 0.2087912087912088,
+    "26": 0.26373626373626374,
+    "27": 0.15384615384615385,
+    "28": 0.19230769230769232,
+    "29": 0.19230769230769232,
+    "30": 0.23636363636363636,
+    "31": 0.18181818181818182,
+    "32": 0.2909090909090909,
+    "33": 0.18181818181818182,
+    "34": 0.2,
+    "35": 0.24444444444444444,
+    "36": 0.24444444444444444,
+    "37": 0.2,
+    "38": 0.3111111111111111,
+    "39": 0.26666666666666666,
+    "40": 0.2222222222222222,
+    "41": 0.2857142857142857,
+    "42": 0.39285714285714285,
+    "43": 0.2857142857142857,
+    "44": 0.38095238095238093,
+    "45": 0.4666666666666667,
+    "46": 0.3333333333333333,
+    "47": 0.3333333333333333,
+    "48": 0.6,
+    "49": 0.4,
+    "50": 0.3333333333333333,
+    "51": 0.4,
+    "52": 0.6,
+    "53": 0.4,
+    "54": 0.4,
+    "55": 0.4,
+    "56": 0.6,
+    "57": 0.5,
+    "58": 0.5,
+    "59": 0.5,
+    "60": 0.5,
+    "61": 0.5,
+    "62": 0.5,
+    "63": 0.5,
+    "64": 0.5,
+    "65": 0.5,
+    "66": 0.5,
+    "67": 0.5,
+    "68": 0.4,
+    "69": 0.5,
+    "70": 0.5,
+    "71": 0.5,
+    "72": 0.5,
+    "73": 0.5,
+    "74": 0.5,
+    "75": 0.5,
+    "76": 0.5,
+    "77": 0.5,
+    "78": 0.5,
+    "79": 0.6666666666666666,
+    "80": 0.6666666666666666,
+    "81": 0.6666666666666666,
+    "82": 0.6666666666666666,
+    "83": 0.6666666666666666,
+    "84": 0.6666666666666666,
+    "85": 0.6666666666666666,
+    "86": 0.6666666666666666,
+    "87": 0.6666666666666666,
+    "88": 0.6666666666666666,
+    "89": 0.6666666666666666,
+    "90": 0.6666666666666666,
+    "91": 0.6666666666666666,
+    "92": 0.6666666666666666,
+    "93": 0.6666666666666666,
+    "94": 0.6666666666666666,
+    "95": 0.6666666666666666,
+    "96": 0.6666666666666666,
     "97": 1.0,
     "98": 1.0,
     "99": 1.0,
     "100": 1.0,
     "101": 1.0,
     "102": 1.0,
-    "103": 1.0
+    "103": 1.0,
+    "104": 1.0,
+    "105": 1.0,
+    "106": 1.0,
+    "107": 1.0,
+    "108": 1.0,
+    "109": 1.0,
+    "110": 1.0,
+    "111": 1.0,
+    "112": 1.0,
+    "113": 1.0,
+    "114": 1.0,
+    "115": 1.0,
+    "116": 1.0,
+    "117": 1.0,
+    "118": 1.0,
+    "119": 1.0,
+    "120": 1.0,
+    "121": 1.0,
+    "122": 1.0,
+    "123": 1.0,
+    "124": 1.0,
+    "125": 1.0,
+    "126": 1.0,
+    "127": 1.0,
+    "128": 1.0,
+    "129": 1.0,
+    "130": 1.0,
+    "131": 1.0,
+    "132": 1.0,
+    "133": 1.0,
+    "134": 1.0,
+    "135": 1.0,
+    "136": 1.0,
+    "137": 1.0,
+    "138": 1.0,
+    "139": 1.0,
+    "140": 1.0,
+    "141": 1.0,
+    "142": 1.0,
+    "143": 1.0,
+    "144": 1.0,
+    "145": 1.0,
+    "146": 1.0,
+    "147": 1.0,
+    "148": 1.0,
+    "149": 1.0,
+    "150": 1.0,
+    "151": 1.0,
+    "152": 1.0,
+    "153": 1.0,
+    "154": 1.0,
+    "155": 1.0,
+    "156": 1.0,
+    "157": 1.0,
+    "158": 1.0,
+    "159": 1.0,
+    "160": 1.0,
+    "161": 1.0,
+    "162": 1.0,
+    "163": 1.0,
+    "164": 1.0,
+    "165": 1.0,
+    "166": 1.0
   },
   "gods": [
     {
       "id": "client_src_lib_admin_api_adminapifetch",
       "label": "adminApiFetch()",
       "degree": 47
+    },
+    {
+      "id": "readme_success_code_academy_neet_coaching_website_project_master_context",
+      "label": "Success Code Academy NEET Coaching Website - Project Master Context",
+      "degree": 32
     },
     {
       "id": "server_tsconfig_compileroptions",
@@ -1252,23 +1681,18 @@
       "degree": 16
     },
     {
-      "id": "client_src_components_admin_adminmodal_adminmodal",
-      "label": "AdminModal()",
-      "degree": 15
-    },
-    {
       "id": "client_src_components_admin_editmodecontext_useeditmode",
       "label": "useEditMode()",
       "degree": 15
     },
     {
-      "id": "server_src_controllers_admin_controller_recordmediarevision",
-      "label": "recordMediaRevision()",
-      "degree": 12
+      "id": "client_src_components_admin_adminmodal_adminmodal",
+      "label": "AdminModal()",
+      "degree": 15
     },
     {
-      "id": "client_src_components_admin_admincontentmanager_admincontentmanager",
-      "label": "AdminContentManager()",
+      "id": "server_src_controllers_admin_controller_recordmediarevision",
+      "label": "recordMediaRevision()",
       "degree": 12
     },
     {
@@ -1290,48 +1714,48 @@
       "why": "bridges separate communities; peripheral node `AdminSettingsPage()` unexpectedly reaches hub `adminApiFetch()`"
     },
     {
-      "source": "isAdminUser()",
-      "target": "isAdminRole()",
-      "source_files": [
-        "client/src/lib/api.ts",
-        "client/src/lib/roles.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities; peripheral node `isAdminUser()` unexpectedly reaches hub `isAdminRole()`"
-    },
-    {
       "source": "exclude",
       "target": "node_modules",
       "source_files": [
-        "server/tsconfig.json",
-        "client/tsconfig.json"
+        "client/tsconfig.json",
+        "server/tsconfig.json"
       ],
       "confidence": "EXTRACTED",
       "relation": "extends",
       "why": "connects across different repos/directories"
     },
     {
-      "source": "AdminCoursesPage()",
+      "source": "AdminDashboardPage()",
       "target": "adminApiFetch()",
       "source_files": [
-        "client/src/app/admin/content/courses/page.tsx",
+        "client/src/app/admin/page.tsx",
         "client/src/lib/admin-api.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "peripheral node `AdminCoursesPage()` unexpectedly reaches hub `adminApiFetch()`"
+      "why": "bridges separate communities"
     },
     {
-      "source": "AdminContactMessagesPage()",
-      "target": "adminApiFetch()",
+      "source": "AdminLeadTable()",
+      "target": "formatAdminDate()",
       "source_files": [
-        "client/src/app/admin/database/contact-messages/page.tsx",
-        "client/src/lib/admin-api.ts"
+        "client/src/components/admin/AdminLeadTable.tsx",
+        "client/src/components/admin/AdminUi.tsx"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "peripheral node `AdminContactMessagesPage()` unexpectedly reaches hub `adminApiFetch()`"
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "AdminContentManager()",
+      "target": "useAdminSession()",
+      "source_files": [
+        "client/src/components/admin/AdminContentManager.tsx",
+        "client/src/components/admin/AdminSessionContext.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
     }
   ],
   "tokens": {

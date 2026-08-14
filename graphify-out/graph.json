@@ -13773,7 +13773,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/app/(main)/home/AcademyInsights.tsx",
-      "source_location": "L432",
+      "source_location": "L423",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_main_home_academyinsights_academyinsights",
@@ -34577,5 +34577,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d3458bf6e033532fa412e247da75af3236893053"
+  "built_at_commit": "7a5c271f67caef61b9033824a15f240b0bc27c2e"
 }

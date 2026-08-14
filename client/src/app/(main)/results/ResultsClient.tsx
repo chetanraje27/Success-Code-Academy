@@ -40,10 +40,12 @@ function StudentResultCard({
   result,
   featured,
   variant,
+  mobileOnly = false,
 }: {
   result: StudentResult;
   featured: boolean;
   variant: number;
+  mobileOnly?: boolean;
 }) {
   const score = result.marks !== undefined;
 
@@ -54,6 +56,7 @@ function StudentResultCard({
         `result-student-card-${result.year}`,
         `result-card-variant-${variant}`,
         featured ? "result-card-featured" : "",
+        mobileOnly ? "result-card-mobile-only" : "",
       ].filter(Boolean).join(" ")}
     >
 
@@ -233,7 +236,7 @@ export default function ResultsClient() {
   const displayedResults = useMemo(
     () =>
       filteredResults.filter(
-        (result) => selectedYear !== 2025 || (result.id !== 1 && result.id !== 2),
+        (result) => selectedYear !== 2025 || result.id !== 1,
       ),
     [filteredResults, selectedYear],
   );
@@ -385,6 +388,7 @@ export default function ResultsClient() {
                     result={result}
                     featured={selectedYear !== 2025 && index === 0}
                     variant={index % 4}
+                    mobileOnly={selectedYear === 2025 && result.id === 2}
                   />
                 ))}
               </div>

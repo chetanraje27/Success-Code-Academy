@@ -1322,6 +1322,277 @@
   }
 }
 
+.result-card-mobile-only {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .results-container {
+    width: min(100% - 1rem, 1160px);
+  }
+
+  .results-catalog-section {
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .results-catalog-header {
+    margin-bottom: 0;
+  }
+
+  .results-catalog-header h1 {
+    font-size: 1.375rem;
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+
+  .results-year-navigation {
+    justify-content: center;
+    margin-top: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .results-year-tabs {
+    justify-content: center;
+  }
+
+  .results-year-tabs button {
+    min-height: 2rem;
+    padding-inline: 0.55rem;
+    font-size: 0.6rem;
+  }
+
+  .results-subsection-heading {
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .results-subsection-heading > span {
+    width: 2px;
+    height: 1.35rem;
+    flex-basis: 2px;
+  }
+
+  .results-subsection-heading h2 {
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+
+  .results-featured-2025 {
+    margin-bottom: 1.5rem;
+  }
+
+  .results-featured-2025-grid article:not(:first-child) {
+    display: none;
+  }
+
+  .results-featured-2025-grid article {
+    min-height: 16rem;
+    border-radius: 10px;
+  }
+
+  .results-featured-copy {
+    width: 48%;
+    padding: 1rem 0.25rem 1rem 1rem;
+  }
+
+  .results-featured-year {
+    padding: 0.3rem 0.45rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
+  }
+
+  .results-featured-rank {
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .results-featured-rank span {
+    font-size: 0.58rem;
+  }
+
+  .results-featured-rank strong {
+    font-size: 2.8rem;
+  }
+
+  .results-featured-copy .student-name-chip {
+    display: block;
+    max-width: 100%;
+    margin: 0.7rem 0 0;
+    overflow: hidden;
+    padding: 0.4rem 0.55rem;
+    font-size: clamp(0.62rem, 2.8vw, 0.78rem);
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .results-featured-copy p {
+    display: -webkit-box;
+    margin-top: 0.35rem;
+    overflow: hidden;
+    font-size: 0.62rem;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .results-featured-score {
+    margin-top: 0.6rem;
+  }
+
+  .results-featured-score strong {
+    font-size: 1.2rem;
+  }
+
+  .results-featured-score span {
+    font-size: 0.65rem;
+  }
+
+  .results-featured-portrait {
+    width: 64%;
+    height: 96%;
+  }
+
+  .results-student-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .result-student-card {
+    min-height: 9.75rem;
+    border-radius: 8px;
+    background-position: center bottom;
+  }
+
+  .result-card-featured {
+    grid-column: 1 / -1;
+    min-height: 16rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .result-card-mobile-only {
+    display: block;
+  }
+
+  .result-card-copy {
+    width: 64%;
+    padding: 0.45rem 0.1rem 0.5rem 0.4rem;
+  }
+
+  .result-card-featured .result-card-copy {
+    width: 48%;
+    padding: 1rem 0.35rem 1rem 1rem;
+  }
+
+  .result-card-year {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0.2rem 0.25rem;
+    font-size: clamp(0.42rem, 1.55vw, 0.54rem);
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .result-card-college {
+    max-width: 100%;
+    gap: 0.2rem;
+    font-size: clamp(0.42rem, 1.45vw, 0.52rem);
+    line-height: 1.2;
+  }
+
+  .result-card-pin {
+    width: 14px;
+    height: 14px;
+    flex-basis: 14px;
+  }
+
+  .result-card-pin svg {
+    width: 8px;
+    height: 8px;
+  }
+
+  .result-card-achievement-label {
+    font-size: 0.44rem;
+    letter-spacing: 0.06em;
+  }
+
+  .result-card-achievement strong {
+    font-size: clamp(1.1rem, 5vw, 1.45rem);
+  }
+
+  .result-card-copy .student-name-chip {
+    display: block;
+    width: auto;
+    max-width: 150%;
+    margin-top: 0.45rem;
+    padding: 0.24rem 0.3rem;
+    font-size: clamp(0.4rem, 1.45vw, 0.52rem);
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .result-card-copy .student-name-chip::before {
+    border-bottom-width: 2px;
+    border-radius: 2px;
+    box-shadow: none;
+  }
+
+  .result-card-featured .result-card-copy .student-name-chip {
+    margin-top: 0.7rem;
+    padding: 0.4rem 0.55rem;
+    font-size: clamp(0.62rem, 2.8vw, 0.78rem);
+  }
+
+  .result-student-portrait {
+    right: -22%;
+    width: 102%;
+    height: 82%;
+  }
+
+  .result-card-featured .result-student-portrait {
+    right: -3%;
+    width: 66%;
+    height: 98%;
+  }
+}
+
+@media (max-width: 380px) {
+  .results-container {
+    width: min(100% - 0.75rem, 1160px);
+  }
+
+  .results-student-grid {
+    gap: 0.3rem;
+  }
+
+  .result-student-card {
+    min-height: 9rem;
+  }
+
+  .result-card-featured,
+  .results-featured-2025-grid article {
+    min-height: 14.5rem;
+  }
+
+  .result-card-copy {
+    width: 66%;
+    padding-inline: 0.35rem 0.05rem;
+  }
+
+  .result-card-year,
+  .result-card-copy .student-name-chip {
+    font-size: 0.38rem;
+  }
+
+  .result-student-portrait {
+    right: -25%;
+    width: 108%;
+    height: 80%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   .results-page-container *,

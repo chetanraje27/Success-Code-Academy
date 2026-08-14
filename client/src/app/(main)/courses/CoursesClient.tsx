@@ -358,7 +358,7 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           background: transparent;
           justify-content: center;
           align-items: center;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           box-sizing: border-box;
         }
 
@@ -376,6 +376,7 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           font-family: var(--font-sans);
           font-size: 1rem;
           font-weight: 600;
+          white-space: nowrap;
         }
 
         .filter-tab-btn:hover {
@@ -750,28 +751,32 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             overflow-wrap: anywhere;
           }
           .courses-filter-tabs {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 0.4rem !important;
             overflow: visible !important;
             width: 100% !important;
             padding: 0.15rem 0.05rem 0.35rem !important;
-            justify-content: center !important;
           }
           .courses-filter-tabs::-webkit-scrollbar {
             display: none;
           }
           .filter-tab-btn {
-            flex: 0 0 auto !important;
+            min-width: 0;
             min-height: 2.25rem;
             padding: 0.45rem 0.65rem !important;
             font-size: 0.7rem !important;
-            width: auto !important;
+            width: 100% !important;
             justify-content: center;
             gap: 0.4rem !important;
             border-radius: 8px !important;
-            scroll-snap-align: start;
+            white-space: nowrap;
+          }
+          .filter-tab-btn .tab-label {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .filter-tab-btn .tab-icon svg {
             width: 14px !important;
@@ -901,8 +906,13 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           }
           .filter-tab-btn {
             min-height: 2.1rem;
-            padding: 0.4rem 0.55rem !important;
-            font-size: 0.65rem !important;
+            padding: 0.38rem 0.35rem !important;
+            font-size: 0.58rem !important;
+            gap: 0.25rem !important;
+          }
+          .filter-tab-btn .tab-icon svg {
+            width: 12px !important;
+            height: 12px !important;
           }
           .course-card-title {
             font-size: 1.05rem !important;

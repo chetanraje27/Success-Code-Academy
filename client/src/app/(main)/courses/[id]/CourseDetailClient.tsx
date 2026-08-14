@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   FaArrowLeft,
@@ -136,6 +136,7 @@ const classroomFeatures = [
 ];
 
 export default function CourseDetailClient({ course }: CourseDetailClientProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -248,16 +249,26 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
     <div className={`course-detail-page course-detail-${course.category}`}>
       <section className="course-detail-hero">
         <div className="course-detail-container">
-          <Link href="/courses" className="course-detail-back">
+          <button
+            type="button"
+            className="course-detail-back"
+            onClick={() => {
+              if (window.history.length > 1) {
+                router.back();
+              } else {
+                router.push("/courses");
+              }
+            }}
+          >
             <FaArrowLeft aria-hidden="true" />
             <EditableText
               contentKey="navigation.back"
               label="back to courses link"
               showInlineControls={false}
             >
-              Back to Courses
+              Back
             </EditableText>
-          </Link>
+          </button>
 
           <div className="course-detail-hero-card">
             <div className="course-detail-hero-copy">

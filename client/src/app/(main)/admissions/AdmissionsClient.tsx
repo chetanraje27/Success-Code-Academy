@@ -188,10 +188,6 @@ export default function AdmissionsClient() {
               </span>
             </h1>
 
-            <div className="poster-badge-pill">
-              For NEET Freshers
-            </div>
-
             <p className="poster-intro-text">
               <EditableText
                 contentKey="scholarship.introduction"

@@ -442,39 +442,77 @@
  * this grid at two columns -- these `!important` single-column rules used to
  * reach up to 1000px and silently beat it. */
 @media (max-width: 767px) {
+  .public-shell .admissions-page-container .admissions-hero-banner {
+    padding-top: var(--header-h) !important;
+  }
+
+  .public-shell .admissions-page-container .poster-img-container {
+    aspect-ratio: 1916 / 821;
+  }
+
+  .public-shell .admissions-page-container .admissions-poster-img {
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
   .public-shell .admissions-page-container .scholarship-grid-container {
     grid-template-columns: 1fr !important;
-    gap: 24px !important;
-    padding: 2.5rem var(--page-gutter) 54px !important;
+    gap: 1.25rem !important;
+    padding: 1.5rem 0.75rem 2.5rem !important;
   }
 
   .public-shell .admissions-page-container .scholarship-right-form {
     position: static;
   }
 
+  .public-shell .admissions-page-container .scholarship-left-details {
+    padding: 0 0 1.25rem !important;
+    border-bottom: 1px solid var(--admission-line) !important;
+  }
+
   .public-shell .admissions-page-container .poster-header {
-    grid-template-columns: 42px minmax(0, 1fr);
-    column-gap: 12px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    column-gap: 0.65rem;
   }
 
   .public-shell .admissions-page-container .poster-header-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 11px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
   }
 
   .public-shell .admissions-page-container .poster-header-icon svg {
-    width: 27px;
-    height: 27px;
+    width: 22px;
+    height: 22px;
   }
 
   .public-shell .admissions-page-container .poster-main-title {
-    font-size: clamp(1.45rem, 7.5vw, 2rem) !important;
+    margin: 0 0 0.65rem !important;
+    font-size: 1.375rem !important;
+    letter-spacing: 0 !important;
+    line-height: 1.15 !important;
   }
 
-  /* Wraps on its own: two cards on a 700px phablet, one on a 390px phone. */
+  .public-shell .admissions-page-container .poster-badge-pill {
+    margin-bottom: 0.85rem !important;
+    padding: 0.3rem 0.55rem !important;
+    font-size: 0.58rem !important;
+    letter-spacing: 0.045em !important;
+  }
+
+  .public-shell .admissions-page-container .poster-intro-text {
+    font-size: 0.76rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .public-shell .admissions-page-container .poster-star-divider {
+    gap: 0.55rem !important;
+    margin: 1rem 0 0.75rem !important;
+  }
+
   .public-shell .admissions-page-container .poster-features-list {
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: 1fr;
+    gap: 0.5rem !important;
   }
 
   .public-shell .admissions-page-container .poster-feature-card-boxed {
@@ -483,13 +521,192 @@
 
   .public-shell .admissions-page-container .poster-feature-item,
   .public-shell .admissions-page-container .poster-feature-card-boxed {
+    display: grid !important;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center !important;
     min-height: 0;
-    padding: 16px !important;
+    gap: 0.65rem !important;
+    padding: 0.65rem 0.7rem !important;
+    border-radius: 9px !important;
+  }
+
+  .public-shell .admissions-page-container .feature-icon-circle,
+  .public-shell .admissions-page-container .feature-icon-circle-dark {
+    width: 34px !important;
+    height: 34px !important;
+    flex-basis: 34px !important;
+    border-radius: 8px !important;
+  }
+
+  .public-shell .admissions-page-container .feature-icon-circle svg,
+  .public-shell .admissions-page-container .feature-icon-circle-dark svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .public-shell .admissions-page-container .feature-text-block {
+    min-width: 0;
+    gap: 0 !important;
+  }
+
+  .public-shell .admissions-page-container .feature-title,
+  .public-shell .admissions-page-container .feature-title-blue {
+    font-size: 0.78rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .public-shell .admissions-page-container .feature-description,
+  .public-shell .admissions-page-container .feature-description-blue {
+    margin-top: 0.18rem !important;
+    font-size: 0.67rem !important;
+    line-height: 1.4 !important;
   }
 
   .public-shell .admissions-page-container .registration-form-card {
-    padding: 22px !important;
-    border-radius: 13px !important;
+    padding: 1rem !important;
+    border-radius: 10px !important;
+  }
+
+  .public-shell .admissions-page-container .form-card-header {
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 0.65rem;
+    margin-bottom: 1rem !important;
+  }
+
+  .public-shell .admissions-page-container .form-header-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+  }
+
+  .public-shell .admissions-page-container .form-header-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .public-shell .admissions-page-container .form-card-title {
+    font-size: 0.92rem !important;
+    letter-spacing: 0 !important;
+    line-height: 1.35 !important;
+  }
+
+  .public-shell .admissions-page-container .register-exam-form {
+    gap: 0.75rem !important;
+  }
+
+  .public-shell .admissions-page-container .register-exam-form .form-input-group {
+    gap: 0.32rem !important;
+  }
+
+  .public-shell .admissions-page-container .form-label {
+    font-size: 0.67rem !important;
+  }
+
+  .public-shell .admissions-page-container .input-with-icon input,
+  .public-shell .admissions-page-container .input-with-icon select {
+    min-height: 44px;
+    padding: 0.65rem 0.75rem 0.65rem 2.35rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+  }
+
+  .public-shell .admissions-page-container .input-icon {
+    left: 0.75rem !important;
+    width: 15px;
+    height: 15px;
+  }
+
+  .public-shell .admissions-page-container .register-submit-btn {
+    min-height: 44px !important;
+    margin-top: 0.15rem !important;
+    padding: 0.65rem 0.8rem !important;
+    font-size: 0.76rem !important;
+    border-radius: 8px !important;
+  }
+
+  .public-shell .admissions-page-container .form-card-footer {
+    align-items: flex-start;
+    margin-top: 0.75rem !important;
+    font-size: 0.58rem !important;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  .public-shell .admissions-page-container .form-error-message {
+    margin-bottom: 0 !important;
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.7rem !important;
+    border-radius: 8px !important;
+  }
+
+  .public-shell .admissions-page-container .success-feedback-container {
+    gap: 0.75rem;
+    padding: 1.25rem 0.25rem;
+  }
+
+  .public-shell .admissions-page-container .success-checkmark-badge {
+    width: 54px;
+    height: 54px;
+  }
+
+  .public-shell .admissions-page-container .success-checkmark-badge svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .public-shell .admissions-page-container .success-feedback-container h4 {
+    font-size: 1.05rem;
+  }
+
+  .public-shell .admissions-page-container .success-feedback-container p {
+    font-size: 0.76rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 380px) {
+  .public-shell .admissions-page-container .scholarship-grid-container {
+    padding: 1.25rem 0.5rem 2rem !important;
+  }
+
+  .public-shell .admissions-page-container .poster-header {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 0.55rem;
+  }
+
+  .public-shell .admissions-page-container .poster-header-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .public-shell .admissions-page-container .poster-main-title {
+    font-size: 1.25rem !important;
+  }
+
+  .public-shell .admissions-page-container .poster-feature-item,
+  .public-shell .admissions-page-container .poster-feature-card-boxed {
+    grid-template-columns: 30px minmax(0, 1fr);
+    padding: 0.58rem 0.6rem !important;
+  }
+
+  .public-shell .admissions-page-container .feature-icon-circle,
+  .public-shell .admissions-page-container .feature-icon-circle-dark {
+    width: 30px !important;
+    height: 30px !important;
+    flex-basis: 30px !important;
+  }
+
+  .public-shell .admissions-page-container .registration-form-card {
+    padding: 0.8rem !important;
+  }
+
+  .public-shell .admissions-page-container .form-card-header {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .public-shell .admissions-page-container .form-header-icon {
+    width: 34px !important;
+    height: 34px !important;
   }
 }
 

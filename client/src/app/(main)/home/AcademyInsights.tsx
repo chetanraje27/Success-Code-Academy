@@ -211,9 +211,6 @@ export default function AcademyInsights() {
                         <div className="blog-card-title skeleton-pulse" style={{ height: "20px", width: "90%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.4)" }} />
                         <div className="blog-card-excerpt skeleton-pulse" style={{ height: "14px", width: "100%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
                         <div className="blog-card-excerpt skeleton-pulse" style={{ height: "14px", width: "84%", borderRadius: "999px", backgroundColor: "rgba(203, 213, 225, 0.32)" }} />
-                        <div className="blog-card-footer" style={{ paddingTop: 0 }}>
-                          <span className="blog-card-action" />
-                        </div>
                       </div>
                     </article>
                   </div>
@@ -255,9 +252,6 @@ export default function AcademyInsights() {
                             </div>
                             <h3 className="blog-card-title-text">{blog.shortTitle || blog.title}</h3>
                             <p className="blog-card-excerpt">{blog.excerpt}</p>
-                            <div className="blog-card-footer">
-                              <span className="blog-card-action">Read article</span>
-                            </div>
                           </div>
                         </article>
                       </a>
@@ -282,9 +276,6 @@ export default function AcademyInsights() {
                             </div>
                             <h3 className="blog-card-title-text">{blog.shortTitle || blog.title}</h3>
                             <p className="blog-card-excerpt">{blog.excerpt}</p>
-                            <div className="blog-card-footer">
-                              <span className="blog-card-action">Read article</span>
-                            </div>
                           </div>
                         </article>
                       </Link>

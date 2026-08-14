@@ -1,7 +1,7 @@
 # Graph Report - Success-Code-Academy  (2026-08-15)
 
 ## Corpus Check
-- 235 files · ~3,715,579 words
+- 235 files · ~3,715,551 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

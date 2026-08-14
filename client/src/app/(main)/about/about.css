@@ -620,125 +620,324 @@
 @media (max-width: 767px) {
   .about-page {
     --about-content-width: calc(100% - 2rem);
-    --about-section-space: 2.5rem;
+    --about-section-space: 2rem;
   }
 
   .about-hero {
-    padding: calc(64px + 0.9rem) 0 5.5rem;
+    padding: calc(var(--header-h) + 1.25rem) 0 2rem;
+  }
+
+  .about-hero-grid {
+    gap: 1rem;
   }
 
   .about-hero-title {
-    font-size: clamp(2.35rem, 12vw, 3.15rem);
+    max-width: 15ch;
+    font-size: clamp(1.8rem, 8vw, 2.35rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
   }
 
   .about-hero-description {
-    margin-top: 1rem;
-    font-size: 0.94rem;
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
   }
 
   .about-hero-metrics {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
+    border-radius: 10px;
   }
 
   .about-hero-metric {
-    min-height: 66px;
-    gap: 0.65rem;
-    padding: 0.65rem;
+    min-height: 58px;
+    gap: 0.55rem;
+    padding: 0.55rem;
   }
 
   .about-metric-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    font-size: 0.78rem;
+    border-radius: 7px;
+  }
+
+  .about-metric-copy small,
+  .about-metric-copy em {
+    font-size: 0.6rem;
+    letter-spacing: 0.045em;
   }
 
   .about-metric-copy strong {
-    font-size: 1.15rem;
+    margin-block: 0.18rem 0.1rem;
+    font-size: 1rem;
   }
 
   .about-map-card {
-    min-height: clamp(240px, 55vw, 285px);
+    min-height: clamp(190px, 53vw, 250px);
   }
 
   .about-map-img {
-    transform: scale(1.04) translateY(1.5%);
+    transform: scale(1.02) translateY(1%);
+  }
+
+  .about-impact {
+    padding-block: 0 2rem;
+  }
+
+  .about-achievement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    border-radius: 10px;
+    transform: none;
   }
 
   .about-rank-card {
-    min-height: 142px;
-    padding: 0.9rem;
+    min-height: 118px;
+    padding: 0.75rem;
   }
 
   .about-rank-emblem {
-    width: 48px;
-    font-size: 1.1rem;
+    width: 40px;
+    font-size: 0.92rem;
   }
 
   .about-achievement-year {
-    margin-bottom: 0.65rem;
-    padding: 0.25rem 0.42rem;
-    font-size: var(--font-size-micro);
+    margin-bottom: 0.45rem;
+    padding: 0.22rem 0.35rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.045em;
   }
 
   .about-rank-value {
-    font-size: 2.85rem;
+    font-size: 2.35rem;
   }
 
   .about-achievement-card {
-    min-height: 145px;
-    padding: 0.85rem;
+    min-height: 112px;
+    padding: 0.7rem;
   }
 
   .about-achievement-icon {
-    width: 31px;
-    height: 31px;
-    margin-bottom: 0.6rem;
+    width: 28px;
+    height: 28px;
+    margin-bottom: 0.45rem;
+    font-size: 0.78rem;
+    border-radius: 7px;
+  }
+
+  .about-achievement-card strong {
+    font-size: 1.55rem;
   }
 
   .about-achievement-card h3 {
-    font-size: 0.82rem;
+    font-size: 0.76rem;
+    line-height: 1.25;
   }
 
   .about-achievement-card p {
-    font-size: 0.7rem;
+    margin-top: 0.3rem;
+    font-size: 0.64rem;
+    line-height: 1.35;
+  }
+
+  .about-stars {
+    margin-top: 0.55rem;
+    font-size: 0.64rem;
+  }
+
+  .about-section-title,
+  .about-philosophy-header h2 {
+    font-size: 1.375rem;
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+
+  .about-story-grid {
+    gap: 1.25rem;
   }
 
   .about-story-media {
-    min-height: clamp(280px, 62vw, 390px);
+    min-height: clamp(245px, 67vw, 330px);
   }
 
-  /* Clears the absolutely-positioned quote, which grows taller as it narrows,
-   * hence the negative slope: more clearance on the smallest screens. */
   .about-story-image {
-    inset: 0 0 clamp(4.5rem, 8.5rem - 12.5vw, 5.5rem);
+    inset: 0 0 3.8rem;
+    border-radius: 10px;
   }
 
   .about-story-quote {
-    right: 0.75rem;
-    left: 0.75rem;
+    right: 0.65rem;
+    bottom: 0;
+    left: 0.65rem;
     width: auto;
-    padding: 1rem 1.1rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 9px;
+  }
+
+  .about-story-quote p {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .about-story-copy .about-section-title {
+    max-width: none;
+  }
+
+  .about-story-text {
+    margin-top: 0.75rem;
+  }
+
+  .about-story-text p {
+    padding: 0.55rem 0 0.55rem 0.85rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .about-story-text p::before {
+    top: 1rem;
+  }
+
+  .about-philosophy-grid {
+    border-radius: 10px;
   }
 
   .about-philosophy-card {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 
   .about-philosophy-header {
-    align-items: flex-start;
+    align-items: center;
+    gap: 0.7rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .about-philosophy-header h2 {
+    font-size: 1.05rem;
+  }
+
+  .about-philosophy-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.82rem;
+    border-radius: 8px;
+  }
+
+  .about-philosophy-list {
+    margin-top: 0.55rem;
+  }
+
+  .about-philosophy-list li {
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 0.55rem;
+    padding-block: 0.6rem;
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .about-infrastructure-heading {
+    margin-bottom: 1rem;
   }
 
   .about-infrastructure-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 235px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 145px;
+    gap: 0.55rem;
   }
 
-  .about-infrastructure-card,
+  .about-infrastructure-card {
+    grid-column: span 1;
+    border-radius: 9px;
+  }
+
   .about-infrastructure-card-wide {
-    grid-column: 1;
+    grid-column: 1 / -1;
+  }
+
+  .about-infrastructure-overlay {
+    right: 0.45rem;
+    bottom: 0.45rem;
+    left: 0.45rem;
+    max-width: calc(100% - 0.9rem);
+    padding: 0.45rem 0.55rem;
+    gap: 0.4rem;
+    border-radius: 7px;
+  }
+
+  .about-infrastructure-overlay > span {
+    width: 25px;
+    height: 25px;
+    font-size: 0.65rem;
+    border-radius: 6px;
+  }
+
+  .about-infrastructure-overlay p {
+    font-size: 0.65rem;
+    line-height: 1.25;
   }
 
   .about-closing-quote {
-    align-items: flex-start;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.55rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 9px;
+  }
+
+  .about-closing-quote > span {
+    font-size: 1.25rem;
+  }
+
+  .about-closing-quote p {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 380px) {
+  .about-page {
+    --about-content-width: calc(100% - 1.5rem);
+  }
+
+  .about-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .about-hero-metric {
+    gap: 0.4rem;
+    padding: 0.45rem;
+  }
+
+  .about-metric-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .about-rank-card {
+    min-height: 108px;
+    padding: 0.65rem;
+  }
+
+  .about-rank-emblem {
+    width: 34px;
+  }
+
+  .about-achievement-card {
+    min-height: 105px;
+    padding: 0.6rem;
+  }
+
+  .about-section-title {
+    font-size: 1.25rem;
+  }
+
+  .about-infrastructure-grid {
+    grid-auto-rows: 132px;
+  }
+
+  .about-infrastructure-overlay > span {
+    display: none;
   }
 }
 

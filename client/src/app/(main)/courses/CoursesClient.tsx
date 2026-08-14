@@ -117,6 +117,20 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
                     transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
                     className="course-horizontal-card"
                   >
+                    {/* Folded ribbon is anchored to the complete card boundary. */}
+                    <div className="starts-ribbon-banner">
+                      <span className="ribbon-text">
+                        <EditableText
+                          contentKey={`course-${course.id}.badge`}
+                          label={`${course.title} batch badge`}
+                          showInlineControls={false}
+                        >
+                          {course.badge}
+                        </EditableText>
+                      </span>
+                      <span className="ribbon-fold-corner"></span>
+                    </div>
+
                     {/* Left content panel */}
                     <div className="course-card-left">
                       <div className="course-type-pill">
@@ -227,20 +241,6 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
 
                     {/* Right graphical panel */}
                     <div className="course-card-right">
-                      {/* Orange fold-over starts ribbon banner */}
-                      <div className="starts-ribbon-banner">
-                        <span className="ribbon-text">
-                          <EditableText
-                            contentKey={`course-${course.id}.badge`}
-                            label={`${course.title} batch badge`}
-                            showInlineControls={false}
-                          >
-                            {course.badge}
-                          </EditableText>
-                        </span>
-                        <span className="ribbon-fold-corner"></span>
-                      </div>
-
                       {/* Floating star shape background overlay */}
                       <div className="badge-graphics-wrap">
                         {/* Curvy blue-grey background decoration polygon */}
@@ -703,9 +703,10 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             right: 0 !important;
             left: auto !important;
             transform: none !important;
-            top: 90px !important;
-            width: 80px !important;
-            height: 100px !important;
+            top: 50% !important;
+            width: 92px !important;
+            height: 116px !important;
+            margin-top: -58px;
             border-radius: 12px 0 0 12px !important;
             clip-path: polygon(15px 0%, 100% 0%, 100% 100%, 15% 100%, 0% 50%) !important;
           }
@@ -713,25 +714,34 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
             display: none !important;
           }
           .floating-gold-star {
-            left: 70px !important; /* Moved more towards right side on mobile */
-            top: 115px !important;
+            top: 50% !important;
+            left: 50% !important;
+            margin-top: -29px;
+            margin-left: -29px;
             transform: rotate(-10deg) !important;
           }
           .gold-star-svg {
-            width: 45px !important;
-            height: 45px !important;
+            width: 58px !important;
+            height: 58px !important;
           }
         }
 
         @media (max-width: 767px) {
+          .courses-page-container {
+            padding-top: var(--header-h);
+          }
           .courses-page-container .container {
-            width: min(calc(100% - 2rem), 96rem);
+            width: min(calc(100% - 1.5rem), 96rem);
+          }
+          .courses-hero-section {
+            padding: 1.25rem 0 0.85rem;
           }
           .courses-hero-title {
-            width: 100%;
-            font-size: var(--font-size-heading-1);
-            margin-bottom: 1.25rem;
-            line-height: 1.15;
+            max-width: 21rem;
+            margin: 0 auto 0.9rem;
+            font-size: clamp(1.55rem, 7vw, 1.9rem);
+            letter-spacing: 0;
+            line-height: 1.12;
             overflow-wrap: anywhere;
           }
           .courses-hero-title .live-editable-text,
@@ -742,80 +752,171 @@ export default function CoursesClient({ courses }: { courses: Course[] }) {
           .courses-filter-tabs {
             display: flex !important;
             flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 8px !important;
-            overflow-x: auto !important;
+            flex-wrap: wrap !important;
+            gap: 0.4rem !important;
+            overflow: visible !important;
             width: 100% !important;
-            padding: 4px 10px !important;
-            justify-content: flex-start !important;
-            scrollbar-width: none;
+            padding: 0.15rem 0.05rem 0.35rem !important;
+            justify-content: center !important;
           }
           .courses-filter-tabs::-webkit-scrollbar {
             display: none;
           }
           .filter-tab-btn {
             flex: 0 0 auto !important;
-            padding: 8px 12px !important;
-            font-size: 0.8rem !important;
+            min-height: 2.25rem;
+            padding: 0.45rem 0.65rem !important;
+            font-size: 0.7rem !important;
             width: auto !important;
             justify-content: center;
-            gap: 6px !important;
-            border-radius: 10px !important;
+            gap: 0.4rem !important;
+            border-radius: 8px !important;
+            scroll-snap-align: start;
           }
           .filter-tab-btn .tab-icon svg {
-            width: 16px !important;
-            height: 16px !important;
+            width: 14px !important;
+            height: 14px !important;
+          }
+          .courses-grid-section {
+            padding: 0.85rem 0 2.5rem;
+          }
+          .courses-list-stack {
+            gap: 0.75rem;
           }
           .course-card-left {
-            flex: 0 1 calc(100% - 90px) !important;
-            width: calc(100% - 90px) !important;
-            padding: 20px 16px !important;
+            flex: none !important;
+            width: 100% !important;
+            padding: 0.9rem 0.8rem 0.75rem !important;
           }
           .course-card-right {
-            width: 90px !important;
+            display: none !important;
           }
           .course-horizontal-card {
+            display: flex;
+            width: 100%;
+            flex-direction: column !important;
             overflow: hidden !important;
+            min-height: 0;
+            background: var(--courses-surface);
+            border-radius: 10px;
           }
           .starts-ribbon-banner {
-            right: 0 !important;
+            top: 0.75rem !important;
+            right: 0.75rem !important;
+            max-width: none;
+            padding: 0.32rem 0.5rem !important;
+            font-size: 0.54rem !important;
+            line-height: 1.15;
+            text-align: center;
+            white-space: nowrap;
+            border: 1px solid rgba(204, 72, 0, 0.18);
+            border-radius: 999px !important;
+            box-shadow: none;
+          }
+          .ribbon-fold-corner {
+            display: none !important;
           }
           .course-card-title {
-            font-size: 1.35rem !important;
-            margin: 10px 0 6px !important;
+            margin: 0.55rem 0 0.3rem !important;
+            font-size: 1.15rem !important;
+            line-height: 1.15;
+            letter-spacing: 0 !important;
           }
           .course-card-desc {
-            font-size: 0.82rem !important;
-            margin-bottom: 12px !important;
+            display: -webkit-box;
+            margin-bottom: 0.45rem !important;
+            overflow: hidden;
+            font-size: 0.72rem !important;
+            line-height: 1.42;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+          }
+          .card-divider-line {
+            margin: 0.25rem 0;
+          }
+          .course-highlights-list {
+            gap: 0.4rem;
+            margin: 0.45rem 0;
+          }
+          .highlight-item {
+            align-items: flex-start;
+            gap: 0.45rem;
           }
           .highlight-text {
-            font-size: 0.82rem !important;
+            font-size: 0.69rem !important;
+            line-height: 1.35;
           }
           .highlight-icon-box {
-            width: 28px !important;
-            height: 28px !important;
+            width: 22px !important;
+            height: 22px !important;
+            border-radius: 6px;
           }
           .highlight-icon-box svg {
-            width: 13px !important;
-            height: 13px !important;
+            width: 11px !important;
+            height: 11px !important;
           }
           .course-type-pill {
-            padding: 4px 10px !important;
-            font-size: 0.72rem !important;
+            gap: 0.3rem;
+            max-width: calc(100% - 6rem);
+            padding: 0.28rem 0.5rem !important;
+            font-size: 0.6rem !important;
+            letter-spacing: 0.025em;
+          }
+          .pill-user-icon svg {
+            width: 12px;
+            height: 12px;
+          }
+          .course-action-wrap {
+            padding-top: 0.35rem;
+          }
+          .course-know-more-link {
+            gap: 0.3rem;
+            font-size: 0.72rem;
           }
         }
         @media (max-width: 380px) {
           .course-card-left {
-            padding: 16px 12px !important;
+            flex-basis: auto !important;
+            width: 100% !important;
+            padding: 0.75rem 0.65rem !important;
+          }
+          .course-card-right {
+            display: none !important;
           }
           .course-type-pill {
             white-space: normal !important;
-            border-radius: 8px !important;
+            border-radius: 7px !important;
             line-height: 1.2 !important;
           }
           .courses-page-container .container {
-            width: 100%;
-            padding: 0 10px;
+            width: min(calc(100% - 1rem), 96rem);
+            padding: 0;
+          }
+          .courses-hero-section {
+            padding-top: 1rem;
+          }
+          .courses-hero-title {
+            max-width: 18rem;
+            font-size: 1.4rem;
+          }
+          .filter-tab-btn {
+            min-height: 2.1rem;
+            padding: 0.4rem 0.55rem !important;
+            font-size: 0.65rem !important;
+          }
+          .course-card-title {
+            font-size: 1.05rem !important;
+          }
+          .course-card-desc {
+            font-size: 0.68rem !important;
+          }
+          .highlight-text {
+            font-size: 0.65rem !important;
+          }
+          .starts-ribbon-banner {
+            top: 0.65rem !important;
+            right: 0.65rem !important;
+            font-size: 0.5rem !important;
           }
         }
       `}</style>

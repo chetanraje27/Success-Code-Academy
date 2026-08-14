@@ -10,6 +10,17 @@ import SignInModal from "@/components/ui/SignInModal";
 import ProfileModal from "@/components/ui/ProfileModal";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import { FaPen, FaDatabase } from "react-icons/fa6";
+import {
+  Award,
+  BookOpen,
+  CircleUserRound,
+  GraduationCap,
+  Home,
+  Mail,
+  Menu,
+  Trophy,
+  X,
+} from "lucide-react";
 
 type HeaderUser = {
   firstName?: string;
@@ -18,6 +29,15 @@ type HeaderUser = {
   mobileNumber?: string;
   age?: number;
   role?: string;
+};
+
+const mobileNavIcons = {
+  "/": Home,
+  "/about": GraduationCap,
+  "/courses": BookOpen,
+  "/admissions": Award,
+  "/results": Trophy,
+  "/contact": Mail,
 };
 
 export default function Header() {
@@ -273,11 +293,7 @@ export default function Header() {
             aria-controls="mobile-navigation"
             aria-expanded={isMenuOpen}
           >
-            <div className="hamburger">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+            <Menu aria-hidden="true" />
           </button>
         </div>
       </header>
@@ -336,27 +352,38 @@ export default function Header() {
             onClick={() => setIsMenuOpen(false)}
             aria-label="Close menu"
           >
-            &times;
+            <X aria-hidden="true" />
           </button>
         </div>
 
         <div className="mobile-nav-links">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsMenuOpen(false)}
-              className={`mobile-nav-link ${isActivePath(link.href) ? "active" : ""}`}
-              aria-current={isActivePath(link.href) ? "page" : undefined}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <nav className="mobile-nav-list" aria-label="Mobile navigation">
+            {navLinks.map((link) => {
+              const NavIcon = mobileNavIcons[link.href as keyof typeof mobileNavIcons] || BookOpen;
+              const active = isActivePath(link.href);
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`mobile-nav-link ${active ? "active" : ""}`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <span className="mobile-nav-icon" aria-hidden="true">
+                    <NavIcon />
+                  </span>
+                  <span className="mobile-nav-label">{link.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
           <div className="mobile-actions">
             {currentUser ? (
               <div className="mobile-user-profile">
                 <div className="mobile-user-greeting">
-                  Hi, {currentUser.firstName || "Student"}
+                  <CircleUserRound aria-hidden="true" />
+                  <span>Hi, {currentUser.firstName || "Student"}</span>
                 </div>
                 {isAdmin && (
                   <div className="mobile-editor-actions">
@@ -436,7 +463,7 @@ export default function Header() {
               className="mobile-action-button"
               onClick={() => setIsMenuOpen(false)}
             >
-              Courses
+              Explore Courses
             </Button>
           </div>
         </div>
@@ -546,16 +573,46 @@ export default function Header() {
         }
 
         .mobile-menu-btn {
-          width: var(--touch-target);
-          height: var(--touch-target);
+          position: relative;
+          width: 36px;
+          height: 36px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: transparent;
-          border: none;
+          color: var(--brand-primary);
+          background: #f8fafc;
+          border: 1px solid var(--color-border);
           cursor: pointer;
-          padding: var(--space-2);
-          border-radius: var(--radius-control);
+          padding: 0;
+          border-radius: 9px;
+          box-shadow: var(--shadow-xs);
+          transition:
+            color var(--duration-fast) var(--ease-standard),
+            background-color var(--duration-fast) var(--ease-standard),
+            border-color var(--duration-fast) var(--ease-standard),
+            transform var(--duration-fast) var(--ease-standard);
+        }
+
+        .mobile-menu-btn:hover {
+          color: #fff;
+          background: var(--brand-primary);
+          border-color: var(--brand-primary);
+        }
+
+        .mobile-menu-btn::before {
+          position: absolute;
+          inset: -4px;
+          content: "";
+        }
+
+        .mobile-menu-btn:active {
+          transform: scale(0.96);
+        }
+
+        .mobile-menu-btn :global(svg) {
+          width: 18px;
+          height: 18px;
+          stroke-width: 2;
         }
 
         @media (min-width: 1024px) {
@@ -564,33 +621,13 @@ export default function Header() {
           }
         }
 
-        .hamburger {
-          width: 24px;
-          height: 20px;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-
-        .hamburger span {
-          display: block;
-          height: 2px;
-          width: 100%;
-          background: var(--text-primary);
-          transition:
-            background-color var(--duration-fast) var(--ease-standard),
-            transform var(--duration-fast) var(--ease-standard);
-          border-radius: 2px;
-        }
-
         /* Drawer Overlay Backdrop */
         .drawer-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(15, 23, 42, 0.4);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
+          background: rgba(10, 29, 52, 0.34);
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
           opacity: 0;
           visibility: hidden;
           transition:
@@ -610,10 +647,13 @@ export default function Header() {
           top: 0;
           right: 0;
           bottom: 0;
-          width: 300px;
-          max-width: calc(100vw - 32px);
-          background: var(--color-surface);
-          box-shadow: var(--shadow-md);
+          width: min(288px, calc(100vw - 48px));
+          max-width: none;
+          overflow: hidden;
+          background: #fff;
+          border-left: 1px solid var(--color-border);
+          border-radius: 18px 0 0 18px;
+          box-shadow: -18px 0 50px rgba(16, 47, 94, 0.16);
           transform: translateX(100%);
           transition: transform var(--duration-overlay) var(--ease-standard);
           z-index: 1000;
@@ -630,73 +670,153 @@ export default function Header() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: var(--space-4) var(--space-6);
+          min-height: 68px;
+          padding: 0.75rem 0.9rem 0.75rem 1rem;
           border-bottom: 1px solid var(--color-border);
+          background: linear-gradient(135deg, #fff, #f4f8fc);
+        }
+
+        .drawer-header .logo-group {
+          min-width: 0;
+        }
+
+        .drawer-header :global(.logo-image) {
+          width: auto;
+          max-width: 108px;
+          max-height: 38px;
         }
 
         .drawer-close-btn {
-          background: transparent;
-          border: none;
-          font-size: 2.2rem;
+          width: 34px;
+          height: 34px;
+          flex: 0 0 34px;
+          padding: 0;
           color: var(--text-secondary);
+          background: #fff;
+          border: 1px solid var(--color-border);
           cursor: pointer;
-          display: flex;
+          display: grid;
           align-items: center;
           justify-content: center;
-          width: var(--touch-target);
-          height: var(--touch-target);
-          line-height: var(--touch-target);
-          border-radius: var(--radius-control);
+          line-height: 1;
+          border-radius: 8px;
           transition:
             color var(--duration-fast) var(--ease-standard),
             background-color var(--duration-fast) var(--ease-standard);
         }
 
         .drawer-close-btn:hover {
-          color: var(--accent-primary);
-          background: var(--color-surface-muted);
+          color: #fff;
+          background: var(--brand-primary);
+          border-color: var(--brand-primary);
+        }
+
+        .drawer-close-btn :global(svg) {
+          width: 16px;
+          height: 16px;
         }
 
         .mobile-nav-links {
-          padding: var(--space-5) var(--space-6) max(var(--space-6), env(safe-area-inset-bottom));
+          min-height: 0;
+          padding: 0.9rem 0.8rem max(0.9rem, env(safe-area-inset-bottom));
           display: flex;
           flex-direction: column;
-          gap: var(--space-2);
+          gap: 0;
+          flex: 1;
           overflow-y: auto;
         }
 
-        .mobile-nav-link {
-          min-height: var(--touch-target);
+        .mobile-nav-list {
           display: flex;
-          align-items: center;
-          font-size: 1rem;
-          font-weight: 600;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+
+        .mobile-nav-link {
+          position: relative;
+          display: flex !important;
+          width: 100%;
+          min-height: 44px;
+          box-sizing: border-box;
+          align-items: center !important;
+          justify-content: flex-start;
+          gap: 0.75rem !important;
+          overflow: hidden;
+          font-size: 0.84rem;
+          font-weight: 650;
           color: var(--text-primary);
-          padding: var(--space-2) var(--space-3);
-          border-radius: var(--radius-control);
+          padding: 0.5rem 0.75rem !important;
+          border: 1px solid transparent;
+          border-radius: 9px;
           transition:
             color var(--duration-fast) var(--ease-standard),
             background-color var(--duration-fast) var(--ease-standard);
+          line-height: 1.2;
           text-align: left;
         }
 
-        .mobile-nav-link:hover,
-        .mobile-nav-link.active {
+        .mobile-nav-link:hover {
           color: var(--brand-primary);
-          background: var(--color-surface-muted);
+          background: #f3f7fb;
+          border-color: #dce6f0;
+        }
+
+        .mobile-nav-link.active {
+          color: #fff;
+          background: linear-gradient(110deg, #102f5e, #184a78) !important;
+          border-color: #102f5e;
+          box-shadow: 0 7px 16px rgba(16, 47, 94, 0.16);
+        }
+
+        .mobile-nav-icon {
+          display: grid !important;
+          width: 28px;
+          height: 28px;
+          flex: 0 0 28px;
+          color: var(--brand-primary);
+          background: var(--color-brand-primary-soft);
+          border: 0;
+          border-radius: 6px;
+          place-items: center;
+        }
+
+        .mobile-nav-icon :global(svg) {
+          width: 14px;
+          height: 14px;
+          stroke-width: 1.9;
+        }
+
+        .mobile-nav-link.active .mobile-nav-icon {
+          color: #fff;
+          background: transparent !important;
+          box-shadow: none;
+        }
+
+        .mobile-nav-label {
+          display: block;
+          min-width: 0;
+          flex: 1;
+          line-height: 1.2;
+          text-align: left;
         }
 
         .mobile-actions {
-          margin-top: var(--space-4);
+          margin-top: auto;
           display: flex;
           flex-direction: column;
-          gap: var(--space-3);
-          padding-top: var(--space-4);
-          border-top: 1px solid var(--color-border);
+          gap: 0.55rem;
+          padding: 0.75rem;
+          background: #f5f8fb;
+          border: 1px solid var(--color-border);
+          border-radius: 11px;
         }
 
         :global(.mobile-action-button) {
           width: 100%;
+          min-height: 36px;
+          border-radius: 8px;
+          font-size: 0.76rem;
+          box-shadow: none;
         }
 
         .user-profile-container {
@@ -802,24 +922,34 @@ export default function Header() {
           width: 100%;
           display: flex;
           flex-direction: column;
-          gap: var(--space-3);
-          padding-bottom: var(--space-4);
+          gap: 0.6rem;
+          padding-bottom: 0.65rem;
           border-bottom: 1px solid var(--color-border);
-          margin-bottom: var(--space-1);
+          margin-bottom: 0.05rem;
         }
 
         .mobile-user-greeting {
-          font-size: 1rem;
-          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          font-size: 0.8rem;
+          font-weight: 650;
           color: var(--text-primary);
           font-family: var(--font-sans);
           text-align: left;
         }
 
+        .mobile-user-greeting :global(svg) {
+          width: 18px;
+          height: 18px;
+          color: var(--brand-primary);
+        }
+
         .mobile-editor-actions,
         .mobile-account-actions {
-          display: flex;
-          gap: var(--space-2);
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.45rem;
           width: 100%;
         }
 
@@ -830,8 +960,12 @@ export default function Header() {
 
         :global(.mobile-account-actions .mobile-action-button) {
           min-width: 0;
-          flex: 1;
-          padding-inline: var(--space-2);
+          width: 100%;
+          padding-inline: 0.45rem;
+        }
+
+        :global(.mobile-account-actions .mobile-signout-button:last-child:nth-child(3)) {
+          grid-column: 1 / -1;
         }
 
         :global(.mobile-admin-button) {
@@ -877,8 +1011,42 @@ export default function Header() {
         }
 
         @media (max-width: 380px) {
+          .mobile-drawer {
+            width: min(268px, calc(100vw - 36px));
+          }
+
+          .drawer-header {
+            min-height: 62px;
+            padding-inline: 0.8rem;
+          }
+
+          .drawer-header :global(.logo-image) {
+            max-width: 98px;
+            max-height: 34px;
+          }
+
+          .mobile-nav-links {
+            padding: 0.75rem 0.65rem max(0.75rem, env(safe-area-inset-bottom));
+          }
+
+          .mobile-nav-link {
+            min-height: 40px;
+            gap: 0.65rem !important;
+            padding: 0.45rem 0.65rem !important;
+            font-size: 0.8rem;
+          }
+
+          .mobile-nav-icon {
+            width: 26px;
+            height: 26px;
+          }
+
           .mobile-account-actions {
-            flex-direction: column;
+            grid-template-columns: 1fr;
+          }
+
+          :global(.mobile-account-actions .mobile-signout-button:last-child:nth-child(3)) {
+            grid-column: auto;
           }
         }
       `}</style>

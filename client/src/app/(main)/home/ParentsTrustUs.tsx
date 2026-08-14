@@ -113,7 +113,7 @@ export default function ParentsTrustUs() {
                   <FaUsers className="card-icon" />
                 </div>
                 <div className="card-number dark-number">
-                  <StatCounter value={<EditableText contentKey="trust.students.value" label="students value">1500+</EditableText>} />
+                  <StatCounter value={<EditableText contentKey="trust.students.value" label="students value">500+</EditableText>} />
                 </div>
               </div>
               <div className="card-body">

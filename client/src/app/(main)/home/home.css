@@ -1950,11 +1950,11 @@
   .home-container .standard-white-card,
   .home-container .top-row .trust-card {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 108px minmax(0, 1fr);
     align-items: center;
     min-height: 0;
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0.8rem;
+    gap: 0.75rem;
   }
 
   .home-container .trust-card .card-body {
@@ -2644,14 +2644,80 @@
     -webkit-line-clamp: 2;
   }
 
+  .home-container .parents-trust-section {
+    padding-block: 2rem;
+  }
+
+  .home-container .parents-trust-section .section-header {
+    margin-bottom: 1.1rem;
+  }
+
+  .home-container .parents-trust-section .section-title {
+    font-size: 1.375rem;
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+
+  .home-container .parents-trust-section .section-subtitle {
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
   .home-container .trust-grid-wrapper {
     grid-template-columns: 1fr;
+    gap: 1px;
+    border-top-width: 1px;
+    border-radius: 10px;
   }
 
   .home-container .trust-card,
   .home-container .featured-teal-card,
   .home-container .standard-white-card {
     min-height: 0;
+  }
+
+  .home-container .card-top-head {
+    min-height: 46px;
+    padding-right: 0.7rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    gap: 0.55rem;
+  }
+
+  .home-container .card-icon-box {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 0.78rem;
+  }
+
+  .home-container .card-number {
+    font-size: 1.7rem;
+    letter-spacing: -0.035em;
+  }
+
+  .home-container .trust-card .card-title {
+    margin-bottom: 0.2rem;
+    font-size: 0.86rem;
+    letter-spacing: 0;
+    line-height: 1.25;
+  }
+
+  .home-container .trust-card .card-desc {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .home-container .trust-card:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .home-container .top-row .trust-card:first-child {
+    background: linear-gradient(90deg, rgba(210, 162, 43, 0.09), rgba(255, 255, 255, 0.025));
+  }
+
+  .home-container .trust-card::after {
+    height: 2px;
   }
 }
 
@@ -2750,6 +2816,37 @@
 
   .home-container .academy-video-content {
     padding: 0.65rem 0.7rem 0.7rem;
+  }
+
+  .home-container .parents-trust-section .section-title {
+    font-size: 1.25rem;
+  }
+
+  .home-container .parents-trust-section .section-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .home-container .trust-card,
+  .home-container .featured-teal-card,
+  .home-container .standard-white-card,
+  .home-container .top-row .trust-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding: 0.7rem;
+    gap: 0.65rem;
+  }
+
+  .home-container .card-top-head {
+    padding-right: 0.6rem;
+  }
+
+  .home-container .card-icon-box {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .home-container .card-number {
+    font-size: 1.5rem;
   }
 }
 

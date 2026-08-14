@@ -167,10 +167,10 @@ export default function ToppersCarousel() {
         {isLoading ? (
           <div className="results-grid">
             {[1, 2].map(i => (
-              <article className="featured-card skeleton-pulse" key={`feat-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)", minHeight: "320px", borderRadius: "16px" }}></article>
+              <article className="featured-card skeleton-pulse" key={`feat-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)" }}></article>
             ))}
             {[1, 2, 3, 4].map(i => (
-              <article className={`support-card support-${i} skeleton-pulse`} key={`supp-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)", minHeight: "180px", borderRadius: "12px" }}></article>
+              <article className={`support-card support-${i} skeleton-pulse`} key={`supp-skel-${i}`} style={{ backgroundColor: "rgba(203, 213, 225, 0.2)" }}></article>
             ))}
           </div>
         ) : fetchError ? (

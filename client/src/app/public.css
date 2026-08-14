@@ -952,19 +952,19 @@
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     grid-template-rows: none !important;
     grid-auto-rows: auto !important;
-    gap: 1rem !important;
+    gap: 0.65rem !important;
   }
 
   .public-shell .stars-section .featured-card {
     grid-column: 1 / -1 !important;
     grid-row: auto !important;
     width: 100%;
-    height: 22rem !important;
+    height: 16.875rem !important;
   }
 
   .public-shell .stars-section .support-card {
     grid-row: auto !important;
-    min-height: 11.5rem;
+    min-height: 10.625rem;
   }
 
   .public-shell .why-sca-section .ecosystem-center {

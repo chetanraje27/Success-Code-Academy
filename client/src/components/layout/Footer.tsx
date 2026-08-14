@@ -286,6 +286,13 @@ export default function Footer() {
               >
                 Terms of Service
               </Link>
+              <Link
+                href="/faq"
+                className={`footer-link ${isActivePath("/faq") ? "active" : ""}`}
+                aria-current={isActivePath("/faq") ? "page" : undefined}
+              >
+                FAQs
+              </Link>
             </div>
           </div>
         </div>

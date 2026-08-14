@@ -47,7 +47,11 @@ function StudentResultCard({
   variant: number;
   mobileOnly?: boolean;
 }) {
-  const score = result.marks !== undefined;
+  const achievement = result.marks !== undefined
+    ? { label: "MARKS", value: result.marks }
+    : result.rank !== undefined
+      ? { label: "AIR", value: result.rank }
+      : null;
 
   return (
     <article
@@ -62,10 +66,10 @@ function StudentResultCard({
 
       <div className="result-card-copy">
         <div className="result-card-year">NEET UG {result.year}</div>
-        {score ? (
-          <div className="result-card-achievement">
-            <span className="result-card-achievement-label">MARKS</span>
-            <strong>{result.marks}</strong>
+        {achievement ? (
+          <div className={`result-card-achievement ${achievement.label === "AIR" ? "result-card-achievement-rank" : ""}`}>
+            <span className="result-card-achievement-label">{achievement.label}</span>
+            <strong>{achievement.value}</strong>
           </div>
         ) : (
           <div className="result-card-college">

@@ -12,6 +12,7 @@ export interface StudentResult {
 
 export const resultsData: StudentResult[] = [
   // ─── YEAR 2026 RESULTS ───
+  { id: 115, name: "Shravani Kudale", image: "/images/results/2026/ShravaniKudale_.png", year: 2026, rank: 5, isCustomCard: true },
   { id: 81, name: "Tanishka Adsul", image: "/images/results/2026/tanishka_adsul.png", year: 2026, marks: 645, isCustomCard: true },
   { id: 82, name: "Aryan Dolas", image: "/images/results/2026/aryan_dolas.png", year: 2026, marks: 631, isCustomCard: true },
   { id: 83, name: "Shruti Chavan", image: "/images/results/2026/shruti_chavan.png", year: 2026, marks: 618, isCustomCard: true },

@@ -9,6 +9,7 @@ import "./courses/course-detail.css";
 import "./results/results.css";
 import "./contact/contact.css";
 import "./admissions/admissions.css";
+import "./faq/faq.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";

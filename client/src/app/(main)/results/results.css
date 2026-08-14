@@ -1335,6 +1335,18 @@
   display: none;
 }
 
+.result-card-achievement-rank .result-card-achievement-label {
+  color: var(--card-accent-dark);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+}
+
+.result-card-achievement-rank strong {
+  font-size: clamp(3rem, 7vw, 5.2rem);
+  font-weight: 750;
+}
+
 @media (max-width: 767px) {
   .results-container {
     width: min(100% - 1rem, 1160px);
@@ -1533,6 +1545,16 @@
   .result-card-achievement-label {
     font-size: 0.44rem;
     letter-spacing: 0.06em;
+  }
+
+  .result-card-achievement-rank .result-card-achievement-label {
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .result-card-featured .result-card-achievement-rank strong {
+    font-size: clamp(3.6rem, 17vw, 5rem);
   }
 
   .result-card-achievement strong {

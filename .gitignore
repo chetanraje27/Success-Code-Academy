@@ -110,3 +110,5 @@ client/out/
 # System Files
 .DS_Store
 Thumbs.db
+
+.opencode

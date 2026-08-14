@@ -1,33 +1,33 @@
 # Graph Report - Success-Code-Academy  (2026-08-14)
 
 ## Corpus Check
-- 232 files · ~3,712,828 words
+- 232 files · ~3,713,081 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1157 nodes · 1856 edges · 151 communities (102 shown, 49 thin omitted)
+- 1161 nodes · 1859 edges · 147 communities (98 shown, 49 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8e45fe55`
+- Built from commit: `e3aa43cc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - admin.routes.ts
-- form.routes.ts
 - seedDatabase.ts
+- app.ts
 - admin.controller.ts
-- ResultsClient.tsx
+- api.ts
 - server/package.json
 - adminApiFetch
-- lib/roles.ts
+- admin/layout.tsx
 - EditModeContext.tsx
 - devDependencies
-- config/roles.ts
+- lib/roles.ts
 - AdminContentManager.tsx
-- ContactClient.tsx
+- SettingsEditor.tsx
 - compilerOptions
 - auth.routes.ts
 - Backend Foundation — Complete File-by-File Summary
@@ -37,7 +37,7 @@
 - compilerOptions
 - AdminModal.tsx
 - Header.tsx
-- SettingsEditor.tsx
+- ResultsClient.tsx
 - dependencies
 - MediaRevision.ts
 - AdminUi.tsx
@@ -48,8 +48,8 @@
 - StarStudent.ts
 - assertNotLastSuperAdmin
 - getListOptions
-- isAdminRole
-- v1/index.ts
+- mailer.ts
+- opencode.json
 - Writing Guidelines for Postgres References
 - replacePaths.js
 - public/[...path]/route.ts
@@ -60,11 +60,8 @@
 - AcademyVideo.ts
 - AdminPasswordReset.ts
 - Banner.ts
-- ContactMessage.ts
 - CourseRegistration.ts
 - NewsArticle.ts
-- Notification
-- OtpVerification.ts
 - SiteSetting.ts
 - TopperResult.ts
 - models/index.ts
@@ -77,7 +74,6 @@
 - middleware.ts
 - graphify.js
 - publicStudent
-- loadSettingsMap
 - environment.d.ts
 - express.d.ts
 - test-db.js
@@ -154,10 +150,10 @@
 10. `isAdminRole()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `AdminSettingsPage()` --calls--> `adminApiFetch()`  [EXTRACTED]
+  client/src/app/admin/settings/page.tsx → client/src/lib/admin-api.ts
 - `isAdminUser()` --calls--> `isAdminRole()`  [EXTRACTED]
   client/src/lib/api.ts → client/src/lib/roles.ts
-- `ContactClient()` --calls--> `useSiteSettings()`  [EXTRACTED]
-  client/src/app/(main)/contact/ContactClient.tsx → client/src/lib/site-settings.ts
 - `generateMetadata()` --calls--> `getApiBase()`  [EXTRACTED]
   client/src/app/(main)/courses/[id]/page.tsx → client/src/lib/api.ts
 - `CourseDetailPage()` --calls--> `getApiBase()`  [EXTRACTED]
@@ -168,99 +164,99 @@
 ## Import Cycles
 - None detected.
 
-## Communities (151 total, 49 thin omitted)
+## Communities (147 total, 49 thin omitted)
 
 ### Community 0 - "admin.routes.ts"
-Cohesion: 0.09
-Nodes (40): superAdminOnly, adminAccountCreateSchema, adminAccountUpdateSchema, adminCreateContactMessageSchema, adminCreateCourseFormSchema, adminCreateScholarshipFormSchema, adminCreateUserSchema, adminListQuerySchema (+32 more)
+Cohesion: 0.06
+Nodes (55): ADMIN, ADMIN_ROLES, AdminRole, isAdminRole(), SUPER_ADMIN, ADMIN_ROLE_SET, authorize(), Admin (+47 more)
 
-### Community 1 - "form.routes.ts"
-Cohesion: 0.14
-Nodes (15): submitContactForm, submitCourseRegistration, createRegistration, adminLoginLimiter, defaultLimiter, submissionLimiter, validate(), ValidationTarget (+7 more)
+### Community 1 - "seedDatabase.ts"
+Cohesion: 0.29
+Nodes (8): main(), scheduleDatabaseReconnect(), startServer(), sequelize, testConnection(), claimMobileNumber(), seedDatabase(), seedSuperAdmin()
 
-### Community 2 - "seedDatabase.ts"
-Cohesion: 0.09
-Nodes (31): main(), app, corsOptions, dbConfig, appBaseUrl(), Env, envSchema, parsed (+23 more)
+### Community 2 - "app.ts"
+Cohesion: 0.13
+Nodes (15): app, corsOptions, dbConfig, appBaseUrl(), Env, envSchema, parsed, errorHandler() (+7 more)
 
 ### Community 3 - "admin.controller.ts"
 Cohesion: 0.05
-Nodes (39): ADMIN_PUBLIC_ATTRIBUTES, createAcademyVideo, createBanner, createContactMessage, createCourse, createCourseForm, createNewsArticle, createNotification (+31 more)
+Nodes (42): ADMIN_PUBLIC_ATTRIBUTES, createAcademyVideo, createBanner, createContactMessage, createCourse, createCourseForm, createNewsArticle, createNotification (+34 more)
 
-### Community 4 - "ResultsClient.tsx"
-Cohesion: 0.07
-Nodes (25): Course, CoursesClient(), classroomFeatures, CourseDetailClient(), CourseDetailClientProps, courseVisuals, timeSlots, CourseDetailPage() (+17 more)
+### Community 4 - "api.ts"
+Cohesion: 0.13
+Nodes (14): Course, CoursesClient(), classroomFeatures, CourseDetailClient(), CourseDetailClientProps, courseVisuals, timeSlots, CourseDetailPage() (+6 more)
 
 ### Community 5 - "server/package.json"
 Cohesion: 0.07
 Nodes (26): nodemon, author, description, devDependencies, nodemon, sequelize-cli, ts-node, @types/multer (+18 more)
 
 ### Community 6 - "adminApiFetch"
-Cohesion: 0.16
-Nodes (19): AdminCoursesPage(), ContactMessageEditorModal(), AdminContactMessagesPage(), CourseFormEditorModal(), AdminCourseFormsPage(), AdminScholarshipFormsPage(), ScholarshipFormEditorModal(), AdminStudentsPage() (+11 more)
+Cohesion: 0.17
+Nodes (18): AdminCoursesPage(), ContactMessageEditorModal(), AdminContactMessagesPage(), CourseFormEditorModal(), AdminCourseFormsPage(), AdminScholarshipFormsPage(), ScholarshipFormEditorModal(), AdminStudentsPage() (+10 more)
 
-### Community 7 - "lib/roles.ts"
-Cohesion: 0.15
-Nodes (20): AdministratorEditorModal(), generatePassword(), ResetLink, AdminAdministratorsPage(), AdminLayout(), AdminTheme, navigation, routeNames (+12 more)
+### Community 7 - "admin/layout.tsx"
+Cohesion: 0.14
+Nodes (21): AdminLayout(), AdminTheme, navigation, routeNames, SessionState, AdminLoginPage(), backendUrl(), DELETE() (+13 more)
 
 ### Community 8 - "EditModeContext.tsx"
-Cohesion: 0.20
-Nodes (11): metadata, EditModeContext, EditModeContextValue, useEditMode(), LeadsDrawer(), SettingsEditor(), CookieConsent(), Footer() (+3 more)
+Cohesion: 0.22
+Nodes (9): metadata, EditModeContext, EditModeContextValue, LeadsDrawer(), useLiveContent(), LiveEditorToolbar(), pageName(), CookieConsent() (+1 more)
 
 ### Community 9 - "devDependencies"
 Cohesion: 0.05
 Nodes (37): dependencies, framer-motion, lucide-react, next, react, react-dom, react-icons, devDependencies (+29 more)
 
-### Community 10 - "config/roles.ts"
-Cohesion: 0.18
-Nodes (15): ADMIN, ADMIN_ROLES, AdminRole, isAdminRole(), authenticate, ADMIN_ROLE_SET, authorize(), Admin (+7 more)
+### Community 10 - "lib/roles.ts"
+Cohesion: 0.32
+Nodes (9): AdministratorEditorModal(), generatePassword(), ResetLink, AdminAdministratorsPage(), ADMIN, ADMIN_ROLES, AdminRole, adminRoleLabel() (+1 more)
 
 ### Community 11 - "AdminContentManager.tsx"
-Cohesion: 0.12
-Nodes (11): AdminNotificationsPage(), ICON_PRESETS, renderNotificationIcon(), AdminContentColumn, AdminContentField, AdminContentManager(), FieldValue, initialValues() (+3 more)
+Cohesion: 0.11
+Nodes (12): AdminNotificationsPage(), ICON_PRESETS, renderNotificationIcon(), AdminContentColumn, AdminContentField, AdminContentManager(), FieldValue, initialValues() (+4 more)
 
-### Community 12 - "ContactClient.tsx"
-Cohesion: 0.24
-Nodes (7): ContactClient(), generateCaptcha(), INITIAL_CAPTCHA, Op, metadata, EditableSection(), EditableSectionProps
+### Community 12 - "SettingsEditor.tsx"
+Cohesion: 0.17
+Nodes (15): ContactClient(), generateCaptcha(), INITIAL_CAPTCHA, Op, metadata, EditableSection(), EditableSectionProps, SettingsEditor() (+7 more)
 
 ### Community 13 - "compilerOptions"
 Cohesion: 0.07
 Nodes (29): dist, ES2022, node, src/**/*, compilerOptions, declaration, declarationMap, esModuleInterop (+21 more)
 
 ### Community 14 - "auth.routes.ts"
-Cohesion: 0.17
-Nodes (20): AuthPurpose, changeAdminPassword, checkMobileOrLogin, createToken(), getCurrentUser, loginAdmin, publicAdmin(), publicUser() (+12 more)
+Cohesion: 0.07
+Nodes (41): AuthPurpose, changeAdminPassword, checkMobileOrLogin, createToken(), getCurrentUser, loginAdmin, publicAdmin(), publicUser() (+33 more)
 
 ### Community 15 - "Backend Foundation — Complete File-by-File Summary"
 Cohesion: 0.06
 Nodes (35): Backend Foundation — Complete File-by-File Summary, Commit 1 + 2: TypeScript Config Fix + Environment Configuration, Commit 3: Logger Setup, Commit 4: Error Handling Infrastructure, Commit 5: Database Connection, Commit 6: Core Middleware Stack, Commit 7: Authentication Middleware, Commit 8: Routes, Controllers & App Assembly (+27 more)
 
 ### Community 16 - "EditableText.tsx"
-Cohesion: 0.15
-Nodes (15): EditableTextProps, ContentKind, ContentMap, ContentOverride, ContentScope, fetchContentMap(), LiveContentContext, LiveContentContextValue (+7 more)
+Cohesion: 0.17
+Nodes (12): EditableTextProps, ContentKind, ContentMap, ContentOverride, ContentScope, fetchContentMap(), LiveContentContext, LiveContentContextValue (+4 more)
 
 ### Community 17 - "AcademyInsights.tsx"
 Cohesion: 0.18
 Nodes (11): categoryConfig, GalleryPage(), VideoItem, videoItems, AcademyInsights(), BlogItem, VideoItem, InstagramEmbed() (+3 more)
 
 ### Community 18 - "HomeClient.tsx"
-Cohesion: 0.12
-Nodes (19): Course, courseStyles, ExploreCourses(), Announcement, HomeBanner, HomeClient(), PublicContentResponse, renderAnnouncementIcon() (+11 more)
+Cohesion: 0.11
+Nodes (20): Course, courseStyles, ExploreCourses(), Announcement, HomeBanner, HomeClient(), PublicContentResponse, renderAnnouncementIcon() (+12 more)
 
 ### Community 19 - "compilerOptions"
 Cohesion: 0.07
 Nodes (28): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+20 more)
 
 ### Community 20 - "AdminModal.tsx"
-Cohesion: 0.20
-Nodes (14): AdminModal(), Banner, BannerEditor(), BannerEditorProps, Result, ResultEditor(), ACTION_LABELS, Revision (+6 more)
+Cohesion: 0.15
+Nodes (21): AdminModal(), Banner, BannerEditor(), BannerEditorProps, useEditMode(), ICON_PRESETS, Notification, NotificationEditor() (+13 more)
 
 ### Community 21 - "Header.tsx"
-Cohesion: 0.18
-Nodes (10): Home(), Header(), HeaderUser, mobileNavIcons, Button(), ButtonProps, ProfileModal(), ProfileModalProps (+2 more)
+Cohesion: 0.10
+Nodes (20): Header(), HeaderUser, mobileNavIcons, Button(), ButtonProps, ProfileModal(), ProfileModalProps, SignInModal() (+12 more)
 
-### Community 22 - "SettingsEditor.tsx"
-Cohesion: 0.12
-Nodes (18): initialSettings, SiteSettings, AdminLoadingState(), Course, courses, NavLink, navLinks, NewsItem (+10 more)
+### Community 22 - "ResultsClient.tsx"
+Cohesion: 0.24
+Nodes (5): metadata, ResultsClient(), videoStories, resultsData, StudentResult
 
 ### Community 23 - "dependencies"
 Cohesion: 0.05
@@ -271,8 +267,8 @@ Cohesion: 0.19
 Nodes (10): restoreMediaRevision, initMediaRevision(), MediaResourceType, MediaRevision, MediaRevisionAction, MediaRevisionAttributes, MediaRevisionCreationAttributes, restoreValues() (+2 more)
 
 ### Community 25 - "AdminUi.tsx"
-Cohesion: 0.19
-Nodes (12): AdminDashboardPage(), DashboardStats, quickActions, RecentStudent, TokenState, AdminCardsSkeleton(), AdminEmptyState(), AdminNotice() (+4 more)
+Cohesion: 0.16
+Nodes (15): AdminDashboardPage(), DashboardStats, quickActions, RecentStudent, TokenState, AdminSettingsPage(), initialSettings, SiteSettings (+7 more)
 
 ### Community 26 - "ScholarshipRegistration.ts"
 Cohesion: 0.50
@@ -302,13 +298,13 @@ Nodes (8): assertAdminIdentityIsFree(), assertNotLastSuperAdmin(), countSuperAdm
 Cohesion: 0.39
 Nodes (8): getContactMessages, getCourseForms, getCourses, getListOptions(), getScholarshipForms, getUsers, searchLeads, sendPaginated()
 
-### Community 33 - "isAdminRole"
-Cohesion: 0.35
-Nodes (10): AdminLoginPage(), backendUrl(), DELETE(), GET(), isSameOrigin(), parseBackendResponse(), POST(), PUT() (+2 more)
+### Community 33 - "mailer.ts"
+Cohesion: 0.28
+Nodes (8): sendAdminPasswordReset, issueAdminPasswordReset(), deliver(), isMailerConfigured(), MailMessage, MailResult, TODO: create a nodemailer transport from SMTP_HOST / SMTP_PORT /, sendMail()
 
-### Community 34 - "v1/index.ts"
-Cohesion: 0.27
-Nodes (7): getHealth, router, router, router, router, router, v1Router
+### Community 34 - "opencode.json"
+Cohesion: 0.50
+Nodes (3): plugin, $schema, .opencode/plugins/graphify.js
 
 ### Community 35 - "Writing Guidelines for Postgres References"
 Cohesion: 0.12
@@ -346,10 +342,6 @@ Nodes (4): AdminPasswordReset, AdminPasswordResetAttributes, AdminPasswordResetC
 Cohesion: 0.50
 Nodes (4): Banner, BannerAttributes, BannerCreationAttributes, initBanner()
 
-### Community 45 - "ContactMessage.ts"
-Cohesion: 0.50
-Nodes (4): ContactMessage, ContactMessageAttributes, ContactMessageCreationAttributes, initContactMessage()
-
 ### Community 46 - "CourseRegistration.ts"
 Cohesion: 0.50
 Nodes (4): CourseRegistration, CourseRegistrationAttributes, CourseRegistrationCreationAttributes, initCourseRegistration()
@@ -357,14 +349,6 @@ Nodes (4): CourseRegistration, CourseRegistrationAttributes, CourseRegistrationC
 ### Community 47 - "NewsArticle.ts"
 Cohesion: 0.50
 Nodes (4): initNewsArticle(), NewsArticle, NewsArticleAttributes, NewsArticleCreationAttributes
-
-### Community 48 - "Notification"
-Cohesion: 0.50
-Nodes (4): initNotification(), Notification, NotificationAttributes, NotificationCreationAttributes
-
-### Community 49 - "OtpVerification.ts"
-Cohesion: 0.50
-Nodes (4): initOtpVerification(), OtpVerification, OtpVerificationAttributes, OtpVerificationCreationAttributes
 
 ### Community 50 - "SiteSetting.ts"
 Cohesion: 0.50
@@ -375,8 +359,8 @@ Cohesion: 0.50
 Nodes (4): initTopperResult(), TopperResult, TopperResultAttributes, TopperResultCreationAttributes
 
 ### Community 52 - "models/index.ts"
-Cohesion: 0.27
-Nodes (7): Course, initCourse(), sequelize, initUser(), User, UserAttributes, UserCreationAttributes
+Cohesion: 0.13
+Nodes (18): ContactMessage, ContactMessageAttributes, ContactMessageCreationAttributes, initContactMessage(), Course, initCourse(), initNotification(), Notification (+10 more)
 
 ### Community 53 - "test-render.js"
 Cohesion: 0.40
@@ -389,10 +373,6 @@ Nodes (4): getSignedUploadUrl, getSupabase(), upload, uploadImage
 ### Community 63 - "publicStudent"
 Cohesion: 0.67
 Nodes (3): createUser, publicStudent(), updateUser
-
-### Community 64 - "loadSettingsMap"
-Cohesion: 0.67
-Nodes (3): getSettings, loadSettingsMap(), updateSettings
 
 ### Community 79 - "Section Definitions"
 Cohesion: 0.20
@@ -427,8 +407,8 @@ Cohesion: 0.40
 Nodes (5): 5.5 Student Hub, NCERT Solutions, NEET Answer Key, Study Material, Success Code Academy G-Books
 
 ### Community 88 - "content.routes.ts"
-Cohesion: 0.60
-Nodes (3): isTransientDatabaseError(), readFromDatabase(), TRANSIENT_DATABASE_ERRORS
+Cohesion: 0.31
+Nodes (5): asyncHandler(), AsyncRouteHandler, isTransientDatabaseError(), readFromDatabase(), TRANSIENT_DATABASE_ERRORS
 
 ### Community 89 - "client/README.md"
 Cohesion: 0.50
@@ -475,24 +455,24 @@ Cohesion: 0.67
 Nodes (3): 8. Admin / CMS Requirements, Admin Roles, CMS Features
 
 ## Knowledge Gaps
-- **457 isolated node(s):** `eslintConfig`, `nextConfig`, `name`, `version`, `private` (+452 more)
+- **459 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `eslintConfig`, `nextConfig`, `name` (+454 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **49 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `adminApiFetch()` connect `adminApiFetch` to `ResultsClient.tsx`, `lib/roles.ts`, `EditModeContext.tsx`, `AdminContentManager.tsx`, `EditableText.tsx`, `AdminModal.tsx`, `SettingsEditor.tsx`, `AdminUi.tsx`?**
+- **Why does `adminApiFetch()` connect `adminApiFetch` to `api.ts`, `EditModeContext.tsx`, `lib/roles.ts`, `AdminContentManager.tsx`, `SettingsEditor.tsx`, `EditableText.tsx`, `AdminModal.tsx`, `AdminUi.tsx`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `isAdminRole()` connect `isAdminRole` to `EditModeContext.tsx`, `ResultsClient.tsx`, `lib/roles.ts`?**
+- **Why does `isAdminRole()` connect `admin/layout.tsx` to `EditModeContext.tsx`, `lib/roles.ts`, `api.ts`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `Success Code Academy NEET Coaching Website - Project Master Context` connect `Success Code Academy NEET Coaching Website - Project Master Context` to `5.2 Courses Page`, `5.4 Test Series Page`, `9. Backend Modules & Data Models`, `17. Environment Variables`, `5.7 Blogs & Reviews`, `7. Student Login Portal`, `Success Code Academy Admin Guide`, `8. Admin / CMS Requirements`, `5.3 Scholarships Page`, `14. Implementation Phases`, `2.2 Core Technology Stack`, `5.5 Student Hub`, `12. Forms, Leads & Conversion Rules`, `13. Payment & Access Control`, `15. Development Standards`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `dependencies` to `server/package.json`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `eslintConfig`, `nextConfig`, `name` to the rest of the system?**
-  _457 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `$schema`, `.opencode/plugins/graphify.js`, `eslintConfig` to the rest of the system?**
+  _459 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `admin.routes.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08826945412311266 - nodes in this community are weakly interconnected._
-- **Should `form.routes.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.13852813852813853 - nodes in this community are weakly interconnected._
-- **Should `seedDatabase.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08599033816425121 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06240084611316764 - nodes in this community are weakly interconnected._
+- **Should `app.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.1349206349206349 - nodes in this community are weakly interconnected._
+- **Should `admin.controller.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.04983388704318937 - nodes in this community are weakly interconnected._

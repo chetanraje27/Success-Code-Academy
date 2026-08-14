@@ -2800,7 +2800,7 @@
       "label": "ResultsClient()",
       "file_type": "code",
       "source_file": "client/src/app/(main)/results/ResultsClient.tsx",
-      "source_location": "L183",
+      "source_location": "L186",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_app_main_results_resultsclient_resultsclient",
@@ -2812,7 +2812,7 @@
       "label": "StoryCard()",
       "file_type": "code",
       "source_file": "client/src/app/(main)/results/ResultsClient.tsx",
-      "source_location": "L105",
+      "source_location": "L108",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_app_main_results_resultsclient_storycard",
@@ -13912,7 +13912,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/app/(main)/results/ResultsClient.tsx",
-      "source_location": "L202",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_main_results_resultsclient_resultsclient",
@@ -27502,7 +27502,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/app/(main)/results/ResultsClient.tsx",
-      "source_location": "L105",
+      "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_main_results_resultsclient",
@@ -27524,7 +27524,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/app/(main)/results/ResultsClient.tsx",
-      "source_location": "L183",
+      "source_location": "L186",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_main_results_resultsclient",
@@ -34689,5 +34689,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e3aa43cca4a8bac2f0556b0c76810c5cdc57f3c5"
+  "built_at_commit": "c3b995bdd0fe53d7988007ee11f2cb29c2a206bd"
 }

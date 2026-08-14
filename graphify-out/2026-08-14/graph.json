@@ -4336,7 +4336,7 @@
       "label": "Footer()",
       "file_type": "code",
       "source_file": "client/src/components/layout/Footer.tsx",
-      "source_location": "L25",
+      "source_location": "L23",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_components_layout_footer_footer",
@@ -14361,7 +14361,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/layout/Footer.tsx",
-      "source_location": "L30",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_layout_footer_footer",
@@ -28337,7 +28337,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/layout/Footer.tsx",
-      "source_location": "L25",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_layout_footer",
@@ -34577,5 +34577,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7a5c271f67caef61b9033824a15f240b0bc27c2e"
+  "built_at_commit": "dafcf99cd697e890da2113b2c4907df60335a7d4"
 }

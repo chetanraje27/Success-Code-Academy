@@ -109,7 +109,7 @@ export default function AcademyInsights() {
   React.useEffect(() => {
     const updateView = () => {
       if (typeof window !== "undefined") {
-        if (window.innerWidth <= 640) {
+        if (window.innerWidth <= 767) {
           setItemsPerView(1);
           setVideoItemsPerView(1);
         } else if (window.innerWidth <= 1023) {

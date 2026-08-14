@@ -923,29 +923,29 @@
     grid-auto-columns: auto;
     grid-auto-flow: row;
     grid-template-columns: 1fr !important;
-    gap: 1rem !important;
+    gap: 0.75rem !important;
     overflow: visible;
     padding: 0;
   }
 
   .public-shell .explore-section .explore-card {
-    min-height: 14.75rem !important;
-    height: 100% !important;
+    min-height: 12rem !important;
+    height: 12rem !important;
     scroll-snap-align: none;
   }
 
   .public-shell .explore-section .content-box {
-    padding: 1.25rem 1rem 1.2rem !important;
+    padding: 0.85rem 0.75rem 0.75rem !important;
   }
 
   .public-shell .explore-section .course-title-text {
-    font-size: 1.05rem !important;
+    font-size: 0.96rem !important;
     line-height: 1.25 !important;
   }
 
   .public-shell .explore-section .see-more {
-    padding: 1.15rem 0 0 !important;
-    font-size: 0.8rem !important;
+    padding: 0.5rem 0 0 !important;
+    font-size: 0.74rem !important;
   }
 
   .public-shell .stars-section .results-grid {

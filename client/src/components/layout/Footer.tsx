@@ -12,26 +12,19 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { EditableText } from "@/components/admin/EditableText";
 import {
   FaFacebookF,
-  FaXTwitter,
   FaInstagram,
   FaLinkedinIn,
   FaYoutube,
   FaLocationDot,
   FaPhone,
-  FaEnvelope,
-  FaChevronDown
+  FaEnvelope
 } from "react-icons/fa6";
 
 export default function Footer() {
   const pathname = usePathname();
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [editSettings, setEditSettings] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState("");
   const settings = useSiteSettings();
-
-  const toggleSection = (section: string) => {
-    setExpandedSection(prev => prev === section ? null : section);
-  };
 
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
@@ -143,7 +136,7 @@ export default function Footer() {
               </EditableSection>
             </div>
 
-            {/* Quick Links Column (Accordion on Mobile) */}
+            {/* Quick Links Column */}
             <div className="footer-col">
               <div className="footer-heading-row">
                 <h4 className="footer-heading">
@@ -155,22 +148,10 @@ export default function Footer() {
                     Quick Links
                   </EditableText>
                 </h4>
-                <button
-                  type="button"
-                  className="accordion-toggle"
-                  onClick={() => toggleSection("links")}
-                  aria-expanded={expandedSection === "links"}
-                  aria-controls="footer-quick-links"
-                  aria-label="Toggle quick links"
-                >
-                  <span className={`accordion-chevron ${expandedSection === "links" ? "rotated" : ""}`}>
-                    <FaChevronDown size={14} />
-                  </span>
-                </button>
               </div>
               <ul
                 id="footer-quick-links"
-                className={`footer-links ${expandedSection === "links" ? "expanded" : ""}`}
+                className="footer-links"
               >
                 {navLinks.map((link) => (
                   <li key={link.href}>
@@ -193,7 +174,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Our Programs Column (Accordion on Mobile) */}
+            {/* Our Programs Column */}
             <div className="footer-col">
               <div className="footer-heading-row">
                 <h4 className="footer-heading">
@@ -205,22 +186,10 @@ export default function Footer() {
                     Our Programs
                   </EditableText>
                 </h4>
-                <button
-                  type="button"
-                  className="accordion-toggle"
-                  onClick={() => toggleSection("programs")}
-                  aria-expanded={expandedSection === "programs"}
-                  aria-controls="footer-program-links"
-                  aria-label="Toggle programs"
-                >
-                  <span className={`accordion-chevron ${expandedSection === "programs" ? "rotated" : ""}`}>
-                    <FaChevronDown size={14} />
-                  </span>
-                </button>
               </div>
               <ul
                 id="footer-program-links"
-                className={`footer-links ${expandedSection === "programs" ? "expanded" : ""}`}
+                className="footer-links"
               >
                 {[
                   "NEET 11th-12th Batch",
@@ -244,8 +213,8 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Contact Us Column (Accordion on Mobile) */}
-            <EditableSection label="Contact Info" onEdit={() => setEditSettings(true)}>
+            {/* Contact Us Column */}
+            <EditableSection label="Contact Info" onEdit={() => setEditSettings(true)} className="footer-contact-section">
               <div className="footer-col">
                 <div className="footer-heading-row">
                   <h4 className="footer-heading">
@@ -257,22 +226,10 @@ export default function Footer() {
                       Contact Us
                     </EditableText>
                   </h4>
-                  <button
-                    type="button"
-                    className="accordion-toggle"
-                    onClick={() => toggleSection("contact")}
-                    aria-expanded={expandedSection === "contact"}
-                    aria-controls="footer-contact-links"
-                    aria-label="Toggle contact information"
-                  >
-                    <span className={`accordion-chevron ${expandedSection === "contact" ? "rotated" : ""}`}>
-                      <FaChevronDown size={14} />
-                    </span>
-                  </button>
                 </div>
                 <ul
                   id="footer-contact-links"
-                  className={`footer-contact ${expandedSection === "contact" ? "expanded" : ""}`}
+                  className="footer-contact"
                 >
                   <li>
                     <span className="contact-icon" style={{ marginTop: '2px' }}><FaLocationDot /></span>
@@ -506,10 +463,6 @@ export default function Footer() {
           font-weight: 700;
         }
 
-        .accordion-toggle {
-          display: none;
-        }
-
         .footer-links {
           list-style: none;
           display: flex;
@@ -588,80 +541,187 @@ export default function Footer() {
           }
         }
 
-        .accordion-chevron {
-          display: flex;
-        }
-
-        /* Mobile Accordion Styles */
+        /* Compact mobile footer */
         @media (max-width: 767px) {
+          .footer-newsletter {
+            padding: var(--space-6) 0;
+          }
+
+          .newsletter-content {
+            gap: var(--space-4);
+          }
+
+          .newsletter-title {
+            margin-bottom: var(--space-1);
+            font-size: 1.375rem;
+            letter-spacing: 0;
+            line-height: 1.15;
+          }
+
+          .newsletter-desc {
+            font-size: 0.82rem;
+            line-height: 1.45;
+          }
+
+          .newsletter-form-wrap {
+            max-width: none;
+          }
+
+          .newsletter-form {
+            gap: var(--space-2);
+          }
+
+          .newsletter-input,
+          .newsletter-form :global(button) {
+            min-height: 2.25rem;
+            border-radius: 9999px;
+          }
+
+          .newsletter-input {
+            padding: 0.4rem 1rem;
+            font-size: var(--font-size-small);
+          }
+
+          .newsletter-form :global(button) {
+            padding-inline: 1.25rem;
+            font-size: var(--font-size-caption);
+          }
+
+          .newsletter-status {
+            min-height: 0;
+            margin-top: var(--space-1);
+          }
+
           .footer-main {
-            padding: var(--space-8) 0;
+            padding: var(--space-8) 0 var(--space-6);
           }
+
           .footer-grid {
-            gap: 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--space-6) var(--space-4);
           }
+
           .brand-col {
+            grid-column: 1 / -1;
             padding-bottom: var(--space-6);
             border-bottom: 1px solid var(--color-border);
-            margin-bottom: var(--space-2);
+            margin-bottom: 0;
+          }
+
+          .footer-logo {
+            margin-bottom: var(--space-3);
+          }
+
+          :global(.logo-image) {
+            max-height: 40px;
+          }
+
+          .footer-desc {
+            max-width: 34rem;
+            margin-bottom: var(--space-4);
+            font-size: var(--font-size-caption);
+            line-height: 1.5;
+          }
+
+          .social-links {
+            gap: var(--space-2);
+          }
+
+          .social-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.55rem;
           }
 
           .footer-heading-row {
-            min-height: var(--touch-target);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0;
-            padding: var(--space-2) 0 var(--space-2) var(--space-1);
-            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-3);
+            padding: 0;
+            border-bottom: 0;
           }
 
           .footer-heading {
-            font-size: 1rem;
-          }
-
-          .accordion-toggle {
-            display: flex;
-            width: var(--touch-target);
-            height: var(--touch-target);
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            background: transparent;
-            border: 0;
-            border-radius: var(--radius-control);
-            cursor: pointer;
-          }
-
-          .accordion-toggle:hover {
-            background: var(--color-surface-subtle);
-          }
-
-          .accordion-chevron {
-            transition: transform var(--duration-normal) var(--ease-standard);
-            color: var(--text-muted);
-          }
-
-          .accordion-chevron.rotated {
-            transform: rotate(180deg);
-            color: var(--accent-primary);
+            font-size: var(--font-size-caption);
           }
 
           .footer-links, .footer-contact {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--duration-overlay) var(--ease-standard);
-            padding-left: var(--space-1);
+            max-height: none;
+            overflow: visible;
+            padding: 0;
             margin-top: 0;
-            gap: var(--space-2);
+            gap: 0.55rem;
             display: flex;
             flex-direction: column;
           }
 
-          .footer-links.expanded, .footer-contact.expanded {
-            max-height: 350px;
-            padding: var(--space-4) var(--space-1);
-            border-bottom: 1px solid var(--color-border);
+          .contact-icon {
+            width: 24px;
+            min-width: 24px;
+            height: 24px;
+            font-size: var(--font-size-micro);
+          }
+
+          .footer-link,
+          .footer-contact {
+            font-size: var(--font-size-caption);
+          }
+
+          :global(.footer-contact-section) {
+            grid-column: 1 / -1;
+            padding-top: var(--space-5);
+            border-top: 1px solid var(--color-border);
+          }
+
+          .footer-contact li {
+            gap: var(--space-2);
+            line-height: 1.5;
+          }
+
+          .footer-bottom {
+            padding-block: var(--space-4);
+          }
+
+          .footer-bottom-content {
+            gap: var(--space-2);
+            font-size: var(--font-size-micro);
+            text-align: center;
+          }
+
+          .footer-legal {
+            gap: var(--space-3);
+          }
+        }
+
+        @media (max-width: 380px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-5);
+          }
+
+          .brand-col,
+          :global(.footer-contact-section) {
+            grid-column: auto;
+          }
+
+          :global(.footer-contact-section) {
+            padding-top: var(--space-4);
+          }
+
+          .newsletter-title {
+            font-size: 1.25rem;
+          }
+
+          .newsletter-desc {
+            font-size: 0.78rem;
+          }
+
+          .newsletter-form {
+            flex-direction: column;
+          }
+
+          .newsletter-form :global(button) {
+            width: 100%;
           }
         }
       `}</style>

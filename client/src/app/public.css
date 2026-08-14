@@ -121,9 +121,9 @@
 .public-shell footer.footer {
   position: relative;
   overflow: hidden;
-  color: #d8e4f2;
-  background: #0a1f38;
-  border-top: 1px solid rgba(112, 209, 206, 0.34);
+  color: var(--text-primary);
+  background: #f8fafc;
+  border-top: 1px solid var(--color-border);
 }
 
 .public-shell footer.footer::before {
@@ -134,18 +134,18 @@
   left: 0;
   height: 3px;
   content: "";
-  background: linear-gradient(90deg, #078d92, #70d1ce 48%, rgba(112, 209, 206, 0.16));
+  background: linear-gradient(90deg, #102f5e, #078d92 52%, rgba(7, 141, 146, 0.16));
 }
 
 .public-shell .footer .footer-newsletter {
   padding: clamp(2.5rem, 5vw, 3.5rem) 0;
-  border-bottom-color: rgba(255, 255, 255, 0.12);
-  background: #0d2745;
+  border-bottom-color: var(--color-border);
+  background: linear-gradient(135deg, #edf3fb 0%, #f5f9fc 58%, #eaf8f7 100%);
 }
 
 .public-shell .footer .newsletter-title,
 .public-shell .footer .footer-heading {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .public-shell .footer .newsletter-title {
@@ -161,7 +161,7 @@
 .public-shell .footer .footer-contact,
 .public-shell .footer .footer-contact li,
 .public-shell .footer .footer-bottom-content {
-  color: #aebdd0;
+  color: var(--text-secondary);
 }
 
 .public-shell .footer .newsletter-content {
@@ -178,19 +178,19 @@
 
 .public-shell .footer .newsletter-input {
   min-height: 3rem;
-  color: #fff;
-  background: #102e50;
-  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--text-primary);
+  background: #fff;
+  border-color: var(--color-border-strong);
   border-radius: 9px;
 }
 
 .public-shell .footer .newsletter-input::placeholder {
-  color: #aebdd0;
+  color: var(--text-muted);
 }
 
 .public-shell .footer .newsletter-input:focus {
-  border-color: rgba(96, 215, 210, 0.75);
-  box-shadow: 0 0 0 3px rgba(7, 141, 146, 0.2);
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .public-shell .footer .newsletter-form button {
@@ -211,13 +211,13 @@
 @media (min-width: 1024px) {
   .public-shell .footer .footer-col:not(.brand-col) {
     padding-left: clamp(1.5rem, 3vw, 2.5rem);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid var(--color-border);
   }
 }
 
 .public-shell .footer .footer-logo .logo-image {
   padding: 0.38rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--color-border);
   border-radius: 9px;
   background: #fff;
 }
@@ -238,17 +238,17 @@
   display: grid;
   width: 38px;
   height: 38px;
-  color: #dce7f4;
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--text-secondary);
+  background: #fff;
+  border-color: var(--color-border);
   border-radius: 9px;
   place-items: center;
 }
 
 .public-shell .footer .social-icon:hover {
-  color: #fff;
-  background: rgba(112, 209, 206, 0.13);
-  border-color: rgba(112, 209, 206, 0.72);
+  color: var(--brand-primary);
+  background: var(--color-brand-primary-soft);
+  border-color: var(--brand-primary);
 }
 
 .public-shell .footer .footer-heading-row {
@@ -273,12 +273,12 @@
 .public-shell .footer .footer-link:hover,
 .public-shell .footer .footer-link.active,
 .public-shell .footer .contact-icon {
-  color: #70d1ce;
+  color: var(--brand-primary);
 }
 
 .public-shell .footer .footer-bottom {
-  border-top-color: rgba(255, 255, 255, 0.1);
-  background: #081a30;
+  border-top-color: var(--color-border);
+  background: #eef3f7;
 }
 
 .public-shell .footer .contact-icon {
@@ -286,8 +286,8 @@
   min-width: 28px;
   height: 28px;
   margin-top: -2px;
-  background: rgba(112, 209, 206, 0.08);
-  border: 1px solid rgba(112, 209, 206, 0.14);
+  background: var(--color-brand-primary-soft);
+  border: 1px solid #d7e2ef;
   border-radius: 7px;
   font-size: var(--font-size-caption);
 }
@@ -1011,14 +1011,6 @@
     flex-direction: column;
   }
 
-  .public-shell .footer .footer-heading-row {
-    border-bottom-color: rgba(255, 255, 255, 0.12);
-  }
-
-  .public-shell .footer .footer-links.expanded,
-  .public-shell .footer .footer-contact.expanded {
-    border-bottom-color: rgba(255, 255, 255, 0.12);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

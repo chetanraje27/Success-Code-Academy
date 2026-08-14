@@ -59,6 +59,7 @@
   gap: 4px;
   padding: 4px;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   background: #fff;
   border: 1px solid var(--results-border);
   border-radius: 10px;
@@ -71,8 +72,15 @@
   z-index: 20;
   display: flex;
   justify-content: flex-end;
-  margin-top: -48px;
-  margin-bottom: 34px;
+  width: fit-content;
+  max-width: 100%;
+  margin: -48px 0 34px auto;
+  padding: 0.25rem;
+  background: rgba(247, 249, 252, 0.88);
+  border: 1px solid rgba(220, 228, 236, 0.9);
+  border-radius: 11px;
+  box-shadow: 0 8px 18px rgba(16, 35, 63, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 .results-year-tabs::-webkit-scrollbar {
@@ -106,6 +114,7 @@
   color: #fff;
   background: var(--results-ink);
   border-color: var(--results-ink);
+  box-shadow: 0 3px 8px rgba(16, 35, 63, 0.18);
 }
 
 .results-subsection-heading {
@@ -1349,10 +1358,18 @@
     justify-content: center;
     margin-top: 0.9rem;
     margin-bottom: 1.5rem;
+    width: 100%;
+    padding: 0.2rem;
+    top: calc(var(--header-h) + 0.4rem);
+    border-radius: 9px;
+    box-shadow: 0 5px 14px rgba(16, 35, 63, 0.07);
   }
 
   .results-year-tabs {
     justify-content: center;
+    gap: 0.2rem;
+    border: 0;
+    border-radius: 7px;
   }
 
   .results-year-tabs button {
@@ -1590,6 +1607,26 @@
     right: -25%;
     width: 108%;
     height: 80%;
+  }
+}
+
+@media (max-width: 767px) {
+  .result-student-portrait {
+    top: 0.35rem;
+    bottom: 0;
+    height: auto;
+  }
+
+  .result-student-card-2026 .result-student-image {
+    object-fit: contain;
+    object-position: center bottom;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
+  }
+
+  .result-card-featured .result-student-portrait {
+    top: 0;
+    height: auto;
   }
 }
 

@@ -647,7 +647,7 @@ export default function Header() {
           top: 0;
           right: 0;
           bottom: 0;
-          width: min(288px, calc(100vw - 48px));
+          width: min(240px, calc(100vw - 48px));
           max-width: none;
           overflow: hidden;
           background: #fff;

@@ -4,6 +4,7 @@ import { testConnection } from './models';
 import logger from './utils/logger';
 import { sequelize } from './models';
 import { seedDatabase } from './seedDatabase';
+import { runMigrations } from './utils/runMigrations';
 
 function scheduleDatabaseReconnect(): void {
   let delay = 3_000;
@@ -11,6 +12,7 @@ function scheduleDatabaseReconnect(): void {
   const reconnect = async (): Promise<void> => {
     const connected = await testConnection();
     if (connected) {
+      runMigrations();
       try {
         await seedDatabase();
         logger.info('Database connection restored.');
@@ -41,6 +43,10 @@ async function startServer(): Promise<void> {
   // Test the database connection. In development, testConnection also
   // synchronizes models; production schema changes use migrations.
   const dbConnected = await testConnection();
+
+  // Apply pending migrations regardless of how the process was launched
+  // (`prestart` is skipped when hosts invoke the compiled entry point directly).
+  runMigrations();
 
   if (dbConnected) {
     // Seed default content data if empty (must run after sync)

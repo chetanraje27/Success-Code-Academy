@@ -21,17 +21,43 @@ import { LiveEditorToolbar } from "@/components/admin/LiveEditorToolbar";
 
 
 export const metadata: Metadata = {
-  title: "Success Code Academy | Premier Educational Institution",
+  title: "Best NEET Coaching in Maharashtra | Success Code Academy",
   description:
-    "Success Code Academy is a premier educational institution dedicated to academic excellence, holistic development, and shaping tomorrow's leaders since 2000. Explore our programs in Science, Arts, Commerce, and more.",
-  keywords:
-    "education, academy, college, school, science, arts, commerce, courses, Mumbai, India, success code academy",
+    "Maharashtra's premier medical entrance coaching institute in Baramati. Specializing exclusively in NEET and AIIMS preparation with elite foundation and repeater batches.",
+  keywords: [
+    "best NEET coaching in Maharashtra",
+    "top NEET institute in India",
+    "premier medical entrance coaching",
+    "best AIIMS preparation classes",
+    "top medical coaching institutes in Maharashtra",
+    "Aakash institute alternative Maharashtra",
+    "IIB alternative Baramati",
+    "Allen offline alternative",
+    "NEET repeater batch experts",
+    "Success Code Academy Baramati"
+  ].join(", "),
   openGraph: {
-    title: "Success Code Academy | Premier Educational Institution",
+    title: "Best NEET Coaching in Maharashtra | Success Code Academy",
     description:
-      "Premier educational institution dedicated to academic excellence and shaping tomorrow's leaders.",
+      "Compete at the highest level. Join Maharashtra's premier institute dedicated exclusively to NEET and medical entrance preparation.",
+    url: "https://www.successcodeacademy.in",
+    siteName: "Success Code Academy",
     type: "website",
     locale: "en_IN",
+  },
+  alternates: {
+    canonical: "https://www.successcodeacademy.in",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

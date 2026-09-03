@@ -1,16 +1,16 @@
 # Graph Report - Success-Code-Academy  (2026-09-03)
 
 ## Corpus Check
-- 243 files · ~3,727,768 words
+- 244 files · ~3,728,001 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1301 nodes · 2106 edges · 158 communities (109 shown, 49 thin omitted)
+- 1302 nodes · 2106 edges · 159 communities (110 shown, 49 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dca6e7f0`
+- Built from commit: `926fa88b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,7 +37,7 @@
 - compilerOptions
 - adminApiFetch
 - Header.tsx
-- logger.ts
+- src/index.ts
 - dependencies
 - MediaRevision.ts
 - 17. Environment Variables Reference
@@ -173,7 +173,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (158 total, 49 thin omitted)
+## Communities (159 total, 49 thin omitted)
 
 ### Community 0 - "admin.routes.ts"
 Cohesion: 0.06
@@ -208,8 +208,8 @@ Cohesion: 0.11
 Nodes (30): AdministratorEditorModal(), generatePassword(), ResetLink, AdminAdministratorsPage(), AdminLayout(), AdminTheme, navigation, routeNames (+22 more)
 
 ### Community 8 - "emailTemplates.ts"
-Cohesion: 0.34
-Nodes (18): submitContactForm, submitCourseRegistration, adminLoginAlert(), adminPasswordResetEmail(), BRAND, contactFormReceipt(), contactFormStaffAlert(), courseRegistrationReceipt() (+10 more)
+Cohesion: 0.37
+Nodes (17): submitContactForm, adminLoginAlert(), adminPasswordResetEmail(), BRAND, contactFormReceipt(), contactFormStaffAlert(), courseRegistrationReceipt(), detailTable() (+9 more)
 
 ### Community 9 - "devDependencies"
 Cohesion: 0.05
@@ -263,9 +263,9 @@ Nodes (60): AdminCoursesPage(), ContactMessageEditorModal(), AdminContactMessage
 Cohesion: 0.21
 Nodes (9): Header(), HeaderUser, mobileNavIcons, Button(), ButtonProps, ProfileModal(), ProfileModalProps, SignInModal() (+1 more)
 
-### Community 22 - "logger.ts"
-Cohesion: 0.26
-Nodes (9): main(), scheduleDatabaseReconnect(), startServer(), sequelize, testConnection(), seedDatabase(), devFormat, logger (+1 more)
+### Community 22 - "src/index.ts"
+Cohesion: 0.35
+Nodes (7): main(), scheduleDatabaseReconnect(), startServer(), sequelize, testConnection(), seedDatabase(), runMigrations()
 
 ### Community 23 - "dependencies"
 Cohesion: 0.05
@@ -344,8 +344,8 @@ Cohesion: 0.50
 Nodes (4): Banner, BannerAttributes, BannerCreationAttributes, initBanner()
 
 ### Community 45 - "mailer.ts"
-Cohesion: 0.18
-Nodes (17): subscribeNewsletter, createRegistration, asyncHandler(), AsyncRouteHandler, brand, deliver(), deliverOnce(), getClient() (+9 more)
+Cohesion: 0.16
+Nodes (20): submitCourseRegistration, subscribeNewsletter, createRegistration, asyncHandler(), AsyncRouteHandler, devFormat, logger, brand (+12 more)
 
 ### Community 46 - "🏆 Success Code Academy — Master Project Documentation"
 Cohesion: 0.17

@@ -98,14 +98,14 @@ function detailTable(rows: Array<[string, string]>): string {
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0;border:1px solid ${BRAND.border};border-radius:9px;">
 ${rows
-  .map(
-    ([label, value]) => `
+      .map(
+        ([label, value]) => `
 <tr>
   <td style="padding:10px 14px;border-bottom:1px solid ${BRAND.border};font-size:11px;font-weight:700;color:${BRAND.muted};text-transform:uppercase;letter-spacing:0.08em;width:38%;vertical-align:top;">${escapeHtml(label)}</td>
   <td style="padding:10px 14px;border-bottom:1px solid ${BRAND.border};font-size:14px;color:${BRAND.text};vertical-align:top;">${escapeHtml(value)}</td>
 </tr>`,
-  )
-  .join('')}
+      )
+      .join('')}
 </table>`;
 }
 
@@ -159,8 +159,8 @@ export function studentWelcome(params: {
 ${greeting(params.firstName)}
 ${paragraph('Your student account at Success Code Academy is set up. You can sign in any time from the website using the mobile number below.')}
 ${detailTable([
-  ['Mobile number', params.mobileNumber],
-])}
+    ['Mobile number', params.mobileNumber],
+  ])}
 ${paragraph('Whenever you are ready, our counselors can walk you through the batches, the study material and the test schedule. Just ask.')}`;
 
   const text = [
@@ -186,11 +186,11 @@ export function contactFormReceipt(params: {
 ${greeting(params.name)}
 ${paragraph('We got your message and someone from the team will get back to you, usually within a day. Here is a copy of what you sent us, for your records.')}
 ${detailTable([
-  ['Name', params.name],
-  ['Email', params.email],
-  ['Phone', params.phone],
-  ['Message', params.message],
-])}
+    ['Name', params.name],
+    ['Email', params.email],
+    ['Phone', params.phone],
+    ['Message', params.message],
+  ])}
 ${paragraph('If it is urgent, you can always call us on +91 86004 70850 between 9 AM and 7 PM.')}`;
 
   const text = [
@@ -219,11 +219,11 @@ export function contactFormStaffAlert(params: {
 ${greeting('team')}
 ${paragraph('A new enquiry came in through the website contact form. Reply to this email and it goes straight to the sender.')}
 ${detailTable([
-  ['Name', params.name],
-  ['Email', params.email],
-  ['Phone', params.phone],
-  ['Message', params.message],
-])}
+    ['Name', params.name],
+    ['Email', params.email],
+    ['Phone', params.phone],
+    ['Message', params.message],
+  ])}
 ${linkButton(`${WEBSITE}/admin/database/contact-messages`, 'Open the dashboard')}`;
 
   const text = [
@@ -259,10 +259,10 @@ export function courseRegistrationReceipt(params: {
 ${greeting(params.studentName)}
 ${paragraph('Your campus visit is booked. Here are the details, keep this email handy.')}
 ${detailTable([
-  ['Course', params.courseTitle],
-  ['Visit date', params.visitingDate],
-  ['Visit time', params.visitingTime],
-])}
+    ['Course', params.courseTitle],
+    ['Visit date', params.visitingDate],
+    ['Visit time', params.visitingTime],
+  ])}
 ${paragraph('Please come ten minutes early and carry a photo ID. Our counselor will show you the classrooms, the library and the doubt solving desks, and answer whatever is on your mind.')}`;
 
   const text = [
@@ -291,12 +291,12 @@ export function scholarshipRegistrationReceipt(params: {
 ${greeting(params.studentName)}
 ${paragraph('We have noted down your registration for the SCST scholarship test. We will call you on your registered mobile number with your exam slot and center details.')}
 ${detailTable([
-  ['Student', params.studentName],
-  ['Class', params.studentClass],
-  ['School', params.schoolName],
-  ['City', params.city],
-  ['Preferred course', params.preferredCourse],
-])}
+    ['Student', params.studentName],
+    ['Class', params.studentClass],
+    ['School', params.schoolName],
+    ['City', params.city],
+    ['Preferred course', params.preferredCourse],
+  ])}
 ${paragraph('The top scorers in SCST can win up to a full fee waiver, so take it seriously. Start your revision early.')}`;
 
   const text = [
@@ -322,15 +322,19 @@ export function adminLoginAlert(params: {
   ip?: string | undefined;
   when: Date;
 }): { html: string; text: string } {
-  const when = params.when.toUTCString();
+  const when = params.when.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    dateStyle: 'medium',
+    timeStyle: 'long',
+  });
   const bodyHtml = `
 ${greeting(params.name)}
 ${paragraph('Your admin account was just signed in to. If that was you, you can ignore the rest of this email.')}
 ${detailTable([
-  ['Email', params.email],
-  ['Signed in at', when],
-  ['IP address', params.ip || 'Not available'],
-])}
+    ['Email', params.email],
+    ['Signed in at', when],
+    ['IP address', params.ip || 'Not available'],
+  ])}
 ${paragraph("If you do not recognize this sign in, change your password from the admin dashboard right away and inform the super admin.")}`;
 
   const text = [

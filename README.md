@@ -1,5 +1,5 @@
 # Success Code Academy NEET Coaching Website - Project Master Context
-
+ 
 > Staff instructions: see [ADMIN_GUIDE.md](./ADMIN_GUIDE.md) for the dashboard
 > and visual website editor.
 

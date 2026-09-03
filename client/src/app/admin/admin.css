@@ -156,8 +156,8 @@
 .admin-nav-group>p {
   margin: 0 8px 4px;
   color: var(--admin-faint);
-  font-size: var(--font-size-micro);
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }

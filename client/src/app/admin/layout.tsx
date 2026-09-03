@@ -12,6 +12,7 @@ import {
   ExternalLink,
   GraduationCap,
   Globe2,
+  ImagePlus,
   Images,
   LayoutDashboard,
   LogOut,
@@ -49,6 +50,7 @@ const navigation = [
     label: "Website content",
     items: [
       { label: "Banners", href: "/admin/banners", icon: Images },
+      { label: "Page banners", href: "/admin/page-banners", icon: ImagePlus },
       { label: "Course catalog", href: "/admin/content/courses", icon: ClipboardList },
       { label: "Announcements", href: "/admin/notifications", icon: Bell },
       { label: "News articles", href: "/admin/content/news", icon: Newspaper },

@@ -1,55 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import AdminContentManager from "@/components/admin/AdminContentManager";
 
 export default function AdminBannersPage() {
-  const [activeTab, setActiveTab] = useState<"HOME" | "RESULTS">("HOME");
-
-  const tabs = (
-    <div className="admin-tabs" role="tablist" aria-label="Banner location">
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === "HOME"}
-        className={`admin-tab ${activeTab === "HOME" ? "is-active" : ""}`}
-        onClick={() => setActiveTab("HOME")}
-      >
-        Home page
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === "RESULTS"}
-        className={`admin-tab ${activeTab === "RESULTS" ? "is-active" : ""}`}
-        onClick={() => setActiveTab("RESULTS")}
-      >
-        Results page
-      </button>
-    </div>
-  );
-
   return (
     <AdminContentManager
-        key={activeTab}
-        headerAction={tabs}
-        title={activeTab === "HOME" ? "Home page banners" : "Results page banners"}
+        title="Home page banners"
         description="Large images shown on this page. Keep the description short and meaningful."
         itemName="Banner"
         resource="banners"
         historyType="banner"
         uploadType="banner"
-        filterItems={(item) => item.type === activeTab}
+        filterItems={(item) => item.type === "HOME"}
         fields={[
           {
             name: "type",
             label: "Shown on",
             kind: "select",
-            defaultValue: activeTab,
+            defaultValue: "HOME",
             required: true,
             options: [
               { label: "Home page", value: "HOME" },
-              { label: "Results page", value: "RESULTS" },
             ],
           },
           {

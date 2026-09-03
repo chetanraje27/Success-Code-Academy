@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/admin/EditableText";
+import { usePageBanner } from "@/lib/use-page-banner";
+import { useEditModeOptional } from "@/components/admin/EditModeContext";
 
 export default function AdmissionsClient() {
   const [formData, setFormData] = useState({
@@ -21,6 +23,8 @@ export default function AdmissionsClient() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const scholarshipBanner = usePageBanner("scholarships");
+  const { editMode } = useEditModeOptional();
 
   useEffect(() => {
     const checkAuth = () => {
@@ -49,6 +53,7 @@ export default function AdmissionsClient() {
   }, []);
 
   const handleAuthInterceptor = (e: React.MouseEvent | React.FocusEvent) => {
+    if (editMode) return;
     if (!isAuthenticated) {
       e.preventDefault();
       e.stopPropagation();
@@ -66,6 +71,8 @@ export default function AdmissionsClient() {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (editMode) return;
+    
     setIsSubmitting(true);
     setErrorMessage(null);
 
@@ -141,7 +148,7 @@ export default function AdmissionsClient() {
           >
             <div className="poster-img-container">
               <Image
-                src="/images/banners/ScholorshipHero.png"
+                src={scholarshipBanner}
                 alt="NEET Admissions & Scholarship Test Hero Banner"
                 width={800}
                 height={500}
@@ -507,7 +514,14 @@ export default function AdmissionsClient() {
                 )}
 
                 <button type="submit" className="register-submit-btn" disabled={isSubmitting}>
-                  {isSubmitting ? "Registering..." : "Register for Scholarship Exam →"}
+                  {isSubmitting ? "Registering..." : (
+                    <EditableText
+                      contentKey="scholarship.submit-btn"
+                      label="scholarship submit button"
+                    >
+                      Register for Scholarship Exam →
+                    </EditableText>
+                  )}
                 </button>
 
               </form>

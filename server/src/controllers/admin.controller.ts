@@ -647,6 +647,9 @@ const SETTINGS_KEYS = [
   'youtube',
   'linkedin',
   'twitter',
+  'page_banner_scholarships',
+  'page_banner_contact',
+  'page_banner_results',
 ] as const;
 
 async function loadSettingsMap(): Promise<Record<string, string>> {

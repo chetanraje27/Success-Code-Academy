@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
 import { ScholarshipRegistration } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
+import logger from '../utils/logger';
+import { sendMail } from '../utils/mailer';
+import { scholarshipRegistrationReceipt } from '../utils/emailTemplates';
 
 /**
  * POST /api/v1/scholarships/register
@@ -27,6 +30,30 @@ export const createRegistration = asyncHandler(
       schoolName,
       city,
       preferredCourse,
+    });
+
+    logger.info(
+      `🎓 [Scholarship] New SCST registration: ${studentName} (${studentClass}, ${city})`,
+    );
+
+    // Confirmation email. The public form does not collect an address, so it
+    // is delivered to the academy inbox for the admissions team to act on.
+    const template = scholarshipRegistrationReceipt({
+      studentName,
+      studentClass,
+      schoolName,
+      city,
+      preferredCourse,
+    });
+    void sendMail({
+      to: 'successcodeacademy@gmail.com',
+      subject: `New SCST registration — ${studentName} (${studentClass})`,
+      text: template.text,
+      html: template.html,
+    }).then((mail) => {
+      if (!mail.delivered) {
+        logger.warn('[Scholarship] Registration alert email failed', { error: mail.error });
+      }
     });
 
     res.status(201).json({

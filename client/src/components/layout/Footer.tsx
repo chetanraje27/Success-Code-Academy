@@ -24,14 +24,44 @@ export default function Footer() {
   const pathname = usePathname();
   const [editSettings, setEditSettings] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
   const settings = useSiteSettings();
 
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
-  const handleNewsletterSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setNewsletterMessage("Newsletter signup is currently unavailable.");
+    const emailInput = event.currentTarget.elements.namedItem("email") as HTMLInputElement | null;
+    const email = emailInput?.value?.trim();
+
+    if (!email) {
+      setNewsletterMessage("Please enter your email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    setNewsletterMessage("");
+
+    try {
+      const response = await fetch("/api/public/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const result = await response.json();
+
+      if (response.ok && result.status === "success") {
+        setNewsletterMessage(result.message || "Subscribed successfully!");
+        event.currentTarget.reset();
+      } else {
+        setNewsletterMessage(result.message || "Subscription failed. Please try again.");
+      }
+    } catch {
+      setNewsletterMessage("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -75,8 +105,8 @@ export default function Footer() {
                   required
                   onChange={() => newsletterMessage && setNewsletterMessage("")}
                 />
-                <Button variant="primary" type="submit">
-                  Subscribe
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Subscribing..." : "Subscribe"}
                 </Button>
               </form>
               <p className="newsletter-status" role="status" aria-live="polite">

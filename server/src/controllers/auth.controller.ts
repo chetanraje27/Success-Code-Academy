@@ -8,6 +8,8 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import { hashResetToken } from '../utils/adminPasswordReset';
 import logger from '../utils/logger';
+import { sendMail } from '../utils/mailer';
+import { studentWelcome, adminLoginAlert } from '../utils/emailTemplates';
 
 type AuthPurpose = 'student' | 'admin';
 
@@ -151,6 +153,21 @@ export const registerUser = asyncHandler(
 
     logger.info(`👤 [Auth] New user registered successfully: ${mobileNumber}`);
 
+    // Welcome email, best-effort: a failed send never blocks registration.
+    if (email) {
+      const template = studentWelcome({ firstName, mobileNumber });
+      void sendMail({
+        to: email,
+        subject: 'Welcome to Success Code Academy',
+        text: template.text,
+        html: template.html,
+      }).then((mail) => {
+        if (!mail.delivered) {
+          logger.warn('[Auth] Welcome email failed', { to: email, error: mail.error });
+        }
+      });
+    }
+
     // Generate JWT token
     const token = createToken(
       user,
@@ -253,6 +270,27 @@ export const loginAdmin = asyncHandler(
     );
 
     logger.info('[Auth] Admin signed in', { userId: user.id });
+
+    // Login alert, best-effort: a failed send never blocks sign-in.
+    const template = adminLoginAlert({
+      name: user.name,
+      email: user.email,
+      ip: req.ip,
+      when: new Date(),
+    });
+    void sendMail({
+      to: user.email,
+      subject: 'New sign-in to your SCA admin account',
+      text: template.text,
+      html: template.html,
+    }).then((mail) => {
+      if (!mail.delivered) {
+        logger.warn('[Auth] Admin sign-in alert email failed', {
+          to: user.email,
+          error: mail.error,
+        });
+      }
+    });
 
     res.status(200).json({
       status: 'success',

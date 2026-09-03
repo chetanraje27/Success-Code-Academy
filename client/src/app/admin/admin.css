@@ -96,10 +96,17 @@
   inset: 0 auto 0 0;
   z-index: 80;
   display: flex;
-  width: 256px;
+  width: 244px;
+  max-width: 90vw;
   flex-direction: column;
-  border-right: 1px solid var(--admin-border);
-  background: var(--admin-surface);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: #06152f;
+  color: #e2e8f0;
+  transition: transform 200ms ease-out, width 200ms ease-out;
+}
+
+.admin-shell.is-collapsed .admin-sidebar {
+  width: 64px;
 }
 
 .admin-brand {
@@ -157,44 +164,28 @@
 
 .admin-nav-link {
   position: relative;
-  display: grid;
-  grid-template-columns: 18px 1fr auto;
+  display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 34px;
-  margin: 1px 0;
+  height: 32px;
+  margin: 2px 8px;
   padding: 0 10px;
-  border-radius: var(--admin-radius-sm);
-  color: var(--admin-text-secondary);
-  font-size: 0.82rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 13px;
   font-weight: 500;
-  transition:
-    background var(--admin-dur-fast) var(--admin-ease),
-    color var(--admin-dur-fast) var(--admin-ease);
+  transition: background-color 150ms, color 150ms;
 }
 
 .admin-nav-link:hover {
-  background: var(--admin-surface-hover);
-  color: var(--admin-text);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .admin-nav-link.is-active {
-  background: var(--admin-brand-soft);
-  color: var(--admin-brand);
-  font-weight: 600;
-}
-
-/* Rail marker reads as a selected row in a desktop app. */
-.admin-nav-link.is-active::before {
-  position: absolute;
-  top: 50%;
-  left: -10px;
-  width: 3px;
-  height: 18px;
-  border-radius: 0 2px 2px 0;
-  background: var(--admin-brand);
-  transform: translateY(-50%);
-  content: "";
+  background: #ffffff;
+  color: #06152f;
+  font-weight: 500;
 }
 
 .admin-sidebar-footer {
@@ -267,7 +258,12 @@
 
 .admin-main {
   min-height: 100vh;
-  margin-left: 256px;
+  margin-left: 244px;
+  transition: margin-left 200ms ease-out;
+}
+
+.admin-shell.is-collapsed .admin-main {
+  margin-left: 64px;
 }
 
 .admin-topbar {
@@ -2243,4 +2239,193 @@ html[data-admin-theme]::-webkit-scrollbar-track {
 .admin-shell ::-webkit-scrollbar-track,
 .admin-modal::-webkit-scrollbar-track {
   background: transparent;
+}
+.admin-header-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #64748b;
+  background:var(--admin-text) ;
+  transition: background 150ms, color 150ms;
+}
+.admin-header-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.admin-header-toggle.is-collapsed {
+  width: 36px;
+  height: 36px;
+  border: none;
+  color: #cbd5e1;
+}
+.collapsed-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: opacity 150ms;
+}
+.admin-header-toggle:hover .collapsed-logo {
+  opacity: 0;
+}
+.collapsed-icon {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.admin-header-toggle:hover .collapsed-icon {
+  opacity: 1;
+}
+.admin-brand.justify-center {
+  justify-content: center;
+  padding: 0 8px;
+}
+.admin-brand.justify-between {
+  justify-content: space-between;
+  padding: 0 14px;
+}
+.admin-header-toggle .tooltip {
+  pointer-events: none;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  z-index: 120;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  border-radius: 6px;
+  background: #0f172a;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.admin-header-toggle:hover .tooltip {
+  opacity: 1;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.collapsed-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 20px;
+}
+.is-collapsed-group {
+  margin-top: 12px;
+}
+.admin-shell.is-collapsed .admin-nav-link {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  padding: 0;
+  justify-content: center;
+  grid-template-columns: auto;
+}
+.admin-shell.is-collapsed .admin-sidebar-footer {
+  justify-content: center;
+  padding: 12px 8px;
+}
+.admin-shell.is-collapsed .admin-website-link {
+  justify-content: center;
+  padding: 8px;
+}
+.admin-shell.is-collapsed .admin-account-summary {
+  grid-template-columns: auto;
+  padding: 6px;
+  justify-content: center;
+}
+.admin-sidebar-tooltip {
+  pointer-events: none;
+  position: fixed;
+  left: 74px;
+  z-index: 100;
+  transform: translateY(-50%);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 6px;
+  background: #0f172a;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.18);
+}
+.admin-scroll-hint {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  height: 48px;
+  align-items: flex-end;
+  justify-content: center;
+  background: linear-gradient(to top, #06152f, transparent);
+  padding-bottom: 6px;
+}
+.admin-scroll-hint-icon {
+  display: flex;
+  height: 28px;
+  width: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(11, 23, 48, 0.95);
+  color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.admin-navigation-container {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-brand-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.admin-nav-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-brand-title {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }

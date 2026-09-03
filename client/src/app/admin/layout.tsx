@@ -1,7 +1,7 @@
 "use client";
 
 import "./admin.css";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,6 +20,8 @@ import {
   MessageSquareText,
   Moon,
   Newspaper,
+  PanelLeft,
+  ChevronDown,
   Settings,
   ShieldCheck,
   Star,
@@ -126,13 +128,9 @@ export default function AdminLayout({
   );
   const [user, setUser] = useState<AdminUser | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  /*
-   * Starts null so the first client render matches the server exactly; the
-   * mount effect below fills it in. The visible icon never waits for this --
-   * it is swapped by CSS off the data-admin-theme attribute that the root
-   * layout script applies before first paint. This state only feeds the
-   * button's label and the next-value calculation.
-   */
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [tooltip, setTooltip] = useState<{ label: string; top: number } | null>(null);
+  const [scrollHint, setScrollHint] = useState({ visible: false, hasMoreBelow: false });
   const [theme, setTheme] = useState<AdminTheme | null>(null);
 
   /*
@@ -166,6 +164,41 @@ export default function AdminLayout({
       /* Private mode blocks writes; the theme still applies for this session. */
     }
   }, []);
+
+  const showTooltip = (label: string, element: HTMLElement) => {
+    if (!isSidebarCollapsed) return;
+    const rect = element.getBoundingClientRect();
+    setTooltip({ label, top: rect.top + rect.height / 2 });
+  };
+
+  const getTooltipHandlers = (label: string) => ({
+    onMouseEnter: (event: React.MouseEvent<HTMLElement>) => showTooltip(label, event.currentTarget),
+    onMouseLeave: () => setTooltip(null),
+  });
+
+  const navRef = useRef<HTMLElement>(null);
+
+  const updateScrollThumb = useCallback(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const { scrollTop, scrollHeight, clientHeight } = nav;
+    const visible = scrollHeight > clientHeight + 1;
+    const hasMoreBelow = scrollTop + clientHeight < scrollHeight - 1;
+    if (!visible) {
+      setScrollHint({ visible: false, hasMoreBelow: false });
+      return;
+    }
+    setScrollHint({ visible: true, hasMoreBelow });
+  }, []);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(updateScrollThumb);
+    window.addEventListener('resize', updateScrollThumb);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('resize', updateScrollThumb);
+    };
+  }, [isSidebarCollapsed, updateScrollThumb]);
 
   const verifySession = useCallback(async () => {
     try {
@@ -275,7 +308,7 @@ export default function AdminLayout({
 
   return (
     <AdminSessionProvider user={user}>
-    <div className="admin-shell">
+    <div className={`admin-shell ${isSidebarCollapsed ? "is-collapsed" : ""}`}>
       <button
         className={`admin-sidebar-backdrop ${sidebarOpen ? "is-open" : ""}`}
         onClick={() => setSidebarOpen(false)}
@@ -283,72 +316,110 @@ export default function AdminLayout({
       />
 
       <aside className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-        <div className="admin-brand">
-          <Image
-            src="/images/ui/SCA-Logo.png"
-            alt="Success Code Academy"
-            width={48}
-            height={48}
-            className="admin-brand-logo"
-            priority
-          />
-          <div>
-            <strong>Success Code</strong>
-            <span>Website admin</span>
-          </div>
-          <button
-            className="admin-icon-button admin-sidebar-close"
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close navigation"
-          >
-            <X size={19} />
-          </button>
+        <div className={`admin-brand ${isSidebarCollapsed ? 'justify-center px-2' : 'justify-between px-3.5'}`}>
+          {isSidebarCollapsed ? (
+            <button
+              type="button"
+              onClick={() => setIsSidebarCollapsed(false)}
+              className="admin-header-toggle is-collapsed group/header-toggle"
+              aria-label="Open sidebar"
+              {...getTooltipHandlers("Open sidebar")}
+            >
+              <Image src="/images/ui/SCA-Logo.png" alt="Logo" width={28} height={28} className="collapsed-logo" />
+              <PanelLeft size={17} strokeWidth={2} className="collapsed-icon" />
+            </button>
+          ) : (
+            <>
+              <div className="admin-brand-content">
+                <Image
+                  src="/images/ui/SCA-Logo.png"
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="admin-brand-logo"
+                  priority
+                />
+                <strong className="admin-brand-title"></strong>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSidebarCollapsed(true)}
+                className="admin-header-toggle group/header-toggle"
+                aria-label="Close sidebar"
+              >
+                <PanelLeft size={17} strokeWidth={2} />
+                <span className="tooltip">Close sidebar</span>
+              </button>
+            </>
+          )}
         </div>
 
-        <nav className="admin-navigation" aria-label="Admin navigation">
-          {visibleNavigation.map((group) => (
-            <div className="admin-nav-group" key={group.label}>
-              <p>{group.label}</p>
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const active =
-                  pathname === item.href ||
-                  (item.href !== "/admin" && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setSidebarOpen(false)}
-                    className={`admin-nav-link ${active ? "is-active" : ""}`}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    <Icon size={18} strokeWidth={1.9} />
-                    <span>{item.label}</span>
-                    {active && <ChevronRight size={15} />}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
-        </nav>
+        <div className="admin-navigation-container">
+          <nav ref={navRef} className="admin-navigation scrollbar-hide" aria-label="Admin navigation" onScroll={updateScrollThumb}>
+            {visibleNavigation.map((group, groupIndex) => (
+              <div className={`admin-nav-group ${isSidebarCollapsed && groupIndex > 0 ? 'is-collapsed-group' : ''}`} key={group.label}>
+                {!isSidebarCollapsed && <p>{group.label}</p>}
+                {isSidebarCollapsed && groupIndex > 0 && <div className="collapsed-divider" />}
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const active =
+                    pathname === item.href ||
+                    (item.href !== "/admin" && pathname.startsWith(item.href));
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setSidebarOpen(false)}
+                      className={`admin-nav-link ${active ? "is-active" : ""}`}
+                      aria-current={active ? "page" : undefined}
+                      {...getTooltipHandlers(item.label)}
+                    >
+                      <Icon size={16} className="shrink-0" />
+                      {!isSidebarCollapsed && <span className="min-w-0 truncate">{item.label}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
+          </nav>
 
-        <div className="admin-sidebar-footer">
-          <Link href="/" className="admin-website-link" target="_blank">
-            <ExternalLink size={17} />
-            View live website
+          {scrollHint.visible && scrollHint.hasMoreBelow && (
+            <div className="admin-scroll-hint">
+              <div className="admin-scroll-hint-icon">
+                <ChevronDown size={14} strokeWidth={3} />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* <div className={`admin-sidebar-footer ${isSidebarCollapsed ? 'is-collapsed' : ''}`}>
+          <Link href="/" className="admin-website-link" target="_blank" {...getTooltipHandlers("Live website")}>
+            <ExternalLink size={17} className="shrink-0" />
+            {!isSidebarCollapsed && <span>View live website</span>}
           </Link>
           <div className="admin-account-summary">
-            <span className="admin-avatar" aria-hidden="true">
+            <span className="admin-avatar" aria-hidden="true" {...getTooltipHandlers(user?.firstName || "Admin")}>
               {(user?.firstName?.[0] || user?.email?.[0] || "A").toUpperCase()}
             </span>
-            <div>
-              <strong>{user?.firstName || "Administrator"}</strong>
-              <span>{user?.email}</span>
-              <span>{adminRoleLabel(user?.role)}</span>
-            </div>
+            {!isSidebarCollapsed && (
+              <div>
+                <strong>{user?.firstName || "Administrator"}</strong>
+                <span>{user?.email}</span>
+                <span>{adminRoleLabel(user?.role)}</span>
+              </div>
+            )}
           </div>
-        </div>
+        </div> */}
       </aside>
+
+      {isSidebarCollapsed && tooltip && (
+        <div
+          className="admin-sidebar-tooltip"
+          style={{ top: tooltip.top }}
+        >
+          {tooltip.label}
+        </div>
+      )}
 
       <div className="admin-main">
         <header className="admin-topbar">

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { ScholarshipRegistration } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 import logger from '../utils/logger';
-import { sendMail } from '../utils/mailer';
+import { sendMail, brand } from '../utils/mailer';
 import { scholarshipRegistrationReceipt } from '../utils/emailTemplates';
 
 /**
@@ -46,7 +46,7 @@ export const createRegistration = asyncHandler(
       preferredCourse,
     });
     void sendMail({
-      to: 'successcodeacademy@gmail.com',
+      to: brand.email,
       subject: `New SCST registration — ${studentName} (${studentClass})`,
       text: template.text,
       html: template.html,

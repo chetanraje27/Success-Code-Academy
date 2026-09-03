@@ -32,7 +32,10 @@ export default function Footer() {
 
   const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const emailInput = event.currentTarget.elements.namedItem("email") as HTMLInputElement | null;
+    // React nulls event.currentTarget once the handler awaits, so the form
+    // reference must be captured up front for the later reset() call.
+    const form = event.currentTarget;
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement | null;
     const email = emailInput?.value?.trim();
 
     if (!email) {
@@ -53,12 +56,16 @@ export default function Footer() {
 
       if (response.ok && result.status === "success") {
         setNewsletterMessage(result.message || "Subscribed successfully!");
-        event.currentTarget.reset();
+        form.reset();
       } else {
-        setNewsletterMessage(result.message || "Subscription failed. Please try again.");
+        setNewsletterMessage(
+          result.message || "Subscription failed. Please try again.",
+        );
       }
     } catch {
-      setNewsletterMessage("Something went wrong. Please try again.");
+      setNewsletterMessage(
+        "We could not reach the server. Please check your connection and try again.",
+      );
     } finally {
       setSubmitting(false);
     }

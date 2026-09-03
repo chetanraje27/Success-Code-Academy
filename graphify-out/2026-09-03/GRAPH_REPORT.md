@@ -1,11 +1,11 @@
 # Graph Report - Success-Code-Academy  (2026-09-03)
 
 ## Corpus Check
-- 242 files · ~3,727,268 words
+- 243 files · ~3,727,365 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1298 nodes · 2105 edges · 162 communities (113 shown, 49 thin omitted)
+- 1299 nodes · 2105 edges · 163 communities (114 shown, 49 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
@@ -178,7 +178,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (162 total, 49 thin omitted)
+## Communities (163 total, 49 thin omitted)
 
 ### Community 0 - "admin.routes.ts"
 Cohesion: 0.06

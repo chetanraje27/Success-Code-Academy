@@ -1,4 +1,6 @@
 import { Resend } from 'resend';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import logger from './logger';
 import { env, appBaseUrl } from '../config/environment';
 
@@ -71,6 +73,40 @@ function isRetryable(status: number | null): boolean {
   return status === null || status >= 500;
 }
 
+/**
+ * Logo PNG, read once and cached, attached to every HTML email as a Resend
+ * inline attachment under the "sca-logo" content id. The templates reference
+ * it as cid:sca-logo so the header renders without a remote fetch. A missing
+ * or unreadable file is logged once; emails still go out with the alt text
+ * in place of the image.
+ */
+let cachedLogo: Buffer | null | undefined;
+
+function logoAttachment(): { content: Buffer; cid: string; filename: string } | null {
+  if (cachedLogo === undefined) {
+    try {
+      // Compiled: dist/utils -> client/public. ts-node dev: src/utils -> client/public.
+      const logoPath = path.resolve(
+        __dirname,
+        '../../..',
+        'client',
+        'public',
+        'images',
+        'ui',
+        'logo2.png',
+      );
+      cachedLogo = readFileSync(logoPath);
+    } catch {
+      logger.warn(
+        '[Mail] Logo file could not be read; emails will render without it.',
+      );
+      cachedLogo = null;
+    }
+  }
+  if (!cachedLogo) return null;
+  return { content: cachedLogo, cid: 'sca-logo', filename: 'sca-logo.png' };
+}
+
 async function deliverOnce(
   client: Resend,
   message: MailMessage,
@@ -82,7 +118,20 @@ async function deliverOnce(
       subject: message.subject,
       text: message.text,
     };
-    if (message.html !== undefined) payload.html = message.html;
+    if (message.html !== undefined) {
+      payload.html = message.html;
+      // Inline attachments are only valid alongside an HTML body.
+      const logo = logoAttachment();
+      if (logo) {
+        payload.attachments = [
+          {
+            content: logo.content,
+            filename: logo.filename,
+            contentId: logo.cid,
+          },
+        ];
+      }
+    }
     if (message.replyTo !== undefined) payload.replyTo = message.replyTo;
 
     const { data, error } = await client.emails.send(payload);

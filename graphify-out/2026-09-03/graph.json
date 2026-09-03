@@ -11343,6 +11343,17 @@
       "norm_label": "searchleads"
     },
     {
+      "label": "20260903000000-create-newsletter-subscribers.js",
+      "file_type": "code",
+      "source_file": "server/src/database/migrations/20260903000000-create-newsletter-subscribers.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_database_migrations_20260903000000_create_newsletter_subscribers",
+      "community": 33,
+      "community_name": "20260903000000-create-newsletter-subscribers.js",
+      "norm_label": "20260903000000-create-newsletter-subscribers.js"
+    },
+    {
       "label": "opencode.json",
       "file_type": "code",
       "source_file": ".opencode/opencode.json",

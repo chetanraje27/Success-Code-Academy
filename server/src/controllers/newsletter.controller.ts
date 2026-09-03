@@ -30,7 +30,7 @@ export const subscribeNewsletter = asyncHandler(
 
     let emailSent = false;
     if (isMailerConfigured()) {
-      const template = newsletterWelcome(email);
+      const template = newsletterWelcome();
       const mail = await sendMail({
         to: email,
         subject: 'Welcome to Success Code Academy updates',

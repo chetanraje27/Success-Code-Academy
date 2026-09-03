@@ -33,6 +33,7 @@ import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import logger from '../utils/logger';
 import { sendMail } from '../utils/mailer';
+import { adminPasswordResetEmail, contactFormStaffAlert } from '../utils/emailTemplates';
 import {
   buildResetUrl,
   issueAdminPasswordReset,
@@ -646,6 +647,9 @@ const SETTINGS_KEYS = [
   'youtube',
   'linkedin',
   'twitter',
+  'page_banner_scholarships',
+  'page_banner_contact',
+  'page_banner_results',
 ] as const;
 
 async function loadSettingsMap(): Promise<Record<string, string>> {
@@ -1214,19 +1218,16 @@ export const sendAdminPasswordReset = asyncHandler(
     });
     const resetUrl = buildResetUrl(rawToken);
 
+    const template = adminPasswordResetEmail({
+      name: admin.name,
+      resetUrl,
+      ttlMinutes,
+    });
     const mail = await sendMail({
       to: admin.email,
       subject: 'Reset your Success Code Academy admin password',
-      text: [
-        `Hello ${admin.name},`,
-        '',
-        'Use the link below to choose a new admin password.',
-        `It expires in ${ttlMinutes} minutes and can only be used once.`,
-        '',
-        resetUrl,
-        '',
-        'If you did not expect this email, you can ignore it.',
-      ].join('\n'),
+      text: template.text,
+      html: template.html,
     });
 
     logger.info('[Admin] Password reset link issued', {

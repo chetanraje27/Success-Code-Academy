@@ -5,6 +5,7 @@ import authRoutes from './auth.routes';
 import formRoutes from './form.routes';
 import adminRoutes from './admin.routes';
 import contentRoutes from './content.routes';
+import newsletterRoutes from './newsletter.routes';
 
 /**
  * V1 API route aggregator.
@@ -20,5 +21,6 @@ v1Router.use('/auth', authRoutes);
 v1Router.use('/forms', formRoutes);
 v1Router.use('/admin', adminRoutes);
 v1Router.use('/content', contentRoutes);
+v1Router.use('/newsletter', newsletterRoutes);
 
 export default v1Router;

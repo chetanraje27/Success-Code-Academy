@@ -24,14 +24,51 @@ export default function Footer() {
   const pathname = usePathname();
   const [editSettings, setEditSettings] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
   const settings = useSiteSettings();
 
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
-  const handleNewsletterSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setNewsletterMessage("Newsletter signup is currently unavailable.");
+    // React nulls event.currentTarget once the handler awaits, so the form
+    // reference must be captured up front for the later reset() call.
+    const form = event.currentTarget;
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement | null;
+    const email = emailInput?.value?.trim();
+
+    if (!email) {
+      setNewsletterMessage("Please enter your email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    setNewsletterMessage("");
+
+    try {
+      const response = await fetch("/api/public/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const result = await response.json();
+
+      if (response.ok && result.status === "success") {
+        setNewsletterMessage(result.message || "Subscribed successfully!");
+        form.reset();
+      } else {
+        setNewsletterMessage(
+          result.message || "Subscription failed. Please try again.",
+        );
+      }
+    } catch {
+      setNewsletterMessage(
+        "We could not reach the server. Please check your connection and try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -75,8 +112,8 @@ export default function Footer() {
                   required
                   onChange={() => newsletterMessage && setNewsletterMessage("")}
                 />
-                <Button variant="primary" type="submit">
-                  Subscribe
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Subscribing..." : "Subscribe"}
                 </Button>
               </form>
               <p className="newsletter-status" role="status" aria-live="polite">

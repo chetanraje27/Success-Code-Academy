@@ -18,8 +18,10 @@ import logger from './logger';
  */
 export function runMigrations(): void {
   try {
-    // Compiled: dist -> server root. ts-node dev: src -> server root.
-    const serverRoot = path.resolve(__dirname, '..');
+    // Compiled: dist/utils -> server root. ts-node dev: src/utils -> server root.
+    // Two levels up in both layouts; one level lands on src/ or dist/, where
+    // sequelize-cli cannot find .sequelizerc and falls back to config/config.json.
+    const serverRoot = path.resolve(__dirname, '../..');
     execSync('npx sequelize-cli db:migrate', {
       cwd: serverRoot,
       stdio: 'inherit',

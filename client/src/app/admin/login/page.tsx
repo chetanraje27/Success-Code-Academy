@@ -14,17 +14,20 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   useEffect(() => {
     fetch("/api/admin/session", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((payload: { data?: { user?: { role?: string } } } | null) => {
         if (isAdminRole(payload?.data?.user?.role)) {
-          router.replace("/admin");
+          window.location.replace("/admin");
+        } else {
+          setIsCheckingSession(false);
         }
       })
       .catch(() => {
-        /* session check failed — stay on login */
+        setIsCheckingSession(false);
       });
   }, [router]);
 
@@ -44,17 +47,26 @@ export default function AdminLoginPage() {
       if (!response.ok) {
         throw new Error(payload.message || "Unable to sign in.");
       }
-      router.replace("/admin");
-      router.refresh();
+      window.location.replace("/admin");
+      // Do NOT setSubmitting(false) here. Keep it loading while the browser navigates.
     } catch (caught) {
       setError(
         caught instanceof Error
           ? caught.message
           : "Unable to sign in. Please try again.",
       );
-    } finally {
-      setSubmitting(false);
+      setSubmitting(false); // Only clear on error
     }
+  }
+
+  if (isCheckingSession) {
+    return (
+      <div className="admin-auth-loading" role="status" aria-live="polite">
+        <span className="admin-spinner" aria-hidden="true" />
+        <strong>Checking your admin session</strong>
+        <span>This only takes a moment.</span>
+      </div>
+    );
   }
 
   return (

@@ -70,8 +70,8 @@ export default function AdminLoginPage() {
 
   if (isCheckingSession) {
     return (
-      <div className="app-login-loading" role="status" aria-live="polite">
-        <span className="app-login-spinner" aria-hidden="true" />
+      <div className="admin-auth-loading" role="status" aria-live="polite">
+        <span className="admin-auth-spinner" aria-hidden="true" />
       </div>
     );
   }

@@ -270,9 +270,7 @@ export default function AdminLayout({
     return (
       <ToastProvider>
         <div className="admin-auth-loading" role="status" aria-live="polite">
-          <span className="admin-spinner" aria-hidden="true" />
-          <strong>Checking your admin session</strong>
-          <span>This only takes a moment.</span>
+          <span className="admin-auth-spinner" aria-hidden="true" />
         </div>
       </ToastProvider>
     );

@@ -1519,15 +1519,19 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   display: grid;
   min-height: 100vh;
   place-items: center;
-  align-content: center;
-  gap: 8px;
   background: var(--admin-bg);
-  color: var(--admin-muted);
 }
 
-.admin-auth-loading strong {
-  margin-top: 5px;
-  color: var(--admin-text);
+/* Subtle, text-free loading screen — matches the login reload treatment.
+   Theme-aware through the admin tokens. */
+.admin-auth-spinner {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--admin-border);
+  border-top-color: var(--admin-brand);
+  border-radius: 50%;
+  animation: admin-spin 700ms linear infinite;
 }
 
 .admin-spinner {

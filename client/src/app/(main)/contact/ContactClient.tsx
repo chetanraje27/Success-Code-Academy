@@ -39,7 +39,7 @@ const INITIAL_CAPTCHA = { question: "1 + 1 = ?", answer: 2 };
 
 export default function ContactClient() {
   const settings = useSiteSettings();
-  const contactBanner = usePageBanner("contact");
+  const { src: contactBanner, isLoading: isBannerLoading } = usePageBanner("contact");
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [captcha, setCaptcha] = useState(INITIAL_CAPTCHA);
   const [captchaInput, setCaptchaInput] = useState("");
@@ -117,7 +117,10 @@ export default function ContactClient() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="poster-img-container">
+            <div className="poster-img-container" style={{ position: "relative" }}>
+              {isBannerLoading && (
+                <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1, borderRadius: "inherit" }}></div>
+              )}
               <Image
                 src={contactBanner}
                 alt="Contact Success Code Academy Poster"

@@ -49,6 +49,7 @@ export default function Header() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
   const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
   const isActivePath = (href: string) =>
@@ -145,10 +146,17 @@ export default function Header() {
   }, [isDropdownOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setCurrentUser(null);
-    window.dispatchEvent(new Event("auth-changed"));
+    setIsLoggingOut(true);
+    // Add a small artificial delay so the user sees the loading state
+    setTimeout(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setCurrentUser(null);
+      setIsLoggingOut(false);
+      setIsDropdownOpen(false);
+      setIsMenuOpen(false);
+      window.dispatchEvent(new Event("auth-changed"));
+    }, 600);
   };
 
   const handleLoginSuccess = (user: HeaderUser) => {
@@ -262,16 +270,14 @@ export default function Header() {
                       </Link>
                     )}
                     <div className="dropdown-separator" role="separator" />
-                    <button 
-                      type="button"
-                      onClick={() => {
-                        handleLogout();
-                        setIsDropdownOpen(false);
-                      }}
-                      className="dropdown-item danger"
-                    >
-                      Sign Out
-                    </button>
+                      <button 
+                        type="button"
+                        onClick={handleLogout}
+                        className="dropdown-item danger"
+                        disabled={isLoggingOut}
+                      >
+                        {isLoggingOut ? "Signing out..." : "Sign Out"}
+                      </button>
                   </div>
                 )}
               </div>
@@ -430,17 +436,15 @@ export default function Header() {
                       Admin Portal
                     </Button>
                   )}
-                  <Button 
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    variant="outline" 
-                    size="sm" 
-                    className="mobile-action-button mobile-signout-button"
-                  >
-                    Sign Out
-                  </Button>
+                    <Button 
+                      onClick={handleLogout}
+                      variant="outline" 
+                      size="sm" 
+                      className="mobile-action-button mobile-signout-button"
+                      disabled={isLoggingOut}
+                    >
+                      {isLoggingOut ? "Signing out..." : "Sign Out"}
+                    </Button>
                 </div>
               </div>
             ) : (

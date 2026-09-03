@@ -23,7 +23,7 @@ export default function AdmissionsClient() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const scholarshipBanner = usePageBanner("scholarships");
+  const { src: scholarshipBanner, isLoading: isBannerLoading } = usePageBanner("scholarships");
   const { editMode } = useEditModeOptional();
 
   useEffect(() => {
@@ -147,6 +147,9 @@ export default function AdmissionsClient() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="poster-img-container">
+              {isBannerLoading && (
+                <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1, borderRadius: "inherit" }}></div>
+              )}
               <Image
                 src={scholarshipBanner}
                 alt="NEET Admissions & Scholarship Test Hero Banner"

@@ -138,6 +138,7 @@ export default function AdminLayout({
   const [tooltip, setTooltip] = useState<{ label: string; top: number } | null>(null);
   const [scrollHint, setScrollHint] = useState({ visible: false, hasMoreBelow: false });
   const [theme, setTheme] = useState<AdminTheme | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   /*
    * The attribute lives on <html> because admin.css is shared with the public
@@ -305,13 +306,18 @@ export default function AdminLayout({
   }, [isSuperAdmin, pathname, router, session]);
 
   async function handleLogout() {
-    await fetch("/api/admin/session", {
-      method: "DELETE",
-      credentials: "same-origin",
-    });
-    setUser(null);
-    setSession("guest");
-    router.replace("/admin/login");
+    setIsLoggingOut(true);
+    try {
+      await fetch("/api/admin/session", {
+        method: "DELETE",
+        credentials: "same-origin",
+      });
+    } finally {
+      setUser(null);
+      setSession("guest");
+      setIsLoggingOut(false);
+      router.replace("/admin/login");
+    }
   }
 
   if (isPublicRoute) {
@@ -485,9 +491,9 @@ export default function AdminLayout({
               <Moon size={17} className="admin-theme-icon-dark" aria-hidden="true" />
               <Sun size={17} className="admin-theme-icon-light" aria-hidden="true" />
             </button>
-            <button className="admin-logout-button" onClick={handleLogout}>
+            <button className="admin-logout-button" onClick={handleLogout} disabled={isLoggingOut}>
               <LogOut size={17} />
-              <span>Sign out</span>
+              <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
             </button>
           </div>
         </header>

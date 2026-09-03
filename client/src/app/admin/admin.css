@@ -2201,7 +2201,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
  * narrower gets the drawer. */
 @media (max-width: 1023px) {
   .admin-sidebar {
-    width: min(280px, 84vw);
+    width: 244px;
     box-shadow: var(--admin-shadow-lg);
     transform: translateX(-105%);
     transition: transform var(--admin-dur) var(--admin-ease);
@@ -2239,12 +2239,6 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
 
   .admin-main {
     margin-left: 0;
-  }
-
-  /* Roomier hit areas once the sidebar is a touch drawer. */
-  .admin-nav-link {
-    min-height: 42px;
-    font-size: 0.86rem;
   }
 
   .admin-skeleton-cards {

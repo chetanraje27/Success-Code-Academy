@@ -34,6 +34,7 @@ import {
 import type { AdminUser } from "@/lib/admin-api";
 import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
 import { AdminSessionProvider } from "@/components/admin/AdminSessionContext";
+import { ToastProvider } from "@/components/admin/Toast";
 
 type SessionState = "loading" | "authenticated" | "guest";
 type AdminTheme = "light" | "dark";
@@ -293,20 +294,25 @@ export default function AdminLayout({
   }
 
   if (isPublicRoute) {
-    return <>{children}</>;
+    return (
+      <ToastProvider>{children}</ToastProvider>
+    );
   }
 
   if (session !== "authenticated") {
     return (
-      <div className="admin-auth-loading" role="status" aria-live="polite">
-        <span className="admin-spinner" aria-hidden="true" />
-        <strong>Checking your admin session</strong>
-        <span>This only takes a moment.</span>
-      </div>
+      <ToastProvider>
+        <div className="admin-auth-loading" role="status" aria-live="polite">
+          <span className="admin-spinner" aria-hidden="true" />
+          <strong>Checking your admin session</strong>
+          <span>This only takes a moment.</span>
+        </div>
+      </ToastProvider>
     );
   }
 
   return (
+    <ToastProvider>
     <AdminSessionProvider user={user}>
     <div className={`admin-shell ${isSidebarCollapsed ? "is-collapsed" : ""}`}>
       <button
@@ -466,5 +472,6 @@ export default function AdminLayout({
       </div>
     </div>
     </AdminSessionProvider>
+    </ToastProvider>
   );
 }

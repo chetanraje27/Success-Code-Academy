@@ -123,10 +123,12 @@ async function deliverOnce(
       // Inline attachments are only valid alongside an HTML body.
       const logo = logoAttachment();
       if (logo) {
-        payload.attachments = [
+      payload.attachments = [
           {
             content: logo.content,
             filename: logo.filename,
+            // Setting contentId alone makes Resend send it inline; the
+            // templates reference it as cid:sca-logo.
             contentId: logo.cid,
           },
         ];

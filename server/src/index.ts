@@ -5,6 +5,12 @@ import logger from './utils/logger';
 import { sequelize } from './models';
 import { seedDatabase } from './seedDatabase';
 import { runMigrations } from './utils/runMigrations';
+import { ensureModelColumns } from './utils/schemaGuard';
+
+async function reconcileSchema(): Promise<void> {
+  // Schema guard must run after any migration/seed step and before serving.
+  await ensureModelColumns();
+}
 
 function scheduleDatabaseReconnect(): void {
   let delay = 3_000;
@@ -13,6 +19,7 @@ function scheduleDatabaseReconnect(): void {
     const connected = await testConnection();
     if (connected) {
       runMigrations();
+      await reconcileSchema();
       try {
         await seedDatabase();
         logger.info('Database connection restored.');
@@ -49,7 +56,9 @@ async function startServer(): Promise<void> {
   runMigrations();
 
   if (dbConnected) {
-    // Seed default content data if empty (must run after sync)
+    // Self-heal any model columns that the database is missing, then seed
+    // default content data (must run after sync + guard).
+    await reconcileSchema();
     await seedDatabase();
   }
 

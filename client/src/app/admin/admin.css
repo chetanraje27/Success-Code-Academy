@@ -1626,6 +1626,14 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   height: 36px;
 }
 
+/* ==========================================================================
+   Login screen — a single light form, theme-independent.
+   --------------------------------------------------------------------------
+   The login route renders without .admin-shell, but html[data-admin-theme]
+   may still be set from a previous admin visit. Everything below uses a fixed
+   light palette and is scoped to .app-login, so the screen reads the same no
+   matter what theme was saved last. No cards, no heavy panels, no imagery.
+   ========================================================================== */
 .admin-login-page {
   display: grid;
   min-height: 100vh;
@@ -1633,138 +1641,468 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   background: var(--admin-surface);
 }
 
-.admin-login-brand {
-  position: relative;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  padding: 56px;
+.app-login,
+.app-login-loading {
+  --login-bg: #eef3fb;
+  --login-surface: #ffffff;
+  --login-border: #dfe5ec;
+  --login-border-strong: #c3cedd;
+  --login-text: #14243a;
+  --login-muted: #5d6c7e;
+  --login-faint: #8a97a8;
+  --login-brand: #102f5e;
+  --login-brand-hover: #0a2348;
+  --login-danger: #b3261e;
+  --login-danger-soft: #fdf1f1;
+  min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 15%, rgba(7, 141, 146, 0.22), transparent 36%),
-    linear-gradient(150deg, #0b1f42 0%, #102f5e 55%, #1a4585 100%);
-  color: #fff;
+    radial-gradient(circle at 12% 8%, rgba(16, 47, 94, 0.09), transparent 34rem),
+    radial-gradient(circle at 88% 92%, rgba(8, 127, 131, 0.07), transparent 30rem),
+    linear-gradient(160deg, #e8eef8 0%, #f3f6fb 46%, #e6edf7 100%);
 }
 
-.admin-login-brand::after {
-  position: absolute;
-  right: -110px;
-  bottom: -140px;
-  width: 360px;
-  height: 360px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 60px rgba(255, 255, 255, 0.04),
-    0 0 0 120px rgba(255, 255, 255, 0.025);
-  content: "";
-}
-
-.admin-login-brand-content {
-  position: relative;
-  z-index: 1;
-  max-width: 520px;
-}
-
-.admin-login-brand-mark {
+.app-login {
   display: grid;
-  width: auto;
-  min-width: 60px;
-  height: 60px;
-  padding: 0 12px;
+  min-height: 100vh;
+  padding: 48px 6vw;
   place-items: center;
-  margin-bottom: 28px;
-  border-radius: var(--admin-radius-lg);
-  background: #fff;
 }
 
-.admin-login-brand-mark img {
-  width: auto;
-  height: 100%;
-  max-height: 48px;
-  object-fit: contain;
-  object-position: center;
+/* Desktop-app split: info on the left, sign-in stage anchored right. */
+.app-login-layout {
+  display: grid;
+  width: min(1080px, 100%);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+  align-items: center;
+  gap: clamp(48px, 8vw, 120px);
 }
 
-.admin-login-brand h1 {
-  margin: 0;
+/* ---- Left informational pane ------------------------------------------- */
+.app-login-aside {
+  max-width: 520px;
+  color: var(--login-text);
+}
+
+.app-login-aside-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 42px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.app-login-aside-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
   color: #fff;
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-  font-weight: 650;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  background: linear-gradient(135deg, var(--login-brand), #0a4d6e);
+  border-radius: 9px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
 }
 
-.admin-login-brand p {
-  max-width: 430px;
+.app-login-aside-copy h1 {
+  margin: 0;
+  color: var(--login-text);
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.app-login-aside-copy p {
+  max-width: 40ch;
   margin: 14px 0 0;
-  color: rgba(255, 255, 255, 0.74);
-  font-size: 0.9rem;
+  color: var(--login-muted);
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
-.admin-login-benefits {
+.app-login-aside-list {
   display: grid;
-  gap: 9px;
-  margin-top: 26px;
+  gap: 8px;
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.admin-login-benefits span {
+.app-login-aside-list li {
   display: flex;
   align-items: center;
-  gap: 9px;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 0.8rem;
+  gap: 13px;
+  padding: 11px 13px;
+  border: 1px solid transparent;
+  border-radius: 12px;
 }
 
-.admin-login-panel {
+.app-login-aside-icon {
   display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   place-items: center;
-  padding: 40px;
+  color: var(--login-brand);
+  background: rgba(16, 47, 94, 0.08);
+  border-radius: 9px;
 }
 
-.admin-login-card {
-  width: min(400px, 100%);
+.app-login-aside-list strong {
+  display: block;
+  color: var(--login-text);
+  font-size: 0.84rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
 }
 
-.admin-login-card>span {
-  color: var(--admin-accent);
-  font-size: var(--font-size-micro);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.app-login-aside-list small {
+  display: block;
+  margin-top: 2px;
+  color: var(--login-faint);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+/* ---- Right sign-in stage ----------------------------------------------- */
+.app-login-stage {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Bordered square — no card fill, the page gradient shows straight through
+   so it reads as a crisp window outline rather than a raised card. */
+.app-login-frame {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  padding: 34px 30px 24px;
+  background: transparent;
+  border: 1px solid var(--login-border-strong);
+  border-radius: 18px;
+  transition: border-color var(--admin-dur) var(--admin-ease);
+}
+
+.app-login-frame:hover {
+  border-color: #aebccd;
+}
+
+.app-login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+
+.app-login-frame-label {
+  margin: 0 0 18px;
+  color: var(--login-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-align: center;
   text-transform: uppercase;
 }
 
-.admin-login-card h2 {
-  margin: 6px 0 0;
-  font-size: 1.45rem;
-  font-weight: 650;
-  letter-spacing: -0.03em;
+.app-login-frame-label::after {
+  display: block;
+  width: 28px;
+  height: 2px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, var(--login-brand), #087f83);
+  border-radius: 2px;
+  content: "";
 }
 
-.admin-login-card>p {
-  margin: 6px 0 22px;
-  color: var(--admin-muted);
-  font-size: 0.84rem;
-  line-height: 1.5;
-}
-
-.admin-login-form {
+.app-login-form {
   display: grid;
-  gap: 14px;
+  width: 100%;
+  gap: 12px;
 }
 
-.admin-login-form .admin-button {
-  min-height: 38px;
-  margin-top: 2px;
+/* Pill fields — slim, neutral, icon inside the pill. */
+.app-login-field {
+  display: grid;
 }
 
-.admin-login-help {
+.app-login-control {
+  position: relative;
+}
+
+.app-login-control-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  color: var(--login-faint);
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.app-login-control:focus-within .app-login-control-icon {
+  color: var(--login-brand);
+}
+
+.app-login-field input {
+  width: 100%;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 6px 40px 6px 38px;
+  color: var(--login-text);
+  background: var(--login-surface);
+  border: 1px solid var(--login-border-strong);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.82rem;
+  outline: none;
+  transition:
+    border-color var(--admin-dur-fast) var(--admin-ease),
+    box-shadow var(--admin-dur-fast) var(--admin-ease),
+    background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.app-login-field input::placeholder {
+  color: var(--login-faint);
+}
+
+.app-login-field input:hover {
+  border-color: #b9c5d3;
+  background: #fdfdfe;
+}
+
+.app-login-field input:focus {
+  border-color: var(--login-brand);
+  background: var(--login-surface);
+  box-shadow: 0 0 0 3px rgba(16, 47, 94, 0.08);
+}
+
+.app-login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  color: var(--login-faint);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    color var(--admin-dur-fast) var(--admin-ease),
+    background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.app-login-password-toggle:hover {
+  color: var(--login-brand);
+  background: var(--admin-brand-soft);
+}
+
+.app-login-password-toggle:focus-visible {
+  outline: 2px solid var(--login-brand);
+  outline-offset: 1px;
+}
+
+.app-login-submit {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 4px;
+  padding: 0 22px;
+  color: #fff;
+  background: var(--login-brand);
+  border: 1px solid var(--login-brand);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--admin-dur-fast) var(--admin-ease),
+    border-color var(--admin-dur-fast) var(--admin-ease),
+    box-shadow var(--admin-dur-fast) var(--admin-ease),
+    transform var(--admin-dur-fast) var(--admin-ease);
+}
+
+.app-login-submit:hover:not(:disabled) {
+  background: var(--login-brand-hover);
+  border-color: var(--login-brand-hover);
+  box-shadow: 0 8px 18px -12px rgba(16, 47, 94, 0.55);
+  transform: translateY(-1px);
+}
+
+.app-login-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.app-login-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.app-login-submit:focus-visible {
+  outline: 2px solid var(--login-brand);
+  outline-offset: 1px;
+}
+
+.app-login-submit .app-login-spinner {
+  width: 14px;
+  height: 14px;
+}
+
+.app-login-back {
+  display: inline-flex;
+  align-items: center;
   margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid var(--admin-divider);
-  color: var(--admin-faint);
+  padding: 5px 12px;
+  color: var(--login-faint);
+  border-radius: 999px;
   font-size: 0.74rem;
-  line-height: 1.5;
+  font-weight: 550;
+  text-decoration: none;
+  transition:
+    color var(--admin-dur-fast) var(--admin-ease),
+    background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.app-login-back:hover {
+  color: var(--login-brand);
+  background: var(--admin-brand-soft);
+}
+
+/* Small centered spinner for the session check screen. */
+.app-login-loading {
+  display: grid;
+  place-items: center;
+}
+
+.app-login-spinner {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--admin-border);
+  border-top-color: var(--login-brand);
+  border-radius: 50%;
+  animation: admin-spin 700ms linear infinite;
+}
+
+/* ==========================================================================
+   Toasts — top-right notifications used across the admin console.
+   Slim, crisp border, restrained shadow; tone is carried by a small icon.
+   Tokens flip with the admin theme like every other admin surface.
+   ========================================================================== */
+.admin-toast-viewport {
+  position: fixed;
+  z-index: 1000;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: min(360px, calc(100vw - 28px));
+  gap: 8px;
+  pointer-events: none;
+}
+
+.admin-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  box-shadow: var(--admin-shadow-md);
+  pointer-events: auto;
+  animation: admin-toast-in 160ms var(--admin-ease);
+}
+
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.admin-toast-icon {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  border-radius: 7px;
+}
+
+.admin-toast-success .admin-toast-icon {
+  color: var(--admin-success);
+  background: var(--admin-success-soft);
+}
+
+.admin-toast-error .admin-toast-icon {
+  color: var(--admin-danger);
+  background: var(--admin-danger-soft);
+}
+
+.admin-toast-info .admin-toast-icon {
+  color: var(--admin-info);
+  background: var(--admin-info-soft);
+}
+
+.admin-toast p {
+  min-width: 0;
+  flex: 1;
+  margin: 2px 0 0;
+  color: var(--admin-text);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.admin-toast-close {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  padding: 0;
+  place-items: center;
+  color: var(--admin-faint);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color var(--admin-dur-fast) var(--admin-ease),
+    background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-toast-close:hover {
+  color: var(--admin-text);
+  background: var(--admin-surface-hover);
+}
+
+.admin-toast-close:focus-visible {
+  outline: 2px solid var(--admin-brand);
+  outline-offset: 1px;
+}
+
+/* Keep the old brand/panel rules scoped out of the DOM but harmless for any
+   stale references; the new login markup no longer uses them. */
+.admin-login-brand {
+  display: none;
+}
+
+.admin-login-panel {
+  display: none;
 }
 
 /* Segmented tabs (banners page and any future tabbed section). */
@@ -1920,6 +2258,28 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
   .admin-login-panel {
     min-height: 100vh;
   }
+
+  /* Two-pane login collapses to a single centered frame on tablets. */
+  .app-login {
+    padding: 40px 5vw;
+  }
+
+  .app-login-layout {
+    display: flex;
+    justify-content: center;
+  }
+
+  .app-login-stage {
+    justify-content: center;
+  }
+
+  .app-login-aside {
+    display: none;
+  }
+
+  .app-login-frame {
+    width: min(400px, 100%);
+  }
 }
 
 @media (max-width: 767px) {
@@ -2062,6 +2422,14 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
     padding: 24px 18px;
   }
 
+  .app-login {
+    padding: 24px 16px;
+  }
+
+  .app-login-frame {
+    padding: 26px 22px 20px;
+  }
+
   /* Icon-only at this width, so square it up to match the theme toggle. */
   .admin-logout-button {
     width: 36px;
@@ -2160,7 +2528,9 @@ html[data-admin-theme="dark"] {
     0 8px 16px rgba(0, 0, 0, 0.4), 0 24px 48px rgba(0, 0, 0, 0.5);
 }
 
-/* Brand hero keeps its navy identity but drops to match the darker room. */
+/* Brand hero keeps its navy identity but drops to match the darker room.
+   The current login screen is theme-independent (.app-login), so this rule
+   targets the (now unused) legacy class only. */
 html[data-admin-theme="dark"] .admin-login-brand {
   background:
     radial-gradient(circle at 15% 15%, rgba(47, 212, 198, 0.16), transparent 36%),

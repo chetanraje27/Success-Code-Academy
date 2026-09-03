@@ -111,10 +111,12 @@
 
 .admin-brand {
   display: flex;
+  height: 56px;
   min-height: 56px;
+  box-sizing: border-box;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
+  padding: 0 16px;
   border-bottom: 1px solid var(--admin-border);
 }
 
@@ -271,11 +273,13 @@
   top: 0;
   z-index: 50;
   display: flex;
-  min-height: 52px;
+  height: 56px;
+  min-height: 56px;
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 8px 20px;
+  padding: 0 20px;
   border-bottom: 1px solid var(--admin-border);
   background: var(--admin-topbar-bg);
   backdrop-filter: saturate(180%) blur(12px);
@@ -284,29 +288,38 @@
 .admin-topbar-title {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
 }
 
-.admin-topbar-title>div {
-  display: grid;
+.admin-topbar-page {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
 
-.admin-topbar-title span {
-  color: var(--admin-faint);
-  font-size: var(--font-size-micro);
+.admin-topbar-page-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--admin-brand);
+  flex-shrink: 0;
+}
+
+.admin-topbar-page-title {
+  color: var(--admin-text);
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.admin-topbar-title strong {
-  font-size: 0.86rem;
-  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 .admin-menu-button,
 .admin-sidebar-close {
   display: none !important;
+}
+
+.admin-menu-button {
+  border-radius: 50%;
 }
 
 .admin-icon-button {
@@ -2288,7 +2301,7 @@ html[data-admin-theme="dark"] .admin-theme-icon-light {
 
 @media (max-width: 767px) {
   .admin-topbar {
-    padding: 8px 14px;
+    padding: 0 14px;
   }
 
   .admin-content {
@@ -2623,13 +2636,14 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   height: 32px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #64748b;
-  background:var(--admin-text) ;
-  transition: background 150ms, color 150ms;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 150ms, color 150ms, border-color 150ms;
 }
 .admin-header-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .admin-header-toggle.is-collapsed {
   width: 36px;
@@ -2654,13 +2668,40 @@ html[data-admin-theme]::-webkit-scrollbar-track {
 .admin-header-toggle:hover .collapsed-icon {
   opacity: 1;
 }
+.admin-brand.is-collapsed,
 .admin-brand.justify-center {
   justify-content: center;
   padding: 0 8px;
+  height: 56px;
+  min-height: 56px;
+  box-sizing: border-box;
 }
-.admin-brand.justify-between {
-  justify-content: space-between;
+.admin-brand.is-expanded {
+  position: relative;
+  height: 56px;
+  min-height: 56px;
+  box-sizing: border-box;
   padding: 0 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.admin-brand-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  transition: opacity 150ms ease;
+  min-width: 0;
+}
+.admin-brand-link:hover {
+  opacity: 0.9;
+}
+.admin-brand.is-expanded .admin-header-toggle {
+  flex-shrink: 0;
 }
 .admin-header-toggle .tooltip {
   pointer-events: none;
@@ -2783,12 +2824,14 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   flex-direction: column;
 }
 
-.admin-brand-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  overflow: hidden;
-  white-space: nowrap;
+.admin-brand-logo-full {
+  width: auto;
+  height: 38px;
+  max-width: 145px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+  margin-left: -4px;
 }
 .admin-nav-link span {
   overflow: hidden;

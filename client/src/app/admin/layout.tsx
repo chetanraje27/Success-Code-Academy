@@ -30,6 +30,7 @@ import {
   Users,
   Video,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import type { AdminUser } from "@/lib/admin-api";
 import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
@@ -104,10 +105,14 @@ const navigation = [
   },
 ] as const;
 
-const routeNames = new Map<string, string>(
-  navigation.flatMap((group) =>
-    group.items.map((item) => [item.href, item.label] as const),
-  ),
+type NavItem = {
+  readonly label: string;
+  readonly href: string;
+  readonly icon: LucideIcon;
+};
+
+const allNavItems: readonly NavItem[] = navigation.flatMap(
+  (group) => [...group.items] as NavItem[],
 );
 
 export default function AdminLayout({
@@ -254,10 +259,26 @@ export default function AdminLayout({
     }
   }, [isPublicRoute, router, session]);
 
-  const currentPage = useMemo(
-    () => routeNames.get(pathname) || "Administration",
-    [pathname],
-  );
+  const currentNavItem = useMemo(() => {
+    const exact = allNavItems.find((item) => item.href === pathname);
+    if (exact) return exact;
+
+    const prefixes = allNavItems.filter(
+      (item) => item.href !== "/admin" && pathname.startsWith(item.href),
+    );
+    if (prefixes.length > 0) {
+      return prefixes.sort((a, b) => b.href.length - a.href.length)[0];
+    }
+
+    if (pathname === "/admin") {
+      return allNavItems.find((item) => item.href === "/admin") || null;
+    }
+
+    return null;
+  }, [pathname]);
+
+  const CurrentPageIcon = currentNavItem?.icon || LayoutDashboard;
+  const currentPageTitle = currentNavItem?.label || "Dashboard";
 
   const isSuperAdmin = isSuperAdminRole(user?.role);
 
@@ -320,7 +341,7 @@ export default function AdminLayout({
       />
 
       <aside className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-        <div className={`admin-brand ${isSidebarCollapsed ? 'justify-center px-2' : 'justify-between px-3.5'}`}>
+        <div className={`admin-brand ${isSidebarCollapsed ? 'is-collapsed justify-center px-2' : 'is-expanded justify-between px-3.5'}`}>
           {isSidebarCollapsed ? (
             <button
               type="button"
@@ -334,17 +355,21 @@ export default function AdminLayout({
             </button>
           ) : (
             <>
-              <div className="admin-brand-content">
+              <Link
+                href="/admin"
+                className="admin-brand-link"
+                aria-label="Admin dashboard"
+                onClick={() => setSidebarOpen(false)}
+              >
                 <Image
-                  src="/images/ui/SCA-Logo.png"
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="admin-brand-logo"
+                  src="/images/ui/logo-nav-full.png"
+                  alt="Success Code Academy"
+                  width={160}
+                  height={55}
+                  className="admin-brand-logo-full"
                   priority
                 />
-                <strong className="admin-brand-title"></strong>
-              </div>
+              </Link>
               <button
                 type="button"
                 onClick={() => setIsSidebarCollapsed(true)}
@@ -435,9 +460,9 @@ export default function AdminLayout({
             >
               <Menu size={21} />
             </button>
-            <div>
-              <span>Admin portal</span>
-              <strong>{currentPage}</strong>
+            <div className="admin-topbar-page">
+              <CurrentPageIcon size={18} className="admin-topbar-page-icon" aria-hidden="true" />
+              <span className="admin-topbar-page-title">{currentPageTitle}</span>
             </div>
           </div>
           <div className="admin-topbar-actions">

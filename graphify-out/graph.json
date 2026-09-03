@@ -56,30 +56,56 @@
       "norm_label": "admincreationattributes"
     },
     {
-      "label": "Env",
+      "label": "AppError",
       "file_type": "code",
-      "source_file": "server/src/config/environment.ts",
-      "source_location": "L99",
+      "source_file": "server/src/utils/AppError.ts",
+      "source_location": "L12",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_config_environment_env",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "env"
+      "id": "server_src_utils_apperror_apperror",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": "apperror"
     },
     {
-      "label": "AuthPurpose",
+      "label": "CourseRegistration",
       "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L14",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L18",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_authpurpose",
+      "id": "server_src_models_courseregistration_courseregistration",
       "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "authpurpose"
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistration"
+    },
+    {
+      "label": "CourseRegistrationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_courseregistrationattributes",
+      "community": 1,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistrationattributes"
+    },
+    {
+      "label": "CourseRegistrationCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_courseregistrationcreationattributes",
+      "community": 1,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistrationcreationattributes"
     },
     {
       "label": "FaqItem",
@@ -277,17 +303,43 @@
       "norm_label": "testimonial"
     },
     {
-      "label": "ValidationTarget",
+      "label": "NewsletterSubscriber",
       "file_type": "code",
-      "source_file": "server/src/middlewares/validate.ts",
-      "source_location": "L4",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L13",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_middlewares_validate_validationtarget",
+      "id": "server_src_models_newslettersubscriber_newslettersubscriber",
       "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "validationtarget"
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriber"
+    },
+    {
+      "label": "NewsletterSubscriberAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_newslettersubscriberattributes",
+      "community": 14,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriberattributes"
+    },
+    {
+      "label": "NewsletterSubscriberCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L10",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_newslettersubscribercreationattributes",
+      "community": 14,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscribercreationattributes"
     },
     {
       "label": "EditableTextProps",
@@ -429,7 +481,7 @@
       "_origin": "ast",
       "id": "server_src_models_adminpasswordreset_adminpasswordreset",
       "community": 165,
-      "community_name": "AdminPasswordReset.ts",
+      "community_name": "adminPasswordReset.ts",
       "norm_label": "adminpasswordreset"
     },
     {
@@ -442,7 +494,7 @@
       "_origin": "ast",
       "id": "server_src_models_adminpasswordreset_adminpasswordresetattributes",
       "community": 165,
-      "community_name": "AdminPasswordReset.ts",
+      "community_name": "adminPasswordReset.ts",
       "norm_label": "adminpasswordresetattributes"
     },
     {
@@ -455,86 +507,8 @@
       "_origin": "ast",
       "id": "server_src_models_adminpasswordreset_adminpasswordresetcreationattributes",
       "community": 165,
-      "community_name": "AdminPasswordReset.ts",
+      "community_name": "adminPasswordReset.ts",
       "norm_label": "adminpasswordresetcreationattributes"
-    },
-    {
-      "label": "OtpVerification",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L15",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverification",
-      "community": 167,
-      "community_name": "OtpVerification.ts",
-      "norm_label": "otpverification"
-    },
-    {
-      "label": "OtpVerificationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverificationattributes",
-      "community": 167,
-      "community_name": "OtpVerification.ts",
-      "norm_label": "otpverificationattributes"
-    },
-    {
-      "label": "OtpVerificationCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L12",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverificationcreationattributes",
-      "community": 167,
-      "community_name": "OtpVerification.ts",
-      "norm_label": "otpverificationcreationattributes"
-    },
-    {
-      "label": "SiteSetting",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L14",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesetting",
-      "community": 168,
-      "community_name": "SiteSetting.ts",
-      "norm_label": "sitesetting"
-    },
-    {
-      "label": "SiteSettingAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesettingattributes",
-      "community": 168,
-      "community_name": "SiteSetting.ts",
-      "norm_label": "sitesettingattributes"
-    },
-    {
-      "label": "SiteSettingCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L11",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesettingcreationattributes",
-      "community": 168,
-      "community_name": "SiteSetting.ts",
-      "norm_label": "sitesettingcreationattributes"
     },
     {
       "label": "VideoItem",
@@ -654,17 +628,43 @@
       "norm_label": "publiccontentresponse"
     },
     {
-      "label": "AppError",
+      "label": "NewsArticle",
       "file_type": "code",
-      "source_file": "server/src/utils/AppError.ts",
-      "source_location": "L12",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L24",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_utils_apperror_apperror",
+      "id": "server_src_models_newsarticle_newsarticle",
       "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "apperror"
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticle"
+    },
+    {
+      "label": "NewsArticleAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_newsarticleattributes",
+      "community": 2,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticleattributes"
+    },
+    {
+      "label": "NewsArticleCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L21",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_newsarticlecreationattributes",
+      "community": 2,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticlecreationattributes"
     },
     {
       "label": "AdminContentColumn",
@@ -784,6 +784,19 @@
       "norm_label": "signinmodalprops"
     },
     {
+      "label": "Env",
+      "file_type": "code",
+      "source_file": "server/src/config/environment.ts",
+      "source_location": "L99",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_config_environment_env",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "env"
+    },
+    {
       "label": "MediaResourceType",
       "file_type": "code",
       "source_file": "server/src/models/MediaRevision.ts",
@@ -847,6 +860,45 @@
       "community": 24,
       "community_name": "MediaRevision.ts",
       "norm_label": "mediarevisioncreationattributes"
+    },
+    {
+      "label": "StarStudent",
+      "file_type": "code",
+      "source_file": "server/src/models/StarStudent.ts",
+      "source_location": "L21",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_starstudent_starstudent",
+      "community": 25,
+      "community_name": "StarStudent.ts",
+      "norm_label": "starstudent"
+    },
+    {
+      "label": "StarStudentAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/StarStudent.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_starstudent_starstudentattributes",
+      "community": 25,
+      "community_name": "StarStudent.ts",
+      "norm_label": "starstudentattributes"
+    },
+    {
+      "label": "StarStudentCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/StarStudent.ts",
+      "source_location": "L18",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_starstudent_starstudentcreationattributes",
+      "community": 25,
+      "community_name": "StarStudent.ts",
+      "norm_label": "starstudentcreationattributes"
     },
     {
       "label": "ParsedResult",
@@ -1122,17 +1174,43 @@
       "norm_label": "apienvelope"
     },
     {
-      "label": "AsyncRouteHandler",
+      "label": "SiteSetting",
       "file_type": "code",
-      "source_file": "server/src/utils/asyncHandler.ts",
-      "source_location": "L17",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L14",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_utils_asynchandler_asyncroutehandler",
+      "id": "server_src_models_sitesetting_sitesetting",
       "community": 47,
       "community_name": "content.routes.ts",
-      "norm_label": "asyncroutehandler"
+      "norm_label": "sitesetting"
+    },
+    {
+      "label": "SiteSettingAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_sitesettingattributes",
+      "community": 47,
+      "community_name": "content.routes.ts",
+      "norm_label": "sitesettingattributes"
+    },
+    {
+      "label": "SiteSettingCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_sitesettingcreationattributes",
+      "community": 47,
+      "community_name": "content.routes.ts",
+      "norm_label": "sitesettingcreationattributes"
     },
     {
       "label": "DashboardStats",
@@ -1304,45 +1382,6 @@
       "norm_label": "starstudenteditorprops"
     },
     {
-      "label": "TopperResult",
-      "file_type": "code",
-      "source_file": "server/src/models/TopperResult.ts",
-      "source_location": "L23",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_topperresult_topperresult",
-      "community": 51,
-      "community_name": "TopperResult.ts",
-      "norm_label": "topperresult"
-    },
-    {
-      "label": "TopperResultAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/TopperResult.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_topperresult_topperresultattributes",
-      "community": 51,
-      "community_name": "TopperResult.ts",
-      "norm_label": "topperresultattributes"
-    },
-    {
-      "label": "TopperResultCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/TopperResult.ts",
-      "source_location": "L17",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_topperresult_topperresultcreationattributes",
-      "community": 51,
-      "community_name": "TopperResult.ts",
-      "norm_label": "topperresultcreationattributes"
-    },
-    {
       "label": "Banner",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -1352,7 +1391,7 @@
       "_origin": "ast",
       "id": "server_src_models_banner_banner",
       "community": 52,
-      "community_name": "models/index.ts",
+      "community_name": "Banner.ts",
       "norm_label": "banner"
     },
     {
@@ -1365,7 +1404,7 @@
       "_origin": "ast",
       "id": "server_src_models_banner_bannerattributes",
       "community": 52,
-      "community_name": "models/index.ts",
+      "community_name": "Banner.ts",
       "norm_label": "bannerattributes"
     },
     {
@@ -1378,177 +1417,8 @@
       "_origin": "ast",
       "id": "server_src_models_banner_bannercreationattributes",
       "community": 52,
-      "community_name": "models/index.ts",
+      "community_name": "Banner.ts",
       "norm_label": "bannercreationattributes"
-    },
-    {
-      "label": "Course",
-      "file_type": "code",
-      "source_file": "server/src/models/Course.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_course_course",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "course"
-    },
-    {
-      "label": "CourseRegistration",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L18",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistration",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistration"
-    },
-    {
-      "label": "CourseRegistrationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistrationattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistrationattributes"
-    },
-    {
-      "label": "CourseRegistrationCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L15",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistrationcreationattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistrationcreationattributes"
-    },
-    {
-      "label": "NewsArticle",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L24",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticle",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newsarticle"
-    },
-    {
-      "label": "NewsArticleAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticleattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newsarticleattributes"
-    },
-    {
-      "label": "NewsArticleCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L21",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticlecreationattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newsarticlecreationattributes"
-    },
-    {
-      "label": "NewsletterSubscriber",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L13",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscriber",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriber"
-    },
-    {
-      "label": "NewsletterSubscriberAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscriberattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriberattributes"
-    },
-    {
-      "label": "NewsletterSubscriberCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L10",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscribercreationattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscribercreationattributes"
-    },
-    {
-      "label": "StarStudent",
-      "file_type": "code",
-      "source_file": "server/src/models/StarStudent.ts",
-      "source_location": "L21",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_starstudent_starstudent",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "starstudent"
-    },
-    {
-      "label": "StarStudentAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/StarStudent.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_starstudent_starstudentattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "starstudentattributes"
-    },
-    {
-      "label": "StarStudentCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/StarStudent.ts",
-      "source_location": "L18",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_starstudent_starstudentcreationattributes",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "starstudentcreationattributes"
     },
     {
       "label": "CardProps",
@@ -1642,6 +1512,97 @@
       "norm_label": "sectionheadingprops"
     },
     {
+      "label": "Course",
+      "file_type": "code",
+      "source_file": "server/src/models/Course.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_course_course",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "course"
+    },
+    {
+      "label": "OtpVerification",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverification",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "otpverification"
+    },
+    {
+      "label": "OtpVerificationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverificationattributes",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "otpverificationattributes"
+    },
+    {
+      "label": "OtpVerificationCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L12",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverificationcreationattributes",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "otpverificationcreationattributes"
+    },
+    {
+      "label": "TopperResult",
+      "file_type": "code",
+      "source_file": "server/src/models/TopperResult.ts",
+      "source_location": "L23",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_topperresult_topperresult",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "topperresult"
+    },
+    {
+      "label": "TopperResultAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/TopperResult.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_topperresult_topperresultattributes",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "topperresultattributes"
+    },
+    {
+      "label": "TopperResultCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/TopperResult.ts",
+      "source_location": "L17",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_topperresult_topperresultcreationattributes",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "topperresultcreationattributes"
+    },
+    {
       "label": "User",
       "file_type": "code",
       "source_file": "server/src/models/User.ts",
@@ -1651,7 +1612,7 @@
       "_origin": "ast",
       "id": "server_src_models_user_user",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "user"
     },
     {
@@ -1664,7 +1625,7 @@
       "_origin": "ast",
       "id": "server_src_models_user_userattributes",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "userattributes"
     },
     {
@@ -1677,7 +1638,7 @@
       "_origin": "ast",
       "id": "server_src_models_user_usercreationattributes",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "usercreationattributes"
     },
     {
@@ -1785,6 +1746,45 @@
       "norm_label": "adminrole"
     },
     {
+      "label": "AuthPurpose",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L14",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_authpurpose",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "authpurpose"
+    },
+    {
+      "label": "ValidationTarget",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/validate.ts",
+      "source_location": "L4",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_validate_validationtarget",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "validationtarget"
+    },
+    {
+      "label": "AsyncRouteHandler",
+      "file_type": "code",
+      "source_file": "server/src/utils/asyncHandler.ts",
+      "source_location": "L17",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_utils_asynchandler_asyncroutehandler",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "asyncroutehandler"
+    },
+    {
       "label": "MailMessage",
       "file_type": "code",
       "source_file": "server/src/utils/mailer.ts",
@@ -1794,7 +1794,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_mailmessage",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "mailmessage"
     },
     {
@@ -1807,7 +1807,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_mailresult",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "mailresult"
     },
     {
@@ -1846,6 +1846,18 @@
       "community": 0,
       "community_name": "admin.routes.ts",
       "norm_label": "authorize()"
+    },
+    {
+      "label": "notFound()",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/notFound.ts",
+      "source_location": "L8",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_notfound_notfound",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": "notfound()"
     },
     {
       "label": ".isSuperAdmin()",
@@ -1920,76 +1932,28 @@
       "norm_label": "validatepassword()"
     },
     {
-      "label": "appBaseUrl()",
+      "label": ".constructor()",
       "file_type": "code",
-      "source_file": "server/src/config/environment.ts",
-      "source_location": "L91",
+      "source_file": "server/src/utils/AppError.ts",
+      "source_location": "L17",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_config_environment_appbaseurl",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "appbaseurl()"
+      "id": "server_src_utils_apperror_apperror_constructor",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": ".constructor()"
     },
     {
-      "label": "publicAdmin()",
+      "label": "initCourseRegistration()",
       "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L51",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L34",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_publicadmin",
+      "id": "server_src_models_courseregistration_initcourseregistration",
       "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "publicadmin()"
-    },
-    {
-      "label": "publicUser()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L39",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_publicuser",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "publicuser()"
-    },
-    {
-      "label": "buildResetUrl()",
-      "file_type": "code",
-      "source_file": "server/src/utils/adminPasswordReset.ts",
-      "source_location": "L18",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_utils_adminpasswordreset_buildreseturl",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "buildreseturl()"
-    },
-    {
-      "label": "hashResetToken()",
-      "file_type": "code",
-      "source_file": "server/src/utils/adminPasswordReset.ts",
-      "source_location": "L13",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_utils_adminpasswordreset_hashresettoken",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "hashresettoken()"
-    },
-    {
-      "label": "issueAdminPasswordReset()",
-      "file_type": "code",
-      "source_file": "server/src/utils/adminPasswordReset.ts",
-      "source_location": "L32",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_utils_adminpasswordreset_issueadminpasswordreset",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "issueadminpasswordreset()"
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "initcourseregistration()"
     },
     {
       "label": "FaqClient()",
@@ -2316,16 +2280,16 @@
       "norm_label": "isadminrole()"
     },
     {
-      "label": "validate()",
+      "label": "initNewsletterSubscriber()",
       "file_type": "code",
-      "source_file": "server/src/middlewares/validate.ts",
-      "source_location": "L29",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L24",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_middlewares_validate_validate",
+      "id": "server_src_models_newslettersubscriber_initnewslettersubscriber",
       "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "validate()"
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "initnewslettersubscriber()"
     },
     {
       "label": "fetchContentMap()",
@@ -2388,6 +2352,18 @@
       "norm_label": "initacademyvideo()"
     },
     {
+      "label": "appBaseUrl()",
+      "file_type": "code",
+      "source_file": "server/src/config/environment.ts",
+      "source_location": "L91",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_config_environment_appbaseurl",
+      "community": 165,
+      "community_name": "adminPasswordReset.ts",
+      "norm_label": "appbaseurl()"
+    },
+    {
       "label": "initAdminPasswordReset()",
       "file_type": "code",
       "source_file": "server/src/models/AdminPasswordReset.ts",
@@ -2396,32 +2372,20 @@
       "_origin": "ast",
       "id": "server_src_models_adminpasswordreset_initadminpasswordreset",
       "community": 165,
-      "community_name": "AdminPasswordReset.ts",
+      "community_name": "adminPasswordReset.ts",
       "norm_label": "initadminpasswordreset()"
     },
     {
-      "label": "initOtpVerification()",
+      "label": "buildResetUrl()",
       "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L28",
+      "source_file": "server/src/utils/adminPasswordReset.ts",
+      "source_location": "L18",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_models_otpverification_initotpverification",
-      "community": 167,
-      "community_name": "OtpVerification.ts",
-      "norm_label": "initotpverification()"
-    },
-    {
-      "label": "initSiteSetting()",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L26",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_initsitesetting",
-      "community": 168,
-      "community_name": "SiteSetting.ts",
-      "norm_label": "initsitesetting()"
+      "id": "server_src_utils_adminpasswordreset_buildreseturl",
+      "community": 165,
+      "community_name": "adminPasswordReset.ts",
+      "norm_label": "buildreseturl()"
     },
     {
       "label": "getSupabase()",
@@ -2640,64 +2604,16 @@
       "norm_label": "editabletext()"
     },
     {
-      "label": "errorHandler()",
+      "label": "initNewsArticle()",
       "file_type": "code",
-      "source_file": "server/src/middlewares/errorHandler.ts",
-      "source_location": "L32",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L46",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_middlewares_errorhandler_errorhandler",
+      "id": "server_src_models_newsarticle_initnewsarticle",
       "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "errorhandler()"
-    },
-    {
-      "label": "isZodError()",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/errorHandler.ts",
-      "source_location": "L11",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_middlewares_errorhandler_iszoderror",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "iszoderror()"
-    },
-    {
-      "label": "notFound()",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/notFound.ts",
-      "source_location": "L8",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_middlewares_notfound_notfound",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "notfound()"
-    },
-    {
-      "label": "requestLogger()",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/requestLogger.ts",
-      "source_location": "L11",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_middlewares_requestlogger_requestlogger",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "requestlogger()"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "server/src/utils/AppError.ts",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_utils_apperror_apperror_constructor",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": ".constructor()"
+      "community_name": "NewsArticle.ts",
+      "norm_label": "initnewsarticle()"
     },
     {
       "label": "AdminBannersPage()",
@@ -2892,10 +2808,22 @@
       "norm_label": "main()"
     },
     {
+      "label": "reconcileSchema()",
+      "file_type": "code",
+      "source_file": "server/src/index.ts",
+      "source_location": "L10",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_index_reconcileschema",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "reconcileschema()"
+    },
+    {
       "label": "scheduleDatabaseReconnect()",
       "file_type": "code",
       "source_file": "server/src/index.ts",
-      "source_location": "L9",
+      "source_location": "L15",
       "_callable": true,
       "_origin": "ast",
       "id": "server_src_index_scheduledatabasereconnect",
@@ -2907,13 +2835,49 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/src/index.ts",
-      "source_location": "L42",
+      "source_location": "L49",
       "_callable": true,
       "_origin": "ast",
       "id": "server_src_index_startserver",
       "community": 22,
       "community_name": "seedDatabase.ts",
       "norm_label": "startserver()"
+    },
+    {
+      "label": "errorHandler()",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/errorHandler.ts",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_errorhandler_errorhandler",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "errorhandler()"
+    },
+    {
+      "label": "isZodError()",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/errorHandler.ts",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_errorhandler_iszoderror",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "iszoderror()"
+    },
+    {
+      "label": "requestLogger()",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/requestLogger.ts",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_requestlogger_requestlogger",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "requestlogger()"
     },
     {
       "label": "testConnection()",
@@ -2976,6 +2940,18 @@
       "norm_label": "runmigrations()"
     },
     {
+      "label": "ensureModelColumns()",
+      "file_type": "code",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_utils_schemaguard_ensuremodelcolumns",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "ensuremodelcolumns()"
+    },
+    {
       "label": "initMediaRevision()",
       "file_type": "code",
       "source_file": "server/src/models/MediaRevision.ts",
@@ -2998,6 +2974,18 @@
       "community": 24,
       "community_name": "MediaRevision.ts",
       "norm_label": "restorevalues()"
+    },
+    {
+      "label": "initStarStudent()",
+      "file_type": "code",
+      "source_file": "server/src/models/StarStudent.ts",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_starstudent_initstarstudent",
+      "community": 25,
+      "community_name": "StarStudent.ts",
+      "norm_label": "initstarstudent()"
     },
     {
       "label": "parseResult()",
@@ -3106,6 +3094,18 @@
       "community": 3,
       "community_name": "admin.controller.ts",
       "norm_label": "serializecontentblocks()"
+    },
+    {
+      "label": "issueAdminPasswordReset()",
+      "file_type": "code",
+      "source_file": "server/src/utils/adminPasswordReset.ts",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_utils_adminpasswordreset_issueadminpasswordreset",
+      "community": 3,
+      "community_name": "admin.controller.ts",
+      "norm_label": "issueadminpasswordreset()"
     },
     {
       "label": "initNotification()",
@@ -3552,16 +3552,16 @@
       "norm_label": "adminpath()"
     },
     {
-      "label": "asyncHandler()",
+      "label": "initSiteSetting()",
       "file_type": "code",
-      "source_file": "server/src/utils/asyncHandler.ts",
-      "source_location": "L23",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L26",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_utils_asynchandler_asynchandler",
+      "id": "server_src_models_sitesetting_initsitesetting",
       "community": 47,
       "community_name": "content.routes.ts",
-      "norm_label": "asynchandler()"
+      "norm_label": "initsitesetting()"
     },
     {
       "label": "isTransientDatabaseError()",
@@ -3852,18 +3852,6 @@
       "norm_label": "uploadadminimage()"
     },
     {
-      "label": "initTopperResult()",
-      "file_type": "code",
-      "source_file": "server/src/models/TopperResult.ts",
-      "source_location": "L41",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_topperresult_inittopperresult",
-      "community": 51,
-      "community_name": "TopperResult.ts",
-      "norm_label": "inittopperresult()"
-    },
-    {
       "label": "initBanner()",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -3872,68 +3860,8 @@
       "_origin": "ast",
       "id": "server_src_models_banner_initbanner",
       "community": 52,
-      "community_name": "models/index.ts",
+      "community_name": "Banner.ts",
       "norm_label": "initbanner()"
-    },
-    {
-      "label": "initCourse()",
-      "file_type": "code",
-      "source_file": "server/src/models/Course.ts",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_course_initcourse",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "initcourse()"
-    },
-    {
-      "label": "initCourseRegistration()",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L34",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_initcourseregistration",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "initcourseregistration()"
-    },
-    {
-      "label": "initNewsArticle()",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L46",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_initnewsarticle",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "initnewsarticle()"
-    },
-    {
-      "label": "initNewsletterSubscriber()",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L24",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_initnewslettersubscriber",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "initnewslettersubscriber()"
-    },
-    {
-      "label": "initStarStudent()",
-      "file_type": "code",
-      "source_file": "server/src/models/StarStudent.ts",
-      "source_location": "L40",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_starstudent_initstarstudent",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "initstarstudent()"
     },
     {
       "label": "Card()",
@@ -4100,8 +4028,44 @@
       "_origin": "ast",
       "id": "server_scratch_check_users_main",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "main()"
+    },
+    {
+      "label": "initCourse()",
+      "file_type": "code",
+      "source_file": "server/src/models/Course.ts",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_course_initcourse",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "initcourse()"
+    },
+    {
+      "label": "initOtpVerification()",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_initotpverification",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "initotpverification()"
+    },
+    {
+      "label": "initTopperResult()",
+      "file_type": "code",
+      "source_file": "server/src/models/TopperResult.ts",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_topperresult_inittopperresult",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "inittopperresult()"
     },
     {
       "label": "initUser()",
@@ -4112,7 +4076,7 @@
       "_origin": "ast",
       "id": "server_src_models_user_inituser",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "inituser()"
     },
     {
@@ -4460,8 +4424,68 @@
       "_origin": "ast",
       "id": "server_src_controllers_auth_controller_createtoken",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "createtoken()"
+    },
+    {
+      "label": "publicAdmin()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L51",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_publicadmin",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "publicadmin()"
+    },
+    {
+      "label": "publicUser()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L39",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_publicuser",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "publicuser()"
+    },
+    {
+      "label": "validate()",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/validate.ts",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_middlewares_validate_validate",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "validate()"
+    },
+    {
+      "label": "hashResetToken()",
+      "file_type": "code",
+      "source_file": "server/src/utils/adminPasswordReset.ts",
+      "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_utils_adminpasswordreset_hashresettoken",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "hashresettoken()"
+    },
+    {
+      "label": "asyncHandler()",
+      "file_type": "code",
+      "source_file": "server/src/utils/asyncHandler.ts",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_utils_asynchandler_asynchandler",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "asynchandler()"
     },
     {
       "label": "adminLoginAlert()",
@@ -4472,7 +4496,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_adminloginalert",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "adminloginalert()"
     },
     {
@@ -4484,7 +4508,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_adminpasswordresetemail",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "adminpasswordresetemail()"
     },
     {
@@ -4496,7 +4520,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_contactformreceipt",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "contactformreceipt()"
     },
     {
@@ -4508,7 +4532,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_contactformstaffalert",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "contactformstaffalert()"
     },
     {
@@ -4520,7 +4544,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_courseregistrationreceipt",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "courseregistrationreceipt()"
     },
     {
@@ -4532,7 +4556,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_detailtable",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "detailtable()"
     },
     {
@@ -4544,7 +4568,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_escapehtml",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "escapehtml()"
     },
     {
@@ -4556,7 +4580,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_greeting",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "greeting()"
     },
     {
@@ -4568,7 +4592,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_linkbutton",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "linkbutton()"
     },
     {
@@ -4580,7 +4604,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_newsletterwelcome",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "newsletterwelcome()"
     },
     {
@@ -4592,7 +4616,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_paragraph",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "paragraph()"
     },
     {
@@ -4604,7 +4628,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_scholarshipregistrationreceipt",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "scholarshipregistrationreceipt()"
     },
     {
@@ -4616,7 +4640,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_shell",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "shell()"
     },
     {
@@ -4628,7 +4652,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_studentwelcome",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "studentwelcome()"
     },
     {
@@ -4640,7 +4664,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_deliver",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "deliver()"
     },
     {
@@ -4652,7 +4676,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_deliveronce",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "deliveronce()"
     },
     {
@@ -4664,7 +4688,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_getclient",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "getclient()"
     },
     {
@@ -4676,7 +4700,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_ismailerconfigured",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "ismailerconfigured()"
     },
     {
@@ -4688,7 +4712,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_isretryable",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "isretryable()"
     },
     {
@@ -4700,7 +4724,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_logoattachment",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "logoattachment()"
     },
     {
@@ -4712,7 +4736,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_mailfrom",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "mailfrom()"
     },
     {
@@ -4724,7 +4748,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_sendmail",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "sendmail()"
     },
     {
@@ -4736,7 +4760,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_sleep",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "sleep()"
     },
     {
@@ -4892,6 +4916,17 @@
       "norm_label": "super_admin"
     },
     {
+      "label": "authenticate.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/authenticate.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_authenticate",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": "authenticate.ts"
+    },
+    {
       "label": "authenticate",
       "file_type": "code",
       "source_file": "server/src/middlewares/authenticate.ts",
@@ -4923,6 +4958,17 @@
       "community": 0,
       "community_name": "admin.routes.ts",
       "norm_label": "admin_role_set"
+    },
+    {
+      "label": "notFound.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/notFound.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_notfound",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": "notfound.ts"
     },
     {
       "label": "Admin.ts",
@@ -4967,6 +5013,17 @@
       "community": 0,
       "community_name": "admin.routes.ts",
       "norm_label": "createadmin.ts"
+    },
+    {
+      "label": "AppError.ts",
+      "file_type": "code",
+      "source_file": "server/src/utils/AppError.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_utils_apperror",
+      "community": 0,
+      "community_name": "admin.routes.ts",
+      "norm_label": "apperror.ts"
     },
     {
       "label": "admin.schemas.ts",
@@ -5409,136 +5466,15 @@
       "norm_label": "videoupdateschema"
     },
     {
-      "label": "database.ts",
+      "label": "CourseRegistration.ts",
       "file_type": "code",
-      "source_file": "server/src/config/database.ts",
+      "source_file": "server/src/models/CourseRegistration.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_config_database",
+      "id": "server_src_models_courseregistration",
       "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "database.ts"
-    },
-    {
-      "label": "dbConfig",
-      "file_type": "code",
-      "source_file": "server/src/config/database.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "server_src_config_database_dbconfig",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "dbconfig"
-    },
-    {
-      "label": "environment.ts",
-      "file_type": "code",
-      "source_file": "server/src/config/environment.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_config_environment",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "environment.ts"
-    },
-    {
-      "label": "envSchema",
-      "file_type": "code",
-      "source_file": "server/src/config/environment.ts",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "server_src_config_environment_envschema",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "envschema"
-    },
-    {
-      "label": "parsed",
-      "file_type": "code",
-      "source_file": "server/src/config/environment.ts",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "server_src_config_environment_parsed",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "parsed"
-    },
-    {
-      "label": "auth.controller.ts",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "auth.controller.ts"
-    },
-    {
-      "label": "checkMobileOrLogin",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L71",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_checkmobileorlogin",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "checkmobileorlogin"
-    },
-    {
-      "label": "getCurrentUser",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L307",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_getcurrentuser",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "getcurrentuser"
-    },
-    {
-      "label": "resetAdminPassword",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L418",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_resetadminpassword",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "resetadminpassword"
-    },
-    {
-      "label": "updateProfile",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L194",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_updateprofile",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "updateprofile"
-    },
-    {
-      "label": "verifyAdminPasswordReset",
-      "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L385",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_verifyadminpasswordreset",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "verifyadminpasswordreset"
-    },
-    {
-      "label": "adminPasswordReset.ts",
-      "file_type": "code",
-      "source_file": "server/src/utils/adminPasswordReset.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_utils_adminpasswordreset",
-      "community": 1,
-      "community_name": "auth.controller.ts",
-      "norm_label": "adminpasswordreset.ts"
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistration.ts"
     },
     {
       "label": "faq-data.ts",
@@ -7125,356 +7061,15 @@
       "norm_label": "index foreign key columns"
     },
     {
-      "label": "changeAdminPassword",
+      "label": "NewsletterSubscriber.ts",
       "file_type": "code",
-      "source_file": "server/src/controllers/auth.controller.ts",
-      "source_location": "L344",
-      "_origin": "ast",
-      "id": "server_src_controllers_auth_controller_changeadminpassword",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "changeadminpassword"
-    },
-    {
-      "label": "getHealth",
-      "file_type": "code",
-      "source_file": "server/src/controllers/health.controller.ts",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "server_src_controllers_health_controller_gethealth",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "gethealth"
-    },
-    {
-      "label": "rateLimiter.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/rateLimiter.ts",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_middlewares_ratelimiter",
+      "id": "server_src_models_newslettersubscriber",
       "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "ratelimiter.ts"
-    },
-    {
-      "label": "adminLoginLimiter",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/rateLimiter.ts",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "server_src_middlewares_ratelimiter_adminloginlimiter",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "adminloginlimiter"
-    },
-    {
-      "label": "defaultLimiter",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/rateLimiter.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "server_src_middlewares_ratelimiter_defaultlimiter",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "defaultlimiter"
-    },
-    {
-      "label": "submissionLimiter",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/rateLimiter.ts",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "server_src_middlewares_ratelimiter_submissionlimiter",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "submissionlimiter"
-    },
-    {
-      "label": "validate.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/validate.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_middlewares_validate",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "validate.ts"
-    },
-    {
-      "label": "routes/index.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/index.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_index",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "routes/index.ts"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/admin.routes.ts",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_admin_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "auth.routes.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "auth.routes.ts"
-    },
-    {
-      "label": "adminLoginSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_adminloginschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "adminloginschema"
-    },
-    {
-      "label": "adminPasswordSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L58",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_adminpasswordschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "adminpasswordschema"
-    },
-    {
-      "label": "adminResetPasswordSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_adminresetpasswordschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "adminresetpasswordschema"
-    },
-    {
-      "label": "adminResetTokenQuerySchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L72",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_adminresettokenqueryschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "adminresettokenqueryschema"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "sendOtpSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_sendotpschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "sendotpschema"
-    },
-    {
-      "label": "updateProfileSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_updateprofileschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "updateprofileschema"
-    },
-    {
-      "label": "verifyOtpSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/auth.routes.ts",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_auth_routes_verifyotpschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "verifyotpschema"
-    },
-    {
-      "label": "form.routes.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/form.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_form_routes",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "form.routes.ts"
-    },
-    {
-      "label": "contactFormSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/form.routes.ts",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_form_routes_contactformschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "contactformschema"
-    },
-    {
-      "label": "courseRegistrationSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/form.routes.ts",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_form_routes_courseregistrationschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "courseregistrationschema"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/form.routes.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_form_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "health.routes.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/health.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_health_routes",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "health.routes.ts"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/health.routes.ts",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_health_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "v1/index.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/index.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_index",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "v1/index.ts"
-    },
-    {
-      "label": "v1Router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/index.ts",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_index_v1router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "v1router"
-    },
-    {
-      "label": "newsletter.routes.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/newsletter.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_newsletter_routes",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "newsletter.routes.ts"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/newsletter.routes.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_newsletter_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "subscribeSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/newsletter.routes.ts",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_newsletter_routes_subscribeschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "subscribeschema"
-    },
-    {
-      "label": "scholarship.routes.ts",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/scholarship.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_scholarship_routes",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "scholarship.routes.ts"
-    },
-    {
-      "label": "registerScholarshipSchema",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/scholarship.routes.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_scholarship_routes_registerscholarshipschema",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "registerscholarshipschema"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/scholarship.routes.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_scholarship_routes_router",
-      "community": 14,
-      "community_name": "auth.routes.ts",
-      "norm_label": "router"
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriber.ts"
     },
     {
       "label": "schema-lowercase-identifiers.md",
@@ -8804,30 +8399,19 @@
       "_origin": "ast",
       "id": "server_src_models_adminpasswordreset",
       "community": 165,
-      "community_name": "AdminPasswordReset.ts",
+      "community_name": "adminPasswordReset.ts",
       "norm_label": "adminpasswordreset.ts"
     },
     {
-      "label": "OtpVerification.ts",
+      "label": "adminPasswordReset.ts",
       "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
+      "source_file": "server/src/utils/adminPasswordReset.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_models_otpverification",
-      "community": 167,
-      "community_name": "OtpVerification.ts",
-      "norm_label": "otpverification.ts"
-    },
-    {
-      "label": "SiteSetting.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting",
-      "community": 168,
-      "community_name": "SiteSetting.ts",
-      "norm_label": "sitesetting.ts"
+      "id": "server_src_utils_adminpasswordreset",
+      "community": 165,
+      "community_name": "adminPasswordReset.ts",
+      "norm_label": "adminpasswordreset.ts"
     },
     {
       "label": "getSignedUploadUrl",
@@ -9391,114 +8975,15 @@
       "norm_label": "**/*.tsx"
     },
     {
-      "label": "app.ts",
+      "label": "NewsArticle.ts",
       "file_type": "code",
-      "source_file": "server/src/app.ts",
+      "source_file": "server/src/models/NewsArticle.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_app",
+      "id": "server_src_models_newsarticle",
       "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "app.ts"
-    },
-    {
-      "label": "app",
-      "file_type": "code",
-      "source_file": "server/src/app.ts",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "server_src_app_app",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "app"
-    },
-    {
-      "label": "cors.ts",
-      "file_type": "code",
-      "source_file": "server/src/config/cors.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_config_cors",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "cors.ts"
-    },
-    {
-      "label": "corsOptions",
-      "file_type": "code",
-      "source_file": "server/src/config/cors.ts",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "server_src_config_cors_corsoptions",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "corsoptions"
-    },
-    {
-      "label": "authenticate.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/authenticate.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_middlewares_authenticate",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "authenticate.ts"
-    },
-    {
-      "label": "errorHandler.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/errorHandler.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_middlewares_errorhandler",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "errorhandler.ts"
-    },
-    {
-      "label": "notFound.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/notFound.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_middlewares_notfound",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "notfound.ts"
-    },
-    {
-      "label": "requestLogger.ts",
-      "file_type": "code",
-      "source_file": "server/src/middlewares/requestLogger.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_middlewares_requestlogger",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "requestlogger.ts"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/index.ts",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "server_src_routes_index_router",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "AppError.ts",
-      "file_type": "code",
-      "source_file": "server/src/utils/AppError.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_utils_apperror",
-      "community": 2,
-      "community_name": "app.ts",
-      "norm_label": "apperror.ts"
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticle.ts"
     },
     {
       "label": "banners/page.tsx",
@@ -9666,6 +9151,83 @@
       "norm_label": "update_videos.ts"
     },
     {
+      "label": "app.ts",
+      "file_type": "code",
+      "source_file": "server/src/app.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_app",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "app.ts"
+    },
+    {
+      "label": "app",
+      "file_type": "code",
+      "source_file": "server/src/app.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "server_src_app_app",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "app"
+    },
+    {
+      "label": "cors.ts",
+      "file_type": "code",
+      "source_file": "server/src/config/cors.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_config_cors",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "cors.ts"
+    },
+    {
+      "label": "corsOptions",
+      "file_type": "code",
+      "source_file": "server/src/config/cors.ts",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "server_src_config_cors_corsoptions",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "corsoptions"
+    },
+    {
+      "label": "environment.ts",
+      "file_type": "code",
+      "source_file": "server/src/config/environment.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_config_environment",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "environment.ts"
+    },
+    {
+      "label": "envSchema",
+      "file_type": "code",
+      "source_file": "server/src/config/environment.ts",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "server_src_config_environment_envschema",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "envschema"
+    },
+    {
+      "label": "parsed",
+      "file_type": "code",
+      "source_file": "server/src/config/environment.ts",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "server_src_config_environment_parsed",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "parsed"
+    },
+    {
       "label": "src/index.ts",
       "file_type": "code",
       "source_file": "server/src/index.ts",
@@ -9675,6 +9237,39 @@
       "community": 22,
       "community_name": "seedDatabase.ts",
       "norm_label": "src/index.ts"
+    },
+    {
+      "label": "errorHandler.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/errorHandler.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_errorhandler",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "errorhandler.ts"
+    },
+    {
+      "label": "requestLogger.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/requestLogger.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_requestlogger",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "requestlogger.ts"
+    },
+    {
+      "label": "sequelize",
+      "file_type": "code",
+      "source_file": "server/src/models/index.ts",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "server_src_models_index_sequelize",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "sequelize"
     },
     {
       "label": "seedDatabase.ts",
@@ -9730,6 +9325,17 @@
       "community": 22,
       "community_name": "seedDatabase.ts",
       "norm_label": "runmigrations.ts"
+    },
+    {
+      "label": "schemaGuard.ts",
+      "file_type": "code",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_utils_schemaguard",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "schemaguard.ts"
     },
     {
       "label": "dependencies",
@@ -10271,37 +9877,15 @@
       "norm_label": "writable_fields"
     },
     {
-      "label": "17. Environment Variables Reference",
-      "file_type": "document",
-      "source_file": "Master_README.md",
-      "source_location": "L1063",
+      "label": "StarStudent.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/StarStudent.ts",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "master_readme_17_environment_variables_reference",
+      "id": "server_src_models_starstudent",
       "community": 25,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "17. environment variables reference"
-    },
-    {
-      "label": "Client (`client/.env.local`)",
-      "file_type": "document",
-      "source_file": "Master_README.md",
-      "source_location": "L1065",
-      "_origin": "ast",
-      "id": "master_readme_client_client_env_local",
-      "community": 25,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "client (`client/.env.local`)"
-    },
-    {
-      "label": "Server (`server/.env`)",
-      "file_type": "document",
-      "source_file": "Master_README.md",
-      "source_location": "L1072",
-      "_origin": "ast",
-      "id": "master_readme_server_server_env",
-      "community": 25,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "server (`server/.env`)"
+      "community_name": "StarStudent.ts",
+      "norm_label": "starstudent.ts"
     },
     {
       "label": "ToppersCarousel.tsx",
@@ -10962,6 +10546,17 @@
       "community": 3,
       "community_name": "admin.controller.ts",
       "norm_label": "media_signatures"
+    },
+    {
+      "label": "sendAdminPasswordReset",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1209",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_sendadminpasswordreset",
+      "community": 3,
+      "community_name": "admin.controller.ts",
+      "norm_label": "sendadminpasswordreset"
     },
     {
       "label": "SETTINGS_KEYS",
@@ -11778,6 +11373,39 @@
       "norm_label": "20260903120000-force-add-missing-cms-columns.js"
     },
     {
+      "label": "1. Project Overview",
+      "file_type": "document",
+      "source_file": "Master_README.md",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "master_readme_1_project_overview",
+      "community": 43,
+      "community_name": "1. Project Overview",
+      "norm_label": "1. project overview"
+    },
+    {
+      "label": "Key Tagline",
+      "file_type": "document",
+      "source_file": "Master_README.md",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "master_readme_key_tagline",
+      "community": 43,
+      "community_name": "1. Project Overview",
+      "norm_label": "key tagline"
+    },
+    {
+      "label": "Target Audience",
+      "file_type": "document",
+      "source_file": "Master_README.md",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "master_readme_target_audience",
+      "community": 43,
+      "community_name": "1. Project Overview",
+      "norm_label": "target audience"
+    },
+    {
       "label": "Master_README.md",
       "file_type": "document",
       "source_file": "Master_README.md",
@@ -11811,15 +11439,15 @@
       "norm_label": "16. messaging & notification services"
     },
     {
-      "label": "1. Project Overview",
+      "label": "17. Environment Variables Reference",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L34",
+      "source_location": "L1063",
       "_origin": "ast",
-      "id": "master_readme_1_project_overview",
+      "id": "master_readme_17_environment_variables_reference",
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "1. project overview"
+      "norm_label": "17. environment variables reference"
     },
     {
       "label": "20. Implementation",
@@ -11855,15 +11483,26 @@
       "norm_label": "4. repository structure"
     },
     {
-      "label": "Key Tagline",
+      "label": "Client (`client/.env.local`)",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L53",
+      "source_location": "L1065",
       "_origin": "ast",
-      "id": "master_readme_key_tagline",
+      "id": "master_readme_client_client_env_local",
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "key tagline"
+      "norm_label": "client (`client/.env.local`)"
+    },
+    {
+      "label": "Server (`server/.env`)",
+      "file_type": "document",
+      "source_file": "Master_README.md",
+      "source_location": "L1072",
+      "_origin": "ast",
+      "id": "master_readme_server_server_env",
+      "community": 46,
+      "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
+      "norm_label": "server (`server/.env`)"
     },
     {
       "label": "Setup Requirements",
@@ -11899,37 +11538,15 @@
       "norm_label": "table of contents"
     },
     {
-      "label": "Target Audience",
-      "file_type": "document",
-      "source_file": "Master_README.md",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "master_readme_target_audience",
-      "community": 46,
-      "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "target audience"
-    },
-    {
-      "label": "health.controller.ts",
+      "label": "SiteSetting.ts",
       "file_type": "code",
-      "source_file": "server/src/controllers/health.controller.ts",
+      "source_file": "server/src/models/SiteSetting.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_controllers_health_controller",
+      "id": "server_src_models_sitesetting",
       "community": 47,
       "community_name": "content.routes.ts",
-      "norm_label": "health.controller.ts"
-    },
-    {
-      "label": "scholarship.controller.ts",
-      "file_type": "code",
-      "source_file": "server/src/controllers/scholarship.controller.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_controllers_scholarship_controller",
-      "community": 47,
-      "community_name": "content.routes.ts",
-      "norm_label": "scholarship.controller.ts"
+      "norm_label": "sitesetting.ts"
     },
     {
       "label": "content.routes.ts",
@@ -11941,28 +11558,6 @@
       "community": 47,
       "community_name": "content.routes.ts",
       "norm_label": "content.routes.ts"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/content.routes.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_content_routes_router",
-      "community": 47,
-      "community_name": "content.routes.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "asyncHandler.ts",
-      "file_type": "code",
-      "source_file": "server/src/utils/asyncHandler.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_utils_asynchandler",
-      "community": 47,
-      "community_name": "content.routes.ts",
-      "norm_label": "asynchandler.ts"
     },
     {
       "label": "databaseRead.ts",
@@ -12548,17 +12143,6 @@
       "norm_label": "starstudenteditor.tsx"
     },
     {
-      "label": "TopperResult.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/TopperResult.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_topperresult",
-      "community": 51,
-      "community_name": "TopperResult.ts",
-      "norm_label": "topperresult.ts"
-    },
-    {
       "label": "Banner.ts",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -12566,74 +12150,8 @@
       "_origin": "ast",
       "id": "server_src_models_banner",
       "community": 52,
-      "community_name": "models/index.ts",
+      "community_name": "Banner.ts",
       "norm_label": "banner.ts"
-    },
-    {
-      "label": "Course.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/Course.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_course",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "course.ts"
-    },
-    {
-      "label": "CourseRegistration.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistration.ts"
-    },
-    {
-      "label": "models/index.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/index.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_index",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "models/index.ts"
-    },
-    {
-      "label": "NewsArticle.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newsarticle.ts"
-    },
-    {
-      "label": "NewsletterSubscriber.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriber.ts"
-    },
-    {
-      "label": "StarStudent.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/StarStudent.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_starstudent",
-      "community": 52,
-      "community_name": "models/index.ts",
-      "norm_label": "starstudent.ts"
     },
     {
       "label": "test-render.js",
@@ -12984,19 +12502,74 @@
       "_origin": "ast",
       "id": "server_scratch_check_users",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "check_users.ts"
     },
     {
-      "label": "sequelize",
+      "label": "database.ts",
+      "file_type": "code",
+      "source_file": "server/src/config/database.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_config_database",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "database.ts"
+    },
+    {
+      "label": "dbConfig",
+      "file_type": "code",
+      "source_file": "server/src/config/database.ts",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "server_src_config_database_dbconfig",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "dbconfig"
+    },
+    {
+      "label": "Course.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/Course.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_course",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "course.ts"
+    },
+    {
+      "label": "models/index.ts",
       "file_type": "code",
       "source_file": "server/src/models/index.ts",
-      "source_location": "L5",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_models_index_sequelize",
+      "id": "server_src_models_index",
       "community": 6,
-      "community_name": "sequelize",
-      "norm_label": "sequelize"
+      "community_name": "models/index.ts",
+      "norm_label": "models/index.ts"
+    },
+    {
+      "label": "OtpVerification.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_otpverification",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "otpverification.ts"
+    },
+    {
+      "label": "TopperResult.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/TopperResult.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_topperresult",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "topperresult.ts"
     },
     {
       "label": "User.ts",
@@ -13006,7 +12579,7 @@
       "_origin": "ast",
       "id": "server_src_models_user",
       "community": 6,
-      "community_name": "sequelize",
+      "community_name": "models/index.ts",
       "norm_label": "user.ts"
     },
     {
@@ -13648,15 +13221,48 @@
       "norm_label": "section definitions"
     },
     {
-      "label": "sendAdminPasswordReset",
+      "label": "auth.controller.ts",
       "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1209",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_sendadminpasswordreset",
+      "id": "server_src_controllers_auth_controller",
       "community": 8,
-      "community_name": "mailer.ts",
-      "norm_label": "sendadminpasswordreset"
+      "community_name": "auth.controller.ts",
+      "norm_label": "auth.controller.ts"
+    },
+    {
+      "label": "changeAdminPassword",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L344",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_changeadminpassword",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "changeadminpassword"
+    },
+    {
+      "label": "checkMobileOrLogin",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_checkmobileorlogin",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "checkmobileorlogin"
+    },
+    {
+      "label": "getCurrentUser",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L307",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_getcurrentuser",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "getcurrentuser"
     },
     {
       "label": "loginAdmin",
@@ -13666,7 +13272,7 @@
       "_origin": "ast",
       "id": "server_src_controllers_auth_controller_loginadmin",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "loginadmin"
     },
     {
@@ -13677,8 +13283,41 @@
       "_origin": "ast",
       "id": "server_src_controllers_auth_controller_registeruser",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "registeruser"
+    },
+    {
+      "label": "resetAdminPassword",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L418",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_resetadminpassword",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "resetadminpassword"
+    },
+    {
+      "label": "updateProfile",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L194",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_updateprofile",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "updateprofile"
+    },
+    {
+      "label": "verifyAdminPasswordReset",
+      "file_type": "code",
+      "source_file": "server/src/controllers/auth.controller.ts",
+      "source_location": "L385",
+      "_origin": "ast",
+      "id": "server_src_controllers_auth_controller_verifyadminpasswordreset",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "verifyadminpasswordreset"
     },
     {
       "label": "form.controller.ts",
@@ -13688,7 +13327,7 @@
       "_origin": "ast",
       "id": "server_src_controllers_form_controller",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "form.controller.ts"
     },
     {
@@ -13699,7 +13338,7 @@
       "_origin": "ast",
       "id": "server_src_controllers_form_controller_submitcontactform",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "submitcontactform"
     },
     {
@@ -13710,8 +13349,30 @@
       "_origin": "ast",
       "id": "server_src_controllers_form_controller_submitcourseregistration",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "submitcourseregistration"
+    },
+    {
+      "label": "health.controller.ts",
+      "file_type": "code",
+      "source_file": "server/src/controllers/health.controller.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_controllers_health_controller",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "health.controller.ts"
+    },
+    {
+      "label": "getHealth",
+      "file_type": "code",
+      "source_file": "server/src/controllers/health.controller.ts",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "server_src_controllers_health_controller_gethealth",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "gethealth"
     },
     {
       "label": "newsletter.controller.ts",
@@ -13721,7 +13382,7 @@
       "_origin": "ast",
       "id": "server_src_controllers_newsletter_controller",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "newsletter.controller.ts"
     },
     {
@@ -13732,8 +13393,19 @@
       "_origin": "ast",
       "id": "server_src_controllers_newsletter_controller_subscribenewsletter",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "subscribenewsletter"
+    },
+    {
+      "label": "scholarship.controller.ts",
+      "file_type": "code",
+      "source_file": "server/src/controllers/scholarship.controller.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_controllers_scholarship_controller",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "scholarship.controller.ts"
     },
     {
       "label": "createRegistration",
@@ -13743,8 +13415,371 @@
       "_origin": "ast",
       "id": "server_src_controllers_scholarship_controller_createregistration",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "createregistration"
+    },
+    {
+      "label": "rateLimiter.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimiter.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_ratelimiter",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "ratelimiter.ts"
+    },
+    {
+      "label": "adminLoginLimiter",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimiter.ts",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "server_src_middlewares_ratelimiter_adminloginlimiter",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "adminloginlimiter"
+    },
+    {
+      "label": "defaultLimiter",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimiter.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "server_src_middlewares_ratelimiter_defaultlimiter",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "defaultlimiter"
+    },
+    {
+      "label": "submissionLimiter",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimiter.ts",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "server_src_middlewares_ratelimiter_submissionlimiter",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "submissionlimiter"
+    },
+    {
+      "label": "validate.ts",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/validate.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_middlewares_validate",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "validate.ts"
+    },
+    {
+      "label": "routes/index.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/index.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_index",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "routes/index.ts"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/index.ts",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "server_src_routes_index_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/admin.routes.ts",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_admin_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "auth.routes.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "auth.routes.ts"
+    },
+    {
+      "label": "adminLoginSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_adminloginschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "adminloginschema"
+    },
+    {
+      "label": "adminPasswordSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_adminpasswordschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "adminpasswordschema"
+    },
+    {
+      "label": "adminResetPasswordSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_adminresetpasswordschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "adminresetpasswordschema"
+    },
+    {
+      "label": "adminResetTokenQuerySchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_adminresettokenqueryschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "adminresettokenqueryschema"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "sendOtpSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_sendotpschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "sendotpschema"
+    },
+    {
+      "label": "updateProfileSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_updateprofileschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "updateprofileschema"
+    },
+    {
+      "label": "verifyOtpSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/auth.routes.ts",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_auth_routes_verifyotpschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "verifyotpschema"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/content.routes.ts",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_content_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "form.routes.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/form.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_form_routes",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "form.routes.ts"
+    },
+    {
+      "label": "contactFormSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/form.routes.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_form_routes_contactformschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "contactformschema"
+    },
+    {
+      "label": "courseRegistrationSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/form.routes.ts",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_form_routes_courseregistrationschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "courseregistrationschema"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/form.routes.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_form_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "health.routes.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/health.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_health_routes",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "health.routes.ts"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/health.routes.ts",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_health_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "v1/index.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/index.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_index",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "v1/index.ts"
+    },
+    {
+      "label": "v1Router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/index.ts",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_index_v1router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "v1router"
+    },
+    {
+      "label": "newsletter.routes.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/newsletter.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_newsletter_routes",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "newsletter.routes.ts"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/newsletter.routes.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_newsletter_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "subscribeSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/newsletter.routes.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_newsletter_routes_subscribeschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "subscribeschema"
+    },
+    {
+      "label": "scholarship.routes.ts",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/scholarship.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_scholarship_routes",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "scholarship.routes.ts"
+    },
+    {
+      "label": "registerScholarshipSchema",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/scholarship.routes.ts",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_scholarship_routes_registerscholarshipschema",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "registerscholarshipschema"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/scholarship.routes.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_scholarship_routes_router",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "router"
+    },
+    {
+      "label": "asyncHandler.ts",
+      "file_type": "code",
+      "source_file": "server/src/utils/asyncHandler.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_utils_asynchandler",
+      "community": 8,
+      "community_name": "auth.controller.ts",
+      "norm_label": "asynchandler.ts"
     },
     {
       "label": "emailTemplates.ts",
@@ -13754,7 +13789,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "emailtemplates.ts"
     },
     {
@@ -13765,7 +13800,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_brand",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "brand"
     },
     {
@@ -13776,7 +13811,7 @@
       "_origin": "ast",
       "id": "server_src_utils_emailtemplates_logo_cid",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "logo_cid"
     },
     {
@@ -13787,7 +13822,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "mailer.ts"
     },
     {
@@ -13798,7 +13833,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_brand",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "brand"
     },
     {
@@ -13809,7 +13844,7 @@
       "_origin": "ast",
       "id": "server_src_utils_mailer_websiteurl",
       "community": 8,
-      "community_name": "mailer.ts",
+      "community_name": "auth.controller.ts",
       "norm_label": "websiteurl"
     },
     {
@@ -17246,7 +17281,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L13",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index_reconcileschema",
+      "target": "server_src_utils_schemaguard_ensuremodelcolumns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_scheduledatabasereconnect",
@@ -17258,7 +17305,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L15",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_scheduledatabasereconnect",
@@ -17270,7 +17317,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L17",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index_scheduledatabasereconnect",
+      "target": "server_src_index_reconcileschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_scheduledatabasereconnect",
@@ -17282,7 +17341,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L45",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_startserver",
@@ -17294,7 +17353,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L49",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_startserver",
@@ -17306,7 +17365,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L53",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index_startserver",
+      "target": "server_src_index_reconcileschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_startserver",
@@ -17318,7 +17389,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L60",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index_startserver",
@@ -22597,6 +22668,18 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index",
+      "target": "server_src_utils_schemaguard_ensuremodelcolumns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/src/middlewares/authenticate.ts",
       "source_location": "L3",
       "weight": 1.0,
@@ -24558,6 +24641,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_utils_runmigrations",
+      "target": "server_src_utils_logger_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_utils_schemaguard",
+      "target": "server_src_models_index_sequelize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_utils_schemaguard",
       "target": "server_src_utils_logger_logger",
       "confidence_score": 1.0
     },
@@ -27445,6 +27552,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index",
+      "target": "server_src_utils_schemaguard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/src/middlewares/authenticate.ts",
       "source_location": "L3",
       "weight": 1.0,
@@ -28194,6 +28313,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_utils_runmigrations",
+      "target": "server_src_utils_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_utils_schemaguard",
+      "target": "server_src_models_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_utils_schemaguard",
       "target": "server_src_utils_logger",
       "confidence_score": 1.0
     },
@@ -37030,22 +37173,33 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L42",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index",
-      "target": "server_src_index_startserver",
+      "target": "server_src_index_reconcileschema",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/src/index.ts",
-      "source_location": "L9",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "server_src_index",
       "target": "server_src_index_scheduledatabasereconnect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/index.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_index",
+      "target": "server_src_index_startserver",
       "confidence_score": 1.0
     },
     {
@@ -38844,6 +38998,17 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "server/src/utils/schemaGuard.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "server_src_utils_schemaguard",
+      "target": "server_src_utils_schemaguard_ensuremodelcolumns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "server/src/validation/admin.schemas.ts",
       "source_location": "L104",
       "weight": 1.0,
@@ -39729,5 +39894,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "68e4d1d2483349cb7c48cfdc70d03421d6d81798"
+  "built_at_commit": "6b85c109060ffd3c1324793a446fc145366bd0ba"
 }

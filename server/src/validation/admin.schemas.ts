@@ -180,6 +180,9 @@ export const settingsUpdateSchema = z
     youtube: optionalLink,
     linkedin: optionalLink,
     twitter: optionalLink,
+    page_banner_scholarships: optionalLink,
+    page_banner_contact: optionalLink,
+    page_banner_results: optionalLink,
   })
   .strict()
   .refine((value) => Object.keys(value).length > 0, {

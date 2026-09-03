@@ -72,7 +72,6 @@ export default function SignInModal({ isOpen, onClose, onLoginSuccess }: SignInM
         handleClose();
       } catch (err: any) {
         setErrorMessage(err.message || "Registration failed. Please check details.");
-      } finally {
         setIsSubmitting(false);
       }
       return;
@@ -105,10 +104,10 @@ export default function SignInModal({ isOpen, onClose, onLoginSuccess }: SignInM
         // User is new: show signup form elements
         setShowSignupFields(true);
         setInfoMessage("Mobile number is not registered. Please fill in your profile details to create an account.");
+        setIsSubmitting(false);
       }
     } catch (err: any) {
       setErrorMessage(err.message || "Connection failed. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
   };

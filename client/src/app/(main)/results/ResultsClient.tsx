@@ -9,7 +9,7 @@ import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
 import ResultEditor from "@/components/admin/ResultEditor";
 import { EditableText } from "@/components/admin/EditableText";
-import resultsHeroImage from "../../../../public/images/results/heroes/NeetUG2026AchiversShravani.png";
+import { usePageBanner } from "@/lib/use-page-banner";
 
 const videoStories = [
   {
@@ -192,6 +192,7 @@ export default function ResultsClient() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [editResults, setEditResults] = useState(false);
   const [dynamicResults, setDynamicResults] = useState<StudentResult[]>([]);
+  const resultsBanner = usePageBanner("results");
   const storiesGridRef = useRef<HTMLDivElement>(null);
 
   const scrollStories = (direction: 'left' | 'right') => {
@@ -260,10 +261,13 @@ export default function ResultsClient() {
         <section className="results-main-poster-section">
           <div className="results-main-poster">
             <Image
-              src={resultsHeroImage}
+              src={resultsBanner}
               alt="NEET UG 2026 Achievers"
               priority
               sizes="100vw"
+              width={1920}
+              height={820}
+              unoptimized
             />
           </div>
         </section>

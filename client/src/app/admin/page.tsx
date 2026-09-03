@@ -6,6 +6,7 @@ import {
   Bell,
   ClipboardList,
   GraduationCap,
+  ImagePlus,
   Images,
   Pencil,
   Settings,
@@ -46,9 +47,15 @@ const quickActions = [
   },
   {
     label: "Update banners",
-    description: "Change the homepage and results hero images.",
+    description: "Change the homepage hero images.",
     href: "/admin/banners",
     icon: Images,
+  },
+  {
+    label: "Update page banners",
+    description: "Change the homepage hero images.",
+    href: "/admin/page-banners",
+    icon: ImagePlus,
   },
   {
     label: "Post an announcement",

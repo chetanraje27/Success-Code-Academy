@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useSiteSettings } from "@/lib/site-settings";
+import { usePageBanner } from "@/lib/use-page-banner";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
 import SettingsEditor from "@/components/admin/SettingsEditor";
@@ -38,6 +39,7 @@ const INITIAL_CAPTCHA = { question: "1 + 1 = ?", answer: 2 };
 
 export default function ContactClient() {
   const settings = useSiteSettings();
+  const contactBanner = usePageBanner("contact");
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [captcha, setCaptcha] = useState(INITIAL_CAPTCHA);
   const [captchaInput, setCaptchaInput] = useState("");
@@ -117,7 +119,7 @@ export default function ContactClient() {
           >
             <div className="poster-img-container">
               <Image
-                src="/images/banners/ContactPoster.png"
+                src={contactBanner}
                 alt="Contact Success Code Academy Poster"
                 width={800}
                 height={500}

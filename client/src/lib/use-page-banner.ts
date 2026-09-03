@@ -27,14 +27,16 @@ export type PageBannerPage = keyof typeof PAGE_BANNER_MAP;
  * Falls back to the hardcoded default if the database value is empty or
  * the fetch fails.
  */
-export function usePageBanner(page: PageBannerPage): string {
+export function usePageBanner(page: PageBannerPage): { src: string; isLoading: boolean } {
   const { key, fallback } = PAGE_BANNER_MAP[page];
   const [src, setSrc] = useState<string>(fallback);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let active = true;
 
     const load = () => {
+      setIsLoading(true);
       fetch("/api/content/settings", { cache: "no-store" })
         .then(async (r) => {
           if (!r.ok) return null;
@@ -44,9 +46,10 @@ export function usePageBanner(page: PageBannerPage): string {
           if (!active) return;
           const url = payload?.data?.[key]?.trim();
           if (url) setSrc(url);
+          setIsLoading(false);
         })
         .catch(() => {
-          /* keep fallback */
+          if (active) setIsLoading(false);
         });
     };
 
@@ -58,5 +61,5 @@ export function usePageBanner(page: PageBannerPage): string {
     };
   }, [key]);
 
-  return src;
+  return { src, isLoading };
 }

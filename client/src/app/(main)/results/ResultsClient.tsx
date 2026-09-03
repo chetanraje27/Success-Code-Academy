@@ -192,7 +192,7 @@ export default function ResultsClient() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [editResults, setEditResults] = useState(false);
   const [dynamicResults, setDynamicResults] = useState<StudentResult[]>([]);
-  const resultsBanner = usePageBanner("results");
+  const { src: resultsBanner, isLoading: isBannerLoading } = usePageBanner("results");
   const storiesGridRef = useRef<HTMLDivElement>(null);
 
   const scrollStories = (direction: 'left' | 'right') => {
@@ -259,7 +259,10 @@ export default function ResultsClient() {
         className="results-primary-content"
       >
         <section className="results-main-poster-section">
-          <div className="results-main-poster">
+          <div className="results-main-poster" style={{ position: "relative" }}>
+            {isBannerLoading && (
+              <div className="skeleton-pulse" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(203, 213, 225, 0.4)", zIndex: 1, borderRadius: "inherit" }}></div>
+            )}
             <Image
               src={resultsBanner}
               alt="NEET UG 2026 Achievers"

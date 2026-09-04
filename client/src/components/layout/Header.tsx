@@ -6,8 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/data/home";
 import Button from "@/components/ui/Button";
-import SignInModal from "@/components/ui/SignInModal";
-import ProfileModal from "@/components/ui/ProfileModal";
+import { ChevronDown, LogOut } from "lucide-react";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import { FaPen, FaDatabase } from "react-icons/fa6";
 import {
@@ -46,8 +45,7 @@ export default function Header() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
@@ -75,12 +73,11 @@ export default function Header() {
     };
     const storageTimer = window.setTimeout(syncStoredUser, 0);
 
-    const openSignInModal = () => setIsSignInOpen(true);
-    window.addEventListener("open-signin-modal", openSignInModal);
+
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("open-signin-modal", openSignInModal);
+
       window.clearTimeout(storageTimer);
     };
   }, []);
@@ -159,14 +156,7 @@ export default function Header() {
     }, 600);
   };
 
-  const handleLoginSuccess = (user: HeaderUser) => {
-    setCurrentUser(user);
-    window.dispatchEvent(new Event("auth-changed"));
-  };
 
-  const handleProfileUpdate = (user: HeaderUser) => {
-    setCurrentUser(user);
-  };
 
   return (
     <>
@@ -223,66 +213,70 @@ export default function Header() {
               <div className="user-profile-container">
                 <button 
                   type="button"
+                  className={`user-profile-trigger ${isDropdownOpen ? "is-active" : ""}`}
                   onClick={() => setIsDropdownOpen((open) => !open)}
-                  className="user-profile-trigger"
                   aria-expanded={isDropdownOpen}
                   aria-controls="user-account-menu"
                 >
-                  <span className="user-greeting">
-                    Hi, {currentUser.firstName || "Student"}
+                  <span className="user-profile-trigger-avatar" aria-hidden="true">
+                    {currentUser.firstName?.[0]?.toUpperCase() || "S"}
                   </span>
-                  <svg 
-                    className={`dropdown-chevron ${isDropdownOpen ? "open" : ""}`}
-                    viewBox="0 0 24 24" 
-                    width="16" 
-                    height="16" 
-                    fill="none" 
-                    stroke="var(--text-primary)" 
-                    strokeWidth="2.5"
+                  <span className="user-profile-trigger-name">
+                    {currentUser.firstName} {currentUser.lastName}
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`user-profile-trigger-chevron ${isDropdownOpen ? "is-open" : ""}`}
                     aria-hidden="true"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
+                  />
                 </button>
 
                 {isDropdownOpen && (
                   <div 
                     id="user-account-menu"
-                    className="user-dropdown-menu"
+                    className="user-profile-dropdown"
+                    role="menu"
                   >
-                    <button 
-                      type="button"
-                      onClick={() => {
-                        setIsProfileOpen(true);
-                        setIsDropdownOpen(false);
-                      }}
-                      className="dropdown-item"
-                    >
-                      Profile
-                    </button>
-                    {isAdmin && (
-                      <Link 
-                        href="/admin"
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="dropdown-item admin"
-                      >
-                        Admin Portal
-                      </Link>
-                    )}
-                    <div className="dropdown-separator" role="separator" />
-                      <button 
-                        type="button"
-                        onClick={handleLogout}
-                        className="dropdown-item danger"
-                        disabled={isLoggingOut}
-                      >
-                        {isLoggingOut ? "Signing out..." : "Sign Out"}
-                      </button>
+                    <div className="user-profile-header">
+                      <div className="user-profile-header-avatar" aria-hidden="true">
+                        {currentUser.firstName?.[0]?.toUpperCase() || "S"}
+                      </div>
+                      <div className="user-profile-header-meta">
+                        <span className="user-profile-name">
+                          {currentUser.firstName} {currentUser.lastName}
+                        </span>
+                        <span className="user-profile-email">{currentUser?.email || currentUser?.mobileNumber}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="user-profile-menu">
+                      {isAdmin && (
+                        <Link 
+                          href="/admin"
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="user-profile-menu-item admin"
+                        >
+                          <CircleUserRound size={16} aria-hidden="true" />
+                          <span>Admin Portal</span>
+                        </Link>
+                      )}
+                      
+                      <div className="user-profile-footer">
+                        <button 
+                          onClick={handleLogout}
+                          className="user-profile-logout-btn"
+                          disabled={isLoggingOut}
+                        >
+                          <LogOut size={16} aria-hidden="true" />
+                          <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             ) : (
-              <Button onClick={() => setIsSignInOpen(true)} variant="outline" size="sm">
+              <Button href="/login" variant="outline" size="sm">
                 Sign In
               </Button>
             )}
@@ -304,18 +298,7 @@ export default function Header() {
         </div>
       </header>
 
-      <SignInModal 
-        isOpen={isSignInOpen} 
-        onClose={() => setIsSignInOpen(false)} 
-        onLoginSuccess={handleLoginSuccess}
-      />
 
-      <ProfileModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        user={currentUser}
-        onUpdateSuccess={handleProfileUpdate}
-      />
 
       {isDropdownOpen && (
         <div 
@@ -414,17 +397,6 @@ export default function Header() {
                   </div>
                 )}
                 <div className="mobile-account-actions">
-                  <Button 
-                    onClick={() => {
-                      setIsProfileOpen(true);
-                      setIsMenuOpen(false);
-                    }}
-                    variant="outline" 
-                    size="sm" 
-                    className="mobile-action-button"
-                  >
-                    Profile
-                  </Button>
                   {isAdmin && (
                     <Button 
                       href="/admin"
@@ -449,13 +421,11 @@ export default function Header() {
               </div>
             ) : (
               <Button 
-                onClick={() => {
-                  setIsSignInOpen(true);
-                  setIsMenuOpen(false);
-                }} 
+                href="/login"
                 variant="outline" 
                 size="sm" 
                 className="mobile-action-button"
+                onClick={() => setIsMenuOpen(false)}
               >
                 Sign In
               </Button>
@@ -829,90 +799,212 @@ export default function Header() {
         }
 
         .user-profile-trigger {
-          min-height: var(--touch-target);
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: var(--space-2);
-          padding: var(--space-2);
+          gap: 8px;
+          height: 36px;
+          padding: 0 12px 0 4px;
+          border: 1px solid var(--color-border);
+          border-radius: 999px;
+          background: var(--color-surface);
           color: var(--text-primary);
-          background: transparent;
-          border: 0;
-          border-radius: var(--radius-control);
+          font: inherit;
+          font-size: 0.82rem;
+          font-weight: 500;
           cursor: pointer;
-          transition: background-color var(--duration-fast) var(--ease-standard);
+          user-select: none;
+          transition:
+            border-color var(--duration-fast) var(--ease-standard),
+            background var(--duration-fast) var(--ease-standard),
+            box-shadow var(--duration-fast) var(--ease-standard);
         }
 
         .user-profile-trigger:hover {
-          background: var(--color-surface-muted);
+          border-color: var(--color-border-strong);
+          background: var(--color-surface-hover);
         }
 
-        .user-greeting {
-          font-size: 0.88rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          font-family: var(--font-sans);
+        .user-profile-trigger.is-active {
+          border-color: var(--brand-primary);
+          background: var(--color-surface-hover);
+          box-shadow: 0 0 0 3px rgba(16, 47, 94, 0.08);
         }
 
-        .dropdown-chevron {
-          transition: transform var(--duration-fast) var(--ease-standard);
+        .user-profile-trigger-avatar {
+          display: grid;
+          width: 28px;
+          height: 28px;
+          flex: 0 0 28px;
+          place-items: center;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #102f5e, #087f83);
+          color: #ffffff;
+          font-size: 0.75rem;
+          font-weight: 500;
         }
 
-        .dropdown-chevron.open {
+        .user-profile-trigger-name {
+          max-width: 140px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .user-profile-trigger-chevron {
+          color: var(--text-secondary);
+          flex-shrink: 0;
+          transition: transform var(--duration-normal) var(--ease-standard);
+        }
+
+        .user-profile-trigger-chevron.is-open {
           transform: rotate(180deg);
-        }
-
-        .user-dropdown-menu {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          z-index: 46;
-          width: 180px;
-          display: flex;
-          flex-direction: column;
-          margin-top: var(--space-2);
-          padding: var(--space-2) 0;
-          background: var(--color-surface);
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-card);
-          box-shadow: var(--shadow-md);
-        }
-
-        .dropdown-item {
-          min-height: var(--touch-target);
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: var(--space-2) var(--space-4);
-          color: var(--text-primary);
-          background: transparent;
-          border: 0;
-          border-radius: 0;
-          cursor: pointer;
-          font-size: 0.875rem;
-          font-weight: 600;
-          text-align: left;
-          text-decoration: none;
-          transition:
-            color var(--duration-fast) var(--ease-standard),
-            background-color var(--duration-fast) var(--ease-standard);
-        }
-
-        .dropdown-item.admin {
           color: var(--brand-primary);
         }
 
-        .dropdown-item.danger {
+        .user-profile-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          width: 284px;
+          box-sizing: border-box;
+          padding: 16px;
+          background: var(--color-surface);
+          border: 1px solid var(--color-border-strong);
+          border-radius: 18px;
+          box-shadow:
+            0 6px 20px -4px rgba(15, 31, 54, 0.08),
+            0 2px 6px rgba(15, 31, 54, 0.03);
+          backdrop-filter: saturate(180%) blur(16px);
+          z-index: 100;
+          animation: user-profile-pop 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          transform-origin: top right;
+        }
+
+        @keyframes user-profile-pop {
+          from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .user-profile-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+
+        .user-profile-header-avatar {
+          display: grid;
+          width: 40px;
+          height: 40px;
+          flex: 0 0 40px;
+          place-items: center;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #102f5e, #087f83);
+          color: #ffffff;
+          font-size: 0.95rem;
+          font-weight: 500;
+          box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 3px var(--color-border);
+        }
+
+        .user-profile-header-meta {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          flex: 1;
+        }
+
+        .user-profile-name {
+          color: var(--text-primary);
+          font-size: 0.88rem;
+          font-weight: 600;
+          line-height: 1.25;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .user-profile-email {
+          margin-top: 2px;
+          color: var(--text-secondary);
+          font-size: 0.74rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .user-profile-menu {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .user-profile-menu-item {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          padding: 7px 10px;
+          border-radius: 999px;
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 0.78rem;
+          font-weight: 500;
+          transition:
+            background-color var(--duration-fast) var(--ease-standard),
+            color var(--duration-fast) var(--ease-standard);
+        }
+
+        .user-profile-menu-item:hover {
+          background: #f4f7fb;
+          color: var(--text-primary);
+        }
+
+        .user-profile-menu-item.admin {
+          color: var(--brand-primary);
+        }
+
+        .user-profile-link-icon {
+          color: var(--brand-primary);
+          display: flex;
+          align-items: center;
+        }
+
+        .user-profile-footer {
+          padding-top: 12px;
+          margin-top: 8px;
+          border-top: 1px solid var(--color-border);
+        }
+
+        .user-profile-logout-btn {
+          display: flex;
+          width: 100%;
+          height: 36px;
+          box-sizing: border-box;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          padding: 0 14px;
+          border: 1px solid var(--color-border);
+          border-radius: 999px;
+          background: transparent;
+          color: var(--text-secondary);
+          font: inherit;
+          font-size: 0.78rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition:
+            background-color var(--duration-fast) var(--ease-standard),
+            border-color var(--duration-fast) var(--ease-standard),
+            color var(--duration-fast) var(--ease-standard);
+        }
+
+        .user-profile-logout-btn:hover:not(:disabled) {
+          background: #fef2f2;
+          border-color: #f6c9c9;
           color: var(--color-danger);
         }
 
-        .dropdown-item:hover {
-          background: var(--color-surface-muted);
-        }
-
-        .dropdown-separator {
-          height: 1px;
-          margin: var(--space-1) 0;
-          background: var(--color-border);
+        .user-profile-logout-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         .dropdown-backdrop-click {

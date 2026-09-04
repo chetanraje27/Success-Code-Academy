@@ -14,6 +14,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppWidget from "@/components/layout/WhatsAppWidget";
 import CookieConsent from "@/components/layout/CookieConsent";
+import { ToastProvider } from "@/components/admin/Toast";
 import { EditModeProvider } from "@/components/admin/EditModeContext";
 import LeadsDrawer from "@/components/admin/LeadsDrawer";
 import { LiveContentProvider } from "@/components/admin/LiveContentContext";
@@ -67,9 +68,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <EditModeProvider>
-      <LiveContentProvider>
-        <div className="public-shell">
+    <ToastProvider>
+      <EditModeProvider>
+        <LiveContentProvider>
+          <div className="public-shell">
           <Header />
           <main className="site-main">{children}</main>
           <Footer />
@@ -77,8 +79,9 @@ export default function RootLayout({
           <CookieConsent />
           <LeadsDrawer />
           <LiveEditorToolbar />
-        </div>
-      </LiveContentProvider>
-    </EditModeProvider>
+          </div>
+        </LiveContentProvider>
+      </EditModeProvider>
+    </ToastProvider>
   );
 }

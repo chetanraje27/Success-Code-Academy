@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 export interface OtpVerificationAttributes {
   id: number;
-  mobileNumber: string;
+  email: string;
   otp: string;
   expiresAt: Date;
   createdAt?: Date;
@@ -17,7 +17,7 @@ export class OtpVerification
   implements OtpVerificationAttributes
 {
   declare public id: number;
-  declare public mobileNumber: string;
+  declare public email: string;
   declare public otp: string;
   declare public expiresAt: Date;
 
@@ -33,7 +33,7 @@ export function initOtpVerification(sequelize: Sequelize): void {
         autoIncrement: true,
         primaryKey: true,
       },
-      mobileNumber: {
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
       },

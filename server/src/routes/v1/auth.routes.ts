@@ -2,10 +2,11 @@ import { Router } from 'express';
 import { z } from 'zod';
 import {
   changeAdminPassword,
-  checkMobileOrLogin,
+  sendEmailOtp,
   forgotAdminPassword,
   getCurrentUser,
   loginAdmin,
+  loginStudent,
   registerUser,
   requestAdminPasswordReset,
   resetAdminPassword,
@@ -25,19 +26,26 @@ import { ADMIN_ROLES } from '../../config/roles';
 const router = Router();
 
 const sendOtpSchema = z.object({
-  mobileNumber: z.string().regex(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
+  email: z.string().email('A valid email address is required'),
 });
 
 const verifyOtpSchema = z.object({
-  mobileNumber: z.string().regex(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  mobileNumber: z.string().regex(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
   email: z.string().email('A valid email address is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  otp: z.string().min(6).max(6, 'OTP must be 6 digits'),
   age: z.union([z.number(), z.string()]).transform((val) => {
     if (typeof val === 'number') return val;
     const parsed = parseInt(val, 10);
     return isNaN(parsed) ? undefined : parsed;
   }),
+});
+
+const studentLoginSchema = z.object({
+  email: z.string().email('A valid email address is required'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 const updateProfileSchema = z.object({
@@ -94,8 +102,9 @@ const adminForgotPasswordSchema = z
   })
   .strict();
 
-router.post('/send-otp', submissionLimiter, validate(sendOtpSchema), checkMobileOrLogin);
+router.post('/send-otp', submissionLimiter, validate(sendOtpSchema), sendEmailOtp);
 router.post('/verify-otp', submissionLimiter, validate(verifyOtpSchema), registerUser);
+router.post('/login', submissionLimiter, validate(studentLoginSchema), loginStudent);
 router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile);
 router.post('/admin/login', adminLoginLimiter, validate(adminLoginSchema), loginAdmin);
 // Public forgot-password endpoint for admins

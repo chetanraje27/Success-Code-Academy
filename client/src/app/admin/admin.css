@@ -4530,6 +4530,13 @@ html[data-admin-theme="dark"] .admin-dash-pill.is-messages {
 }
 
 @media (max-width: 767px) {
+  .admin-toast-viewport {
+    left: 14px;
+    right: 14px;
+    margin: 0 auto;
+    width: auto;
+  }
+  
   .admin-topbar {
     padding: 0 14px;
   }

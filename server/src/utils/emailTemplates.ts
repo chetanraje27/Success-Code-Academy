@@ -176,6 +176,30 @@ ${paragraph('Whenever you are ready, our counselors can walk you through the bat
   return { html: shell({ heading: 'Your student account is ready', bodyHtml }).html, text };
 }
 
+export function studentOtpVerification(params: {
+  otp: string;
+}): { html: string; text: string } {
+  const bodyHtml = `
+${greeting('student')}
+${paragraph('Please use the verification code below to verify your email address and complete your registration at Success Code Academy.')}
+<div style="margin:24px 0;padding:16px;background:${BRAND.bg};border:1px solid ${BRAND.border};border-radius:8px;text-align:center;">
+  <span style="font-size:32px;font-weight:700;letter-spacing:4px;color:${BRAND.navy};">${escapeHtml(params.otp)}</span>
+</div>
+${paragraph('This code expires in 15 minutes. If you did not request this, you can safely ignore this email.')}`;
+
+  const text = [
+    'Hi student,',
+    '',
+    'Please use the verification code below to verify your email address and complete your registration at Success Code Academy.',
+    '',
+    `Verification Code: ${params.otp}`,
+    '',
+    'This code expires in 15 minutes. If you did not request this, you can safely ignore this email.',
+  ].join('\n');
+
+  return { html: shell({ heading: 'Verify your email address', bodyHtml }).html, text };
+}
+
 export function contactFormReceipt(params: {
   name: string;
   email: string;

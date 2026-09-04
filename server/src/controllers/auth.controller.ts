@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { type SignOptions } from 'jsonwebtoken';
 import { Op } from 'sequelize';
-import { User, Admin, AdminPasswordReset, sequelize } from '../models';
+import { User, Admin, AdminPasswordReset, OtpVerification, sequelize } from '../models';
 import { env } from '../config/environment';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
@@ -70,85 +70,95 @@ function publicAdmin(admin: Admin) {
   };
 }
 
-/**
- * POST /api/v1/auth/send-otp
- *
- * Temporarily acts as a direct mobile number check.
- * If user exists: logs them in immediately (generates JWT).
- * If user is new: returns exists = false to prompt profile creation on frontend.
- */
-export const checkMobileOrLogin = asyncHandler(
+export const sendEmailOtp = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { mobileNumber } = req.body;
+    const { email } = req.body;
 
-    if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
-      throw new AppError('A valid 10-digit mobile number is required.', 400);
+    if (!email || !email.includes('@')) {
+      throw new AppError('A valid email address is required.', 400);
     }
 
-    // Check if user is already registered
-    const user = await User.findOne({ where: { mobileNumber } });
-
+    // Check if user is already registered with this email
+    const user = await User.findOne({ where: { email } });
     if (user) {
-      if (user.role !== 'student') {
-        throw new AppError('Please use the admin sign-in page.', 403);
-      }
-
-      const token = createToken(
-        user,
-        'student',
-        env.JWT_EXPIRES_IN as NonNullable<SignOptions['expiresIn']>,
-      );
-
-      logger.info(`👤 [Auth] Existing user logged in directly: ${mobileNumber}`);
-
-      res.status(200).json({
-        status: 'success',
-        message: 'Login successful',
-        data: {
-          exists: true,
-          token,
-          user: publicUser(user),
-        },
-      });
-    } else {
-      // New user
-      logger.info(`👤 [Auth] New mobile number detected: ${mobileNumber}`);
-
-      res.status(200).json({
-        status: 'success',
-        message: 'Mobile number checked. Registration required.',
-        data: {
-          exists: false,
-        },
-      });
+      throw new AppError('An account with this email already exists.', 400);
     }
+
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+    // Save to OtpVerification
+    const [otpRecord, created] = await OtpVerification.findOrCreate({
+      where: { email },
+      defaults: { email, otp, expiresAt },
+    });
+
+    if (!created) {
+      otpRecord.otp = otp;
+      otpRecord.expiresAt = expiresAt;
+      await otpRecord.save();
+    }
+
+    logger.info(`📧 [Auth] Sending OTP to new email: ${email}`);
+
+    // Send email
+    const template = require('../utils/emailTemplates').studentOtpVerification({ otp });
+    void sendMail({
+      to: email,
+      subject: 'Verify your Success Code Academy registration',
+      text: template.text,
+      html: template.html,
+    }).then((mail) => {
+      if (!mail.delivered) {
+        logger.warn('[Auth] OTP email failed', { to: email, error: mail.error });
+      }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'OTP sent successfully to your email.',
+      data: { emailed: true },
+    });
   },
 );
 
-/**
- * POST /api/v1/auth/verify-otp
- *
- * Temporarily acts as the direct registration endpoint.
- * Registers new profile details for a mobile number, then returns the JWT.
- */
 export const registerUser = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { mobileNumber, firstName, lastName, email, age } = req.body;
+    const { mobileNumber, firstName, lastName, email, age, password, otp } = req.body;
 
     if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
       throw new AppError('A valid 10-digit mobile number is required.', 400);
     }
 
-    if (!firstName || !lastName || !email || !age) {
-      throw new AppError('First name, last name, email, and age are required for registration.', 400);
+    if (!firstName || !lastName || !email || !age || !password || !otp) {
+      throw new AppError('All registration fields are required.', 400);
     }
 
-    // Check if user already exists (concurrency protection)
-    let user = await User.findOne({ where: { mobileNumber } });
+    // Check if user already exists
+    let user = await User.findOne({ where: { 
+      [Op.or]: [{ mobileNumber }, { email }]
+    }});
 
     if (user) {
-      throw new AppError('Mobile number is already registered.', 400);
+      throw new AppError('Mobile number or email is already registered.', 400);
     }
+
+    // Verify OTP
+    const otpRecord = await OtpVerification.findOne({ where: { email } });
+    if (!otpRecord) {
+      throw new AppError('OTP not requested for this email.', 400);
+    }
+    // Typecast to any to avoid strict typescript issues on the model definition if not strictly typed
+    if ((otpRecord as any).otp !== otp) {
+      throw new AppError('Invalid OTP.', 400);
+    }
+    if ((otpRecord as any).expiresAt < new Date()) {
+      throw new AppError('OTP has expired.', 400);
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 12);
 
     // Create new user
     user = await User.create({
@@ -157,10 +167,14 @@ export const registerUser = asyncHandler(
       mobileNumber,
       email,
       age: parseInt(age, 10),
+      passwordHash,
       role: 'student',
     });
 
-    logger.info(`👤 [Auth] New user registered successfully: ${mobileNumber}`);
+    // Delete OTP record
+    await otpRecord.destroy();
+
+    logger.info(`👤 [Auth] New user registered successfully: ${email}`);
 
     // Welcome email, best-effort: a failed send never blocks registration.
     if (email) {
@@ -233,6 +247,53 @@ export const updateProfile = asyncHandler(
       status: 'success',
       message: 'Profile updated successfully',
       data: {
+        user: publicUser(user),
+      },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/auth/login
+ *
+ * Student login endpoint.
+ */
+export const loginStudent = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const email = String(req.body.email).trim().toLowerCase();
+    const password = String(req.body.password);
+
+    const user = await User.findOne({
+      where: { email },
+    });
+
+    const fallbackHash = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
+    const passwordMatches = await bcrypt.compare(
+      password,
+      user?.passwordHash || fallbackHash,
+    );
+
+    if (!user || !user.passwordHash || !passwordMatches || user.role !== 'student') {
+      logger.warn('[Auth] Failed student sign-in attempt', {
+        email,
+        ip: req.ip,
+      });
+      throw new AppError('Invalid email or password.', 401);
+    }
+
+    const token = createToken(
+      user,
+      'student',
+      env.JWT_EXPIRES_IN as NonNullable<SignOptions['expiresIn']>,
+    );
+
+    logger.info('[Auth] Student signed in', { userId: user.id });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Sign-in successful.',
+      data: {
+        token,
         user: publicUser(user),
       },
     });

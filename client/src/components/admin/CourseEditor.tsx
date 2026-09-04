@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import AdminModal from "./AdminModal";
 import { adminApiFetch } from "@/lib/admin-api";
 import { FaTrash, FaPlus } from "react-icons/fa6";
+import { useToast } from "./Toast";
 
 export default function CourseEditor({
   open,
@@ -28,6 +29,7 @@ export default function CourseEditor({
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const toast = useToast();
 
   const isNew = !course?.id;
 
@@ -102,6 +104,7 @@ export default function CourseEditor({
       });
       
       onSaved();
+      toast.success(isNew ? "Course created." : "Course changes saved.");
       onClose();
     } catch (e: any) {
       setError(e.message || "Error saving course");
@@ -112,7 +115,7 @@ export default function CourseEditor({
 
   return (
     <AdminModal open={open} onClose={onClose} title={isNew ? "Add New Course" : "Edit Course"} width={640}>
-      <div className="sca-admin-form" style={{ padding: "20px" }}>
+      <div className="admin-form">
         {error && <div className="sca-admin-error">{error}</div>}
         
         <div className="sca-admin-row">

@@ -5,29 +5,25 @@ import AdministratorEditorModal from "./AdministratorEditorModal";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { adminRoleLabel } from "@/lib/roles";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminAdministratorsPage() {
   const [editingAdmin, setEditingAdmin] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState("");
+  const toast = useToast();
 
   async function handleDelete(admin: any) {
     const label = admin.name || admin.email || "this administrator";
-    if (
-      !window.confirm(
-        `Remove ${label}? They will lose access to the admin dashboard immediately.`,
-      )
-    ) {
-      return;
-    }
     setError("");
     try {
       await adminApiFetch(`/api/v1/admin/database/admins/${admin.id}`, {
         method: "DELETE",
       });
       setRefreshKey((prev) => prev + 1);
+      toast.success(`${label} removed from administrators.`);
     } catch (e: any) {
-      setError(e.message || "Failed to remove administrator");
+      toast.error(e.message || "Failed to remove administrator");
     }
   }
 
@@ -61,7 +57,7 @@ export default function AdminAdministratorsPage() {
               </>
             ),
           },
-          { key: "mobileNumber", label: "Mobile" },
+          { key: "mobileNumber", label: "Mobile", sortable: true },
           {
             key: "role",
             label: "Access level",
@@ -69,7 +65,7 @@ export default function AdminAdministratorsPage() {
               <span className="admin-status">{adminRoleLabel(row.role)}</span>
             ),
           },
-          { key: "createdAt", label: "Added" },
+          { key: "createdAt", label: "Added", sortable: true },
         ]}
         onAdd={() => setEditingAdmin({})}
         onEdit={setEditingAdmin}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { RotateCcw, Save } from "lucide-react";
 import AdminModal from "./AdminModal";
 import type { ContentKind } from "./LiveContentContext";
+import { useToast } from "./Toast";
 
 type LiveContentDialogProps = {
   open: boolean;
@@ -38,12 +39,14 @@ export function LiveContentDialog({
   const [draft, setDraft] = useState(value);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const toast = useToast();
 
   async function save() {
     setSaving(true);
     setError("");
     try {
       await onSave(draft);
+      toast.success(`${label} updated.`);
       onClose();
     } catch (nextError) {
       setError(
@@ -66,6 +69,7 @@ export function LiveContentDialog({
     setError("");
     try {
       await onReset();
+      toast.success(`${label} restored to the original.`);
       setDraft(defaultValue);
       onClose();
     } catch (nextError) {

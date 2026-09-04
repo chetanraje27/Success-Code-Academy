@@ -59,11 +59,11 @@ export default function AdminResultsPage() {
           kind: "image",
           roundImage: true,
         },
-        { label: "Student", key: "name" },
-        { label: "Year", key: "year" },
+        { label: "Student", key: "name", sortable: true },
+        { label: "Year", key: "year", sortable: true },
         { label: "Marks", key: "marks" },
         { label: "College", key: "college" },
-        { label: "Status", key: "isActive", kind: "status" },
+        { label: "Status", key: "isActive", kind: "status", sortable: true },
       ]}
     />
   );

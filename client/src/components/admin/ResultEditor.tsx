@@ -6,6 +6,7 @@ import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
+import { useToast } from "./Toast";
 
 interface Result {
   id: number;
@@ -27,6 +28,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { bumpRefresh, isSuperAdmin } = useEditMode();
+  const toast = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -49,6 +51,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
       setError(
         caught instanceof Error ? caught.message : "Unable to load results.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to load results.");
     } finally {
       setLoading(false);
     }
@@ -98,12 +101,14 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     }
     try {
       await adminApiFetch(`results/${id}`, { method: "DELETE" });
+      toast.success("Result deleted. You can restore it from History.");
       bumpRefresh();
       await loadResults();
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Unable to delete result.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to delete result.");
     }
   }
 
@@ -113,10 +118,12 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
     try {
       const url = await uploadAdminImage(file, "result");
       setFormData(prev => ({ ...prev, image: url }));
+      toast.success("Result image uploaded.");
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Image upload failed.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Image upload failed.");
     }
   }
 
@@ -138,12 +145,14 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
 
       await adminApiFetch(url, { method, body: JSON.stringify(payload) });
       bumpRefresh();
+      toast.success(editingResult ? "Result changes saved." : "Result added.");
       setIsFormOpen(false);
       await loadResults();
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Unable to save result.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to save result.");
     } finally {
       setIsSubmitting(false);
     }
@@ -209,7 +218,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
           )}
         </>
       ) : (
-        <form className="sca-admin-form" onSubmit={handleSubmit}>
+        <form className="admin-form" onSubmit={handleSubmit}>
           <div className="sca-admin-row">
             <div className="sca-admin-field">
               <label>Name</label>

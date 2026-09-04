@@ -4,17 +4,19 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import CourseEditor from "@/components/admin/CourseEditor";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminCoursesPage() {
   const [editingCourse, setEditingCourse] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const toast = useToast();
 
   async function handleDelete(course: any) {
     try {
       await adminApiFetch(`/api/v1/admin/courses/${course.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
     } catch (e: any) {
-      alert(e.message || "Failed to delete course");
+      toast.error(e.message || "Failed to delete course");
     }
   }
 
@@ -38,8 +40,8 @@ export default function AdminCoursesPage() {
               </>
             ),
           },
-          { key: "category", label: "Category", render: (row: any) => <span style={{textTransform: 'capitalize'}}>{row.category.replace('-', ' ')}</span> },
-          { key: "type", label: "Type" },
+          { key: "category", label: "Category", sortable: true, render: (row: any) => <span style={{textTransform: 'capitalize'}}>{row.category.replace('-', ' ')}</span> },
+          { key: "type", label: "Type", sortable: true },
           { key: "isActive", label: "Status", render: (row: any) => (
               <span className={`admin-status ${row.isActive ? "" : "danger"}`}>
                 {row.isActive ? "Active" : "Inactive"}

@@ -68,8 +68,8 @@ export default function AdminBannersPage() {
           { label: "Preview", key: "image", kind: "image" },
           { label: "Description", key: "altText" },
           { label: "Page", key: "type" },
-          { label: "Order", key: "orderIndex" },
-          { label: "Status", key: "isActive", kind: "status" },
+          { label: "Order", key: "orderIndex", sortable: true },
+          { label: "Status", key: "isActive", kind: "status", sortable: true },
         ]}
     />
   );

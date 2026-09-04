@@ -4,17 +4,19 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import ContactMessageEditorModal from "./ContactMessageEditorModal";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminContactMessagesPage() {
   const [editingMessage, setEditingMessage] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const toast = useToast();
 
   async function handleDelete(messageRecord: any) {
     try {
       await adminApiFetch(`/api/v1/admin/database/contact-messages/${messageRecord.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
     } catch (e: any) {
-      alert(e.message || "Failed to delete contact message");
+      toast.error(e.message || "Failed to delete contact message");
     }
   }
 
@@ -53,7 +55,7 @@ export default function AdminContactMessagesPage() {
             </span>
           ),
         },
-        { key: "createdAt", label: "Submitted" },
+        { key: "createdAt", label: "Submitted", sortable: true },
       ]}
       onAdd={() => setEditingMessage({})}
       onEdit={setEditingMessage}

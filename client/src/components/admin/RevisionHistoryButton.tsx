@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { History, RotateCcw } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import AdminModal from "./AdminModal";
+import { useToast } from "./Toast";
 
 export type MediaResourceType = "banner" | "star" | "result" | "news" | "video";
 
@@ -53,6 +54,7 @@ export default function RevisionHistoryButton({
   const [loading, setLoading] = useState(false);
   const [restoringId, setRestoringId] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const toast = useToast();
 
   const loadHistory = useCallback(async () => {
     setLoading(true);
@@ -95,6 +97,7 @@ export default function RevisionHistoryButton({
         { method: "POST" },
       );
       await onRestored();
+      toast.success(`${itemName} restored successfully.`);
       await loadHistory();
       window.dispatchEvent(new Event("admin-content-changed"));
     } catch (caught) {

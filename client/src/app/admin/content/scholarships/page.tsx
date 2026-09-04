@@ -4,17 +4,19 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import ScholarshipProgramEditor from "./ScholarshipProgramEditor";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminScholarshipProgramsPage() {
   const [editingProgram, setEditingProgram] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const toast = useToast();
 
   async function handleDelete(program: any) {
     try {
       await adminApiFetch(`/api/v1/admin/scholarship-programs/${program.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
     } catch (e: any) {
-      alert(e.message || "Failed to delete scholarship program");
+      toast.error(e.message || "Failed to delete scholarship program");
     }
   }
 
@@ -35,7 +37,7 @@ export default function AdminScholarshipProgramsPage() {
               <span className="admin-table-title">{row.title}</span>
             ),
           },
-          { key: "description", label: "Description" },
+          { key: "description", label: "Description", sortable: true },
           {
             key: "isActive",
             label: "Status",

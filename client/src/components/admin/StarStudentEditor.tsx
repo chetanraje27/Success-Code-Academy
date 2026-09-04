@@ -6,6 +6,8 @@ import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
+import { useToast } from "./Toast";
+import { AdminEmptyState, AdminLoadingState, AdminNotice } from "./AdminUi";
 
 interface StarStudent {
   id: number;
@@ -27,6 +29,7 @@ interface StarStudentEditorProps {
 
 export default function StarStudentEditor({ open, onClose }: StarStudentEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
+  const toast = useToast();
   const [items, setItems] = useState<StarStudent[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,6 +61,7 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
           ? caught.message
           : "Unable to load star students.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to load star students.");
     } finally {
       setLoading(false);
     }
@@ -118,6 +122,7 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       await adminApiFetch(`stars/${id}`, {
         method: "DELETE",
       });
+      toast.success("Star student deleted. You can restore it from History.");
       bumpRefresh();
       await fetchItems();
     } catch (caught) {
@@ -126,6 +131,7 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
           ? caught.message
           : "Unable to delete star student.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to delete star student.");
       setLoading(false);
     }
   };
@@ -138,10 +144,12 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
       setError("");
       const url = await uploadAdminImage(file, "star");
       setFormData((prev) => ({ ...prev, image: url }));
+      toast.success("Student image uploaded.");
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Image upload failed.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Image upload failed.");
     } finally {
       setUploading(false);
     }
@@ -164,6 +172,7 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
         });
       }
       bumpRefresh();
+      toast.success(editingItem ? "Star student changes saved." : "Star student added.");
       await fetchItems();
       resetForm();
     } catch (caught) {
@@ -172,13 +181,14 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
           ? caught.message
           : "Unable to save star student.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to save star student.");
       setLoading(false);
     }
   };
 
   return (
     <AdminModal title="Manage Star Students" open={open} onClose={onClose} width={640}>
-      {error && <div className="sca-admin-error">{error}</div>}
+      {error && <AdminNotice>{error}</AdminNotice>}
       
       {!showForm ? (
         <>
@@ -205,9 +215,9 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
           )}
           
           {loading ? (
-            <div>Loading...</div>
+            <AdminLoadingState label="Loading star students…" />
           ) : items.length === 0 ? (
-            <div className="sca-admin-empty">No star students found</div>
+            <AdminEmptyState title="No star students yet" message="Add a student to highlight on the website." />
           ) : (
             <div className="sca-admin-list">
               {items.map((item) => (
@@ -239,7 +249,7 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
           )}
         </>
       ) : (
-        <form className="sca-admin-form" onSubmit={handleSubmit}>
+        <form className="admin-form" onSubmit={handleSubmit}>
           <div className="sca-admin-row">
             <div className="sca-admin-field">
               <label>Name</label>

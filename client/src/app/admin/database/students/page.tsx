@@ -4,17 +4,19 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import StudentEditorModal from "./StudentEditorModal";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminStudentsPage() {
   const [editingStudent, setEditingStudent] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const toast = useToast();
 
   async function handleDelete(student: any) {
     try {
       await adminApiFetch(`/api/v1/admin/database/users/${student.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
     } catch (e: any) {
-      alert(e.message || "Failed to delete student");
+      toast.error(e.message || "Failed to delete student");
     }
   }
 
@@ -43,9 +45,9 @@ export default function AdminStudentsPage() {
             </>
           ),
         },
-        { key: "mobileNumber", label: "Mobile" },
-        { key: "age", label: "Age" },
-        { key: "createdAt", label: "Registered" },
+        { key: "mobileNumber", label: "Mobile", sortable: true },
+        { key: "age", label: "Age", sortable: true },
+        { key: "createdAt", label: "Registered", sortable: true },
       ]}
       onAdd={() => setEditingStudent({})}
       onEdit={setEditingStudent}

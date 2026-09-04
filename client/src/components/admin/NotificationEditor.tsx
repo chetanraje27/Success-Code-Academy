@@ -21,6 +21,7 @@ import {
   FaLink,
   FaArrowRight,
 } from "react-icons/fa6";
+import { useToast } from "./Toast";
 
 interface Notification {
   id: string;
@@ -58,6 +59,7 @@ export function renderIconByKey(iconKey?: string) {
 
 export default function NotificationEditor({ open, onClose }: NotificationEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
+  const toast = useToast();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -91,6 +93,7 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
       }
     } catch (err: any) {
       setError(err.message || "Failed to fetch notifications");
+      toast.error(err.message || "Failed to fetch notifications");
     } finally {
       setLoading(false);
     }
@@ -135,10 +138,12 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
         method: "DELETE",
         auth: true,
       });
+      toast.success("Notification deleted.");
       bumpRefresh();
       fetchItems();
     } catch (err: any) {
       setError(err.message || "Failed to delete notification");
+      toast.error(err.message || "Failed to delete notification");
       setLoading(false);
     }
   };
@@ -162,10 +167,12 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
         });
       }
       bumpRefresh();
+      toast.success(editingItem ? "Notification updated." : "Notification created.");
       fetchItems();
       resetForm();
     } catch (err: any) {
       setError(err.message || "Failed to save notification");
+      toast.error(err.message || "Failed to save notification");
       setLoading(false);
     }
   };
@@ -271,7 +278,7 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
           )}
         </>
       ) : (
-        <form className="sca-admin-form" onSubmit={handleSubmit}>
+        <form className="admin-form" onSubmit={handleSubmit}>
           {/* Icon Selector */}
           <div className="sca-admin-field">
             <label style={{ fontWeight: 600, marginBottom: "6px", display: "block" }}>Select Notification Icon</label>

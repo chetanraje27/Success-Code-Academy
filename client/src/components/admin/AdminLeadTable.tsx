@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, useMemo } from "react";
-import { Download, Search, Edit2, Trash2 } from "lucide-react";
+import { Download, Search, Edit2, Trash2, ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { useAdminSession } from "./AdminSessionContext";
 import AdminDetailDrawer, { AdminDrawerField } from "./AdminDetailDrawer";
@@ -19,7 +19,11 @@ export type LeadColumn = {
   key: string;
   label: string;
   render?: (row: LeadRow) => React.ReactNode;
+  sortable?: boolean;
+  sortValue?: (row: LeadRow) => string | number | null | undefined;
 };
+
+type SortState = { key: string; direction: "asc" | "desc" } | null;
 
 function csvCell(value: unknown): string {
   const text =
@@ -63,6 +67,7 @@ export default function AdminLeadTable({
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [selectedRow, setSelectedRow] = useState<LeadRow | null>(null);
+  const [sort, setSort] = useState<SortState>(null);
 
   /*
    * A standard administrator reads and edits records but never creates or
@@ -115,14 +120,48 @@ export default function AdminLeadTable({
 
   const displayedRows = useMemo(() => {
     const trimmed = query.trim();
-    if (!trimmed) return rows;
     const lower = trimmed.toLowerCase();
-    return rows.filter((row) =>
+    const filteredRows = !trimmed ? rows : rows.filter((row) =>
       Object.values(row).some(
         (val) => typeof val === "string" && val.toLowerCase().includes(lower)
       )
     );
-  }, [rows, query]);
+    if (!sort) return filteredRows;
+
+    const column = columns.find((item) => item.key === sort.key);
+    if (!column) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
+      const aValue = column.sortValue
+        ? column.sortValue(a)
+        : (a[column.key] as string | number | null | undefined);
+      const bValue = column.sortValue
+        ? column.sortValue(b)
+        : (b[column.key] as string | number | null | undefined);
+      if (aValue == null && bValue == null) return 0;
+      if (aValue == null) return 1;
+      if (bValue == null) return -1;
+      const result = typeof aValue === "number" && typeof bValue === "number"
+        ? aValue - bValue
+        : String(aValue).localeCompare(String(bValue), undefined, {
+            numeric: true,
+            sensitivity: "base",
+          });
+      return sort.direction === "asc" ? result : -result;
+    });
+  }, [rows, query, sort, columns]);
+
+  function toggleSort(column: LeadColumn) {
+    if (!column.sortable) return;
+    setSort((current) => {
+      if (!current || current.key !== column.key) {
+        return { key: column.key, direction: "asc" };
+      }
+      if (current.direction === "asc") {
+        return { key: column.key, direction: "desc" };
+      }
+      return null;
+    });
+  }
 
   function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -386,9 +425,56 @@ export default function AdminLeadTable({
               <table className="admin-table">
                 <thead>
                   <tr>
-                    {columns.map((column) => (
-                      <th key={column.key}>{column.label}</th>
-                    ))}
+                    {columns.map((column) => {
+                      const active = sort?.key === column.key;
+                      const SortIcon = !active
+                        ? ArrowUpDown
+                        : sort.direction === "asc"
+                          ? ArrowUp
+                          : ArrowDown;
+                      return (
+                        <th
+                          key={column.key}
+                          aria-sort={
+                            active
+                              ? sort.direction === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : "none"
+                          }
+                        >
+                          {column.sortable ? (
+                            <button
+                              type="button"
+                              onClick={() => toggleSort(column)}
+                              aria-label={`Sort by ${column.label}. ${
+                                active
+                                  ? `${sort.direction === "asc" ? "Ascending" : "Descending"}; click to reset`
+                                  : "Currently unsorted"
+                              }`}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 5,
+                                border: 0,
+                                padding: 0,
+                                background: "transparent",
+                                color: "inherit",
+                                font: "inherit",
+                                letterSpacing: "inherit",
+                                textTransform: "inherit",
+                                cursor: "pointer",
+                              }}
+                            >
+                              {column.label}
+                              <SortIcon size={13} aria-hidden="true" />
+                            </button>
+                          ) : (
+                            column.label
+                          )}
+                        </th>
+                      );
+                    })}
                     {showActions && <th>Actions</th>}
                   </tr>
                 </thead>
@@ -422,6 +508,7 @@ export default function AdminLeadTable({
                           <div style={{ display: "flex", gap: "8px" }}>
                             {onEdit && (
                               <button
+                                type="button"
                                 className="sca-admin-icon-btn"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -434,6 +521,7 @@ export default function AdminLeadTable({
                             )}
                             {canDelete && (
                               <button
+                                type="button"
                                 className="sca-admin-icon-btn danger"
                                 onClick={(e) => {
                                   e.stopPropagation();

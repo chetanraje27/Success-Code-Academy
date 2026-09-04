@@ -57,11 +57,11 @@ export default function AdminStarsPage() {
           kind: "image",
           roundImage: true,
         },
-        { label: "Student", key: "name" },
+        { label: "Student", key: "name", sortable: true },
         { label: "Score", key: "score" },
         { label: "Rank", key: "rank" },
         { label: "Year", key: "year" },
-        { label: "Status", key: "isActive", kind: "status" },
+        { label: "Status", key: "isActive", kind: "status", sortable: true },
       ]}
     />
   );

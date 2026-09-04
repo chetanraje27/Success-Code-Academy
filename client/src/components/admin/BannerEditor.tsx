@@ -6,6 +6,8 @@ import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
+import { useToast } from "./Toast";
+import { AdminEmptyState, AdminLoadingState, AdminNotice } from "./AdminUi";
 
 interface Banner {
   id: number;
@@ -24,6 +26,7 @@ interface BannerEditorProps {
 
 export default function BannerEditor({ open, onClose }: BannerEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
+  const toast = useToast();
   const [items, setItems] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,6 +53,7 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       setError(
         caught instanceof Error ? caught.message : "Unable to load banners.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to load banners.");
     } finally {
       setLoading(false);
     }
@@ -100,12 +104,14 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       await adminApiFetch(`banners/${id}`, {
         method: "DELETE",
       });
+      toast.success("Banner deleted. You can restore it from History.");
       bumpRefresh();
       await fetchItems();
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Unable to delete banner.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to delete banner.");
       setLoading(false);
     }
   };
@@ -118,10 +124,12 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
       setError("");
       const url = await uploadAdminImage(file, "banner");
       setFormData((prev) => ({ ...prev, image: url }));
+      toast.success("Banner image uploaded.");
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Image upload failed.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Image upload failed.");
     } finally {
       setUploading(false);
     }
@@ -144,19 +152,21 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
         });
       }
       bumpRefresh();
+      toast.success(editingItem ? "Banner changes saved." : "Banner added.");
       await fetchItems();
       resetForm();
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : "Unable to save banner.",
       );
+      toast.error(caught instanceof Error ? caught.message : "Unable to save banner.");
       setLoading(false);
     }
   };
 
   return (
     <AdminModal title="Manage Banners" open={open} onClose={onClose} width={640}>
-      {error && <div className="sca-admin-error">{error}</div>}
+      {error && <AdminNotice>{error}</AdminNotice>}
       
       {!showForm ? (
         <>
@@ -183,9 +193,9 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
           )}
           
           {loading ? (
-            <div>Loading...</div>
+            <AdminLoadingState label="Loading banners…" />
           ) : items.length === 0 ? (
-            <div className="sca-admin-empty">No banners found</div>
+            <AdminEmptyState title="No banners yet" message="Add a banner to update the website hero area." />
           ) : (
             <div className="sca-admin-list">
               {items.map((item) => (
@@ -218,7 +228,7 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
           )}
         </>
       ) : (
-        <form className="sca-admin-form" onSubmit={handleSubmit}>
+        <form className="admin-form" onSubmit={handleSubmit}>
           <div className="sca-admin-field">
             <label htmlFor="live-banner-image">Banner image</label>
             <input

@@ -132,8 +132,8 @@ export default function AdminNotificationsPage() {
               <span className="admin-cell-empty">—</span>
             ),
         },
-        { label: "Order", key: "orderIndex" },
-        { label: "Status", key: "isActive", kind: "status" },
+        { label: "Order", key: "orderIndex", sortable: true },
+        { label: "Status", key: "isActive", kind: "status", sortable: true },
       ]}
     />
   );

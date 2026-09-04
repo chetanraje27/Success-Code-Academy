@@ -4847,6 +4847,183 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   background: var(--admin-bg);
 }
 
+/* Shared dashboard reference: keep data surfaces compact, quiet, and easy to
+   scan. These rules intentionally sit after the page styles so every admin
+   table and control gets the same baseline without page-specific markup. */
+.admin-table-wrap {
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+.admin-table {
+  min-width: 640px;
+  table-layout: auto;
+}
+
+.admin-table th,
+.admin-table td {
+  border-right: 0;
+}
+
+.admin-table th {
+  height: 36px;
+  box-sizing: border-box;
+  padding: 8px 14px;
+  background: var(--admin-surface-sunken);
+  color: var(--admin-text-secondary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.admin-table td {
+  height: 44px;
+  padding: 9px 14px;
+  color: var(--admin-text-secondary);
+  line-height: 1.35;
+}
+
+.admin-table tbody tr:focus-visible {
+  outline: 2px solid var(--admin-brand);
+  outline-offset: -2px;
+}
+
+.admin-table-sort {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  margin: -4px -7px;
+  padding: 4px 7px;
+  border: 1px solid transparent;
+  border-radius: var(--admin-radius-xs);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: inherit;
+  cursor: pointer;
+  transition:
+    background var(--admin-dur-fast) var(--admin-ease),
+    border-color var(--admin-dur-fast) var(--admin-ease),
+    color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-table-sort:hover {
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+.admin-table-sort:active {
+  background: var(--admin-surface-active);
+}
+
+.admin-table-sort:focus-visible,
+.admin-drawer-close-btn:focus-visible,
+.admin-drawer-action-btn:focus-visible,
+.admin-drawer-message-copy-btn:focus-visible {
+  outline: 2px solid var(--admin-brand);
+  outline-offset: 1px;
+}
+
+.admin-modal-overlay,
+.admin-drawer-scrim {
+  overscroll-behavior: contain;
+}
+
+.admin-modal {
+  width: min(680px, 100%);
+  max-width: calc(100vw - 32px);
+  max-height: min(86vh, 820px);
+  border-radius: var(--admin-radius-md);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.admin-modal-header,
+.admin-drawer-header,
+.admin-drawer-footer {
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.admin-modal-body,
+.admin-drawer-body {
+  min-width: 0;
+}
+
+.admin-drawer {
+  width: min(480px, calc(100vw - 24px));
+  box-shadow: var(--admin-shadow-md);
+}
+
+.admin-drawer-body {
+  padding: 16px;
+  gap: 16px;
+}
+
+.admin-toast {
+  min-height: 48px;
+  border-radius: var(--admin-radius-sm);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+/* A consistent pressed state is more useful than a decorative lift on touch
+   and keyboard controls. */
+.admin-button:active:not(:disabled),
+.admin-icon-button:active,
+.admin-row-action:active,
+.admin-drawer-action-btn:active,
+.admin-drawer-message-copy-btn:active,
+.admin-toast-close:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 767px) {
+  .admin-table-wrap {
+    margin-inline: 0;
+  }
+
+  .admin-table {
+    min-width: 600px;
+  }
+
+  .admin-modal {
+    max-width: 100vw;
+    box-shadow: var(--admin-shadow-md);
+  }
+
+  .admin-drawer {
+    width: 100vw;
+    max-width: 100vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .admin-dash-kpi:hover,
+  .admin-button:active:not(:disabled),
+  .admin-icon-button:active,
+  .admin-row-action:active,
+  .admin-drawer-action-btn:active,
+  .admin-drawer-message-copy-btn:active,
+  .admin-toast-close:active {
+    transform: none;
+  }
+}
+
 /* WebKit/older Blink fallback, which allows the finer inset thumb. */
 .admin-shell ::-webkit-scrollbar,
 .admin-modal::-webkit-scrollbar {

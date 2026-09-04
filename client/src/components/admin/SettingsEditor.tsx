@@ -13,6 +13,7 @@ import {
 import AdminModal from "./AdminModal";
 import { useEditMode } from "./EditModeContext";
 import { AdminLoadingState, AdminNotice } from "./AdminUi";
+import { useToast } from "./Toast";
 
 export default function SettingsEditor({
   open,
@@ -22,6 +23,7 @@ export default function SettingsEditor({
   onClose: () => void;
 }) {
   const { bumpRefresh } = useEditMode();
+  const toast = useToast();
   const [settings, setSettings] =
     useState<PublicSiteSettings>(defaultSiteSettings);
   const [loading, setLoading] = useState(false);
@@ -66,6 +68,7 @@ export default function SettingsEditor({
         body: JSON.stringify(settings),
       });
       bumpRefresh();
+      toast.success("Website settings saved.");
       onClose();
     } catch (caught) {
       if (caught instanceof AdminApiError && caught.fields.length > 0) {
@@ -93,7 +96,7 @@ export default function SettingsEditor({
       {loading ? (
         <AdminLoadingState label="Loading website settings…" />
       ) : (
-        <form className="admin-form" onSubmit={handleSubmit}>
+        <form className="admin-form" onSubmit={handleSubmit} aria-busy={saving}>
           <div className="admin-form-grid">
             <div className="admin-field">
               <label htmlFor="live-settings-phone">Phone number</label>

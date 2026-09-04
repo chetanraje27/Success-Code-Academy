@@ -4,17 +4,19 @@ import AdminLeadTable from "@/components/admin/AdminLeadTable";
 import CourseFormEditorModal from "./CourseFormEditorModal";
 import { useState } from "react";
 import { adminApiFetch } from "@/lib/admin-api";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdminCourseFormsPage() {
   const [editingForm, setEditingForm] = useState<any>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const toast = useToast();
 
   async function handleDelete(formRecord: any) {
     try {
       await adminApiFetch(`/api/v1/admin/database/course-forms/${formRecord.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
     } catch (e: any) {
-      alert(e.message || "Failed to delete course form");
+      toast.error(e.message || "Failed to delete course form");
     }
   }
 
@@ -43,10 +45,10 @@ export default function AdminCourseFormsPage() {
           ),
         },
         { key: "studentPhone", label: "Phone" },
-        { key: "courseTitle", label: "Course" },
+        { key: "courseTitle", label: "Course", sortable: true },
         { key: "visitingDate", label: "Visit date" },
         { key: "visitingTime", label: "Visit time" },
-        { key: "createdAt", label: "Submitted" },
+        { key: "createdAt", label: "Submitted", sortable: true },
       ]}
       onAdd={() => setEditingForm({})}
       onEdit={setEditingForm}

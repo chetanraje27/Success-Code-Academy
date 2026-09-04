@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Pencil, Plus, Trash2, Search } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Plus, Trash2, Search } from "lucide-react";
 import {
   adminApiFetch,
   AdminApiError,
@@ -21,6 +21,7 @@ import {
 import RevisionHistoryButton, {
   type MediaResourceType,
 } from "./RevisionHistoryButton";
+import { useToast } from "./Toast";
 
 type FieldValue = string | number | boolean;
 type ResourceItem = { id: number; [key: string]: unknown };
@@ -54,6 +55,7 @@ export type AdminContentColumn = {
   kind?: "text" | "image" | "status";
   roundImage?: boolean;
   render?: (item: ResourceItem) => React.ReactNode;
+  sortable?: boolean;
 };
 
 function initialValues(fields: AdminContentField[]) {
@@ -120,6 +122,8 @@ export default function AdminContentManager({
   const [imagePreview, setImagePreview] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [selectedItem, setSelectedItem] = useState<ResourceItem | null>(null);
+  const [sort, setSort] = useState<{ key: string; direction: "asc" | "desc" | null }>({ key: "", direction: null });
+  const toast = useToast();
 
   /*
    * A standard administrator may open any record and save changes to it, but
@@ -148,8 +152,22 @@ export default function AdminContentManager({
         )
       );
     }
+    if (sort.direction && sort.key) {
+      const column = columns.find((candidate) => candidate.key === sort.key);
+      filtered = [...filtered].sort((a, b) => {
+        const left = a[sort.key];
+        const right = b[sort.key];
+        const dateLike = column?.key === "date" || column?.key.endsWith("At");
+        const leftValue = dateLike ? new Date(String(left)).getTime() : left;
+        const rightValue = dateLike ? new Date(String(right)).getTime() : right;
+        const comparison = typeof leftValue === "number" && typeof rightValue === "number"
+          ? leftValue - rightValue
+          : String(leftValue ?? "").localeCompare(String(rightValue ?? ""), undefined, { numeric: true });
+        return sort.direction === "asc" ? comparison : -comparison;
+      });
+    }
     return filtered;
-  }, [items, filterItems, searchTerm]);
+  }, [items, filterItems, searchTerm, sort, columns]);
 
   const loadItems = useCallback(async () => {
     setLoading(true);
@@ -157,14 +175,15 @@ export default function AdminContentManager({
     try {
       const response = await adminApiFetch<ResourceItem[]>(resource);
       setItems(response.data);
+      toast.success(`${title} loaded.`);
     } catch (caught) {
-      setError(
-        caught instanceof Error ? caught.message : `Unable to load ${title}.`,
-      );
+      const message = caught instanceof Error ? caught.message : `Unable to load ${title}.`;
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  }, [resource, title]);
+  }, [resource, title, toast]);
 
   useEffect(() => {
     // Load the remote CMS resource when its endpoint changes.
@@ -248,10 +267,11 @@ export default function AdminContentManager({
     try {
       await adminApiFetch(`${resource}/${item.id}`, { method: "DELETE" });
       await loadItems();
+      toast.success(`${itemName} deleted.`);
     } catch (caught) {
-      setError(
-        caught instanceof Error ? caught.message : `Unable to delete ${itemName}.`,
-      );
+      const message = caught instanceof Error ? caught.message : `Unable to delete ${itemName}.`;
+      setError(message);
+      toast.error(message);
     }
   }
 
@@ -291,15 +311,16 @@ export default function AdminContentManager({
       setImagePreview("");
       await loadItems();
       window.dispatchEvent(new Event("admin-content-changed"));
+      toast.success(`${itemName} ${editing ? "updated" : "created"} successfully.`);
     } catch (caught) {
       if (caught instanceof AdminApiError && caught.fields.length > 0) {
-        setError(
-          caught.fields.map((field) => field.message).join(" "),
-        );
+        const message = caught.fields.map((field) => field.message).join(" ");
+        setError(message);
+        toast.error(message);
       } else {
-        setError(
-          caught instanceof Error ? caught.message : `Unable to save ${itemName}.`,
-        );
+        const message = caught instanceof Error ? caught.message : `Unable to save ${itemName}.`;
+        setError(message);
+        toast.error(message);
       }
     } finally {
       setSaving(false);
@@ -480,9 +501,27 @@ export default function AdminContentManager({
             <table className="admin-table">
               <thead>
                 <tr>
-                  {columns.map((column) => (
-                    <th key={column.key}>{column.label}</th>
-                  ))}
+                  {columns.map((column) => {
+                    const sortable = column.sortable ?? ["orderIndex", "date", "createdAt", "updatedAt", "title", "name", "status", "isActive"].includes(column.key);
+                    const active = sort.key === column.key ? sort.direction : null;
+                    return (
+                      <th key={column.key} aria-sort={active ? (active === "asc" ? "ascending" : "descending") : "none"}>
+                        {sortable ? (
+                          <button
+                            type="button"
+                            className="admin-table-sort"
+                            onClick={() => setSort((current) => current.key !== column.key
+                              ? { key: column.key, direction: "asc" }
+                              : { key: column.key, direction: current.direction === "asc" ? "desc" : current.direction === "desc" ? null : "asc" })}
+                            aria-label={`Sort by ${column.label}`}
+                          >
+                            {column.label}
+                            {active === "asc" ? <ArrowUp size={13} aria-hidden="true" /> : active === "desc" ? <ArrowDown size={13} aria-hidden="true" /> : <ArrowUpDown size={13} aria-hidden="true" />}
+                          </button>
+                        ) : column.label}
+                      </th>
+                    );
+                  })}
                   <th aria-label="Actions" />
                 </tr>
               </thead>
@@ -521,6 +560,11 @@ export default function AdminContentManager({
                             />
                           ) : column.kind === "status" ? (
                             <AdminStatusBadge active={value !== false} />
+                          ) : ["title", "name", "altText", "text"].includes(column.key) ? (
+                            <div className="admin-table-stack">
+                              <span className="admin-table-title">{String(value ?? "—")}</span>
+                              {typeof item.excerpt === "string" ? <span className="admin-table-subtitle">{item.excerpt}</span> : typeof item.category === "string" ? <span className="admin-table-subtitle">{item.category}</span> : null}
+                            </div>
                           ) : (
                             String(value ?? "—")
                           )}

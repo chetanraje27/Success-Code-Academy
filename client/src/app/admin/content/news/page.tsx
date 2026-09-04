@@ -13,11 +13,11 @@ export default function AdminNewsPage() {
       historyType="news"
       columns={[
         { label: "Image", key: "image", kind: "image" },
-        { label: "Title", key: "title", kind: "text" },
+        { label: "Title", key: "title", kind: "text", sortable: true },
         { label: "Category", key: "category", kind: "text" },
-        { label: "Date", key: "date", kind: "text" },
+        { label: "Date", key: "date", kind: "text", sortable: true },
         { label: "Author", key: "author", kind: "text" },
-        { label: "Status", key: "isActive", kind: "status" },
+        { label: "Status", key: "isActive", kind: "status", sortable: true },
       ]}
       fields={[
         {

@@ -13,10 +13,10 @@ export default function AdminVideosPage() {
       historyType="video"
       columns={[
         { label: "Thumbnail", key: "image", kind: "image" },
-        { label: "Title", key: "title", kind: "text" },
+        { label: "Title", key: "title", kind: "text", sortable: true },
         { label: "Category", key: "category", kind: "text" },
         { label: "Duration", key: "duration", kind: "text" },
-        { label: "Status", key: "isActive", kind: "status" },
+        { label: "Status", key: "isActive", kind: "status", sortable: true },
       ]}
       fields={[
         {

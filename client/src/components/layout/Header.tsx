@@ -63,21 +63,25 @@ export default function Header() {
     
     const syncStoredUser = () => {
       const savedUser = localStorage.getItem("user");
-      if (!savedUser) return;
+      if (!savedUser) {
+        setCurrentUser(null);
+        return;
+      }
       try {
         setCurrentUser(JSON.parse(savedUser) as HeaderUser);
       } catch {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        setCurrentUser(null);
       }
     };
     const storageTimer = window.setTimeout(syncStoredUser, 0);
 
-
+    window.addEventListener("auth-changed", syncStoredUser);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-
+      window.removeEventListener("auth-changed", syncStoredUser);
       window.clearTimeout(storageTimer);
     };
   }, []);
@@ -186,30 +190,41 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="desktop-actions">
-            {isAdmin && (
-              <>
-                <button
-                  onClick={toggleEditMode}
-                  className={`edit-site-toggle ${editMode ? 'active' : ''}`}
-                  title={editMode ? 'Exit Edit Mode' : 'Edit Site'}
-                >
-                  <FaPen size={12} />
-                  <span>{editMode ? 'Editing' : 'Edit Site'}</span>
-                </button>
-                {editMode && (
+          <div className="header-right-actions">
+            <div className="desktop-actions">
+              {isAdmin && (
+                <>
                   <button
-                    onClick={() => setLeadsOpen(true)}
-                    className="edit-site-toggle"
-                    title="View Leads"
+                    onClick={toggleEditMode}
+                    className={`edit-site-toggle ${editMode ? 'active' : ''}`}
+                    title={editMode ? 'Exit Edit Mode' : 'Edit Site'}
                   >
-                    <FaDatabase size={12} />
-                    <span>Leads</span>
+                    <FaPen size={12} />
+                    <span>{editMode ? 'Editing' : 'Edit Site'}</span>
                   </button>
-                )}
-              </>
-            )}
-            {currentUser ? (
+                  {editMode && (
+                    <button
+                      onClick={() => setLeadsOpen(true)}
+                      className="edit-site-toggle"
+                      title="View Leads"
+                    >
+                      <FaDatabase size={12} />
+                      <span>Leads</span>
+                    </button>
+                  )}
+                </>
+              )}
+              {!currentUser && (
+                <Button href="/login" variant="outline" size="sm">
+                  Sign In
+                </Button>
+              )}
+              <Button href="/courses" variant="primary" size="sm">
+                Explore Courses
+              </Button>
+            </div>
+
+            {currentUser && (
               <div className="user-profile-container">
                 <button 
                   type="button"
@@ -275,15 +290,7 @@ export default function Header() {
                   </div>
                 )}
               </div>
-            ) : (
-              <Button href="/login" variant="outline" size="sm">
-                Sign In
-              </Button>
             )}
-            <Button href="/courses" variant="primary" size="sm">
-              Explore Courses
-            </Button>
-          </div>
 
           <button
             ref={menuButtonRef}
@@ -295,6 +302,7 @@ export default function Header() {
           >
             <Menu aria-hidden="true" />
           </button>
+          </div>
         </div>
       </header>
 
@@ -370,10 +378,6 @@ export default function Header() {
           <div className="mobile-actions">
             {currentUser ? (
               <div className="mobile-user-profile">
-                <div className="mobile-user-greeting">
-                  <CircleUserRound aria-hidden="true" />
-                  <span>Hi, {currentUser.firstName || "Student"}</span>
-                </div>
                 {isAdmin && (
                   <div className="mobile-editor-actions">
                     <button
@@ -396,28 +400,6 @@ export default function Header() {
                     )}
                   </div>
                 )}
-                <div className="mobile-account-actions">
-                  {isAdmin && (
-                    <Button 
-                      href="/admin"
-                      variant="primary" 
-                      size="sm" 
-                      className="mobile-action-button mobile-admin-button"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Admin Portal
-                    </Button>
-                  )}
-                    <Button 
-                      onClick={handleLogout}
-                      variant="outline" 
-                      size="sm" 
-                      className="mobile-action-button mobile-signout-button"
-                      disabled={isLoggingOut}
-                    >
-                      {isLoggingOut ? "Signing out..." : "Sign Out"}
-                    </Button>
-                </div>
               </div>
             ) : (
               <Button 
@@ -532,6 +514,12 @@ export default function Header() {
         .nav-link:hover::after,
         .nav-link.active::after {
           width: 100%;
+        }
+
+        .header-right-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
         }
 
         .desktop-actions {
@@ -878,6 +866,25 @@ export default function Header() {
           z-index: 100;
           animation: user-profile-pop 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
           transform-origin: top right;
+        }
+
+        @media (max-width: 1023px) {
+          .user-profile-trigger {
+            padding: 3px;
+            gap: 0;
+            width: 36px;
+            height: 36px;
+            justify-content: center;
+          }
+          .user-profile-trigger-name,
+          .user-profile-trigger-chevron {
+            display: none;
+          }
+          .user-profile-dropdown {
+            right: -48px;
+            width: calc(100vw - 28px);
+            max-width: 300px;
+          }
         }
 
         @keyframes user-profile-pop {

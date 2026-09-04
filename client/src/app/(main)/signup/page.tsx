@@ -103,13 +103,23 @@ export default function StudentSignupPage() {
   }
 
   return (
-    <div className="app-login" style={{ minHeight: 'calc(100vh - 120px)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px 20px' }}>
+    <div className="app-login" style={{ minHeight: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column', paddingTop: '120px', paddingBottom: '60px', paddingLeft: '20px', paddingRight: '20px' }}>
       <style>{`
         .public-shell .app-login-field input:focus-visible {
           outline: none !important;
         }
+        .split-row {
+          display: flex;
+          gap: 12px;
+        }
+        @media (max-width: 480px) {
+          .split-row {
+            flex-direction: column;
+            gap: 0;
+          }
+        }
       `}</style>
-      <div className="app-login-frame" style={{ width: '100%', maxWidth: '460px', margin: '0' }}>
+      <div className="app-login-frame" style={{ width: '100%', maxWidth: '460px', margin: 'auto' }}>
             <div className="app-login-logo">
               <Image
                 src="/images/ui/logo2.png"
@@ -126,7 +136,7 @@ export default function StudentSignupPage() {
                 <p className="app-login-frame-label">Create an account</p>
                 <form className="app-login-form" onSubmit={handleSendOtp} noValidate>
                   
-                  <div style={{ display: 'flex', gap: '12px' }}>
+                  <div className="split-row">
                     <div className="app-login-field" style={{ flex: 1 }}>
                       <label className="sr-only" htmlFor="firstName">First name</label>
                       <div className="app-login-control">
@@ -173,7 +183,7 @@ export default function StudentSignupPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px' }}>
+                  <div className="split-row">
                     <div className="app-login-field" style={{ flex: 2 }}>
                       <label className="sr-only" htmlFor="mobileNumber">Mobile number</label>
                       <div className="app-login-control">

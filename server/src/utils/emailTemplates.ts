@@ -410,3 +410,31 @@ ${paragraph('If you did not ask for this, ignore the email. Your current passwor
 
   return { html: shell({ heading: 'Reset your admin password', bodyHtml }).html, text };
 }
+
+export function userPasswordResetEmail(params: {
+  name: string;
+  resetUrl: string;
+  ttlMinutes: number;
+}): { html: string; text: string } {
+  const bodyHtml = `
+${greeting(params.name)}
+${paragraph('Someone asked to reset your Success Code Academy password. If that was you, use the button below.')}
+${linkButton(params.resetUrl, 'Reset password')}
+${paragraph(`The link works for the next ${params.ttlMinutes} minutes and can only be used once.`)}
+${paragraph('If the button does not open in your mail app, copy this link into your browser:')}
+<p style="margin:0 0 14px;font-size:12px;line-height:1.6;color:${BRAND.teal};word-break:break-all;">${escapeHtml(params.resetUrl)}</p>
+${paragraph('If you did not ask for this, ignore the email. Your current password keeps working.')}`;
+
+  const text = [
+    `Hi ${params.name},`,
+    '',
+    'Someone asked to reset your Success Code Academy password. If that was you, use the link below.',
+    `The link works for the next ${params.ttlMinutes} minutes and can only be used once.`,
+    '',
+    params.resetUrl,
+    '',
+    'If you did not ask for this, ignore the email. Your current password keeps working.',
+  ].join('\n');
+
+  return { html: shell({ heading: 'Reset your password', bodyHtml }).html, text };
+}

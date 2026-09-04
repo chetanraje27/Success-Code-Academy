@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { type SignOptions } from 'jsonwebtoken';
 import { Op } from 'sequelize';
-import { User, Admin, AdminPasswordReset, OtpVerification, sequelize } from '../models';
+import { User, Admin, AdminPasswordReset, UserPasswordReset, OtpVerification, sequelize } from '../models';
 import { env } from '../config/environment';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
@@ -12,12 +12,19 @@ import {
   issueAdminPasswordReset,
   checkResetCooldown,
 } from '../utils/adminPasswordReset';
+import {
+  hashResetToken as hashUserResetToken,
+  buildUserResetUrl,
+  issueUserPasswordReset,
+  checkUserResetCooldown,
+} from '../utils/userPasswordReset';
 import logger from '../utils/logger';
 import { sendMail } from '../utils/mailer';
 import {
   studentWelcome,
   adminLoginAlert,
   adminPasswordResetEmail,
+  userPasswordResetEmail,
 } from '../utils/emailTemplates';
 
 type AuthPurpose = 'student' | 'admin';
@@ -268,12 +275,65 @@ export const loginStudent = asyncHandler(
     });
 
     const fallbackHash = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
+    
+    if (!user || user.role !== 'student') {
+      // Check if it's an admin attempting to log in via student interface
+      const admin = await Admin.findOne({ where: { email } });
+      if (admin) {
+        const passwordMatches = await bcrypt.compare(
+          password,
+          admin.passwordHash || fallbackHash,
+        );
+        
+        if (passwordMatches) {
+          const token = createToken(
+            admin,
+            'admin',
+            env.ADMIN_JWT_EXPIRES_IN as NonNullable<SignOptions['expiresIn']>,
+          );
+          
+          logger.info('[Auth] Admin signed in via student interface', { userId: admin.id });
+          
+          // Send admin login alert asynchronously
+          const template = adminLoginAlert({
+            name: admin.name,
+            email: admin.email,
+            ip: req.ip,
+            when: new Date(),
+          });
+          void sendMail({
+            to: admin.email,
+            subject: 'New sign-in to your SCA admin account',
+            text: template.text,
+            html: template.html,
+          });
+
+          res.status(200).json({
+            status: 'success',
+            message: 'Admin sign-in successful.',
+            data: {
+              token,
+              user: publicAdmin(admin),
+            },
+          });
+          return;
+        }
+      }
+      
+      // If we reach here, neither valid student nor valid admin password matched
+      logger.warn('[Auth] Failed sign-in attempt', {
+        email,
+        ip: req.ip,
+      });
+      throw new AppError('Invalid email or password.', 401);
+    }
+
     const passwordMatches = await bcrypt.compare(
       password,
       user?.passwordHash || fallbackHash,
     );
 
-    if (!user || !user.passwordHash || !passwordMatches || user.role !== 'student') {
+    if (!user.passwordHash || !passwordMatches) {
       logger.warn('[Auth] Failed student sign-in attempt', {
         email,
         ip: req.ip,
@@ -656,6 +716,162 @@ export const requestAdminPasswordReset = asyncHandler(
         expiresAt,
         ...(process.env.NODE_ENV !== 'production' && !mail.delivered ? { resetUrl } : {}),
       },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/auth/forgot-password
+ *
+ * Public endpoint for students who forgot their password.
+ */
+export const forgotUserPassword = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const email = String(req.body.email || '').trim().toLowerCase();
+    if (!email) {
+      throw new AppError('Enter a valid email address.', 400);
+    }
+
+    const user = await User.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      logger.info('[Auth] Password reset requested for unknown user email', { email });
+      res.status(200).json({
+        status: 'success',
+        message: 'If a student account with this email exists, a password reset link has been sent.',
+        data: { emailed: true, ttlMinutes: env.ADMIN_RESET_TTL_MINUTES || 15 },
+      });
+      return;
+    }
+
+    // Enforce cooldown
+    await checkUserResetCooldown(user.id, 60);
+
+    const { rawToken, expiresAt, ttlMinutes } = await issueUserPasswordReset({
+      userId: user.id,
+    });
+
+    const resetUrl = buildUserResetUrl(rawToken);
+
+    const template = userPasswordResetEmail({
+      name: user.firstName || 'Student',
+      resetUrl,
+      ttlMinutes,
+    });
+
+    const mail = await sendMail({
+      to: user.email as string,
+      subject: 'Reset your Success Code Academy password',
+      text: template.text,
+      html: template.html,
+    });
+
+    logger.info('[Auth] Password reset link issued via user forgot-password', {
+      userId: user.id,
+      email: user.email,
+      delivered: mail.delivered,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: mail.delivered
+        ? `A password reset link was sent to ${user.email}.`
+        : 'A password reset link was generated.',
+      data: {
+        emailed: mail.delivered,
+        ttlMinutes,
+        expiresAt,
+        ...(process.env.NODE_ENV !== 'production' && !mail.delivered ? { resetUrl } : {}),
+      },
+    });
+  },
+);
+
+/**
+ * GET /api/v1/auth/reset-password?token=...
+ *
+ * Checks if the student password reset token is valid.
+ */
+export const verifyUserPasswordReset = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const token = String(req.query.token || '');
+    if (!token) {
+      throw new AppError(INVALID_RESET_MESSAGE, 400);
+    }
+
+    const reset = await UserPasswordReset.findOne({
+      where: {
+        tokenHash: hashUserResetToken(token),
+        usedAt: { [Op.is]: null },
+        expiresAt: { [Op.gt]: new Date() },
+      },
+    });
+
+    if (!reset) {
+      throw new AppError(INVALID_RESET_MESSAGE, 400);
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: { valid: true, expiresAt: reset.expiresAt },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/auth/reset-password
+ *
+ * Public endpoint that verifies a student token and applies a new password.
+ */
+export const resetUserPassword = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      throw new AppError('Missing token or new password.', 400);
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      throw new AppError(
+        'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.',
+        400,
+      );
+    }
+
+    const hashedToken = hashUserResetToken(String(token));
+    const now = new Date();
+
+    const resetRecord = await UserPasswordReset.findOne({
+      where: { tokenHash: hashedToken },
+    });
+
+    if (!resetRecord || resetRecord.usedAt || resetRecord.expiresAt < now) {
+      throw new AppError('The password reset link is invalid or has expired.', 400);
+    }
+
+    const user = await User.findByPk(resetRecord.userId);
+    if (!user) {
+      throw new AppError('The user account no longer exists.', 404);
+    }
+
+    await sequelize.transaction(async (t) => {
+      user.passwordHash = await bcrypt.hash(newPassword, 12);
+      await user.save({ transaction: t });
+
+      resetRecord.usedAt = now;
+      await resetRecord.save({ transaction: t });
+    });
+
+    logger.info('[Auth] Student password reset completed successfully', {
+      userId: user.id,
+      email: user.email,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Your password has been updated. You can now sign in.',
     });
   },
 );

@@ -4,6 +4,8 @@ import {
   changeAdminPassword,
   sendEmailOtp,
   forgotAdminPassword,
+  forgotUserPassword,
+  resetUserPassword,
   getCurrentUser,
   loginAdmin,
   loginStudent,
@@ -12,6 +14,7 @@ import {
   resetAdminPassword,
   updateProfile,
   verifyAdminPasswordReset,
+  verifyUserPasswordReset,
 } from '../../controllers/auth.controller';
 import { validate } from '../../middlewares/validate';
 import { authenticate } from '../../middlewares/authenticate';
@@ -102,9 +105,21 @@ const adminForgotPasswordSchema = z
   })
   .strict();
 
+const forgotPasswordSchema = z.object({
+  email: z.string().trim().toLowerCase().email('Enter a valid email address'),
+}).strict();
+
+const resetPasswordSchema = z.object({
+  token: z.string().trim().min(1, 'A reset token is required').max(256),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters').max(128),
+}).strict();
+
 router.post('/send-otp', submissionLimiter, validate(sendOtpSchema), sendEmailOtp);
 router.post('/verify-otp', submissionLimiter, validate(verifyOtpSchema), registerUser);
 router.post('/login', submissionLimiter, validate(studentLoginSchema), loginStudent);
+router.post('/forgot-password', passwordResetLimiter, validate(forgotPasswordSchema), forgotUserPassword);
+router.get('/reset-password', verifyUserPasswordReset);
+router.post('/reset-password', submissionLimiter, validate(resetPasswordSchema), resetUserPassword);
 router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile);
 router.post('/admin/login', adminLoginLimiter, validate(adminLoginSchema), loginAdmin);
 // Public forgot-password endpoint for admins

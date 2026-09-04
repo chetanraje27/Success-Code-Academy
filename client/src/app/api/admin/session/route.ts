@@ -72,16 +72,46 @@ export async function POST(request: NextRequest) {
 
   try {
     const credentials = await request.json();
-    const response = await fetch(backendUrl("/api/v1/auth/admin/login"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-      cache: "no-store",
-    });
-    const payload = await parseBackendResponse(response);
+    let payload;
+    let responseOk = true;
+    let responseStatus = 200;
 
-    if (!response.ok) {
-      return NextResponse.json(payload, { status: response.status });
+    if (credentials.syncToken) {
+      const meResponse = await fetch(backendUrl("/api/v1/auth/me"), {
+        headers: { Authorization: `Bearer ${credentials.syncToken}` },
+        cache: "no-store",
+      });
+      const mePayload = await parseBackendResponse(meResponse);
+      const user = (mePayload.data as { user?: { role?: string } } | undefined)?.user;
+      
+      if (!meResponse.ok || !isAdminRole(user?.role)) {
+        return NextResponse.json(
+          { status: "error", message: "Invalid session token." },
+          { status: 401 }
+        );
+      }
+      
+      payload = {
+        status: "success",
+        data: {
+          token: credentials.syncToken,
+          user: user,
+        }
+      };
+    } else {
+      const response = await fetch(backendUrl("/api/v1/auth/admin/login"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+        cache: "no-store",
+      });
+      payload = await parseBackendResponse(response);
+      responseOk = response.ok;
+      responseStatus = response.status;
+    }
+
+    if (!responseOk) {
+      return NextResponse.json(payload, { status: responseStatus });
     }
 
     const data = payload.data as

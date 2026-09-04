@@ -7,6 +7,7 @@ const sequelize = new Sequelize(dbConfig);
 // Import models and initialize them to ensure they are registered on the sequelize instance
 import Admin, { initAdmin } from './Admin';
 import AdminPasswordReset, { initAdminPasswordReset } from './AdminPasswordReset';
+import UserPasswordReset, { initUserPasswordReset } from './UserPasswordReset';
 import ScholarshipRegistration, { initScholarshipRegistration } from './ScholarshipRegistration';
 import User, { initUser } from './User';
 import OtpVerification, { initOtpVerification } from './OtpVerification';
@@ -29,6 +30,7 @@ import {
 
 initAdmin(sequelize);
 initAdminPasswordReset(sequelize);
+initUserPasswordReset(sequelize);
 initScholarshipRegistration(sequelize);
 initUser(sequelize);
 initOtpVerification(sequelize);
@@ -72,6 +74,7 @@ export {
   sequelize,
   Admin,
   AdminPasswordReset,
+  UserPasswordReset,
   ScholarshipRegistration,
   User,
   OtpVerification,

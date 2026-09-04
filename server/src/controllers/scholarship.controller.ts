@@ -23,9 +23,12 @@ export const getMyRegistration = asyncHandler(
     });
 
     if (!registration) {
-      res.status(404).json({
-        status: 'fail',
-        message: 'No registration found.',
+      res.status(200).json({
+        status: 'success',
+        message: 'No existing scholarship registration found.',
+        data: {
+          registration: null,
+        },
       });
       return;
     }
@@ -52,6 +55,9 @@ export const updateMyRegistration = asyncHandler(
     }
 
     const {
+      studentName,
+      studentPhone,
+      studentEmail,
       parentPhone,
       studentClass,
       schoolName,
@@ -68,14 +74,22 @@ export const updateMyRegistration = asyncHandler(
       throw new AppError('No registration found.', 404);
     }
 
-    await registration.update({
+    const editableFields = {
+      studentName,
+      studentPhone,
+      studentEmail,
       parentPhone,
       studentClass,
       schoolName,
       city,
       preferredCourse,
       scholarshipProgram,
-    });
+    };
+    await registration.update(
+      Object.fromEntries(
+        Object.entries(editableFields).filter(([, value]) => value !== undefined),
+      ),
+    );
 
     res.status(200).json({
       status: 'success',
@@ -119,18 +133,20 @@ export const createRegistration = asyncHandler(
       scholarshipProgram,
     } = req.body;
 
-    const registration = await ScholarshipRegistration.create({
-      userId,
-      studentEmail,
-      scholarshipProgram,
-      studentName,
-      studentPhone,
-      parentPhone,
-      studentClass,
-      schoolName,
-      city,
-      preferredCourse,
-    });
+    let registration;
+    try {
+      registration = await ScholarshipRegistration.create({
+        userId, studentEmail, scholarshipProgram, studentName, studentPhone, parentPhone,
+        studentClass, schoolName, city, preferredCourse,
+      });
+    } catch (error) {
+      if ((error as { name?: string }).name === 'SequelizeUniqueConstraintError') {
+        const existingRegistration = await ScholarshipRegistration.findOne({ where: { userId } });
+        res.status(409).json({ status: 'fail', message: 'You already have a scholarship registration. Please update the existing registration.', data: { registration: existingRegistration } });
+        return;
+      }
+      throw error;
+    }
 
     logger.info(
       `🎓 [Scholarship] New SCST registration: ${studentName} (${studentClass}, ${city})`

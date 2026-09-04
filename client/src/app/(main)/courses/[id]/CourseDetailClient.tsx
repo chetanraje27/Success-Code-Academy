@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,7 +13,7 @@ import {
   FaFilePdf,
 } from "react-icons/fa6";
 import { EditableText } from "@/components/admin/EditableText";
-// import removed
+import { useToast } from "@/components/admin/Toast";
 
 interface CourseDetailClientProps {
   course: {
@@ -146,7 +146,16 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submissionError, setSubmissionError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [savedRegistration, setSavedRegistration] = useState<typeof formData | null>(null);
+  const [isLoadingRegistration, setIsLoadingRegistration] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const hasInteracted = useRef(false);
+  const toast = useToast();
+  const hasChanges = savedRegistration
+    ? Object.keys(savedRegistration).some((key) => formData[key as keyof typeof formData] !== savedRegistration[key as keyof typeof formData])
+    : false;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -154,24 +163,38 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
       if (!savedUser) {
         setIsAuthenticated(false);
-        setFormData((previous) => ({
-          ...previous,
-          name: "",
-          email: "",
-          phone: "",
-        }));
+        setSavedRegistration(null);
+        setFormStatus("idle");
+        setIsEditing(false);
         return;
       }
 
       try {
         const user = JSON.parse(savedUser);
         setIsAuthenticated(true);
-        setFormData((previous) => ({
-          ...previous,
-          name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-          email: user.email || previous.email,
-          phone: user.mobileNumber || previous.phone,
-        }));
+        if (!hasInteracted.current) {
+          setFormData((previous) => ({
+            ...previous,
+            name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+            email: user.email || previous.email,
+            phone: user.mobileNumber || previous.phone,
+          }));
+        }
+        setIsLoadingRegistration(true);
+        fetch("/api/public/forms/course-register/me", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }).then(async (response) => {
+          if (!response.ok) return null;
+          const data = await response.json();
+          return data.data?.registration || data.registration || null;
+        }).then((registration) => {
+          if (!registration) return;
+          const saved = { name: registration.studentName || "", email: registration.studentEmail || "", phone: registration.studentPhone || "", visitingDate: registration.visitingDate || "", visitingTime: registration.visitingTime || "" };
+          setSavedRegistration(saved);
+          if (!hasInteracted.current) setFormData(saved);
+          setFormStatus("success");
+        }).catch((error) => console.error("Error fetching course enquiry:", error))
+          .finally(() => setIsLoadingRegistration(false));
       } catch {
         setIsAuthenticated(false);
       }
@@ -183,7 +206,15 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
   }, []);
 
   const handleAuthInterceptor = (event: React.MouseEvent | React.FocusEvent) => {
-    if (isAuthenticated) {
+    const token = localStorage.getItem("token")?.trim();
+    const savedUser = localStorage.getItem("user");
+
+    if (token && savedUser) {
+      return;
+    }
+
+    // Let submit reach handleSubmit so it can show the specific auth error.
+    if (event.target instanceof Element && event.target.closest('button[type="submit"]')) {
       return;
     }
 
@@ -199,46 +230,92 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.visitingDate ||
-      !formData.visitingTime ||
-      formData.visitingTime === "Choose a convenient time slot"
-    ) {
+    const form = event.currentTarget as HTMLFormElement;
+    setSubmissionError("");
+    const token = localStorage.getItem("token")?.trim();
+    const savedUser = localStorage.getItem("user");
+    if (!token || !savedUser) {
+      setSubmissionError("Please sign in before submitting a course enquiry.");
       setFormStatus("error");
       return;
     }
 
+    const values = new FormData(form);
+    const submittedData = {
+      name: String(values.get("name") || "").trim(),
+      email: String(values.get("email") || "").trim(),
+      phone: String(values.get("phone") || "").trim(),
+      visitingDate: String(values.get("visitingDate") || "").trim(),
+      visitingTime: String(values.get("visitingTime") || "").trim(),
+    };
+    const dateParts = submittedData.visitingDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const validDate = Boolean(dateParts) && (() => {
+      const [, year, month, day] = dateParts!;
+      const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+      return date.getUTCFullYear() === Number(year)
+        && date.getUTCMonth() === Number(month) - 1
+        && date.getUTCDate() === Number(day);
+    })();
+
+    if (
+      !submittedData.name ||
+      !submittedData.email ||
+      !submittedData.phone ||
+      !validDate ||
+      !timeSlots.slice(1).includes(submittedData.visitingTime)
+    ) {
+      setSubmissionError("Please complete all required form fields.");
+      setFormStatus("error");
+      return;
+    }
+
+    if (isLoadingRegistration) return;
+
     setIsSubmitting(true);
 
     try {
+      const hasSaved = Boolean(savedRegistration);
       const response = await fetch(
-        "/api/public/forms/course-register",
+        hasSaved ? "/api/public/forms/course-register/me" : "/api/public/forms/course-register",
         {
-          method: "POST",
+          method: hasSaved ? "PUT" : "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             courseTitle: course.title,
-            studentName: formData.name,
-            studentEmail: formData.email,
-            studentPhone: formData.phone,
-            visitingDate: formData.visitingDate,
-            visitingTime: formData.visitingTime,
+            studentName: submittedData.name,
+            studentEmail: submittedData.email,
+            studentPhone: submittedData.phone,
+            visitingDate: submittedData.visitingDate,
+            visitingTime: submittedData.visitingTime,
           }),
         },
       );
 
+      const result = await response.json().catch(() => ({}));
+      if (response.status === 409 && (result.data?.registration || result.registration)) {
+        const registration = result.data?.registration || result.registration;
+        const saved = { name: registration.studentName || "", email: registration.studentEmail || "", phone: registration.studentPhone || "", visitingDate: registration.visitingDate || "", visitingTime: registration.visitingTime || "" };
+        setSavedRegistration(saved);
+        setFormData(saved);
+        setFormStatus("success");
+        setIsEditing(false);
+        return;
+      }
       if (!response.ok) {
-        throw new Error("Failed to register for the course");
+        throw new Error(result.message || "Failed to save the course enquiry");
       }
 
       setFormStatus("success");
+      setSavedRegistration(submittedData);
+      setFormData(submittedData);
+      setIsEditing(false);
+      if (hasSaved) toast.success("Your course enquiry was updated.");
     } catch (error) {
       console.error(error);
+      setSubmissionError(error instanceof Error ? error.message : "Failed to save the course enquiry.");
       setFormStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -439,7 +516,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
           <aside className="course-detail-sidebar">
             <div className="course-detail-register-card">
-              {formStatus === "success" ? (
+              {formStatus === "success" && !isEditing ? (
                 <AnimatePresence>
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
@@ -472,21 +549,8 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                     <p className="course-registration-note">
                       Our admissions team will call you at {formData.phone} shortly.
                     </p>
-                    <button
-                      type="button"
-                      className="course-registration-reset"
-                      onClick={() => {
-                        setFormData({
-                          name: "",
-                          email: "",
-                          phone: "",
-                          visitingDate: "",
-                          visitingTime: "",
-                        });
-                        setFormStatus("idle");
-                      }}
-                    >
-                      Reserve Another Spot
+                    <button type="button" className="course-registration-reset" onClick={() => setIsEditing(true)}>
+                      Edit enquiry
                     </button>
                   </motion.div>
                 </AnimatePresence>
@@ -530,34 +594,31 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
                   <div className="course-registration-fields">
                     <input
+                      name="name"
                       type="text"
                       placeholder="Full Name"
                       value={formData.name}
-                      onChange={(event) =>
-                        setFormData({ ...formData, name: event.target.value })
-                      }
+                      onChange={(event) => { hasInteracted.current = true; setFormData({ ...formData, name: event.target.value }); }}
                       required
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                     />
                     <input
+                      name="email"
                       type="email"
                       placeholder="Email Address"
                       value={formData.email}
-                      onChange={(event) =>
-                        setFormData({ ...formData, email: event.target.value })
-                      }
+                      onChange={(event) => { hasInteracted.current = true; setFormData({ ...formData, email: event.target.value }); }}
                       required
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                     />
                     <input
+                      name="phone"
                       type="tel"
                       placeholder="Mobile Number"
                       value={formData.phone}
-                      onChange={(event) =>
-                        setFormData({ ...formData, phone: event.target.value })
-                      }
+                      onChange={(event) => { hasInteracted.current = true; setFormData({ ...formData, phone: event.target.value }); }}
                       required
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                     />
                   </div>
 
@@ -582,11 +643,13 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                       <label htmlFor="visiting-date">SELECT VISITING DATE</label>
                       <input
                         id="visiting-date"
+                        name="visitingDate"
                         type="date"
                         value={formData.visitingDate}
-                        onChange={(event) =>
-                          setFormData({ ...formData, visitingDate: event.target.value })
-                        }
+                        onChange={(event) => {
+                          hasInteracted.current = true;
+                          setFormData({ ...formData, visitingDate: event.target.value });
+                        }}
                         required
                       />
                     </div>
@@ -598,10 +661,12 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                       <div className="course-registration-select">
                         <select
                           id="visiting-time"
+                          name="visitingTime"
                           value={formData.visitingTime}
-                          onChange={(event) =>
-                            setFormData({ ...formData, visitingTime: event.target.value })
-                          }
+                          onChange={(event) => {
+                            hasInteracted.current = true;
+                            setFormData({ ...formData, visitingTime: event.target.value });
+                          }}
                           required
                         >
                           {timeSlots.map((slot, index) => (
@@ -618,25 +683,31 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                   <button
                     type="submit"
                     className="course-registration-submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isLoadingRegistration || Boolean(savedRegistration && !hasChanges)}
                   >
                     {isSubmitting ? (
-                      "Registering..."
+                      "Saving..."
                     ) : (
                       <EditableText
                         contentKey="registration.action"
                         label="registration action"
                         showInlineControls={false}
                       >
-                        Register Now
+                        {savedRegistration ? "Update enquiry" : "Register Now"}
                       </EditableText>
                     )}
                   </button>
 
+                  {savedRegistration && (
+                    <button type="button" className="course-registration-reset" onClick={() => setIsEditing(false)}>
+                      Cancel
+                    </button>
+                  )}
+
                   {formStatus === "error" && (
                     <p className="course-registration-error">
                       <FaCircleExclamation aria-hidden="true" />
-                      Please complete all required form fields.
+                      {submissionError || "Please complete all required form fields."}
                     </p>
                   )}
                 </form>

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/admin/EditableText";
 import { usePageBanner } from "@/lib/use-page-banner";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import { useToast } from "@/components/admin/Toast";
 
 export default function AdmissionsClient({ courses = [], scholarshipPrograms = [] }: { courses?: any[]; scholarshipPrograms?: any[] }) {
   const [formData, setFormData] = useState({
@@ -24,10 +25,17 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
   const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasExistingRegistration, setHasExistingRegistration] = useState(false);
+  const [savedRegistration, setSavedRegistration] = useState<typeof formData | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const hasInteracted = useRef(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { src: scholarshipBanner, isLoading: isBannerLoading } = usePageBanner("scholarships");
   const { editMode } = useEditModeOptional();
+  const toast = useToast();
+  const hasChanges = savedRegistration
+    ? Object.keys(savedRegistration).some((key) => formData[key as keyof typeof formData] !== savedRegistration[key as keyof typeof formData])
+    : false;
 
   useEffect(() => {
     const fetchExistingRegistration = async () => {
@@ -41,12 +49,13 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.data?.registration) {
+          if (data.data?.registration || data.registration) {
             setHasExistingRegistration(true);
-            setFormData(prev => ({
-              ...prev,
-              ...data.data.registration,
-            }));
+            const registration = data.data?.registration || data.registration;
+            const saved = { studentName: registration.studentName || "", studentPhone: registration.studentPhone || "", studentEmail: registration.studentEmail || "", parentPhone: registration.parentPhone || "", studentClass: registration.studentClass || "11th", schoolName: registration.schoolName || "", city: registration.city || "", preferredCourse: registration.preferredCourse || "", scholarshipProgram: registration.scholarshipProgram || "" };
+            setSavedRegistration(saved);
+            if (!hasInteracted.current) setFormData(saved);
+            setSubmitStatus("success");
           }
         }
       } catch (err) {
@@ -60,7 +69,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
         try {
           const user = JSON.parse(savedUser);
           setIsAuthenticated(true);
-          setFormData(prev => ({
+          if (!hasInteracted.current) setFormData(prev => ({
             ...prev,
             studentName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
             studentPhone: user.mobileNumber || prev.studentPhone,
@@ -74,6 +83,9 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
         setIsAuthenticated(false);
         setFormData(prev => ({ ...prev, studentName: "", studentPhone: "", studentEmail: "" }));
         setHasExistingRegistration(false);
+        setSavedRegistration(null);
+        setSubmitStatus("idle");
+        setIsEditing(false);
       }
     };
 
@@ -96,13 +108,21 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    hasInteracted.current = true;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (savedRegistration) setSubmitStatus("idle");
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editMode) return;
     if (!isAuthenticated) return;
+    const form = e.currentTarget as HTMLFormElement;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (savedRegistration && !hasChanges) return;
     
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -121,7 +141,28 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
+
+      if (response.status === 409 && (data.data?.registration || data.registration)) {
+        const registration = data.data?.registration || data.registration;
+        const saved = {
+          studentName: registration.studentName || "",
+          studentPhone: registration.studentPhone || "",
+          studentEmail: registration.studentEmail || "",
+          parentPhone: registration.parentPhone || "",
+          studentClass: registration.studentClass || "11th",
+          schoolName: registration.schoolName || "",
+          city: registration.city || "",
+          preferredCourse: registration.preferredCourse || "",
+          scholarshipProgram: registration.scholarshipProgram || "",
+        };
+        setHasExistingRegistration(true);
+        setSavedRegistration(saved);
+        setFormData(saved);
+        setSubmitStatus("success");
+        setIsEditing(false);
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to submit registration");
@@ -129,8 +170,9 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
 
       setSubmitStatus("success");
       setHasExistingRegistration(true);
-      // Wait briefly before resetting status
-      setTimeout(() => setSubmitStatus("idle"), 3000);
+      setSavedRegistration(formData);
+      setIsEditing(false);
+      if (hasExistingRegistration) toast.success("Your scholarship registration was updated.");
     } catch (err: unknown) {
       setErrorMessage(
         err instanceof Error
@@ -386,7 +428,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
               <div className="title-underline"></div>
             </div>
 
-            {submitStatus === "success" ? (
+            {submitStatus === "success" && !isEditing ? (
               <motion.div
                 className="success-feedback-container"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -399,9 +441,11 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                 </div>
                 <h4>Registration Complete!</h4>
                 <p>Thank you for registering for the Success Code Scholarship Exam. Our advisors will contact you shortly with test venue and timing details.</p>
-                <button onClick={() => setSubmitStatus("idle")} className="register-submit-btn">
-                  Register another student
-                </button>
+                {savedRegistration && (
+                  <button type="button" onClick={() => setIsEditing(true)} className="register-submit-btn">
+                    Edit registration
+                  </button>
+                )}
               </motion.div>
             ) : (
               <form
@@ -425,7 +469,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                       required
                       value={formData.studentName}
                       onChange={handleInputChange}
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                     />
                   </div>
                 </div>
@@ -455,7 +499,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                       required
                       value={formData.studentEmail}
                       onChange={handleInputChange}
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                       className={isAuthenticated ? "input-locked" : ""}
                     />
                   </div>
@@ -486,7 +530,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                       pattern="[0-9]{10}"
                       value={formData.studentPhone}
                       onChange={handleInputChange}
-                      readOnly={isAuthenticated}
+                      readOnly={isAuthenticated && !isEditing}
                       className={isAuthenticated ? "input-locked" : ""}
                     />
                   </div>
@@ -611,7 +655,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                   </div>
                 )}
 
-                <button type="submit" className="register-submit-btn" disabled={isSubmitting}>
+                <button type="submit" className="register-submit-btn" disabled={isSubmitting || Boolean(savedRegistration && !hasChanges)}>
                   {isSubmitting ? "Saving..." : (
                     <EditableText
                       contentKey="scholarship.submit-btn"
@@ -621,6 +665,11 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
                     </EditableText>
                   )}
                 </button>
+                {savedRegistration && (
+                  <button type="button" onClick={() => { setFormData(savedRegistration); setSubmitStatus("success"); setIsEditing(false); }} className="register-submit-btn">
+                    Cancel
+                  </button>
+                )}
 
               </form>
             )}

@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { submitContactForm, submitCourseRegistration } from '../../controllers/form.controller';
+import { submitContactForm, submitCourseRegistration, getMyCourseRegistration, updateMyCourseRegistration } from '../../controllers/form.controller';
 import { validate } from '../../middlewares/validate';
 import { submissionLimiter } from '../../middlewares/rateLimiter';
+import { authenticate } from '../../middlewares/authenticate';
 
 const router = Router();
 
@@ -21,8 +22,11 @@ const courseRegistrationSchema = z.object({
   visitingDate: z.string().min(1, 'Visiting date is required'),
   visitingTime: z.string().min(1, 'Visiting time is required'),
 });
+const updateCourseRegistrationSchema = courseRegistrationSchema.partial().refine((value) => Object.keys(value).length > 0, 'At least one field is required');
 
 router.post('/contact', submissionLimiter, validate(contactFormSchema), submitContactForm);
-router.post('/course-register', submissionLimiter, validate(courseRegistrationSchema), submitCourseRegistration);
+router.post('/course-register', authenticate, submissionLimiter, validate(courseRegistrationSchema), submitCourseRegistration);
+router.get('/course-register/me', authenticate, getMyCourseRegistration);
+router.put('/course-register/me', authenticate, validate(updateCourseRegistrationSchema), updateMyCourseRegistration);
 
 export default router;

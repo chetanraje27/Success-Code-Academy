@@ -78,6 +78,7 @@ export function initScholarshipRegistration(sequelize: Sequelize): void {
       userId: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        unique: true,
       },
       studentEmail: {
         type: DataTypes.STRING,

@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 export interface CourseRegistrationAttributes {
   id: number;
+  userId?: number;
   courseTitle: string;
   studentName: string;
   studentEmail: string;
@@ -20,6 +21,7 @@ export class CourseRegistration
   implements CourseRegistrationAttributes
 {
   declare public id: number;
+  declare public userId?: number;
   declare public courseTitle: string;
   declare public studentName: string;
   declare public studentEmail: string;
@@ -38,6 +40,10 @@ export function initCourseRegistration(sequelize: Sequelize): void {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
       courseTitle: {
         type: DataTypes.STRING,

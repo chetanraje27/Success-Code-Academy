@@ -6,20 +6,23 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/data/home";
 import Button from "@/components/ui/Button";
-import { ChevronDown, LogOut } from "lucide-react";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 import { FaPen, FaDatabase } from "react-icons/fa6";
 import {
   Award,
   BookOpen,
+  ChevronDown,
   CircleUserRound,
   GraduationCap,
   Home,
+  LogOut,
   Mail,
   Menu,
+  ShieldCheck,
   Trophy,
   X,
 } from "lucide-react";
+import { getConsoleDashboardHref } from "@/lib/admin-routing";
 
 type HeaderUser = {
   firstName?: string;
@@ -43,6 +46,7 @@ export default function Header() {
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -52,6 +56,16 @@ export default function Header() {
   const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
+
+  const userDisplayName = currentUser
+    ? [currentUser.firstName, currentUser.lastName].filter(Boolean).join(" ").trim() ||
+      currentUser.email?.split("@")[0] ||
+      "Account"
+    : "";
+
+  const userInitial = currentUser
+    ? (currentUser.firstName?.[0] || currentUser.email?.[0] || "A").toUpperCase()
+    : "A";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -138,18 +152,43 @@ export default function Header() {
   useEffect(() => {
     if (!isDropdownOpen) return;
 
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsDropdownOpen(false);
     };
 
+    document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isDropdownOpen]);
 
-  const handleLogout = () => {
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [pathname]);
+
+  const handleLogout = async () => {
     setIsLoggingOut(true);
-    // Add a small artificial delay so the user sees the loading state
-    setTimeout(() => {
+    try {
+      if (isAdmin) {
+        await fetch("/api/admin/session", {
+          method: "DELETE",
+          credentials: "same-origin",
+        });
+      }
+    } catch {
+      // Ignore network errors
+    } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setCurrentUser(null);
@@ -157,7 +196,8 @@ export default function Header() {
       setIsDropdownOpen(false);
       setIsMenuOpen(false);
       window.dispatchEvent(new Event("auth-changed"));
-    }, 600);
+      window.dispatchEvent(new Event("admin-session-expired"));
+    }
   };
 
 
@@ -225,7 +265,7 @@ export default function Header() {
             </div>
 
             {currentUser && (
-              <div className="user-profile-container">
+              <div className="user-profile-container" ref={profileMenuRef}>
                 <button 
                   type="button"
                   className={`user-profile-trigger ${isDropdownOpen ? "is-active" : ""}`}
@@ -234,10 +274,10 @@ export default function Header() {
                   aria-controls="user-account-menu"
                 >
                   <span className="user-profile-trigger-avatar" aria-hidden="true">
-                    {currentUser.firstName?.[0]?.toUpperCase() || "S"}
+                    {userInitial}
                   </span>
                   <span className="user-profile-trigger-name">
-                    {currentUser.firstName} {currentUser.lastName}
+                    {userDisplayName}
                   </span>
                   <ChevronDown
                     size={14}
@@ -254,38 +294,56 @@ export default function Header() {
                   >
                     <div className="user-profile-header">
                       <div className="user-profile-header-avatar" aria-hidden="true">
-                        {currentUser.firstName?.[0]?.toUpperCase() || "S"}
+                        {userInitial}
                       </div>
                       <div className="user-profile-header-meta">
-                        <span className="user-profile-name">
-                          {currentUser.firstName} {currentUser.lastName}
+                        <span className="user-profile-name" title={userDisplayName}>
+                          {userDisplayName}
                         </span>
-                        <span className="user-profile-email">{currentUser?.email || currentUser?.mobileNumber}</span>
+                        <span className="user-profile-email" title={currentUser?.email || currentUser?.mobileNumber}>
+                          {currentUser?.email || currentUser?.mobileNumber}
+                        </span>
+                        {isAdmin && (
+                          <div className="user-profile-badge">
+                            <ShieldCheck size={11} aria-hidden="true" />
+                            <span>Administrator</span>
+                          </div>
+                        )}
                       </div>
                     </div>
+
+                    {isAdmin && (
+                      <>
+                        <div className="user-profile-divider" />
+                        
+                        <div className="user-profile-menu">
+                          <Link 
+                            href={getConsoleDashboardHref()}
+                            onClick={() => setIsDropdownOpen(false)}
+                            className="user-profile-menu-item admin"
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              gap: "10px",
+                            }}
+                          >
+                            <CircleUserRound size={16} aria-hidden="true" style={{ display: "block", flexShrink: 0 }} />
+                            <span>Admin Portal</span>
+                          </Link>
+                        </div>
+                      </>
+                    )}
                     
-                    <div className="user-profile-menu">
-                      {isAdmin && (
-                        <Link 
-                          href="/admin"
-                          onClick={() => setIsDropdownOpen(false)}
-                          className="user-profile-menu-item admin"
-                        >
-                          <CircleUserRound size={16} aria-hidden="true" />
-                          <span>Admin Portal</span>
-                        </Link>
-                      )}
-                      
-                      <div className="user-profile-footer">
-                        <button 
-                          onClick={handleLogout}
-                          className="user-profile-logout-btn"
-                          disabled={isLoggingOut}
-                        >
-                          <LogOut size={16} aria-hidden="true" />
-                          <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
-                        </button>
-                      </div>
+                    <div className={`user-profile-footer ${isAdmin ? "" : "no-border"}`}>
+                      <button 
+                        onClick={handleLogout}
+                        className="user-profile-logout-btn"
+                        disabled={isLoggingOut}
+                      >
+                        <LogOut size={15} aria-hidden="true" />
+                        <span>{isLoggingOut ? "Signing out..." : "Sign Out"}</span>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -896,7 +954,7 @@ export default function Header() {
           display: flex;
           align-items: center;
           gap: 12px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
         .user-profile-header-avatar {
@@ -910,7 +968,7 @@ export default function Header() {
           color: #ffffff;
           font-size: 0.95rem;
           font-weight: 500;
-          box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 3px var(--color-border);
+          box-shadow: 0 0 0 2px var(--color-surface, #ffffff), 0 0 0 3px var(--color-border, #e2e8f0);
         }
 
         .user-profile-header-meta {
@@ -921,7 +979,7 @@ export default function Header() {
         }
 
         .user-profile-name {
-          color: var(--text-primary);
+          color: var(--text-primary, #0f172a);
           font-size: 0.88rem;
           font-weight: 600;
           line-height: 1.25;
@@ -932,52 +990,89 @@ export default function Header() {
 
         .user-profile-email {
           margin-top: 2px;
-          color: var(--text-secondary);
+          color: var(--text-secondary, #64748b);
           font-size: 0.74rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
 
+        .user-profile-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          margin-top: 5px;
+          align-self: flex-start;
+          padding: 2px 7px;
+          border-radius: 999px;
+          background: rgba(16, 47, 94, 0.08);
+          color: var(--brand-primary, #102f5e);
+          font-size: 0.68rem;
+          font-weight: 600;
+          letter-spacing: 0.01em;
+        }
+
+        .user-profile-divider {
+          height: 1px;
+          background: var(--color-border, #e2e8f0);
+          margin: 10px 0;
+        }
+
         .user-profile-menu {
           display: flex;
           flex-direction: column;
+          gap: 2px;
         }
 
-        .user-profile-menu-item {
-          display: flex;
-          align-items: center;
-          gap: 9px;
-          padding: 7px 10px;
-          border-radius: 999px;
-          color: var(--text-secondary);
-          text-decoration: none;
-          font-size: 0.78rem;
-          font-weight: 500;
+        :global(.user-profile-menu-item) {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 10px !important;
+          padding: 8px 12px !important;
+          border-radius: 10px !important;
+          color: var(--text-primary, #0f172a) !important;
+          text-decoration: none !important;
+          font-size: 0.82rem !important;
+          font-weight: 500 !important;
+          line-height: 1.2 !important;
+          cursor: pointer !important;
           transition:
             background-color var(--duration-fast) var(--ease-standard),
-            color var(--duration-fast) var(--ease-standard);
+            color var(--duration-fast) var(--ease-standard) !important;
         }
 
-        .user-profile-menu-item:hover {
-          background: #f4f7fb;
-          color: var(--text-primary);
+        :global(.user-profile-menu-item svg) {
+          display: block !important;
+          flex-shrink: 0 !important;
+          color: var(--brand-primary, #102f5e) !important;
+          transition: transform var(--duration-fast) var(--ease-standard) !important;
         }
 
-        .user-profile-menu-item.admin {
-          color: var(--brand-primary);
+        :global(.user-profile-menu-item:hover) {
+          background: #f1f5f9 !important;
+          color: var(--brand-primary, #102f5e) !important;
         }
 
-        .user-profile-link-icon {
-          color: var(--brand-primary);
-          display: flex;
-          align-items: center;
+        :global(.user-profile-menu-item:hover svg) {
+          transform: scale(1.08);
+        }
+
+        :global(.user-profile-menu-item.admin) {
+          color: var(--brand-primary, #102f5e) !important;
+          font-weight: 600 !important;
         }
 
         .user-profile-footer {
-          padding-top: 12px;
-          margin-top: 8px;
-          border-top: 1px solid var(--color-border);
+          padding-top: 10px;
+          margin-top: 6px;
+          border-top: 1px solid var(--color-border, #e2e8f0);
+        }
+
+        .user-profile-footer.no-border {
+          border-top: none;
+          padding-top: 0;
+          margin-top: 14px;
         }
 
         .user-profile-logout-btn {
@@ -989,10 +1084,10 @@ export default function Header() {
           justify-content: center;
           gap: 7px;
           padding: 0 14px;
-          border: 1px solid var(--color-border);
+          border: 1px solid var(--color-border, #e2e8f0);
           border-radius: 999px;
           background: transparent;
-          color: var(--text-secondary);
+          color: var(--text-secondary, #64748b);
           font: inherit;
           font-size: 0.78rem;
           font-weight: 500;
@@ -1006,7 +1101,7 @@ export default function Header() {
         .user-profile-logout-btn:hover:not(:disabled) {
           background: #fef2f2;
           border-color: #f6c9c9;
-          color: var(--color-danger);
+          color: var(--color-danger, #dc2626);
         }
 
         .user-profile-logout-btn:disabled {

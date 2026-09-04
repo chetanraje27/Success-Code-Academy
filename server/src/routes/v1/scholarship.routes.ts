@@ -23,15 +23,18 @@ const registerScholarshipSchema = z.object({
 });
 
 const updateScholarshipSchema = z.object({
-  parentPhone: z.string().regex(/^[0-9]{10}$/, 'Parent/Guardian mobile number must be exactly 10 digits'),
+  studentName: z.string().min(2, 'Student name must be at least 2 characters long').optional(),
+  studentPhone: z.string().regex(/^[0-9]{10}$/, 'Student mobile number must be exactly 10 digits').optional(),
+  studentEmail: z.string().email('Please enter a valid email address').optional().or(z.literal('')),
+  parentPhone: z.string().regex(/^[0-9]{10}$/, 'Parent/Guardian mobile number must be exactly 10 digits').optional(),
   studentClass: z.enum(['10th Pass', '11th', '12th'], {
     error: 'Class must be either 10th Pass, 11th, or 12th',
-  }),
-  schoolName: z.string().min(2, 'School name must be at least 2 characters long'),
-  city: z.string().min(2, 'City must be at least 2 characters long'),
-  preferredCourse: z.string().min(2, 'Preferred course or batch must be at least 2 characters long'),
-  scholarshipProgram: z.string().min(2, 'Scholarship program is required'),
-});
+  }).optional(),
+  schoolName: z.string().min(2, 'School name must be at least 2 characters long').optional(),
+  city: z.string().min(2, 'City must be at least 2 characters long').optional(),
+  preferredCourse: z.string().min(2, 'Preferred course or batch must be at least 2 characters long').optional(),
+  scholarshipProgram: z.string().min(2, 'Scholarship program is required').optional(),
+}).refine((value) => Object.keys(value).length > 0, 'At least one editable field is required');
 
 router.use(authenticate);
 

@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { Op, col, fn, where as sequelizeWhere } from 'sequelize';
 import { ContactMessage, CourseRegistration } from '../models';
 import { asyncHandler } from '../utils/asyncHandler';
 import logger from '../utils/logger';
@@ -8,6 +9,65 @@ import {
   contactFormStaffAlert,
   courseRegistrationReceipt,
 } from '../utils/emailTemplates';
+import { AppError } from '../utils/AppError';
+
+const normaliseEmail = (value: string): string => value.trim().toLowerCase();
+const normalisePhone = (value: string): string => value.replace(/\D/g, '');
+
+async function findExistingCourseRegistration(req: Request) {
+  const { studentEmail, studentPhone } = req.body ?? {};
+  if (req.user?.id) {
+    const owned = await CourseRegistration.findOne({
+      where: { userId: req.user.id },
+      order: [['createdAt', 'ASC']],
+    });
+    if (owned) return owned;
+  }
+  const identifiers = [
+    studentEmail
+      ? sequelizeWhere(fn('LOWER', col('studentEmail')), normaliseEmail(studentEmail))
+      : req.user?.email
+        ? sequelizeWhere(fn('LOWER', col('studentEmail')), normaliseEmail(req.user.email))
+        : undefined,
+    studentPhone
+      ? sequelizeWhere(fn('REGEXP_REPLACE', col('studentPhone'), '[^0-9]', '', 'g'), normalisePhone(studentPhone))
+      : req.user?.mobileNumber
+        ? sequelizeWhere(fn('REGEXP_REPLACE', col('studentPhone'), '[^0-9]', '', 'g'), normalisePhone(req.user.mobileNumber))
+        : undefined,
+  ].filter(Boolean) as unknown as Array<Record<string, unknown>>;
+  return identifiers.length
+    ? CourseRegistration.findOne({
+        where: { userId: { [Op.is]: null }, [Op.or]: identifiers } as any,
+        order: [['createdAt', 'ASC']],
+      })
+    : null;
+}
+
+export const getMyCourseRegistration = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  if (!req.user?.id) throw new AppError('Unauthorized', 401);
+  const registration = await findExistingCourseRegistration(req);
+  if (!registration) {
+    res.status(200).json({
+      status: 'success',
+      message: 'No existing course enquiry found.',
+      data: { registration: null },
+    });
+    return;
+  }
+  res.status(200).json({ status: 'success', message: 'Existing course enquiry found.', data: { registration } });
+});
+
+export const updateMyCourseRegistration = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  if (!req.user?.id) throw new AppError('Unauthorized', 401);
+  const registration = await findExistingCourseRegistration(req);
+  if (!registration) throw new AppError('No course enquiry found.', 404);
+  await registration.update({
+    ...req.body,
+    userId: req.user.id,
+    ...(req.body.studentEmail ? { studentEmail: normaliseEmail(req.body.studentEmail) } : {}),
+  });
+  res.status(200).json({ status: 'success', message: 'Course enquiry updated successfully.', data: { registration } });
+});
 
 /**
  * POST /api/v1/forms/contact
@@ -71,10 +131,17 @@ export const submitCourseRegistration = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const { courseTitle, studentName, studentEmail, studentPhone, visitingDate, visitingTime } = req.body;
 
+    const existing = await findExistingCourseRegistration(req);
+    if (existing) {
+      res.status(409).json({ status: 'fail', message: 'A course enquiry already exists for this student. Please update the existing enquiry instead.', data: { registration: existing } });
+      return;
+    }
+
     const newRegistration = await CourseRegistration.create({
+      ...(req.user?.id ? { userId: req.user.id } : {}),
       courseTitle,
       studentName,
-      studentEmail,
+      studentEmail: normaliseEmail(studentEmail),
       studentPhone,
       visitingDate,
       visitingTime,

@@ -234,25 +234,69 @@ export const getSignedUploadUrl = asyncHandler(async (req: Request, res: Respons
 
 // --- Dashboard Stats ---
 export const getDashboardStats = asyncHandler(async (req: Request, res: Response) => {
-  const totalStudents = await User.count({ where: { role: 'student' } });
-  const totalCourseForms = await CourseRegistration.count();
-  const totalScholarshipForms = await ScholarshipRegistration.count();
-  
-  // Get recent registrations
-  const recentStudents = await User.findAll({
-    where: { role: 'student' },
-    limit: 5,
-    order: [['createdAt', 'DESC']],
-    attributes: ['id', 'firstName', 'lastName', 'email', 'mobileNumber', 'createdAt']
-  });
+  const [
+    totalStudents,
+    totalCourseForms,
+    totalScholarshipForms,
+    totalContactMessages,
+    totalCourses,
+    recentStudents,
+    recentCourseRegistrations,
+    recentScholarships,
+    recentContactMessages,
+    courseBreakdown,
+  ] = await Promise.all([
+    User.count({ where: { role: 'student' } }),
+    CourseRegistration.count(),
+    ScholarshipRegistration.count(),
+    ContactMessage.count().catch(() => 0),
+    Course.count().catch(() => 0),
+    User.findAll({
+      where: { role: 'student' },
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      attributes: ['id', 'firstName', 'lastName', 'email', 'mobileNumber', 'createdAt'],
+    }),
+    CourseRegistration.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      attributes: ['id', 'courseTitle', 'studentName', 'studentEmail', 'studentPhone', 'createdAt'],
+    }).catch(() => []),
+    ScholarshipRegistration.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      attributes: ['id', 'studentName', 'studentPhone', 'studentClass', 'preferredCourse', 'createdAt'],
+    }).catch(() => []),
+    ContactMessage.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      attributes: ['id', 'name', 'email', 'phone', 'message', 'createdAt'],
+    }).catch(() => []),
+    CourseRegistration.findAll({
+      attributes: [
+        'courseTitle',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+      ],
+      group: ['courseTitle'],
+      order: [[sequelize.literal('count'), 'DESC']],
+      limit: 6,
+      raw: true,
+    }).catch(() => []),
+  ]);
 
   res.status(200).json({
     status: 'success',
     data: {
-      totalStudents,
-      totalCourseForms,
-      totalScholarshipForms,
-      recentStudents,
+      totalStudents: totalStudents ?? 0,
+      totalCourseForms: totalCourseForms ?? 0,
+      totalScholarshipForms: totalScholarshipForms ?? 0,
+      totalContactMessages: totalContactMessages ?? 0,
+      totalCourses: totalCourses ?? 0,
+      recentStudents: recentStudents ?? [],
+      recentCourseRegistrations: recentCourseRegistrations ?? [],
+      recentScholarships: recentScholarships ?? [],
+      recentContactMessages: recentContactMessages ?? [],
+      courseBreakdown: courseBreakdown ?? [],
     },
   });
 });

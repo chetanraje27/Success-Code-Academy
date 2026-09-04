@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  BarChart3,
   Bell,
   BookOpen,
   Calendar,
@@ -30,6 +29,7 @@ import {
 import { adminApiFetch } from "@/lib/admin-api";
 import { AdminNotice } from "@/components/admin/AdminUi";
 import AdminDetailDrawer from "@/components/admin/AdminDetailDrawer";
+import CourseDemandAnalytics from "@/components/admin/CourseDemandAnalytics";
 import { getAdminHref } from "@/lib/admin-routing";
 
 type RecentStudent = {
@@ -307,18 +307,6 @@ export default function AdminDashboardPage() {
     });
   }, [unifiedActivities, activeFilter, searchTerm]);
 
-  // Course demand breakdown from real database records
-  const breakdownStats = useMemo(() => {
-    const raw = stats?.courseBreakdown || [];
-    const items = raw.map((b) => ({
-      title: b?.courseTitle || "Unspecified Course",
-      count: Number(b?.count) || 0,
-    }));
-    const totalCount = items.reduce((acc, curr) => acc + curr.count, 0);
-    const maxCount = Math.max(...items.map((i) => i.count), 1);
-    return { items, totalCount, maxCount };
-  }, [stats?.courseBreakdown]);
-
   return (
     <div className="admin-dash">
       {/* 1. Executive Header Bar */}
@@ -400,55 +388,11 @@ export default function AdminDashboardPage() {
 
       {/* 3. Middle Section (Course Demand Breakdown + Quick Shortcuts) */}
       <div className="admin-dash-mid">
-        {/* Course Demand Breakdown */}
-        <section className="admin-dash-panel" aria-label="Course Demand">
-          <header className="admin-dash-panel-head">
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <BarChart3 size={15} style={{ color: "var(--admin-brand)" }} />
-              <h2 className="admin-dash-panel-title">Course Enquiries Breakdown</h2>
-            </div>
-            <span className="admin-dash-badge">
-              {formatNumber(breakdownStats.totalCount)} Leads
-            </span>
-          </header>
-
-          <div className="admin-dash-breakdown-list">
-            {breakdownStats.items.length === 0 ? (
-              <div className="admin-dash-empty">
-                No course enquiry records found in the database.
-              </div>
-            ) : (
-              breakdownStats.items.map((item, idx) => {
-                const widthPct = Math.round(
-                  (item.count / breakdownStats.maxCount) * 100,
-                );
-
-                return (
-                  <div className="admin-dash-breakdown-row" key={item.title}>
-                    <div className="admin-dash-breakdown-top">
-                      <div className="admin-dash-breakdown-info">
-                        <span className="admin-dash-rank">
-                          {String(idx + 1).padStart(2, "0")}
-                        </span>
-                        <p className="admin-dash-course-name">{item.title}</p>
-                      </div>
-                      <span className="admin-dash-count-pill">
-                        {formatNumber(item.count)} enquiries
-                      </span>
-                    </div>
-
-                    <div className="admin-dash-track">
-                      <div
-                        className="admin-dash-fill"
-                        style={{ width: `${Math.max(widthPct, 4)}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </section>
+        {/* Course Demand Analytics & Strategic Insights */}
+        <CourseDemandAnalytics
+          data={stats?.courseBreakdown || []}
+          totalPublishedCourses={stats?.totalCourses || 0}
+        />
 
         {/* Quick Operations Shortcuts */}
         <section className="admin-dash-panel" aria-label="Quick Shortcuts">

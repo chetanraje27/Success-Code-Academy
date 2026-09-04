@@ -9,6 +9,9 @@ export interface ScholarshipRegistrationAttributes {
   schoolName: string;
   city: string;
   preferredCourse: string;
+  userId?: number;
+  studentEmail?: string;
+  scholarshipProgram?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -28,6 +31,9 @@ export class ScholarshipRegistration
   declare public schoolName: string;
   declare public city: string;
   declare public preferredCourse: string;
+  declare public userId?: number;
+  declare public studentEmail?: string;
+  declare public scholarshipProgram?: string;
 
   declare public readonly createdAt: Date;
   declare public readonly updatedAt: Date;
@@ -68,6 +74,18 @@ export function initScholarshipRegistration(sequelize: Sequelize): void {
       preferredCourse: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      studentEmail: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      scholarshipProgram: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

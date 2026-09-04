@@ -23,6 +23,7 @@ import MediaRevision, { initMediaRevision } from './MediaRevision';
 import NewsArticle, { initNewsArticle } from './NewsArticle';
 import AcademyVideo, { initAcademyVideo } from './AcademyVideo';
 import Course, { initCourse } from './Course';
+import ScholarshipProgram, { initScholarshipProgram } from './ScholarshipProgram';
 import {
   NewsletterSubscriber,
   initNewsletterSubscriber,
@@ -46,6 +47,7 @@ initMediaRevision(sequelize);
 initNewsArticle(sequelize);
 initAcademyVideo(sequelize);
 initCourse(sequelize);
+initScholarshipProgram(sequelize);
 initNewsletterSubscriber(sequelize);
 
 export async function testConnection(): Promise<boolean> {
@@ -90,6 +92,7 @@ export {
   NewsArticle,
   AcademyVideo,
   Course,
+  ScholarshipProgram,
   NewsletterSubscriber,
 };
 export default sequelize;

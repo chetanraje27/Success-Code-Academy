@@ -340,6 +340,60 @@ ${paragraph('The top scorers in SCST can win up to a full fee waiver, so take it
   return { html: shell({ heading: 'SCST registration noted', bodyHtml }).html, text };
 }
 
+export function scholarshipRegistrationStaffAlert(params: {
+  studentName: string;
+  studentPhone: string;
+  studentEmail?: string;
+  studentClass: string;
+  schoolName: string;
+  city: string;
+  preferredCourse: string;
+  scholarshipProgram?: string;
+}): { html: string; text: string } {
+  const rows: [string, string][] = [
+    ['Student', params.studentName],
+    ['Class', params.studentClass],
+    ['Phone', params.studentPhone],
+    ['School', params.schoolName],
+    ['City', params.city],
+    ['Preferred course', params.preferredCourse],
+  ];
+  if (params.scholarshipProgram) rows.push(['Scholarship program', params.scholarshipProgram]);
+  if (params.studentEmail) rows.push(['Email', params.studentEmail]);
+
+  const bodyHtml = `
+${greeting('team')}
+${paragraph('A new SCST scholarship registration has been submitted through the website. Review the details below and follow up as needed.')}
+${detailTable(rows)}
+${linkButton(`${WEBSITE}/admin/database/scholarship-forms`, 'Open the dashboard')}`;
+
+  const text = [
+    'Hi team,',
+    '',
+    'A new SCST scholarship registration has been submitted through the website.',
+    '',
+    `Student: ${params.studentName}`,
+    `Class: ${params.studentClass}`,
+    `Phone: ${params.studentPhone}`,
+    `School: ${params.schoolName}`,
+    `City: ${params.city}`,
+    `Preferred course: ${params.preferredCourse}`,
+    ...(params.scholarshipProgram ? [`Scholarship program: ${params.scholarshipProgram}`] : []),
+    ...(params.studentEmail ? [`Email: ${params.studentEmail}`] : []),
+    '',
+    `Open the dashboard: ${WEBSITE}/admin/database/scholarship-forms`,
+  ].join('\n');
+
+  return {
+    html: shell({
+      heading: 'New SCST registration',
+      bodyHtml,
+      footerNote: 'You are receiving this because you manage the academy inbox.',
+    }).html,
+    text,
+  };
+}
+
 export function adminLoginAlert(params: {
   name: string;
   email: string;

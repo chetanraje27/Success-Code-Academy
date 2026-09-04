@@ -18,11 +18,13 @@ export default function ScholarshipFormEditorModal({
   const [formData, setFormData] = useState<any>({
     studentName: "",
     studentPhone: "",
+    studentEmail: "",
     parentPhone: "",
     studentClass: "",
     schoolName: "",
     city: "",
-    preferredCourse: ""
+    preferredCourse: "",
+    scholarshipProgram: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,21 +37,25 @@ export default function ScholarshipFormEditorModal({
         setFormData({
           studentName: formRecord.studentName || "",
           studentPhone: formRecord.studentPhone || "",
+          studentEmail: formRecord.studentEmail || "",
           parentPhone: formRecord.parentPhone || "",
           studentClass: formRecord.studentClass || "",
           schoolName: formRecord.schoolName || "",
           city: formRecord.city || "",
-          preferredCourse: formRecord.preferredCourse || ""
+          preferredCourse: formRecord.preferredCourse || "",
+          scholarshipProgram: formRecord.scholarshipProgram || ""
         });
       } else {
         setFormData({
           studentName: "",
           studentPhone: "",
+          studentEmail: "",
           parentPhone: "",
           studentClass: "",
           schoolName: "",
           city: "",
-          preferredCourse: ""
+          preferredCourse: "",
+          scholarshipProgram: ""
         });
       }
       setError("");
@@ -115,12 +121,22 @@ export default function ScholarshipFormEditorModal({
               onChange={(e) => setFormData({ ...formData, studentPhone: e.target.value })}
             />
           </div>
-          <div className="sca-admin-field" style={{ flex: 1 }}>
-            <label>Parent Phone</label>
-            <input
-              type="text"
-              value={formData.parentPhone}
-              onChange={(e) => setFormData({ ...formData, parentPhone: e.target.value })}
+          <div className="admin-form-group">
+            <label className="admin-form-label">Email Address (Student)</label>
+            <input 
+              type="email" 
+              className="admin-form-input" 
+              value={formData.studentEmail} 
+              onChange={e => setFormData({...formData, studentEmail: e.target.value})} 
+            />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Parent / Guardian Phone</label>
+            <input 
+              type="text" 
+              className="admin-form-input" 
+              value={formData.parentPhone} 
+              onChange={e => setFormData({...formData, parentPhone: e.target.value})} 
             />
           </div>
         </div>
@@ -144,14 +160,24 @@ export default function ScholarshipFormEditorModal({
           </div>
         </div>
         
-        <div className="sca-admin-field">
-          <label>Preferred Course</label>
-          <input
-            type="text"
-            value={formData.preferredCourse}
-            onChange={(e) => setFormData({ ...formData, preferredCourse: e.target.value })}
-          />
-        </div>
+        <div className="admin-form-group">
+            <label className="admin-form-label">Preferred Course</label>
+            <input 
+              type="text" 
+              className="admin-form-input" 
+              value={formData.preferredCourse} 
+              onChange={e => setFormData({...formData, preferredCourse: e.target.value})} 
+            />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Scholarship Program</label>
+            <input 
+              type="text" 
+              className="admin-form-input" 
+              value={formData.scholarshipProgram} 
+              onChange={e => setFormData({...formData, scholarshipProgram: e.target.value})} 
+            />
+          </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 24 }}>
           <button className="sca-admin-btn ghost" onClick={onClose} disabled={loading}>

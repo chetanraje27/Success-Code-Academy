@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Banner, ContentBlock, Notification, StarStudent, SiteSetting, TopperResult, NewsArticle, AcademyVideo, Course } from '../../models';
+import { Banner, ContentBlock, Notification, StarStudent, SiteSetting, TopperResult, NewsArticle, AcademyVideo, Course, ScholarshipProgram } from '../../models';
 import { asyncHandler } from '../../utils/asyncHandler';
 import { readFromDatabase } from '../../utils/databaseRead';
 
@@ -73,6 +73,15 @@ router.get('/courses', asyncHandler(async (req, res) => {
     order: [['id', 'ASC']],
   }));
   res.status(200).json({ status: 'success', data: courses });
+}));
+
+// Get active scholarship programs
+router.get('/scholarship-programs', asyncHandler(async (_req, res) => {
+  const programs = await readFromDatabase(() => ScholarshipProgram.findAll({
+    where: { isActive: true },
+    order: [['id', 'ASC']],
+  }));
+  res.status(200).json({ status: 'success', data: programs });
 }));
 
 // Public site settings (contact / social)

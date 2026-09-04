@@ -347,4 +347,10 @@ router.post('/database/contact-messages', superAdminOnly, validate(adminCreateCo
 router.put('/database/contact-messages/:id', validate(idParamsSchema, 'params'), validate(adminUpdateContactMessageSchema), adminController.updateContactMessage);
 router.delete('/database/contact-messages/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteContactMessage);
 
+// Scholarship Programs (content management)
+router.get('/scholarship-programs', adminController.getScholarshipPrograms);
+router.post('/scholarship-programs', superAdminOnly, adminController.createScholarshipProgram);
+router.put('/scholarship-programs/:id', validate(idParamsSchema, 'params'), adminController.updateScholarshipProgram);
+router.delete('/scholarship-programs/:id', superAdminOnly, validate(idParamsSchema, 'params'), adminController.deleteScholarshipProgram);
+
 export default router;

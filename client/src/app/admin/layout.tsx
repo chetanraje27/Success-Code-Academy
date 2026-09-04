@@ -29,6 +29,7 @@ import {
   Trophy,
   Users,
   Video,
+  Award,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -57,6 +58,7 @@ const navigation = [
       { label: "Banners", href: "/admin/banners", icon: Images },
       { label: "Page banners", href: "/admin/page-banners", icon: ImagePlus },
       { label: "Course catalog", href: "/admin/content/courses", icon: ClipboardList },
+      { label: "Scholarship programs", href: "/admin/content/scholarships", icon: Award },
       { label: "Announcements", href: "/admin/notifications", icon: Bell },
       { label: "News articles", href: "/admin/content/news", icon: Newspaper },
       { label: "Academy videos", href: "/admin/content/videos", icon: Video },

@@ -15,6 +15,7 @@ import {
   NewsArticle,
   AcademyVideo,
   Course,
+  ScholarshipProgram,
   sequelize,
 } from '../models';
 import type {
@@ -1456,3 +1457,32 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
   await course.destroy();
   res.status(200).json({ status: 'success', data: null });
 });
+
+// ─── Scholarship Programs CRUD ───────────────────────────────────────────────
+
+export const getScholarshipPrograms = asyncHandler(async (_req: Request, res: Response) => {
+  const programs = await ScholarshipProgram.findAll({ order: [['id', 'ASC']] });
+  res.status(200).json({ status: 'success', data: programs });
+});
+
+export const createScholarshipProgram = asyncHandler(async (req: Request, res: Response) => {
+  const program = await ScholarshipProgram.create(req.body);
+  res.status(201).json({ status: 'success', data: program });
+});
+
+export const updateScholarshipProgram = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const program = await ScholarshipProgram.findByPk(id);
+  if (!program) throw new AppError('Scholarship program not found', 404);
+  await program.update(req.body);
+  res.status(200).json({ status: 'success', data: program });
+});
+
+export const deleteScholarshipProgram = asyncHandler(async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const program = await ScholarshipProgram.findByPk(id);
+  if (!program) throw new AppError('Scholarship program not found', 404);
+  await program.destroy();
+  res.status(200).json({ status: 'success', data: null });
+});
+

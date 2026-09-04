@@ -7,26 +7,53 @@ import { EditableText } from "@/components/admin/EditableText";
 import { usePageBanner } from "@/lib/use-page-banner";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
 
-export default function AdmissionsClient() {
+export default function AdmissionsClient({ courses = [], scholarshipPrograms = [] }: { courses?: any[]; scholarshipPrograms?: any[] }) {
   const [formData, setFormData] = useState({
     studentName: "",
     studentPhone: "",
+    studentEmail: "",
     parentPhone: "",
     studentClass: "11th",
     schoolName: "",
     city: "",
     preferredCourse: "",
+    scholarshipProgram: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [hasExistingRegistration, setHasExistingRegistration] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { src: scholarshipBanner, isLoading: isBannerLoading } = usePageBanner("scholarships");
   const { editMode } = useEditModeOptional();
 
   useEffect(() => {
+    const fetchExistingRegistration = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await fetch("/api/public/scholarships/me", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.data?.registration) {
+            setHasExistingRegistration(true);
+            setFormData(prev => ({
+              ...prev,
+              ...data.data.registration,
+            }));
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching registration:", err);
+      }
+    };
+
     const checkAuth = () => {
       const savedUser = localStorage.getItem("user");
       if (savedUser) {
@@ -37,13 +64,16 @@ export default function AdmissionsClient() {
             ...prev,
             studentName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
             studentPhone: user.mobileNumber || prev.studentPhone,
+            studentEmail: user.email || prev.studentEmail,
           }));
+          fetchExistingRegistration();
         } catch {
           setIsAuthenticated(false);
         }
       } else {
         setIsAuthenticated(false);
-        setFormData(prev => ({ ...prev, studentName: "", studentPhone: "" }));
+        setFormData(prev => ({ ...prev, studentName: "", studentPhone: "", studentEmail: "" }));
+        setHasExistingRegistration(false);
       }
     };
 
@@ -72,15 +102,21 @@ export default function AdmissionsClient() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editMode) return;
+    if (!isAuthenticated) return;
     
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
-      const response = await fetch("/api/public/scholarships/register", {
-        method: "POST",
+      const token = localStorage.getItem("token");
+      const url = hasExistingRegistration ? "/api/public/scholarships/me" : "/api/public/scholarships/register";
+      const method = hasExistingRegistration ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify(formData),
       });
@@ -92,16 +128,9 @@ export default function AdmissionsClient() {
       }
 
       setSubmitStatus("success");
-      // Reset form
-      setFormData({
-        studentName: "",
-        studentPhone: "",
-        parentPhone: "",
-        studentClass: "11th",
-        schoolName: "",
-        city: "",
-        preferredCourse: "",
-      });
+      setHasExistingRegistration(true);
+      // Wait briefly before resetting status
+      setTimeout(() => setSubmitStatus("idle"), 3000);
     } catch (err: unknown) {
       setErrorMessage(
         err instanceof Error
@@ -402,7 +431,49 @@ export default function AdmissionsClient() {
                 </div>
 
                 <div className="form-input-group">
-                  <label className="form-label">Mobile Number (Student)</label>
+                  <label className="form-label">
+                    Email Address (Student)
+                    {isAuthenticated && (
+                      <span className="form-locked-badge">
+                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{marginRight:3}}>
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Verified
+                      </span>
+                    )}
+                  </label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    <input
+                      type="email"
+                      name="studentEmail"
+                      placeholder="Enter student email address"
+                      required
+                      value={formData.studentEmail}
+                      onChange={handleInputChange}
+                      readOnly={isAuthenticated}
+                      className={isAuthenticated ? "input-locked" : ""}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">
+                    Mobile Number (Student)
+                    {isAuthenticated && (
+                      <span className="form-locked-badge">
+                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{marginRight:3}}>
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Verified
+                      </span>
+                    )}
+                  </label>
                   <div className="input-with-icon">
                     <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -416,6 +487,7 @@ export default function AdmissionsClient() {
                       value={formData.studentPhone}
                       onChange={handleInputChange}
                       readOnly={isAuthenticated}
+                      className={isAuthenticated ? "input-locked" : ""}
                     />
                   </div>
                 </div>
@@ -493,20 +565,43 @@ export default function AdmissionsClient() {
                 </div>
 
                 <div className="form-input-group">
-                  <label className="form-label">Preferred Course / Batch</label>
+                  <label className="form-label">Preferred Course</label>
                   <div className="input-with-icon">
                     <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                     </svg>
-                    <input
-                      type="text"
+                    <select
                       name="preferredCourse"
-                      placeholder="Enter preferred course or batch"
                       required
                       value={formData.preferredCourse}
                       onChange={handleInputChange}
-                    />
+                    >
+                      <option value="" disabled>Select a course</option>
+                      {courses.map(course => (
+                        <option key={course.id} value={course.title}>{course.title}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-input-group">
+                  <label className="form-label">Scholarship Program</label>
+                  <div className="input-with-icon">
+                    <svg className="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <select
+                      name="scholarshipProgram"
+                      required
+                      value={formData.scholarshipProgram}
+                      onChange={handleInputChange}
+                    >
+                      <option value="" disabled>Select a scholarship program</option>
+                      {scholarshipPrograms.map(prog => (
+                        <option key={prog.id} value={prog.title}>{prog.title}{prog.description ? ` — ${prog.description}` : ""}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
@@ -517,12 +612,12 @@ export default function AdmissionsClient() {
                 )}
 
                 <button type="submit" className="register-submit-btn" disabled={isSubmitting}>
-                  {isSubmitting ? "Registering..." : (
+                  {isSubmitting ? "Saving..." : (
                     <EditableText
                       contentKey="scholarship.submit-btn"
                       label="scholarship submit button"
                     >
-                      Register for Scholarship Exam →
+                      {hasExistingRegistration ? "Update Registration →" : "Register for Scholarship Exam →"}
                     </EditableText>
                   )}
                 </button>
@@ -841,6 +936,32 @@ export default function AdmissionsClient() {
           font-weight: 750;
           color: #1e293b;
           font-family: 'Outfit', sans-serif;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .form-locked-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 2px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: #2563eb;
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          border-radius: 999px;
+          padding: 1px 7px;
+          letter-spacing: 0.02em;
+        }
+        .input-locked {
+          background: #f8fafc !important;
+          color: #64748b !important;
+          cursor: not-allowed;
+          border-color: #e2e8f0 !important;
+        }
+        .input-locked:focus {
+          box-shadow: none !important;
+          border-color: #e2e8f0 !important;
         }
         .input-with-icon {
           position: relative;

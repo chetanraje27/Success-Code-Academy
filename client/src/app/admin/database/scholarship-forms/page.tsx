@@ -43,10 +43,12 @@ export default function AdminScholarshipFormsPage() {
           ),
         },
         { key: "studentPhone", label: "Student phone" },
+        { key: "studentEmail", label: "Student email" },
         { key: "parentPhone", label: "Parent phone" },
         { key: "schoolName", label: "School" },
         { key: "city", label: "City" },
         { key: "preferredCourse", label: "Preferred course" },
+        { key: "scholarshipProgram", label: "Program" },
         { key: "createdAt", label: "Submitted" },
       ]}
       onAdd={() => setEditingForm({})}

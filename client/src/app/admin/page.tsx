@@ -8,12 +8,19 @@ import {
   BarChart3,
   Bell,
   BookOpen,
+  Calendar,
+  Check,
   ClipboardList,
+  Copy,
+  ExternalLink,
   GraduationCap,
   Images,
   LayoutDashboard,
+  Mail,
+  MessageSquare,
   MessageSquareText,
   Pencil,
+  Phone,
   RefreshCw,
   Search,
   Settings,
@@ -22,6 +29,7 @@ import {
 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { AdminNotice } from "@/components/admin/AdminUi";
+import AdminDetailDrawer from "@/components/admin/AdminDetailDrawer";
 
 type RecentStudent = {
   id: number;
@@ -81,6 +89,7 @@ type ActivityType = "all" | "students" | "courses" | "scholarships" | "messages"
 
 type UnifiedActivityItem = {
   id: string;
+  rawId: number;
   type: "students" | "courses" | "scholarships" | "messages";
   typeLabel: string;
   name: string;
@@ -89,6 +98,12 @@ type UnifiedActivityItem = {
   detail: string;
   createdAt: string;
   link: string;
+  studentClass?: string;
+  preferredCourse?: string;
+  courseTitle?: string;
+  message?: string;
+  firstName?: string;
+  lastName?: string;
 };
 
 const formatNumber = (value?: number | string | null): string => {
@@ -117,6 +132,22 @@ const formatDate = (dateStr: string) => {
   }
 };
 
+const formatFullDateTime = (dateStr: string) => {
+  try {
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return dateStr;
+    return d.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return dateStr;
+  }
+};
+
 const getInitial = (name: string) => {
   const trimmed = name ? name.trim() : "";
   return (trimmed ? trimmed[0] : "U").toUpperCase();
@@ -129,6 +160,7 @@ export default function AdminDashboardPage() {
   const [generatedAt, setGeneratedAt] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<ActivityType>("all");
+  const [selectedActivity, setSelectedActivity] = useState<UnifiedActivityItem | null>(null);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
@@ -162,6 +194,7 @@ export default function AdminDashboardPage() {
         [s.firstName, s.lastName].filter(Boolean).join(" ") || "Student";
       list.push({
         id: `student-${s.id}`,
+        rawId: s.id,
         type: "students",
         typeLabel: "Student",
         name: fullName,
@@ -170,12 +203,15 @@ export default function AdminDashboardPage() {
         detail: "Registered Student Account",
         createdAt: s.createdAt,
         link: "/admin/database/students",
+        firstName: s.firstName,
+        lastName: s.lastName,
       });
     });
 
     (stats.recentCourseRegistrations || []).forEach((c) => {
       list.push({
         id: `course-${c.id}`,
+        rawId: c.id,
         type: "courses",
         typeLabel: "Course Enquiry",
         name: c.studentName || "Prospective Student",
@@ -184,6 +220,7 @@ export default function AdminDashboardPage() {
         detail: c.courseTitle || "Course Registration",
         createdAt: c.createdAt,
         link: "/admin/database/course-forms",
+        courseTitle: c.courseTitle,
       });
     });
 
@@ -197,6 +234,7 @@ export default function AdminDashboardPage() {
 
       list.push({
         id: `scholarship-${sc.id}`,
+        rawId: sc.id,
         type: "scholarships",
         typeLabel: "Scholarship",
         name: sc.studentName || "Scholarship Applicant",
@@ -205,12 +243,15 @@ export default function AdminDashboardPage() {
         detail: details || "Scholarship Registration",
         createdAt: sc.createdAt,
         link: "/admin/database/scholarship-forms",
+        studentClass: sc.studentClass,
+        preferredCourse: sc.preferredCourse,
       });
     });
 
     (stats.recentContactMessages || []).forEach((m) => {
       list.push({
         id: `message-${m.id}`,
+        rawId: m.id,
         type: "messages",
         typeLabel: "Message",
         name: m.name || "Inquirer",
@@ -223,6 +264,7 @@ export default function AdminDashboardPage() {
           : "Contact Form Message",
         createdAt: m.createdAt,
         link: "/admin/database/contact-messages",
+        message: m.message,
       });
     });
 
@@ -556,49 +598,73 @@ export default function AdminDashboardPage() {
                   </td>
                 </tr>
               ) : (
-                filteredActivities.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <div className="admin-dash-user-cell">
-                        <div className="admin-dash-avatar">
-                          {getInitial(item.name)}
+                filteredActivities.map((item) => {
+                  const isSelected = selectedActivity?.id === item.id;
+                  return (
+                    <tr
+                      key={item.id}
+                      onClick={() => setSelectedActivity(item)}
+                      className={`admin-dash-row ${isSelected ? "is-selected" : ""}`}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View details for ${item.name}`}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedActivity(item);
+                        }
+                      }}
+                    >
+                      <td>
+                        <div className="admin-dash-user-cell">
+                          <div className="admin-dash-avatar">
+                            {getInitial(item.name)}
+                          </div>
+                          <div>
+                            <div className="admin-dash-user-name">{item.name}</div>
+                            <div className="admin-dash-user-email">{item.email}</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="admin-dash-user-name">{item.name}</div>
-                          <div className="admin-dash-user-email">{item.email}</div>
-                        </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td>
-                      <span className={`admin-dash-pill is-${item.type}`}>
-                        {item.typeLabel}
-                      </span>
-                    </td>
+                      <td>
+                        <span className={`admin-dash-pill is-${item.type}`}>
+                          {item.typeLabel}
+                        </span>
+                      </td>
 
-                    <td>
-                      <span className="admin-dash-detail" title={item.detail}>
-                        {item.detail}
-                      </span>
-                    </td>
+                      <td>
+                        <span className="admin-dash-detail" title={item.detail}>
+                          {item.detail}
+                        </span>
+                      </td>
 
-                    <td>
-                      <span className="admin-dash-phone">{item.phone}</span>
-                    </td>
+                      <td>
+                        <span className="admin-dash-phone">{item.phone}</span>
+                      </td>
 
-                    <td>
-                      <span className="admin-dash-date">
-                        {formatDate(item.createdAt)}
-                      </span>
-                    </td>
+                      <td>
+                        <span className="admin-dash-date">
+                          {formatDate(item.createdAt)}
+                        </span>
+                      </td>
 
-                    <td style={{ textAlign: "right" }}>
-                      <Link href={item.link} className="admin-dash-link">
-                        View &rarr;
-                      </Link>
-                    </td>
-                  </tr>
-                ))
+                      <td style={{ textAlign: "right" }}>
+                        <button
+                          type="button"
+                          className="admin-dash-link-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedActivity(item);
+                          }}
+                          title="Open details"
+                        >
+                          View &rarr;
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -616,6 +682,71 @@ export default function AdminDashboardPage() {
           </div>
         </footer>
       </section>
+
+      {/* 5. Responsive Right Details Drawer */}
+      {selectedActivity && (
+        <AdminDetailDrawer
+          open={Boolean(selectedActivity)}
+          onClose={() => setSelectedActivity(null)}
+          recordId={selectedActivity.rawId}
+          badge={{
+            label: selectedActivity.typeLabel,
+            variant: selectedActivity.type,
+          }}
+          title={selectedActivity.name}
+          timestamp={formatFullDateTime(selectedActivity.createdAt)}
+          email={
+            selectedActivity.email !== "No email provided" &&
+            selectedActivity.email !== "Entrance Form"
+              ? selectedActivity.email
+              : undefined
+          }
+          phone={selectedActivity.phone !== "—" ? selectedActivity.phone : undefined}
+          fields={[
+            { label: "Category", value: selectedActivity.typeLabel },
+            ...(selectedActivity.type !== "messages"
+              ? [{ label: "Program / Record", value: selectedActivity.detail }]
+              : [{ label: "Inquiry Type", value: "Website Contact Form" }]),
+            ...(selectedActivity.phone && selectedActivity.phone !== "—"
+              ? [{ label: "Contact Phone", value: selectedActivity.phone, isPhone: true }]
+              : []),
+            ...(selectedActivity.email &&
+            selectedActivity.email !== "No email provided" &&
+            selectedActivity.email !== "Entrance Form"
+              ? [
+                  {
+                    label: "Email Address",
+                    value: selectedActivity.email,
+                    isEmail: true,
+                    fullWidth: true,
+                  },
+                ]
+              : []),
+            ...(selectedActivity.studentClass
+              ? [{ label: "Student Class", value: `Class ${selectedActivity.studentClass}` }]
+              : []),
+            ...(selectedActivity.preferredCourse
+              ? [{ label: "Preferred Course", value: selectedActivity.preferredCourse, fullWidth: true }]
+              : []),
+            ...(selectedActivity.courseTitle
+              ? [{ label: "Course Applied", value: selectedActivity.courseTitle, fullWidth: true }]
+              : []),
+          ]}
+          message={
+            selectedActivity.message
+              ? {
+                  title: "Inquiry Message Content",
+                  content: selectedActivity.message,
+                  replySubject: `Regarding your inquiry at Success Code Academy`,
+                }
+              : undefined
+          }
+          databaseLink={{
+            label: `Open in ${selectedActivity.typeLabel} Database`,
+            href: selectedActivity.link,
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -9,12 +9,14 @@ import {
 } from "@/lib/admin-api";
 import AdminModal from "./AdminModal";
 import { useAdminSession } from "./AdminSessionContext";
+import AdminDetailDrawer, { AdminDrawerField } from "./AdminDetailDrawer";
 import {
   AdminEmptyState,
   AdminNotice,
   AdminPageHeader,
   AdminStatusBadge,
   AdminTableSkeleton,
+  formatAdminDate,
 } from "./AdminUi";
 import RevisionHistoryButton, {
   type MediaResourceType,
@@ -117,6 +119,7 @@ export default function AdminContentManager({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [selectedItem, setSelectedItem] = useState<ResourceItem | null>(null);
 
   /*
    * A standard administrator may open any record and save changes to it, but
@@ -303,30 +306,133 @@ export default function AdminContentManager({
     }
   }
 
+  const drawerData = useMemo(() => {
+    if (!selectedItem) return null;
+
+    const itemTitle =
+      (typeof selectedItem.title === "string" ? selectedItem.title : "") ||
+      (typeof selectedItem.name === "string" ? selectedItem.name : "") ||
+      (typeof selectedItem.heading === "string" ? selectedItem.heading : "") ||
+      (typeof selectedItem.label === "string" ? selectedItem.label : "") ||
+      `${itemName} #${selectedItem.id}`;
+
+    // Find image preview
+    let imgPreview: string | undefined = undefined;
+    for (const k of ["imageUrl", "image", "thumbnail", "photo", "bannerUrl", "url"]) {
+      const val = selectedItem[k];
+      if (typeof val === "string" && (val.startsWith("/") || val.startsWith("http"))) {
+        imgPreview = val;
+        break;
+      }
+    }
+
+    // Find external / video link
+    let extLink: { label: string; url: string } | undefined = undefined;
+    if (typeof selectedItem.videoUrl === "string" && selectedItem.videoUrl.trim()) {
+      extLink = { label: "Watch Video", url: selectedItem.videoUrl };
+    } else if (typeof selectedItem.link === "string" && selectedItem.link.trim()) {
+      extLink = { label: "Open Link", url: selectedItem.link };
+    }
+
+    // Message or description body
+    let messageContent: string | undefined = undefined;
+    for (const mk of ["description", "content", "message", "body", "details", "notes"]) {
+      const mval = selectedItem[mk];
+      if (typeof mval === "string" && mval.trim()) {
+        messageContent = mval;
+        break;
+      }
+    }
+
+    const itemTimestamp = selectedItem.createdAt
+      ? formatAdminDate(selectedItem.createdAt)
+      : undefined;
+
+    const drawerFields: AdminDrawerField[] = [];
+
+    columns.forEach((col) => {
+      const val = selectedItem[col.key];
+      // Skip image column if displayed as media preview
+      if (col.kind === "image") return;
+
+      const formattedVal =
+        col.render
+          ? col.render(selectedItem)
+          : col.kind === "status"
+          ? (val !== false ? "Active" : "Inactive")
+          : col.key === "createdAt" || col.key === "updatedAt"
+          ? formatAdminDate(val)
+          : val !== null && val !== undefined && val !== ""
+          ? String(val)
+          : "—";
+
+      drawerFields.push({
+        label: col.label,
+        value: formattedVal,
+        fullWidth:
+          col.key.toLowerCase().includes("url") ||
+          col.key.toLowerCase().includes("link") ||
+          col.key.toLowerCase().includes("title") ||
+          col.key.toLowerCase().includes("slug"),
+      });
+    });
+
+    // Also include any other fields in fields array not already displayed
+    const alreadyMapped = new Set(columns.map((c) => c.key));
+    alreadyMapped.add("id");
+    alreadyMapped.add("description");
+    alreadyMapped.add("content");
+    alreadyMapped.add("message");
+    alreadyMapped.add("body");
+    alreadyMapped.add("updatedAt");
+    alreadyMapped.add("imageUrl");
+    alreadyMapped.add("image");
+    alreadyMapped.add("videoUrl");
+
+    fields.forEach((f) => {
+      if (!alreadyMapped.has(f.name) && selectedItem[f.name] !== undefined && selectedItem[f.name] !== null) {
+        drawerFields.push({
+          label: f.label,
+          value: String(selectedItem[f.name]),
+          fullWidth: f.full,
+        });
+      }
+    });
+
+    return {
+      title: itemTitle,
+      timestamp: itemTimestamp,
+      imagePreview: imgPreview,
+      externalLink: extLink,
+      message: messageContent
+        ? {
+            title: `${itemName} Details / Body`,
+            content: messageContent,
+          }
+        : undefined,
+      fields: drawerFields,
+    };
+  }, [selectedItem, columns, fields, itemName]);
+
   return (
     <div className="admin-page">
       <AdminPageHeader
+        eyebrow="Content & media"
         title={title}
         description={description}
-        action={headerAction}
       />
 
       <div className="admin-toolbar">
-        <form className="admin-search-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="admin-search-box">
-            <Search size={17} />
-            <input
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={`Search ${itemName.toLowerCase()}s...`}
-              aria-label={`Search ${title}`}
-            />
-          </div>
-          <button className="admin-button secondary" type="submit">
-            Search
-          </button>
-        </form>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="admin-search-box">
+          <Search size={17} />
+          <input
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder={`Search ${title.toLowerCase()}`}
+            aria-label={`Search ${title}`}
+          />
+        </div>
+        <div style={{ display: "flex", gap: "8px" }}>
           {historyType && isSuperAdmin && (
             <RevisionHistoryButton
               resourceType={historyType}
@@ -334,6 +440,7 @@ export default function AdminContentManager({
               onRestored={loadItems}
             />
           )}
+          {headerAction}
           {isSuperAdmin && (
             <button className="admin-button primary" type="button" onClick={openCreate}>
               <Plus size={17} />
@@ -381,7 +488,20 @@ export default function AdminContentManager({
               </thead>
               <tbody>
                 {displayedItems.map((item) => (
-                  <tr key={item.id}>
+                  <tr
+                    key={item.id}
+                    className={`is-clickable ${selectedItem?.id === item.id ? "is-selected" : ""}`}
+                    onClick={() => setSelectedItem(item)}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedItem(item);
+                      }
+                    }}
+                    role="button"
+                    aria-label={`View details for ${item.title || item.name || itemName}`}
+                  >
                     {columns.map((column) => {
                       const value = item[column.key];
                       return (
@@ -407,12 +527,15 @@ export default function AdminContentManager({
                         </td>
                       );
                     })}
-                    <td>
+                    <td onClick={(e) => e.stopPropagation()}>
                       <div className="admin-row-actions">
                         <button
                           className="admin-row-action"
                           type="button"
-                          onClick={() => openEdit(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEdit(item);
+                          }}
                           aria-label={`Edit ${itemName}`}
                           title="Edit"
                         >
@@ -422,7 +545,10 @@ export default function AdminContentManager({
                           <button
                             className="admin-row-action danger"
                             type="button"
-                            onClick={() => void handleDelete(item)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleDelete(item);
+                            }}
                             aria-label={`Delete ${itemName}`}
                             title="Delete"
                           >
@@ -438,6 +564,32 @@ export default function AdminContentManager({
           </div>
         )}
       </section>
+
+      {/* Slide-over detail drawer for selected content item */}
+      {selectedItem && drawerData && (
+        <AdminDetailDrawer
+          open={Boolean(selectedItem)}
+          onClose={() => setSelectedItem(null)}
+          recordId={selectedItem.id}
+          badge={{ label: itemName, variant: "content" }}
+          title={drawerData.title}
+          timestamp={drawerData.timestamp}
+          imagePreview={drawerData.imagePreview}
+          externalLink={drawerData.externalLink}
+          fields={drawerData.fields}
+          message={drawerData.message}
+          onEdit={() => openEdit(selectedItem)}
+          onDelete={
+            isSuperAdmin
+              ? () => {
+                  void handleDelete(selectedItem);
+                }
+              : undefined
+          }
+          editLabel={`Edit ${itemName}`}
+          deleteLabel={`Delete ${itemName}`}
+        />
+      )}
 
       <AdminModal
         title={`${editing ? "Edit" : "Add"} ${itemName.toLowerCase()}`}

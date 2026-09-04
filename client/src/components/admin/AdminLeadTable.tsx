@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { Download, Search, Edit2, Trash2 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { useAdminSession } from "./AdminSessionContext";
+import AdminDetailDrawer, { AdminDrawerField } from "./AdminDetailDrawer";
 import {
   AdminEmptyState,
   AdminNotice,
@@ -61,6 +62,7 @@ export default function AdminLeadTable({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
+  const [selectedRow, setSelectedRow] = useState<LeadRow | null>(null);
 
   /*
    * A standard administrator reads and edits records but never creates or
@@ -143,6 +145,168 @@ export default function AdminLeadTable({
     anchor.click();
     URL.revokeObjectURL(url);
   }
+
+  const drawerData = useMemo(() => {
+    if (!selectedRow) return null;
+
+    const rowTitle =
+      [selectedRow.firstName, selectedRow.lastName].filter(Boolean).join(" ") ||
+      (typeof selectedRow.studentName === "string" ? selectedRow.studentName : "") ||
+      (typeof selectedRow.name === "string" ? selectedRow.name : "") ||
+      (typeof selectedRow.title === "string" ? selectedRow.title : "") ||
+      `Record #${selectedRow.id}`;
+
+    const rowEmail =
+      (typeof selectedRow.email === "string" ? selectedRow.email : "") ||
+      (typeof selectedRow.studentEmail === "string" ? selectedRow.studentEmail : "");
+
+    const rowPhone =
+      (typeof selectedRow.mobileNumber === "string" ? selectedRow.mobileNumber : "") ||
+      (typeof selectedRow.studentPhone === "string" ? selectedRow.studentPhone : "") ||
+      (typeof selectedRow.phone === "string" ? selectedRow.phone : "") ||
+      (typeof selectedRow.parentPhone === "string" ? selectedRow.parentPhone : "");
+
+    const rowTimestamp = selectedRow.createdAt
+      ? formatAdminDate(selectedRow.createdAt)
+      : undefined;
+
+    const rowMessageContent =
+      typeof selectedRow.message === "string" && selectedRow.message.trim()
+        ? selectedRow.message
+        : undefined;
+
+    const fields: AdminDrawerField[] = [];
+
+    // Map columns to structured drawer fields
+    columns.forEach((col) => {
+      const val = selectedRow[col.key];
+      const isEmail =
+        col.key.toLowerCase().includes("email") ||
+        col.label.toLowerCase().includes("email");
+      const isPhone =
+        col.key.toLowerCase().includes("phone") ||
+        col.key.toLowerCase().includes("mobile");
+
+      // Skip raw message text from the field grid since it has its own dedicated card
+      if (col.key === "message") return;
+
+      let formattedVal = "";
+      if (col.key === "firstName") {
+        // Render full student name (firstName + lastName)
+        formattedVal =
+          [selectedRow.firstName, selectedRow.lastName].filter(Boolean).join(" ") ||
+          String(val ?? "—");
+      } else if (col.key === "name" || col.key === "studentName") {
+        formattedVal =
+          String(
+            selectedRow.studentName ||
+            selectedRow.name ||
+            [selectedRow.firstName, selectedRow.lastName].filter(Boolean).join(" ") ||
+            val ||
+            "—"
+          );
+      } else if (col.key === "createdAt") {
+        formattedVal = formatAdminDate(val);
+      } else {
+        formattedVal =
+          val !== null && val !== undefined && val !== "" ? String(val) : "—";
+      }
+
+      fields.push({
+        label: col.label,
+        value: formattedVal,
+        isEmail,
+        isPhone,
+        fullWidth:
+          isEmail ||
+          col.key.toLowerCase().includes("course") ||
+          col.key.toLowerCase().includes("school") ||
+          col.key.toLowerCase().includes("address"),
+      });
+    });
+
+    // Also include other useful fields in selectedRow if not in columns
+    const alreadyMappedKeys = new Set(columns.map((c) => c.key));
+    alreadyMappedKeys.add("id");
+    alreadyMappedKeys.add("message");
+    alreadyMappedKeys.add("updatedAt");
+    alreadyMappedKeys.add("password");
+    alreadyMappedKeys.add("passwordHash");
+    alreadyMappedKeys.add("firstName");
+    alreadyMappedKeys.add("lastName");
+
+    // Ensure email is always present in details if available
+    const hasEmailInFields = fields.some(
+      (f) => f.isEmail || f.label.toLowerCase().includes("email")
+    );
+    if (
+      !hasEmailInFields &&
+      rowEmail &&
+      rowEmail !== "No email provided" &&
+      rowEmail !== "Entrance Form"
+    ) {
+      fields.push({
+        label: "Email Address",
+        value: rowEmail,
+        isEmail: true,
+        fullWidth: true,
+      });
+      alreadyMappedKeys.add("email");
+      alreadyMappedKeys.add("studentEmail");
+    }
+
+    const candidateExtras: Array<{
+      key: string;
+      label: string;
+      fullWidth?: boolean;
+      isEmail?: boolean;
+    }> = [
+      { key: "email", label: "Email Address", fullWidth: true, isEmail: true },
+      { key: "studentEmail", label: "Email Address", fullWidth: true, isEmail: true },
+      { key: "studentClass", label: "Student Class" },
+      { key: "schoolName", label: "School Name", fullWidth: true },
+      { key: "city", label: "City" },
+      { key: "preferredCourse", label: "Preferred Course", fullWidth: true },
+      { key: "courseTitle", label: "Course Applied", fullWidth: true },
+      { key: "visitingDate", label: "Visiting Date" },
+      { key: "visitingTime", label: "Visiting Time" },
+      { key: "parentPhone", label: "Parent Phone" },
+      { key: "age", label: "Age" },
+      { key: "role", label: "Role" },
+    ];
+
+    candidateExtras.forEach((cand) => {
+      if (
+        !alreadyMappedKeys.has(cand.key) &&
+        selectedRow[cand.key] !== undefined &&
+        selectedRow[cand.key] !== null &&
+        selectedRow[cand.key] !== ""
+      ) {
+        fields.push({
+          label: cand.label,
+          value: String(selectedRow[cand.key]),
+          fullWidth: cand.fullWidth,
+          isEmail: cand.isEmail,
+        });
+        alreadyMappedKeys.add(cand.key);
+      }
+    });
+
+    return {
+      title: rowTitle,
+      email: rowEmail,
+      phone: rowPhone,
+      timestamp: rowTimestamp,
+      message: rowMessageContent
+        ? {
+            title: "Inquiry Message Content",
+            content: rowMessageContent,
+            replySubject: `Regarding your inquiry at Success Code Academy`,
+          }
+        : undefined,
+      fields,
+    };
+  }, [selectedRow, columns]);
 
   return (
     <div className="admin-page">
@@ -230,7 +394,20 @@ export default function AdminLeadTable({
                 </thead>
                 <tbody>
                   {displayedRows.map((row) => (
-                    <tr key={row.id}>
+                    <tr
+                      key={row.id}
+                      className={`is-clickable ${selectedRow?.id === row.id ? "is-selected" : ""}`}
+                      onClick={() => setSelectedRow(row)}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedRow(row);
+                        }
+                      }}
+                      role="button"
+                      aria-label={`View details for ${row.name || row.studentName || row.title || `Record #${row.id}`}`}
+                    >
                       {columns.map((column) => (
                         <td key={column.key}>
                           {column.render
@@ -241,12 +418,15 @@ export default function AdminLeadTable({
                         </td>
                       ))}
                       {showActions && (
-                        <td>
+                        <td onClick={(e) => e.stopPropagation()}>
                           <div style={{ display: "flex", gap: "8px" }}>
                             {onEdit && (
                               <button
                                 className="sca-admin-icon-btn"
-                                onClick={() => onEdit(row)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEdit(row);
+                                }}
                                 title="Edit"
                               >
                                 <Edit2 size={16} />
@@ -255,7 +435,8 @@ export default function AdminLeadTable({
                             {canDelete && (
                               <button
                                 className="sca-admin-icon-btn danger"
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.stopPropagation();
                                   if (confirm("Are you sure you want to delete this record?")) {
                                     onDelete?.(row);
                                   }
@@ -288,6 +469,35 @@ export default function AdminLeadTable({
           </>
         )}
       </section>
+
+      {/* Slide-over detail drawer for any selected row */}
+      {selectedRow && drawerData && (
+        <AdminDetailDrawer
+          open={Boolean(selectedRow)}
+          onClose={() => setSelectedRow(null)}
+          recordId={selectedRow.id}
+          badge={{
+            label: eyebrow || title,
+            variant: endpoint.split("/").pop() || "record",
+          }}
+          title={drawerData.title}
+          timestamp={drawerData.timestamp}
+          email={drawerData.email}
+          phone={drawerData.phone}
+          fields={drawerData.fields}
+          message={drawerData.message}
+          onEdit={onEdit ? () => onEdit(selectedRow) : undefined}
+          onDelete={
+            canDelete
+              ? () => {
+                  if (confirm("Are you sure you want to delete this record?")) {
+                    onDelete?.(selectedRow);
+                  }
+                }
+              : undefined
+          }
+        />
+      )}
     </div>
   );
 }

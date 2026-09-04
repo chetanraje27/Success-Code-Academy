@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import { useToast } from "@/components/admin/Toast";
 import { adminApiFetch, uploadAdminImage } from "@/lib/admin-api";
 import { ImagePlus, Upload, Loader2 } from "lucide-react";
 
@@ -42,6 +43,7 @@ const PAGE_SLOTS: PageBannerSlot[] = [
 ];
 
 export default function AdminPageBannersPage() {
+  const toast = useToast();
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState<string | null>(null);
@@ -80,6 +82,7 @@ export default function AdminPageBannersPage() {
 
       setSettings((prev) => ({ ...prev, [slot.key]: imageUrl }));
       setSuccessKey(slot.key);
+      toast.success(`${slot.label} banner updated.`);
 
       // Notify the live site to refresh
       if (typeof window !== "undefined") {
@@ -89,9 +92,9 @@ export default function AdminPageBannersPage() {
       // Clear success message after 3 seconds
       setTimeout(() => setSuccessKey(null), 3000);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to upload image"
-      );
+      const message = err instanceof Error ? err.message : "Failed to upload image";
+      setError(message);
+      toast.error(message);
     } finally {
       setUploading(null);
     }

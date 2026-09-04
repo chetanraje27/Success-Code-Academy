@@ -588,7 +588,7 @@ export default function AdminDashboardPage() {
                 <th><button type="button" className="admin-dash-sort" onClick={() => changeSort("course")} aria-label="Sort by course">Detail / Program {sortBy === "course" ? (sortDirection === "ASC" ? <ChevronUp size={12} /> : <ChevronDown size={12} />) : <ChevronsUpDown size={12} />}</button></th>
                 <th>Mobile</th>
                 <th><button type="button" className="admin-dash-sort" onClick={() => changeSort("createdAt")} aria-label="Sort by date">Date {sortBy === "createdAt" ? (sortDirection === "ASC" ? <ChevronUp size={12} /> : <ChevronDown size={12} />) : <ChevronsUpDown size={12} />}</button></th>
-                <th style={{ textAlign: "right" }}>Action</th>
+                <th className="admin-dash-action-heading">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -652,7 +652,7 @@ export default function AdminDashboardPage() {
                         </span>
                       </td>
 
-                      <td style={{ textAlign: "right" }}>
+                      <td className="admin-dash-action-cell">
                         <button
                           type="button"
                           className="admin-dash-link-btn"
@@ -677,13 +677,7 @@ export default function AdminDashboardPage() {
           <span>
             Showing {filteredActivities.length ? (page - 1) * pageSize + 1 : 0}–{Math.min(page * pageSize, activityPagination.total)} of {activityPagination.total} database records
           </span>
-          <div className="admin-dash-footer-links">
-            <Link href={getAdminHref("/admin/database/students")}>Students &rarr;</Link>
-            <Link href={getAdminHref("/admin/database/course-forms")}>Course Enquiries &rarr;</Link>
-            <Link href={getAdminHref("/admin/database/scholarship-forms")}>Scholarships &rarr;</Link>
-            <Link href={getAdminHref("/admin/database/contact-messages")}>Messages &rarr;</Link>
-          </div>
-          <div className="admin-dash-pagination" aria-label="Activity pagination">
+          <div className="admin-dash-pagination admin-pagination-controls" aria-label="Activity pagination">
             <label>Rows <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}><option value={10}>10</option><option value={25}>25</option><option value={50}>50</option></select></label>
             <button type="button" className="admin-icon-button" disabled={page <= 1 || activityLoading} onClick={() => setPage((current) => current - 1)} aria-label="Previous page"><ChevronLeft size={15} /></button>
             {Array.from({ length: activityPagination.totalPages }, (_, index) => index + 1).slice(Math.max(0, page - 3), page + 2).map((number) => <button key={number} type="button" className={`admin-dash-page-number ${page === number ? "is-active" : ""}`} onClick={() => setPage(number)} aria-current={page === number ? "page" : undefined}>{number}</button>)}

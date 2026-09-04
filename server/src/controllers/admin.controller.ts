@@ -851,8 +851,9 @@ function dateFilter(req: Request): AdminWhere {
   return { createdAt: range };
 }
 
-function exactText(value: unknown): AdminWhere | undefined {
-  return value ? { [Op.iLike]: String(value).trim() } : undefined;
+function partialText(value: unknown): AdminWhere | undefined {
+  const text = String(value ?? '').trim();
+  return text ? { [Op.iLike]: `%${text}%` } : undefined;
 }
 
 function safeOrder(
@@ -902,7 +903,7 @@ export const getCourseForms = asyncHandler(async (req: Request, res: Response) =
   const { q, cursor, limit, page } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
   const { order, cursorEnabled } = safeOrder(req, { id: 'id', createdAt: 'createdAt', name: 'studentName', email: 'studentEmail', courseTitle: 'courseTitle' }, 'id');
-  const baseWhere: AdminWhere = { ...dateFilter(req), ...(req.query.course ? { courseTitle: exactText(req.query.course) } : {}), ...(like ? { [Op.or]: [{ studentName: like }, { studentEmail: like }, { studentPhone: like }, { courseTitle: like }] } : {}) };
+  const baseWhere: AdminWhere = { ...dateFilter(req), ...(req.query.course ? { courseTitle: partialText(req.query.course) } : {}), ...(like ? { [Op.or]: [{ studentName: like }, { studentEmail: like }, { studentPhone: like }, { courseTitle: like }] } : {}) };
   const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
   const [total, forms] = await Promise.all([CourseRegistration.count({ where: baseWhere }), CourseRegistration.findAll({ where, order, ...pageWindow(req, cursorEnabled) })]);
   sendPaginated(res, forms, limit, total, page, cursorEnabled);
@@ -914,10 +915,11 @@ export const getScholarshipForms = asyncHandler(async (req: Request, res: Respon
   const { order, cursorEnabled } = safeOrder(req, { id: 'id', createdAt: 'createdAt', name: 'studentName', email: 'studentEmail', preferredCourse: 'preferredCourse', city: 'city', studentClass: 'studentClass' }, 'id');
   const baseWhere: AdminWhere = {
     ...dateFilter(req),
-    ...(req.query.course ? { preferredCourse: exactText(req.query.course) } : {}),
-    ...(req.query.program ? { scholarshipProgram: exactText(req.query.program) } : {}),
-    ...(req.query.class ? { studentClass: exactText(req.query.class) } : {}),
-    ...(req.query.city ? { city: exactText(req.query.city) } : {}),
+    ...(req.query.course ? { preferredCourse: partialText(req.query.course) } : {}),
+    ...(req.query.program ? { scholarshipProgram: partialText(req.query.program) } : {}),
+    ...(req.query.class ? { studentClass: partialText(req.query.class) } : {}),
+    ...(req.query.city ? { city: partialText(req.query.city) } : {}),
+    ...(req.query.school ? { schoolName: partialText(req.query.school) } : {}),
     ...(like ? { [Op.or]: [{ studentName: like }, { studentPhone: like }, { parentPhone: like }, { preferredCourse: like }, { scholarshipProgram: like }, { schoolName: like }, { city: like }] } : {}),
   };
   const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
@@ -1026,6 +1028,7 @@ type ActivityRow = {
   course: string | null;
   program: string | null;
   city: string | null;
+  school: string | null;
   createdAt: Date;
 };
 
@@ -1040,7 +1043,8 @@ async function queryActivity(req: Request, paginate: boolean, categoryOverride?:
   const course = String(req.query.course || '');
   const program = String(req.query.program || '');
   const city = String(req.query.city || '');
-  const studentClass = String(req.query.class || '');
+  const studentClass = String(req.query.class || '').trim();
+  const school = String(req.query.school || '').trim();
   const dateFrom = req.query.dateFrom ? new Date(String(req.query.dateFrom)) : null;
   let dateTo = req.query.dateTo ? new Date(String(req.query.dateTo)) : null;
   if (dateTo && /^\d{4}-\d{2}-\d{2}$/.test(String(req.query.dateTo))) {
@@ -1051,35 +1055,37 @@ async function queryActivity(req: Request, paginate: boolean, categoryOverride?:
   if (!category || category === 'student') arms.push(`
     SELECT id, 'student:' || id AS "activityId", 'student' AS category, 'student' AS type,
       TRIM(CONCAT_WS(' ', "firstName", "lastName")) AS name, email, "mobileNumber" AS phone,
-      NULL::text AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+      NULL::text AS course, NULL::text AS program, NULL::text AS city, NULL::text AS school, "createdAt"
     FROM users WHERE role = 'student'`);
   if (!category || category === 'course-form') arms.push(`
     SELECT id, 'course-form:' || id AS "activityId", 'course-form' AS category, 'course-form' AS type,
       "studentName" AS name, "studentEmail" AS email, "studentPhone" AS phone,
-      "courseTitle" AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+      "courseTitle" AS course, NULL::text AS program, NULL::text AS city, NULL::text AS school, "createdAt"
     FROM course_registrations`);
   if (!category || category === 'scholarship-form') arms.push(`
     SELECT id, 'scholarship-form:' || id AS "activityId", 'scholarship-form' AS category, 'scholarship-form' AS type,
       "studentName" AS name, "studentEmail" AS email, "studentPhone" AS phone,
-      "preferredCourse" AS course, "scholarshipProgram" AS program, city, "createdAt"
+      "preferredCourse" AS course, "scholarshipProgram" AS program, city, "schoolName" AS school, "createdAt"
     FROM scholarship_registrations
-    WHERE (:studentClass = '' OR "studentClass" ILIKE :studentClassExact)`);
+    WHERE (:studentClass = '' OR "studentClass" ILIKE :studentClassPattern)`);
   if (!category || category === 'contact-message') arms.push(`
     SELECT id, 'contact-message:' || id AS "activityId", 'contact-message' AS category, 'contact-message' AS type,
-      name, email, phone, NULL::text AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+      name, email, phone, NULL::text AS course, NULL::text AS program, NULL::text AS city, NULL::text AS school, "createdAt"
     FROM contact_messages`);
 
   const union = arms.join(' UNION ALL ');
   const filters = `
-    (:q = '' OR CONCAT_WS(' ', name, email, phone, course, program, city) ILIKE :search)
-    AND (:course = '' OR course ILIKE :courseExact)
-    AND (:program = '' OR program ILIKE :programExact)
-    AND (:city = '' OR city ILIKE :cityExact)
+    (:q = '' OR CONCAT_WS(' ', name, email, phone, course, program, city, school) ILIKE :search)
+    AND (:course = '' OR course ILIKE :coursePattern)
+    AND (:program = '' OR program ILIKE :programPattern)
+    AND (:city = '' OR city ILIKE :cityPattern)
+    AND (:school = '' OR school ILIKE :schoolPattern)
     AND (CAST(:dateFrom AS timestamptz) IS NULL OR "createdAt" >= CAST(:dateFrom AS timestamptz))
     AND (CAST(:dateTo AS timestamptz) IS NULL OR "createdAt" <= CAST(:dateTo AS timestamptz))`;
   const replacements = {
-    q, search: `%${q}%`, course, courseExact: course, program, programExact: program,
-    city, cityExact: city, studentClass, studentClassExact: studentClass,
+    q, search: `%${q}%`, course, coursePattern: `%${course}%`, program, programPattern: `%${program}%`,
+    city, cityPattern: `%${city}%`, school, schoolPattern: `%${school}%`, studentClass,
+    studentClassPattern: `%${studentClass}%`,
     dateFrom, dateTo, limit, offset: (page - 1) * limit,
   };
   const sortColumn = ACTIVITY_SORT_COLUMNS[sortBy || 'createdAt'] || 'createdAt';
@@ -1549,6 +1555,8 @@ export const getCourses = asyncHandler(async (req: Request, res: Response) => {
   const courses = await Course.findAll({
     where: {
       ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
+      ...(req.query.type ? { type: partialText(req.query.type) } : {}),
+      ...(req.query.isActive ? { isActive: String(req.query.isActive) === 'true' } : {}),
       ...(like
         ? {
             [Op.or]: [
@@ -1589,8 +1597,16 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
 
 // ─── Scholarship Programs CRUD ───────────────────────────────────────────────
 
-export const getScholarshipPrograms = asyncHandler(async (_req: Request, res: Response) => {
-  const programs = await ScholarshipProgram.findAll({ order: [['id', 'ASC']] });
+export const getScholarshipPrograms = asyncHandler(async (req: Request, res: Response) => {
+  const { q } = getListOptions(req);
+  const like = q ? { [Op.iLike]: `%${q}%` } : null;
+  const programs = await ScholarshipProgram.findAll({
+    where: {
+      ...(like ? { [Op.or]: [{ title: like }, { description: like }] } : {}),
+      ...(req.query.isActive ? { isActive: String(req.query.isActive) === 'true' } : {}),
+    },
+    order: [['id', 'ASC']],
+  });
   res.status(200).json({ status: 'success', data: programs });
 });
 

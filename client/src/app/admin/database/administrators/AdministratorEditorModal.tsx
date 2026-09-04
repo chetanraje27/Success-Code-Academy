@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Copy, KeyRound, RefreshCw, ShieldAlert } from "lucide-react";
 import AdminModal from "@/components/admin/AdminModal";
+import { useToast } from "@/components/admin/Toast";
 import { adminApiFetch } from "@/lib/admin-api";
 import { ADMIN, ADMIN_ROLES, adminRoleLabel, type AdminRole } from "@/lib/roles";
 
@@ -37,6 +38,7 @@ export default function AdministratorEditorModal({
   admin: any;
   onSaved: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -94,10 +96,13 @@ export default function AdministratorEditorModal({
         },
       );
 
+      toast.success(isNew ? "Administrator created." : "Administrator updated.");
       onSaved();
       onClose();
     } catch (e: any) {
-      setError(e.message || "Error saving administrator");
+      const message = e.message || "Error saving administrator";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -123,8 +128,11 @@ export default function AdministratorEditorModal({
         ...response.data,
         message: response.message || "A reset link was created.",
       });
+      toast.success(response.message || "Password reset link created.");
     } catch (e: any) {
-      setResetError(e.message || "Unable to create a reset link");
+      const message = e.message || "Unable to create a reset link";
+      setResetError(message);
+      toast.error(message);
     } finally {
       setResetLoading(false);
     }

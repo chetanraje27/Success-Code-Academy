@@ -9,6 +9,7 @@ import {
   useLiveContent,
 } from "./LiveContentContext";
 import { LiveContentDialog } from "./LiveContentDialog";
+import { useConfirm } from "./ConfirmDialog";
 
 type EditableTextProps = {
   contentKey: string;
@@ -31,6 +32,7 @@ export function EditableText({
   const { getContent, hasOverride, saveContent, resetContent } =
     useLiveContent();
   const [open, setOpen] = useState(false);
+  const confirmAction = useConfirm();
   const value = getContent(contentKey, children, scope);
   const customized = hasOverride(contentKey, scope);
 
@@ -87,11 +89,12 @@ export function EditableText({
                 onClick={async (event) => {
                   event.preventDefault();
                   event.stopPropagation();
-                  if (
-                    window.confirm(
-                      `Restore “${label}” to the original website text?`,
-                    )
-                  ) {
+                  if (await confirmAction({
+                    title: "Restore original text?",
+                    message: <>Your custom “{label}” text will be removed and the original website text will be shown.</>,
+                    confirmLabel: "Restore original",
+                    tone: "default",
+                  })) {
                     await resetContent(contentKey, scope);
                   }
                 }}

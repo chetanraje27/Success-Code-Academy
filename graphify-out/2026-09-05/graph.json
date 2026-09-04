@@ -2935,7 +2935,7 @@
       "label": "useConfirm()",
       "file_type": "code",
       "source_file": "client/src/components/admin/ConfirmDialog.tsx",
-      "source_location": "L198",
+      "source_location": "L193",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_components_admin_confirmdialog_useconfirm",
@@ -9912,37 +9912,37 @@
       "norm_label": "video-utils.ts"
     },
     {
-      "label": "17. Environment Variables Reference",
+      "label": "1. Project Overview",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L1063",
+      "source_location": "L34",
       "_origin": "ast",
-      "id": "master_readme_17_environment_variables_reference",
+      "id": "master_readme_1_project_overview",
       "community": 170,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "17. environment variables reference"
+      "community_name": "1. Project Overview",
+      "norm_label": "1. project overview"
     },
     {
-      "label": "Client (`client/.env.local`)",
+      "label": "Key Tagline",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L1065",
+      "source_location": "L53",
       "_origin": "ast",
-      "id": "master_readme_client_client_env_local",
+      "id": "master_readme_key_tagline",
       "community": 170,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "client (`client/.env.local`)"
+      "community_name": "1. Project Overview",
+      "norm_label": "key tagline"
     },
     {
-      "label": "Server (`server/.env`)",
+      "label": "Target Audience",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L1072",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "master_readme_server_server_env",
+      "id": "master_readme_target_audience",
       "community": 170,
-      "community_name": "17. Environment Variables Reference",
-      "norm_label": "server (`server/.env`)"
+      "community_name": "1. Project Overview",
+      "norm_label": "target audience"
     },
     {
       "label": "check_users.ts",
@@ -10836,26 +10836,26 @@
       "norm_label": "getdashboardactivity"
     },
     {
-      "label": "@types/jsonwebtoken",
+      "label": "cors",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L31",
+      "source_location": "L34",
       "_origin": "ast",
-      "id": "server_package_dependencies_types_jsonwebtoken",
+      "id": "server_package_dependencies_cors",
       "community": 189,
-      "community_name": "@types/jsonwebtoken",
-      "norm_label": "@types/jsonwebtoken"
+      "community_name": "cors",
+      "norm_label": "cors"
     },
     {
-      "label": "@types/jsonwebtoken",
+      "label": "cors",
       "file_type": "concept",
       "source_file": "server/package.json",
-      "source_location": "L31",
+      "source_location": "L34",
       "_origin": "ast",
-      "id": "types_jsonwebtoken",
+      "id": "cors",
       "community": 189,
-      "community_name": "@types/jsonwebtoken",
-      "norm_label": "@types/jsonwebtoken"
+      "community_name": "cors",
+      "norm_label": "cors"
     },
     {
       "label": "client/tsconfig.json",
@@ -11661,17 +11661,6 @@
       "norm_label": "bcrypt"
     },
     {
-      "label": "cors",
-      "file_type": "code",
-      "source_file": "server/package.json",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "server_package_dependencies_cors",
-      "community": 23,
-      "community_name": "dependencies",
-      "norm_label": "cors"
-    },
-    {
       "label": "dotenv",
       "file_type": "code",
       "source_file": "server/package.json",
@@ -11703,6 +11692,17 @@
       "community": 23,
       "community_name": "dependencies",
       "norm_label": "@types/bcrypt"
+    },
+    {
+      "label": "@types/jsonwebtoken",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "server_package_dependencies_types_jsonwebtoken",
+      "community": 23,
+      "community_name": "dependencies",
+      "norm_label": "@types/jsonwebtoken"
     },
     {
       "label": "typescript",
@@ -11749,17 +11749,6 @@
       "norm_label": "bcrypt"
     },
     {
-      "label": "cors",
-      "file_type": "concept",
-      "source_file": "server/package.json",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "cors",
-      "community": 23,
-      "community_name": "dependencies",
-      "norm_label": "cors"
-    },
-    {
       "label": "dotenv",
       "file_type": "concept",
       "source_file": "server/package.json",
@@ -11802,6 +11791,17 @@
       "community": 23,
       "community_name": "dependencies",
       "norm_label": "@types/bcrypt"
+    },
+    {
+      "label": "@types/jsonwebtoken",
+      "file_type": "concept",
+      "source_file": "server/package.json",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "types_jsonwebtoken",
+      "community": 23,
+      "community_name": "dependencies",
+      "norm_label": "@types/jsonwebtoken"
     },
     {
       "label": "winston",
@@ -13652,15 +13652,15 @@
       "norm_label": "16. messaging & notification services"
     },
     {
-      "label": "1. Project Overview",
+      "label": "17. Environment Variables Reference",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L34",
+      "source_location": "L1063",
       "_origin": "ast",
-      "id": "master_readme_1_project_overview",
+      "id": "master_readme_17_environment_variables_reference",
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "1. project overview"
+      "norm_label": "17. environment variables reference"
     },
     {
       "label": "20. Implementation",
@@ -13696,15 +13696,26 @@
       "norm_label": "4. repository structure"
     },
     {
-      "label": "Key Tagline",
+      "label": "Client (`client/.env.local`)",
       "file_type": "document",
       "source_file": "Master_README.md",
-      "source_location": "L53",
+      "source_location": "L1065",
       "_origin": "ast",
-      "id": "master_readme_key_tagline",
+      "id": "master_readme_client_client_env_local",
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "key tagline"
+      "norm_label": "client (`client/.env.local`)"
+    },
+    {
+      "label": "Server (`server/.env`)",
+      "file_type": "document",
+      "source_file": "Master_README.md",
+      "source_location": "L1072",
+      "_origin": "ast",
+      "id": "master_readme_server_server_env",
+      "community": 46,
+      "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
+      "norm_label": "server (`server/.env`)"
     },
     {
       "label": "Setup Requirements",
@@ -13738,17 +13749,6 @@
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
       "norm_label": "table of contents"
-    },
-    {
-      "label": "Target Audience",
-      "file_type": "document",
-      "source_file": "Master_README.md",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "master_readme_target_audience",
-      "community": 46,
-      "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
-      "norm_label": "target audience"
     },
     {
       "label": "20260904160000-add-registration-ownership.js",
@@ -37108,7 +37108,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/ConfirmDialog.tsx",
-      "source_location": "L198",
+      "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_confirmdialog",

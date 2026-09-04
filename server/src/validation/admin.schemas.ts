@@ -208,6 +208,7 @@ export const adminListQuerySchema = z
     program: z.string().trim().max(200).optional(),
     class: z.string().trim().max(100).optional(),
     city: z.string().trim().max(120).optional(),
+    school: z.string().trim().max(200).optional(),
     isActive: z.enum(['true', 'false']).optional(),
     type: z.string().trim().max(100).optional(),
     year: z.coerce.number().int().min(2000).max(2100).optional(),

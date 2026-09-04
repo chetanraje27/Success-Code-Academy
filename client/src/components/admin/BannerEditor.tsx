@@ -8,6 +8,7 @@ import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
 import { useToast } from "./Toast";
 import { AdminEmptyState, AdminLoadingState, AdminNotice } from "./AdminUi";
+import { useConfirm } from "./ConfirmDialog";
 
 interface Banner {
   id: number;
@@ -27,6 +28,7 @@ interface BannerEditorProps {
 export default function BannerEditor({ open, onClose }: BannerEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
   const toast = useToast();
+  const confirmAction = useConfirm();
   const [items, setItems] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -96,7 +98,12 @@ export default function BannerEditor({ open, onClose }: BannerEditorProps) {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Delete this banner? You can restore it later from History.")) {
+    if (!(await confirmAction({
+      title: "Delete banner?",
+      message: "This banner will be removed from the website. You can restore it later from History.",
+      confirmLabel: "Delete banner",
+      tone: "destructive",
+    }))) {
       return;
     }
     try {

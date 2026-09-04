@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AdminModal from "@/components/admin/AdminModal";
+import { useToast } from "@/components/admin/Toast";
 import { adminApiFetch } from "@/lib/admin-api";
 
 export default function CourseFormEditorModal({
@@ -15,6 +16,7 @@ export default function CourseFormEditorModal({
   formRecord: any;
   onSaved: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState<any>({
     studentName: "",
     courseTitle: "",
@@ -69,11 +71,14 @@ export default function CourseFormEditorModal({
         method,
         body: JSON.stringify(formData)
       });
-      
+
+      toast.success(isNew ? "Course enquiry created." : "Course enquiry updated.");
       onSaved();
       onClose();
     } catch (e: any) {
-      setError(e.message || "Error saving course form");
+      const message = e.message || "Error saving course form";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

@@ -22,6 +22,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa6";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 interface Notification {
   id: string;
@@ -60,6 +61,7 @@ export function renderIconByKey(iconKey?: string) {
 export default function NotificationEditor({ open, onClose }: NotificationEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
   const toast = useToast();
+  const confirmAction = useConfirm();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -131,7 +133,12 @@ export default function NotificationEditor({ open, onClose }: NotificationEditor
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this notification?")) return;
+    if (!(await confirmAction({
+      title: "Delete notification?",
+      message: "This announcement will be removed from the website. This action cannot be undone.",
+      confirmLabel: "Delete notification",
+      tone: "destructive",
+    }))) return;
     try {
       setLoading(true);
       await apiFetch(`/api/v1/admin/notifications/${id}`, {

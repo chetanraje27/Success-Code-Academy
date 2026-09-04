@@ -22,6 +22,7 @@ import RevisionHistoryButton, {
   type MediaResourceType,
 } from "./RevisionHistoryButton";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 type FieldValue = string | number | boolean;
 type ResourceItem = { id: number; [key: string]: unknown };
@@ -126,6 +127,7 @@ export default function AdminContentManager({
   const [pageSize, setPageSize] = useState<10 | 25 | 50>(10);
   const [page, setPage] = useState(1);
   const toast = useToast();
+  const confirmAction = useConfirm();
 
   /*
    * A standard administrator may open any record and save changes to it, but
@@ -221,7 +223,6 @@ export default function AdminContentManager({
         .map((key) => (response as unknown as Record<string, unknown>)[key])
         .filter((item): item is ResourceItem => Boolean(item) && typeof item === "object");
       setItems(legacyItems);
-      toast.success(`${title} loaded.`);
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : `Unable to load ${title}.`;
       setError(message);
@@ -301,11 +302,12 @@ export default function AdminContentManager({
         : typeof item.text === "string"
           ? item.text
           : `this ${itemName.toLowerCase()}`;
-    if (
-      !window.confirm(
-        `Delete "${label}"? You can restore it later from History.`,
-      )
-    ) {
+    if (!(await confirmAction({
+      title: `Delete ${itemName.toLowerCase()}?`,
+      message: <>“{label}” will be removed from the website. You can restore it later from History.</>,
+      confirmLabel: "Delete",
+      tone: "destructive",
+    }))) {
       return;
     }
 
@@ -506,7 +508,6 @@ export default function AdminContentManager({
               itemName={itemName}
               onRestored={async () => {
                 await loadItems();
-                toast.success(`${itemName} restored.`);
               }}
             />
           )}
@@ -692,16 +693,19 @@ export default function AdminContentManager({
         )}
         {!loading && displayedItems.length > 0 && (
           <footer className="admin-card-footer admin-pagination-footer">
+            <span className="admin-pagination-summary">Showing {pageItems.length ? (page - 1) * pageSize + 1 : 0}–{pageItems.length ? (page - 1) * pageSize + pageItems.length : 0} of {displayedItems.length}</span>
+            <div className="admin-pagination-controls">
             <label className="admin-page-size-control">
-              <span>Rows per page</span>
+              <span>Rows/page</span>
               <select value={pageSize} onChange={(event) => setPageSize(Number(event.target.value) as 10 | 25 | 50)} aria-label="Rows per page">
                 <option value={10}>10</option><option value={25}>25</option><option value={50}>50</option>
               </select>
             </label>
-            <span>Page {page} of {pageCount}</span>
+            <span className="admin-pagination-page-label">Page {page} of {pageCount}</span>
             <div className="admin-pagination-actions">
               <button className="admin-button secondary" type="button" disabled={page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}><ChevronLeft size={16} /> Previous</button>
               <button className="admin-button secondary" type="button" disabled={page >= pageCount} onClick={() => setPage((current) => Math.min(pageCount, current + 1))}>Next <ChevronRight size={16} /></button>
+            </div>
             </div>
           </footer>
         )}

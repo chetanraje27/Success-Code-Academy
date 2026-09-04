@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AdminModal from "@/components/admin/AdminModal";
+import { useToast } from "@/components/admin/Toast";
 import { adminApiFetch } from "@/lib/admin-api";
 
 export default function StudentEditorModal({
@@ -15,6 +16,7 @@ export default function StudentEditorModal({
   student: any;
   onSaved: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState<any>({
     firstName: "",
     lastName: "",
@@ -71,10 +73,13 @@ export default function StudentEditorModal({
         body: JSON.stringify(payload)
       });
 
+      toast.success(isNew ? "Student created." : "Student updated.");
       onSaved();
       onClose();
     } catch (e: any) {
-      setError(e.message || "Error saving student");
+      const message = e.message || "Error saving student";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

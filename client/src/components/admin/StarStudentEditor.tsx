@@ -8,6 +8,7 @@ import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
 import { useToast } from "./Toast";
 import { AdminEmptyState, AdminLoadingState, AdminNotice } from "./AdminUi";
+import { useConfirm } from "./ConfirmDialog";
 
 interface StarStudent {
   id: number;
@@ -30,6 +31,7 @@ interface StarStudentEditorProps {
 export default function StarStudentEditor({ open, onClose }: StarStudentEditorProps) {
   const { bumpRefresh, isSuperAdmin } = useEditMode();
   const toast = useToast();
+  const confirmAction = useConfirm();
   const [items, setItems] = useState<StarStudent[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -110,11 +112,12 @@ export default function StarStudentEditor({ open, onClose }: StarStudentEditorPr
   };
 
   const handleDelete = async (id: number) => {
-    if (
-      !confirm(
-        "Delete this star student? You can restore it later from History.",
-      )
-    ) {
+    if (!(await confirmAction({
+      title: "Delete star student?",
+      message: "This student will be removed from the website. You can restore this entry later from History.",
+      confirmLabel: "Delete student",
+      tone: "destructive",
+    }))) {
       return;
     }
     try {

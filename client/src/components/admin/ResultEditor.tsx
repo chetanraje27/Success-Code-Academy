@@ -7,6 +7,7 @@ import { useEditMode } from "./EditModeContext";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa6";
 import RevisionHistoryButton from "./RevisionHistoryButton";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 interface Result {
   id: number;
@@ -29,6 +30,7 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { bumpRefresh, isSuperAdmin } = useEditMode();
   const toast = useToast();
+  const confirmAction = useConfirm();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -96,7 +98,12 @@ export default function ResultEditor({ open, onClose }: { open: boolean; onClose
   }
 
   async function handleDelete(id: number) {
-    if (!confirm("Delete this result? You can restore it later from History.")) {
+    if (!(await confirmAction({
+      title: "Delete result?",
+      message: "This result will be removed from the website. You can restore it later from History.",
+      confirmLabel: "Delete result",
+      tone: "destructive",
+    }))) {
       return;
     }
     try {

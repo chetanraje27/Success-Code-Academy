@@ -5,6 +5,7 @@ import { History, RotateCcw } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import AdminModal from "./AdminModal";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 export type MediaResourceType = "banner" | "star" | "result" | "news" | "video";
 
@@ -55,6 +56,7 @@ export default function RevisionHistoryButton({
   const [restoringId, setRestoringId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const toast = useToast();
+  const confirmAction = useConfirm();
 
   const loadHistory = useCallback(async () => {
     setLoading(true);
@@ -81,11 +83,12 @@ export default function RevisionHistoryButton({
 
   async function restore(revision: Revision) {
     const label = revisionName(revision, itemName);
-    if (
-      !window.confirm(
-        `Restore "${label}" to this saved version? The current version will stay in history.`,
-      )
-    ) {
+    if (!(await confirmAction({
+      title: "Restore saved version?",
+      message: <>“{label}” will return to this saved version. The current version will stay in History.</>,
+      confirmLabel: "Restore version",
+      tone: "default",
+    }))) {
       return;
     }
 

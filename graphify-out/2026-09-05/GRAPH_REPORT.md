@@ -1,7 +1,7 @@
 # Graph Report - Success-Code-Academy  (2026-09-05)
 
 ## Corpus Check
-- 263 files · ~3,752,530 words
+- 263 files · ~3,752,511 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -152,7 +152,7 @@
 - jsonwebtoken
 - assertNotLastSuperAdmin
 - multer
-- 17. Environment Variables Reference
+- 1. Project Overview
 - User
 - getSupabase
 - UserPasswordReset.ts
@@ -170,7 +170,7 @@
 - mailer.ts
 - form.controller.ts
 - queryActivity
-- @types/jsonwebtoken
+- cors
 - express-rate-limit
 - ContentBlock.ts
 - AdminPasswordReset.ts
@@ -299,7 +299,7 @@ Nodes (18): app, configuredOrigins, corsOptions, defaultAllowedOrigins, appBaseU
 
 ### Community 23 - "dependencies"
 Cohesion: 0.12
-Nodes (17): bcrypt, cors, dotenv, sequelize, dependencies, bcrypt, cors, dotenv (+9 more)
+Nodes (17): bcrypt, dotenv, sequelize, dependencies, bcrypt, dotenv, sequelize, @types/bcrypt (+9 more)
 
 ### Community 24 - "MediaRevision.ts"
 Cohesion: 0.19
@@ -371,7 +371,7 @@ Nodes (4): initTopperResult(), TopperResult, TopperResultAttributes, TopperResul
 
 ### Community 46 - "🏆 Success Code Academy — Master Project Documentation"
 Cohesion: 0.17
-Nodes (11): 15. Hosting & Infrastructure Services, 16. Messaging & Notification Services, 1. Project Overview, 20. Implementation, 2. High-Level Architecture, 4. Repository Structure, Key Tagline, Setup Requirements (+3 more)
+Nodes (11): 15. Hosting & Infrastructure Services, 16. Messaging & Notification Services, 17. Environment Variables Reference, 20. Implementation, 2. High-Level Architecture, 4. Repository Structure, Client (`client/.env.local`), Server (`server/.env`) (+3 more)
 
 ### Community 48 - "settings/page.tsx"
 Cohesion: 0.29
@@ -545,9 +545,9 @@ Nodes (11): deleteAcademyVideo, deleteBanner, deleteNewsArticle, deleteResult, d
 Cohesion: 0.33
 Nodes (7): assertAdminIdentityIsFree(), assertNotLastSuperAdmin(), countSuperAdmins(), createAdminAccount, deleteAdminAccount, publicAdminAccount(), updateAdminAccount
 
-### Community 170 - "17. Environment Variables Reference"
+### Community 170 - "1. Project Overview"
 Cohesion: 0.67
-Nodes (3): 17. Environment Variables Reference, Client (`client/.env.local`), Server (`server/.env`)
+Nodes (3): 1. Project Overview, Key Tagline, Target Audience
 
 ### Community 171 - "User"
 Cohesion: 0.33
@@ -609,7 +609,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `adminApiFetch()` connect `useToast` to `EditModeContext.tsx`, `admin-api.ts`, `admin/page.tsx`, `AdminContentManager.tsx`, `settings/page.tsx`, `EditableText.tsx`, `AdminLeadTable.tsx`, `api.ts`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `🏆 Success Code Academy — Master Project Documentation` connect `🏆 Success Code Academy — Master Project Documentation` to `14. Deployment & Infrastructure`, `3. Technology Stack`, `5. Frontend — `client/``, `6. Backend — `server/``, `17. Environment Variables Reference`, `11. Website Pages & Features`, `12. Design System & Branding`, `18. Getting Started — Local Development`, `8. API Routes & Endpoints`, `10. Admin Panel & Visual Website Editor`, `19. Development Standards & Security`, `7. Database — Models & Migrations`, `9. Authentication & Authorization`, `13. SEO & Performance`?**
+- **Why does `🏆 Success Code Academy — Master Project Documentation` connect `🏆 Success Code Academy — Master Project Documentation` to `14. Deployment & Infrastructure`, `3. Technology Stack`, `5. Frontend — `client/``, `6. Backend — `server/``, `1. Project Overview`, `11. Website Pages & Features`, `12. Design System & Branding`, `18. Getting Started — Local Development`, `8. API Routes & Endpoints`, `10. Admin Panel & Visual Website Editor`, `19. Development Standards & Security`, `7. Database — Models & Migrations`, `9. Authentication & Authorization`, `13. SEO & Performance`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `$schema`, `.opencode/plugins/graphify.js`, `eslintConfig` to the rest of the system?**
   _590 weakly-connected nodes found - possible documentation gaps or missing edges._

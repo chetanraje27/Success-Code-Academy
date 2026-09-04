@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { CheckCircle2, CircleAlert, Info, X } from "lucide-react";
+import { ConfirmDialogProvider } from "./ConfirmDialog";
 
 type ToastTone = "success" | "error" | "info";
 
@@ -68,7 +69,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   return (
     <ToastContext.Provider value={api}>
-      {children}
+      <ConfirmDialogProvider>{children}</ConfirmDialogProvider>
 
       <div className="admin-toast-viewport" aria-live="polite" role="status">
         {toasts.map((toast) => {

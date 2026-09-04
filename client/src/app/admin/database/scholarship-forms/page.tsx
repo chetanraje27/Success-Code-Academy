@@ -30,7 +30,7 @@ export default function AdminScholarshipFormsPage() {
       endpoint="database/scholarship-forms"
       searchPlaceholder="Search student, phone, school, city, or course"
       exportName="scholarship-forms"
-      filters={[{ key: "course", label: "Course" }, { key: "program", label: "Program" }, { key: "class", label: "Class" }, { key: "city", label: "City" }, { key: "dateFrom", label: "From", type: "date" }, { key: "dateTo", label: "To", type: "date" }]}
+      filters={[{ key: "course", label: "Course" }, { key: "program", label: "Program" }, { key: "class", label: "Class" }, { key: "city", label: "City" }, { key: "school", label: "School" }, { key: "dateFrom", label: "From", type: "date" }, { key: "dateTo", label: "To", type: "date" }]}
       columns={[
         {
           key: "studentName",
@@ -43,14 +43,11 @@ export default function AdminScholarshipFormsPage() {
               <span className="admin-table-subtitle">
                 Class {String(row.studentClass || "—")}
               </span>
+              {row.studentEmail && <span className="admin-table-subtitle">{String(row.studentEmail)}</span>}
             </>
           ),
         },
         { key: "studentPhone", label: "Student phone" },
-        { key: "studentEmail", label: "Student email" },
-        { key: "parentPhone", label: "Parent phone" },
-        { key: "schoolName", label: "School", sortable: true },
-        { key: "city", label: "City", sortable: true },
         { key: "preferredCourse", label: "Preferred course" },
         { key: "scholarshipProgram", label: "Program" },
         { key: "createdAt", label: "Submitted", sortable: true },
@@ -58,6 +55,18 @@ export default function AdminScholarshipFormsPage() {
       onAdd={() => setEditingForm({})}
       onEdit={setEditingForm}
       onDelete={handleDelete}
+      supplementalFields={[
+        { key: "studentPhone", label: "Student phone", isPhone: true },
+        { key: "studentEmail", label: "Student email", isEmail: true, fullWidth: true },
+        { key: "parentPhone", label: "Parent phone", isPhone: true },
+        { key: "studentClass", label: "Student class" },
+        { key: "schoolName", label: "School name", fullWidth: true },
+        { key: "city", label: "City" },
+        { key: "preferredCourse", label: "Preferred course", fullWidth: true },
+        { key: "scholarshipProgram", label: "Scholarship program", fullWidth: true },
+        { key: "createdAt", label: "Created" },
+        { key: "updatedAt", label: "Updated" },
+      ]}
     />
     <ScholarshipFormEditorModal
       open={!!editingForm}

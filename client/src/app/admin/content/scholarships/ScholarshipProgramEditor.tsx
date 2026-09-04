@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AdminModal from "@/components/admin/AdminModal";
+import { useToast } from "@/components/admin/Toast";
 import { adminApiFetch } from "@/lib/admin-api";
 
 export default function ScholarshipProgramEditor({
@@ -15,6 +16,7 @@ export default function ScholarshipProgramEditor({
   program: any;
   onSaved: () => void;
 }) {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -56,10 +58,13 @@ export default function ScholarshipProgramEditor({
         method,
         body: JSON.stringify(formData),
       });
+      toast.success(isNew ? "Scholarship program created." : "Scholarship program updated.");
       onSaved();
       onClose();
     } catch (e: any) {
-      setError(e.message || "Error saving scholarship program");
+      const message = e.message || "Error saving scholarship program";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

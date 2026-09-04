@@ -5,6 +5,7 @@ import { Download, Search, Edit2, Trash2, ArrowDown, ArrowUp, ArrowUpDown } from
 import { adminApiFetch } from "@/lib/admin-api";
 import { useAdminSession } from "./AdminSessionContext";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 import AdminDetailDrawer, { AdminDrawerField } from "./AdminDetailDrawer";
 import {
   AdminEmptyState,
@@ -27,10 +28,18 @@ export type LeadColumn = {
 type SortState = { key: string; direction: "asc" | "desc" } | null;
 
 export type LeadFilter = {
-  key: "course" | "program" | "class" | "city" | "dateFrom" | "dateTo" | "isActive" | "type" | "year";
+  key: "course" | "program" | "class" | "city" | "school" | "dateFrom" | "dateTo" | "isActive" | "type" | "year";
   label: string;
   options?: Array<{ label: string; value: string }>;
   type?: "select" | "date" | "number";
+};
+
+export type LeadSupplementalField = {
+  key: string;
+  label: string;
+  fullWidth?: boolean;
+  isEmail?: boolean;
+  isPhone?: boolean;
 };
 
 function csvCell(value: unknown): string {
@@ -56,6 +65,7 @@ export default function AdminLeadTable({
   onDelete,
   onAdd,
   filters = [],
+  supplementalFields = [],
 }: {
   title: string;
   description: string;
@@ -68,6 +78,7 @@ export default function AdminLeadTable({
   onDelete?: (row: LeadRow) => void;
   onAdd?: () => void;
   filters?: LeadFilter[];
+  supplementalFields?: LeadSupplementalField[];
 }) {
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [query, setQuery] = useState("");
@@ -81,6 +92,7 @@ export default function AdminLeadTable({
   const [selectedRow, setSelectedRow] = useState<LeadRow | null>(null);
   const [sort, setSort] = useState<SortState>(null);
   const toast = useToast();
+  const confirmAction = useConfirm();
 
   /*
    * A standard administrator reads and edits records but never creates or
@@ -179,6 +191,16 @@ export default function AdminLeadTable({
     toast.success("Exported the currently loaded rows.");
   }
 
+  async function requestDelete(row: LeadRow) {
+    const confirmed = await confirmAction({
+      title: "Delete record?",
+      message: "This record will be permanently removed from the database. This action cannot be undone.",
+      confirmLabel: "Delete record",
+      tone: "destructive",
+    });
+    if (confirmed) onDelete?.(row);
+  }
+
   const drawerData = useMemo(() => {
     if (!selectedRow) return null;
 
@@ -258,15 +280,22 @@ export default function AdminLeadTable({
       });
     });
 
-    // Also include other useful fields in selectedRow if not in columns
+    // Include explicitly configured fields omitted from the compact table.
     const alreadyMappedKeys = new Set(columns.map((c) => c.key));
-    alreadyMappedKeys.add("id");
     alreadyMappedKeys.add("message");
-    alreadyMappedKeys.add("updatedAt");
     alreadyMappedKeys.add("password");
     alreadyMappedKeys.add("passwordHash");
     alreadyMappedKeys.add("firstName");
     alreadyMappedKeys.add("lastName");
+
+    fields.push({ label: "ID", value: String(selectedRow.id) });
+    alreadyMappedKeys.add("id");
+    supplementalFields.forEach((field) => {
+      if (!alreadyMappedKeys.has(field.key) && selectedRow[field.key] !== undefined && selectedRow[field.key] !== null && selectedRow[field.key] !== "") {
+        fields.push({ label: field.label, value: field.key.endsWith("At") ? formatAdminDate(selectedRow[field.key]) : String(selectedRow[field.key]), fullWidth: field.fullWidth, isEmail: field.isEmail, isPhone: field.isPhone });
+        alreadyMappedKeys.add(field.key);
+      }
+    });
 
     // Ensure email is always present in details if available
     const hasEmailInFields = fields.some(
@@ -339,7 +368,7 @@ export default function AdminLeadTable({
         : undefined,
       fields,
     };
-  }, [selectedRow, columns]);
+  }, [selectedRow, columns, supplementalFields]);
 
   return (
     <div className="admin-page">
@@ -368,15 +397,6 @@ export default function AdminLeadTable({
             Search
           </button>
         </form>
-        <div className="admin-lead-filters">
-          {filters.map((filter) => (
-            <label key={filter.key}>
-              <span className="admin-table-subtitle">{filter.label}</span>
-              {filter.options ? <select value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }}><option value="">All</option>{filter.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={filter.type || "text"} value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }} />}
-            </label>
-          ))}
-          <label><span className="admin-table-subtitle">Page size</span><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }}>{[10, 25, 50].map((size) => <option key={size} value={size}>{size}</option>)}</select></label>
-        </div>
         <div className="admin-toolbar-actions">
           {canAdd && (
             <button
@@ -401,10 +421,13 @@ export default function AdminLeadTable({
 
       <section className="admin-card">
         <header className="admin-card-header">
-          <div>
+          <div className="admin-card-header-main">
             <h2>{query.trim() ? `Results for “${query.trim()}”` : title}</h2>
             <p>{total} records{total !== displayedRows.length ? ` · showing ${displayedRows.length}` : ""}</p>
           </div>
+          {filters.length > 0 && <div className="admin-lead-filters" aria-label="Table filters">
+            {filters.map((filter) => <label key={filter.key}><span>{filter.label}</span>{filter.options ? <select value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }}><option value="">All</option>{filter.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={filter.type || "text"} value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }} />}</label>)}
+          </div>}
         </header>
 
         {loading ? (
@@ -455,19 +478,8 @@ export default function AdminLeadTable({
                                   ? `${sort.direction === "asc" ? "Ascending" : "Descending"}; click to reset`
                                   : "Currently unsorted"
                               }`}
-                              style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 5,
-                                border: 0,
-                                padding: 0,
-                                background: "transparent",
-                                color: "inherit",
-                                font: "inherit",
-                                letterSpacing: "inherit",
-                                textTransform: "inherit",
-                                cursor: "pointer",
-                              }}
+                              className="admin-table-sort"
+                              /* style moved to admin.css */
                             >
                               {column.label}
                               <SortIcon size={13} aria-hidden="true" />
@@ -508,7 +520,7 @@ export default function AdminLeadTable({
                       ))}
                       {showActions && (
                         <td onClick={(e) => e.stopPropagation()}>
-                          <div style={{ display: "flex", gap: "8px" }}>
+                          <div className="admin-row-actions">
                             {onEdit && (
                               <button
                                 type="button"
@@ -528,9 +540,7 @@ export default function AdminLeadTable({
                                 className="sca-admin-icon-btn danger"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (confirm("Are you sure you want to delete this record?")) {
-                                    onDelete?.(row);
-                                  }
+                                  void requestDelete(row);
                                 }}
                                 title="Delete"
                               >
@@ -571,11 +581,15 @@ export default function AdminLeadTable({
                 );
               })}
             </div>
-            <div className="admin-card-body admin-pagination" aria-label="Pagination">
-              <button className="admin-button secondary" type="button" disabled={page <= 1 || loading} onClick={() => setPage((current) => current - 1)}>Previous</button>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => <button key={number} className={`admin-button ${number === page ? "primary" : "secondary"}`} type="button" onClick={() => setPage(number)} disabled={loading}>{number}</button>)}
-              <button className="admin-button secondary" type="button" disabled={page >= totalPages || loading} onClick={() => setPage((current) => current + 1)}>Next</button>
-            </div>
+            <footer className="admin-card-footer admin-pagination-footer" aria-label="Pagination">
+              <span className="admin-pagination-summary">Showing {displayedRows.length ? (page - 1) * pageSize + 1 : 0}–{displayedRows.length ? (page - 1) * pageSize + displayedRows.length : 0} of {total}</span>
+              <div className="admin-pagination-controls">
+                <label className="admin-page-size-control"><span>Rows/page</span><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }} aria-label="Rows per page">{[10, 25, 50].map((size) => <option key={size} value={size}>{size}</option>)}</select></label>
+                <button className="admin-pagination-button" type="button" disabled={page <= 1 || loading} onClick={() => setPage((current) => current - 1)}>Previous</button>
+                {Array.from({ length: totalPages }, (_, index) => index + 1).slice(Math.max(0, page - 3), page + 2).map((number) => <button key={number} className={`admin-page-number ${number === page ? "is-active" : ""}`} type="button" onClick={() => setPage(number)} disabled={loading} aria-current={number === page ? "page" : undefined}>{number}</button>)}
+                <button className="admin-pagination-button" type="button" disabled={page >= totalPages || loading} onClick={() => setPage((current) => current + 1)}>Next</button>
+              </div>
+            </footer>
           </>
         )}
       </section>
@@ -600,9 +614,7 @@ export default function AdminLeadTable({
           onDelete={
             canDelete
               ? () => {
-                  if (confirm("Are you sure you want to delete this record?")) {
-                    onDelete?.(selectedRow);
-                  }
+                  void requestDelete(selectedRow);
                 }
               : undefined
           }

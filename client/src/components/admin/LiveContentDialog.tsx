@@ -5,6 +5,7 @@ import { RotateCcw, Save } from "lucide-react";
 import AdminModal from "./AdminModal";
 import type { ContentKind } from "./LiveContentContext";
 import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 type LiveContentDialogProps = {
   open: boolean;
@@ -40,6 +41,7 @@ export function LiveContentDialog({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const toast = useToast();
+  const confirmAction = useConfirm();
 
   async function save() {
     setSaving(true);
@@ -58,11 +60,12 @@ export function LiveContentDialog({
   }
 
   async function reset() {
-    if (
-      !window.confirm(
-        `Restore “${label}” to the original website text?`,
-      )
-    ) {
+    if (!(await confirmAction({
+      title: "Restore original text?",
+      message: <>Your custom “{label}” text will be removed and the original website text will be shown.</>,
+      confirmLabel: "Restore original",
+      tone: "default",
+    }))) {
       return;
     }
     setSaving(true);

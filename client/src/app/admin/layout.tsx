@@ -128,7 +128,8 @@ export default function AdminLayout({
    * by definition locked out.
    */
   const isPublicRoute =
-    pathname === "/admin/login" || pathname === "/admin/reset-password";
+    pathname === "/admin/login" ||
+    pathname.startsWith("/admin/reset-password");
   const [session, setSession] = useState<SessionState>(
     isPublicRoute ? "guest" : "loading",
   );

@@ -4,7 +4,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Lock,
+  LogIn,
+  ShieldCheck,
+  Timer,
+} from "lucide-react";
 import { AdminNotice } from "@/components/admin/AdminUi";
 import { useToast } from "@/components/admin/Toast";
 
@@ -17,17 +27,15 @@ export default function AdminResetPasswordPage() {
   const [tokenState, setTokenState] = useState<TokenState>("checking");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  /*
-   * The token is read from window.location rather than useSearchParams so the
-   * page needs no Suspense boundary: it is a fully client-rendered form and
-   * there is nothing to prerender around the query string.
-   */
   useEffect(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get("token") || "";
+    const fromUrl =
+      new URLSearchParams(window.location.search).get("token") || "";
     setToken(fromUrl);
 
     if (!fromUrl) {
@@ -67,6 +75,11 @@ export default function AdminResetPasswordPage() {
     event.preventDefault();
     setError("");
 
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Both passwords must match.");
       return;
@@ -100,148 +113,229 @@ export default function AdminResetPasswordPage() {
   }
 
   return (
-    <main className="admin-login-page">
-      <section className="admin-login-brand" aria-label="Admin portal overview">
-        <div className="admin-login-brand-content">
-          <div className="admin-login-brand-mark">
-            <Image
-              src="/images/ui/logo2.png"
-              alt="Success Code Academy"
-              width={200}
-              height={60}
-              style={{ width: "auto", height: "100%", objectFit: "contain" }}
-            />
+    <main className="app-login">
+      <div className="app-login-layout">
+        <aside className="app-login-aside" aria-label="Security overview">
+          <div className="app-login-aside-copy">
+            <h1>Admin security</h1>
+            <p>Set a new password for your administrator account.</p>
           </div>
-          <h1>Choose a new admin password.</h1>
-          <p>
-            This link was issued for a single password change and expires on its
-            own. Pick something you have not used elsewhere.
-          </p>
-          <div className="admin-login-benefits">
-            <span>
-              <CheckCircle2 size={17} /> Works only once
-            </span>
-            <span>
-              <CheckCircle2 size={17} /> Expires automatically
-            </span>
-            <span>
-              <CheckCircle2 size={17} /> Stored only as a secure hash
-            </span>
-          </div>
-        </div>
-      </section>
 
-      <section className="admin-login-panel">
-        <div className="admin-login-card">
-          <span>Staff access</span>
-          <h2>Set a new password</h2>
+          <ul className="app-login-aside-list">
+            <li>
+              <span className="app-login-aside-icon" aria-hidden="true">
+                <ShieldCheck size={16} />
+              </span>
+              <div>
+                <strong>Single-use link</strong>
+                <small>Becomes invalid immediately once redeemed</small>
+              </div>
+            </li>
+            <li>
+              <span className="app-login-aside-icon" aria-hidden="true">
+                <Timer size={16} />
+              </span>
+              <div>
+                <strong>Time limited</strong>
+                <small>Expires automatically after 60 minutes</small>
+              </div>
+            </li>
+            <li>
+              <span className="app-login-aside-icon" aria-hidden="true">
+                <Lock size={16} />
+              </span>
+              <div>
+                <strong>Cryptographically secure</strong>
+                <small>Stored only as a SHA-256 hash</small>
+              </div>
+            </li>
+          </ul>
+        </aside>
 
-          {done ? (
-            <>
-              <p>
-                Your password has been updated. Sign in with your email address
-                and the new password.
-              </p>
-              <AdminNotice tone="success">
-                Password changed successfully.
-              </AdminNotice>
-              <button
-                className="admin-button"
-                type="button"
-                onClick={() => router.replace("/admin/login")}
-              >
-                <KeyRound size={18} />
-                Go to sign in
-              </button>
-            </>
-          ) : tokenState === "checking" ? (
-            <div className="admin-loading" role="status" aria-live="polite">
-              <span className="admin-spinner" aria-hidden="true" />
-              Checking your reset link
+        <div className="app-login-stage">
+          <div className="app-login-frame">
+            <div className="app-login-logo">
+              <Image
+                src="/images/ui/logo2.png"
+                alt="Success Code Academy"
+                width={212}
+                height={68}
+                priority
+                style={{ width: "auto", height: 42, objectFit: "contain" }}
+              />
             </div>
-          ) : tokenState === "valid" ? (
-            <>
-              <p>
-                Choose a password of at least 6 characters for your admin
-                account.
-              </p>
 
-              {error && <AdminNotice>{error}</AdminNotice>}
-
-              <form className="admin-login-form" onSubmit={handleSubmit}>
-                <div className="admin-field">
-                  <label htmlFor="admin-new-password">New password</label>
-                  <input
-                    id="admin-new-password"
-                    type="password"
-                    autoComplete="new-password"
-                    minLength={6}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="At least 6 characters"
-                    required
-                  />
-                </div>
-                <div className="admin-field">
-                  <label htmlFor="admin-confirm-password">
-                    Confirm new password
-                  </label>
-                  <input
-                    id="admin-confirm-password"
-                    type="password"
-                    autoComplete="new-password"
-                    minLength={6}
-                    value={confirmPassword}
-                    onChange={(event) =>
-                      setConfirmPassword(event.target.value)
-                    }
-                    placeholder="Repeat the password"
-                    required
-                  />
+            {done ? (
+              <>
+                <p className="app-login-frame-label">Password updated</p>
+                <div className="app-login-success-box">
+                  <div className="app-login-success-header">
+                    <CheckCircle2 size={16} className="app-login-success-icon" />
+                    <span>Password changed</span>
+                  </div>
+                  <p>
+                    Your administrator password has been updated successfully. You
+                    can now sign in with your new password.
+                  </p>
                 </div>
                 <button
-                  className="admin-button"
-                  type="submit"
-                  disabled={submitting}
+                  type="button"
+                  className="app-login-submit"
+                  onClick={() => router.replace("/admin/login")}
                 >
-                  {submitting ? (
-                    <>
-                      <span className="admin-spinner" aria-hidden="true" />
-                      Updating…
-                    </>
-                  ) : (
-                    <>
-                      <KeyRound size={18} />
-                      Update password
-                    </>
-                  )}
+                  <LogIn size={15} />
+                  Go to sign in
                 </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <p>
-                {tokenState === "missing"
-                  ? "This page needs the reset link that was sent to you."
-                  : "This reset link cannot be used."}
-              </p>
-              <AdminNotice>
-                {error ||
-                  "Open the most recent reset link, or ask an administrator to send a new one."}
-              </AdminNotice>
-              <Link className="admin-button" href="/admin/login">
-                Back to sign in
-              </Link>
-            </>
-          )}
+              </>
+            ) : tokenState === "checking" ? (
+              <>
+                <p className="app-login-frame-label">Verifying reset link</p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "32px 0",
+                    gap: "12px",
+                    color: "var(--login-muted)",
+                    fontSize: "0.82rem",
+                  }}
+                >
+                  <span className="app-login-spinner" aria-hidden="true" />
+                  <span>Checking link validity…</span>
+                </div>
+              </>
+            ) : tokenState === "valid" ? (
+              <>
+                <p className="app-login-frame-label">Set a new password</p>
+                <p className="app-login-frame-desc">
+                  Choose a secure password of at least 6 characters.
+                </p>
 
-          <div className="admin-login-help">
-            <LockKeyhole size={15} aria-hidden="true" /> Reset links expire on
-            their own and can only be used once.{" "}
-            <Link href="/">Return to the website</Link>.
+                {error && <AdminNotice>{error}</AdminNotice>}
+
+                <form className="app-login-form" onSubmit={handleSubmit} noValidate>
+                  <div className="app-login-field">
+                    <label className="sr-only" htmlFor="new-password">
+                      New password
+                    </label>
+                    <div className="app-login-control">
+                      <Lock
+                        size={15}
+                        className="app-login-control-icon"
+                        aria-hidden="true"
+                      />
+                      <input
+                        id="new-password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        minLength={6}
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        placeholder="New password (min 6 characters)"
+                        required
+                        disabled={submitting}
+                      />
+                      <button
+                        type="button"
+                        className="app-login-password-toggle"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="app-login-field">
+                    <label className="sr-only" htmlFor="confirm-password">
+                      Confirm new password
+                    </label>
+                    <div className="app-login-control">
+                      <Lock
+                        size={15}
+                        className="app-login-control-icon"
+                        aria-hidden="true"
+                      />
+                      <input
+                        id="confirm-password"
+                        type={showConfirm ? "text" : "password"}
+                        autoComplete="new-password"
+                        minLength={6}
+                        value={confirmPassword}
+                        onChange={(event) =>
+                          setConfirmPassword(event.target.value)
+                        }
+                        placeholder="Confirm new password"
+                        required
+                        disabled={submitting}
+                      />
+                      <button
+                        type="button"
+                        className="app-login-password-toggle"
+                        onClick={() => setShowConfirm((prev) => !prev)}
+                        aria-label={
+                          showConfirm ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    className="app-login-submit"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <>
+                        <span className="app-login-spinner" aria-hidden="true" />
+                        Updating password…
+                      </>
+                    ) : (
+                      <>
+                        <KeyRound size={15} />
+                        Update password
+                      </>
+                    )}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <p className="app-login-frame-label">
+                  {tokenState === "missing"
+                    ? "Reset link required"
+                    : "Link invalid or expired"}
+                </p>
+                <p className="app-login-frame-desc">
+                  {tokenState === "missing"
+                    ? "This page requires a valid reset link from your email inbox."
+                    : error ||
+                      "This password reset link is invalid or has expired. Please request a new one."}
+                </p>
+
+                <button
+                  type="button"
+                  className="app-login-submit"
+                  onClick={() => router.replace("/admin/login")}
+                >
+                  <ArrowLeft size={15} />
+                  Back to sign in
+                </button>
+              </>
+            )}
+
+            <Link href="/" className="app-login-back">
+              Return to the website
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 }

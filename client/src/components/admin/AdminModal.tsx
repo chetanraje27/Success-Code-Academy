@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
@@ -87,7 +87,7 @@ export default function AdminModal({
       <section
         ref={dialogRef}
         className="admin-modal"
-        style={{ maxWidth: width }}
+        style={{ "--admin-modal-width": `${width}px` } as CSSProperties}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

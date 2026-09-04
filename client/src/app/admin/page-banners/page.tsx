@@ -233,11 +233,13 @@ export default function AdminPageBannersPage() {
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 20px;
           margin-top: 4px;
+          min-width: 0;
         }
 
         .pb-card {
           display: flex;
           flex-direction: column;
+          min-width: 0;
         }
 
         .pb-card-sub {
@@ -312,6 +314,7 @@ export default function AdminPageBannersPage() {
           gap: 12px;
           padding: 12px 16px;
           border-top: 1px solid var(--admin-border, #e2e8f0);
+          flex-wrap: wrap;
         }
 
         .pb-success-msg {

@@ -15,6 +15,7 @@ export default function AdminScholarshipProgramsPage() {
     try {
       await adminApiFetch(`/api/v1/admin/scholarship-programs/${program.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Scholarship program deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete scholarship program");
     }
@@ -29,6 +30,7 @@ export default function AdminScholarshipProgramsPage() {
         endpoint="scholarship-programs"
         searchPlaceholder="Search programs..."
         exportName="scholarship-programs"
+        filters={[{ key: "isActive", label: "Status", options: [{ label: "Active", value: "true" }, { label: "Inactive", value: "false" }] }]}
         columns={[
           {
             key: "title",

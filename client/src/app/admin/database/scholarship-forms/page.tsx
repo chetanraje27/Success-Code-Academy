@@ -15,6 +15,7 @@ export default function AdminScholarshipFormsPage() {
     try {
       await adminApiFetch(`/api/v1/admin/database/scholarship-forms/${formRecord.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Scholarship form deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete scholarship form");
     }
@@ -29,6 +30,7 @@ export default function AdminScholarshipFormsPage() {
       endpoint="database/scholarship-forms"
       searchPlaceholder="Search student, phone, school, city, or course"
       exportName="scholarship-forms"
+      filters={[{ key: "course", label: "Course" }, { key: "program", label: "Program" }, { key: "class", label: "Class" }, { key: "city", label: "City" }, { key: "dateFrom", label: "From", type: "date" }, { key: "dateTo", label: "To", type: "date" }]}
       columns={[
         {
           key: "studentName",

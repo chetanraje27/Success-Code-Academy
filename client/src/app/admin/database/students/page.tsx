@@ -15,6 +15,7 @@ export default function AdminStudentsPage() {
     try {
       await adminApiFetch(`/api/v1/admin/database/users/${student.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Student deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete student");
     }

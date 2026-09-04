@@ -2183,6 +2183,39 @@ div.admin-dash-empty {
   text-decoration: underline;
 }
 
+/* Dashboard activity controls and phone layout. */
+.admin-dash-filter-grid { display:flex; align-items:center; flex-wrap:wrap; gap:6px; width:100%; }
+.admin-dash-filter-input { min-height:32px; min-width:110px; box-sizing:border-box; padding:0 8px; border:1px solid var(--admin-border); border-radius:var(--admin-radius-sm); background:var(--admin-surface); color:var(--admin-text); font:inherit; font-size:.75rem; }
+.admin-dash-sort { display:inline-flex; align-items:center; gap:4px; border:0; padding:0; background:transparent; color:inherit; font:inherit; cursor:pointer; text-transform:inherit; letter-spacing:inherit; }
+.admin-dash-sort:hover { color:var(--admin-brand); }
+.admin-dash-table-wrap { width:100%; overflow-x:auto; }
+.admin-dash-pagination { display:flex; align-items:center; gap:5px; margin-left:auto; }
+.admin-dash-pagination label { display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.admin-dash-pagination select { border:1px solid var(--admin-border); border-radius:var(--admin-radius-xs); background:var(--admin-surface); color:var(--admin-text); padding:4px; }
+.admin-dash-page-number { min-width:28px; height:28px; border:1px solid var(--admin-border); border-radius:var(--admin-radius-xs); background:var(--admin-surface); color:var(--admin-text-secondary); cursor:pointer; }
+.admin-dash-page-number.is-active { border-color:var(--admin-brand); background:var(--admin-brand); color:#fff; }
+
+@media (max-width:640px) {
+  .admin-dash-table-toolbar { align-items:stretch; }
+  .admin-dash-filter-tabs { width:100%; overflow-x:auto; justify-content:flex-start; }
+  .admin-dash-tab { flex:0 0 auto; }
+  .admin-dash-search-box { width:100%; }
+  .admin-dash-filter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .admin-dash-filter-input, .admin-dash-filter-grid .admin-button { width:100%; min-width:0; }
+  .admin-dash-table { min-width:0; }
+  .admin-dash-table thead { display:none; }
+  .admin-dash-table, .admin-dash-table tbody, .admin-dash-table tr, .admin-dash-table td { display:block; width:100%; box-sizing:border-box; }
+  .admin-dash-table tbody tr { margin:8px; width:calc(100% - 16px); padding:10px; border:1px solid var(--admin-border); border-radius:var(--admin-radius-sm); background:var(--admin-surface); }
+  .admin-dash-table td { display:flex; justify-content:space-between; gap:12px; padding:4px 0; border:0; }
+  .admin-dash-table td::before { content:attr(data-label); color:var(--admin-muted); font-size:.67rem; font-weight:600; text-transform:uppercase; }
+  .admin-dash-table td:first-child { display:block; padding-bottom:7px; }
+  .admin-dash-table td:first-child::before { display:none; }
+  .admin-dash-table td:last-child { justify-content:flex-end; border-top:1px solid var(--admin-divider); margin-top:5px; padding-top:7px; }
+  .admin-dash-footer { align-items:flex-start; }
+  .admin-dash-footer-links { display:none; }
+  .admin-dash-pagination { width:100%; justify-content:flex-end; margin-left:0; }
+}
+
 /* --- Dark Theme Overrides --- */
 html[data-admin-theme="dark"] .admin-dash-header-icon {
   background: #0f223f;
@@ -4847,6 +4880,34 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   background: var(--admin-bg);
 }
 
+.admin-toolbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-page-size-control,
+.admin-pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-mobile-record-list {
+  display: none;
+}
+
 /* Shared dashboard reference: keep data surfaces compact, quiet, and easy to
    scan. These rules intentionally sit after the page styles so every admin
    table and control gets the same baseline without page-specific markup. */
@@ -4937,7 +4998,7 @@ html[data-admin-theme]::-webkit-scrollbar-track {
 }
 
 .admin-modal {
-  width: min(680px, 100%);
+  width: min(var(--admin-modal-width, 680px), 100%);
   max-width: calc(100vw - 32px);
   max-height: min(86vh, 820px);
   border-radius: var(--admin-radius-md);
@@ -4984,12 +5045,193 @@ html[data-admin-theme]::-webkit-scrollbar-track {
 }
 
 @media (max-width: 767px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .admin-main,
+  .admin-content,
+  .admin-page,
+  .admin-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .admin-toolbar-actions,
+  .admin-lead-filters {
+    width: 100%;
+  }
+
+  .admin-toolbar-actions > *,
+  .admin-search-form > .admin-button,
+  .admin-lead-filters > label {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .admin-lead-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-lead-filters label select,
+  .admin-lead-filters label input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .admin-table-wrap {
+    display: none;
+  }
+
+  .admin-mobile-record-list {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    background: var(--admin-surface-sunken);
+  }
+
+  .admin-mobile-record {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--admin-surface);
+    cursor: pointer;
+  }
+
+  .admin-mobile-record.is-selected {
+    border-color: var(--admin-brand);
+    background: var(--admin-brand-softer);
+  }
+
+  .admin-mobile-record-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .admin-mobile-record-heading strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--admin-text);
+    font-size: 0.85rem;
+  }
+
+  .admin-mobile-record-heading span,
+  .admin-mobile-record-hint {
+    flex: 0 0 auto;
+    color: var(--admin-faint);
+    font-size: 0.68rem;
+  }
+
+  .admin-mobile-record-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    margin-top: 10px;
+  }
+
+  .admin-mobile-record-details > div {
+    min-width: 0;
+  }
+
+  .admin-mobile-record-details span {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--admin-muted);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+  }
+
+  .admin-mobile-record-details b {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--admin-text-secondary);
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .admin-mobile-record-hint {
+    display: block;
+    margin-top: 10px;
+  }
+
+  .admin-pagination-footer,
+  .admin-page-size-control,
+  .admin-pagination-actions {
+    align-items: stretch;
+  }
+
+  .admin-pagination-footer > *,
+  .admin-pagination-actions > * {
+    flex: 1 1 auto;
+  }
+
+  .admin-pagination-actions {
+    width: 100%;
+  }
+
+  .admin-pagination-actions .admin-button {
+    min-width: 0;
+  }
+
+  .admin-form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-actions .admin-button,
+  .admin-drawer-footer .admin-button,
+  .admin-reset-actions .admin-button,
+  .pb-card-footer .admin-button {
+    width: 100%;
+  }
+
+  .admin-drawer-header-meta {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .admin-drawer-quick-actions,
+  .admin-drawer-message-actions,
+  .admin-drawer-footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-drawer-action-btn,
+  .admin-drawer-message-actions .admin-drawer-action-btn {
+    min-width: 0;
+    justify-content: center;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  .admin-drawer-footer .full {
+    grid-column: 1 / -1;
+  }
+
+  .admin-drawer-email-val,
+  .admin-drawer-message-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-modal-body {
+    overflow-x: hidden;
+  }
+
   .admin-table-wrap {
     margin-inline: 0;
   }
 
   .admin-table {
-    min-width: 600px;
+    min-width: 0;
   }
 
   .admin-modal {
@@ -5000,6 +5242,19 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   .admin-drawer {
     width: 100vw;
     max-width: 100vw;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-lead-filters,
+  .admin-mobile-record-details {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-drawer-quick-actions,
+  .admin-drawer-message-actions,
+  .admin-drawer-footer {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -5021,6 +5276,48 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   .admin-drawer-message-copy-btn:active,
   .admin-toast-close:active {
     transform: none;
+  }
+}
+
+/* Legacy leads panel: retain its public-site entry point while matching admin
+   chrome and keeping narrow phones inside the viewport. */
+.leads-drawer {
+  max-width: 100vw;
+  box-sizing: border-box;
+  border-left: 1px solid var(--admin-border, #dfe5ed);
+  box-shadow: -2px 0 8px rgba(15, 31, 54, 0.08) !important;
+  background: var(--admin-surface, #fff) !important;
+}
+
+.leads-content {
+  min-width: 0;
+  background: var(--admin-surface-sunken, #f7f9fc) !important;
+}
+
+.leads-state {
+  padding: 16px;
+}
+
+@media (max-width: 480px) {
+  .leads-drawer {
+    width: 100vw !important;
+  }
+
+  .leads-header {
+    padding: 14px !important;
+  }
+
+  .leads-search {
+    padding: 12px 14px !important;
+  }
+
+  .leads-content {
+    padding: 10px !important;
+  }
+
+  .tab-btn {
+    min-height: 42px;
+    padding-inline: 10px !important;
   }
 }
 

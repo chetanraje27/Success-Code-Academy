@@ -43,6 +43,7 @@ import {
 import multer from 'multer';
 import { createClient } from '@supabase/supabase-js';
 import { Op } from 'sequelize';
+import { QueryTypes } from 'sequelize';
 import type { Transaction } from 'sequelize';
 
 let supabase: ReturnType<typeof createClient> | null = null;
@@ -797,10 +798,14 @@ export const deleteContentBlock = asyncHandler(
 
 // --- Database Viewer Endpoints ---
 function getListOptions(req: Request) {
+  const pageSize = req.query['page-size'];
   return {
     q: String(req.query.q || '').trim(),
     cursor: req.query.cursor ? Number(req.query.cursor) : undefined,
-    limit: Math.min(Number(req.query.limit) || 50, 100),
+    limit: Math.min(Number(pageSize || req.query.limit) || 50, 100),
+    page: req.query.page ? Number(req.query.page) : undefined,
+    sortBy: req.query.sortBy ? String(req.query.sortBy) : undefined,
+    sortDirection: String(req.query.sortDirection || 'desc').toUpperCase() as 'ASC' | 'DESC',
   };
 }
 
@@ -808,11 +813,15 @@ function sendPaginated(
   res: Response,
   rows: Array<{ id: number }>,
   limit: number,
+  total = rows.length,
+  page?: number,
+  cursorEnabled = true,
 ): void {
-  const hasMore = rows.length > limit;
-  const items = hasMore ? rows.slice(0, limit) : rows;
+  const offset = page ? (page - 1) * limit : 0;
+  const hasMore = offset + rows.length > limit || offset + rows.length < total;
+  const items = rows.length > limit ? rows.slice(0, limit) : rows;
   const lastItem = items.at(-1);
-  const nextCursor = hasMore ? lastItem?.id ?? null : null;
+  const nextCursor = hasMore && cursorEnabled ? lastItem?.id ?? null : null;
 
   res.status(200).json({
     status: 'success',
@@ -821,112 +830,109 @@ function sendPaginated(
       nextCursor,
       hasMore,
       limit,
+      total,
+      ...(page ? { page, totalPages: Math.ceil(total / limit) } : {}),
     },
   });
 }
 
+type AdminWhere = Record<string | symbol, unknown>;
+
+function dateFilter(req: Request): AdminWhere {
+  if (!req.query.dateFrom && !req.query.dateTo) return {};
+  const range: AdminWhere = {};
+  if (req.query.dateFrom) range[Op.gte] = new Date(String(req.query.dateFrom));
+  if (req.query.dateTo) {
+    const raw = String(req.query.dateTo);
+    const to = new Date(raw);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) to.setUTCHours(23, 59, 59, 999);
+    range[Op.lte] = to;
+  }
+  return { createdAt: range };
+}
+
+function exactText(value: unknown): AdminWhere | undefined {
+  return value ? { [Op.iLike]: String(value).trim() } : undefined;
+}
+
+function safeOrder(
+  req: Request,
+  fields: Record<string, string>,
+  fallback: string,
+): { order: [string, 'ASC' | 'DESC'][]; cursorEnabled: boolean } {
+  const options = getListOptions(req);
+  const field = (options.sortBy && fields[options.sortBy]) || fallback;
+  return {
+    order: field === 'id'
+      ? [[field, options.sortDirection]]
+      : [[field, options.sortDirection], ['id', options.sortDirection]],
+    cursorEnabled: field === 'id' && options.sortDirection === 'DESC',
+  };
+}
+
+function pageWindow(req: Request, cursorEnabled: boolean): { limit: number; offset?: number } {
+  const { limit, page } = getListOptions(req);
+  return page
+    ? { limit, offset: (page - 1) * limit }
+    : { limit, ...(cursorEnabled ? {} : { offset: 0 }) };
+}
+
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
-  const { q, cursor, limit } = getListOptions(req);
+  const { q, cursor, limit, page } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
-  const users = await User.findAll({
-    where: {
-      role: 'student',
-      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
-      ...(like
-        ? {
-            [Op.or]: [
-              { firstName: like },
-              { lastName: like },
-              { email: like },
-              { mobileNumber: like },
-            ],
-          }
-        : {}),
-    },
-    attributes: [
-      'id',
-      'firstName',
-      'lastName',
-      'email',
-      'mobileNumber',
-      'age',
-      'createdAt',
-    ],
-    order: [['id', 'DESC']],
-    limit: limit + 1,
-  });
-  sendPaginated(res, users, limit);
+  const { order, cursorEnabled } = safeOrder(req, {
+    id: 'id', createdAt: 'createdAt', firstName: 'firstName', email: 'email',
+  }, 'id');
+  const baseWhere: AdminWhere = {
+    role: 'student',
+    ...dateFilter(req),
+    ...(like ? { [Op.or]: [{ firstName: like }, { lastName: like }, { email: like }, { mobileNumber: like }] } : {}),
+  };
+  const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
+  const [total, users] = await Promise.all([User.count({ where: baseWhere }), User.findAll({
+    where,
+    attributes: ['id', 'firstName', 'lastName', 'email', 'mobileNumber', 'age', 'createdAt'],
+    order,
+    ...pageWindow(req, cursorEnabled),
+  })]);
+  sendPaginated(res, users, limit, total, page, cursorEnabled);
 });
 
 export const getCourseForms = asyncHandler(async (req: Request, res: Response) => {
-  const { q, cursor, limit } = getListOptions(req);
+  const { q, cursor, limit, page } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
-  const forms = await CourseRegistration.findAll({
-    where: {
-      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
-      ...(like
-        ? {
-            [Op.or]: [
-              { studentName: like },
-              { studentEmail: like },
-              { studentPhone: like },
-              { courseTitle: like },
-            ],
-          }
-        : {}),
-    },
-    order: [['id', 'DESC']],
-    limit: limit + 1,
-  });
-  sendPaginated(res, forms, limit);
+  const { order, cursorEnabled } = safeOrder(req, { id: 'id', createdAt: 'createdAt', name: 'studentName', email: 'studentEmail', courseTitle: 'courseTitle' }, 'id');
+  const baseWhere: AdminWhere = { ...dateFilter(req), ...(req.query.course ? { courseTitle: exactText(req.query.course) } : {}), ...(like ? { [Op.or]: [{ studentName: like }, { studentEmail: like }, { studentPhone: like }, { courseTitle: like }] } : {}) };
+  const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
+  const [total, forms] = await Promise.all([CourseRegistration.count({ where: baseWhere }), CourseRegistration.findAll({ where, order, ...pageWindow(req, cursorEnabled) })]);
+  sendPaginated(res, forms, limit, total, page, cursorEnabled);
 });
 
 export const getScholarshipForms = asyncHandler(async (req: Request, res: Response) => {
-  const { q, cursor, limit } = getListOptions(req);
+  const { q, cursor, limit, page } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
-  const forms = await ScholarshipRegistration.findAll({
-    where: {
-      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
-      ...(like
-        ? {
-            [Op.or]: [
-              { studentName: like },
-              { studentPhone: like },
-              { parentPhone: like },
-              { preferredCourse: like },
-              { schoolName: like },
-              { city: like },
-            ],
-          }
-        : {}),
-    },
-    order: [['id', 'DESC']],
-    limit: limit + 1,
-  });
-  sendPaginated(res, forms, limit);
+  const { order, cursorEnabled } = safeOrder(req, { id: 'id', createdAt: 'createdAt', name: 'studentName', email: 'studentEmail', preferredCourse: 'preferredCourse', city: 'city', studentClass: 'studentClass' }, 'id');
+  const baseWhere: AdminWhere = {
+    ...dateFilter(req),
+    ...(req.query.course ? { preferredCourse: exactText(req.query.course) } : {}),
+    ...(req.query.program ? { scholarshipProgram: exactText(req.query.program) } : {}),
+    ...(req.query.class ? { studentClass: exactText(req.query.class) } : {}),
+    ...(req.query.city ? { city: exactText(req.query.city) } : {}),
+    ...(like ? { [Op.or]: [{ studentName: like }, { studentPhone: like }, { parentPhone: like }, { preferredCourse: like }, { scholarshipProgram: like }, { schoolName: like }, { city: like }] } : {}),
+  };
+  const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
+  const [total, forms] = await Promise.all([ScholarshipRegistration.count({ where: baseWhere }), ScholarshipRegistration.findAll({ where, order, ...pageWindow(req, cursorEnabled) })]);
+  sendPaginated(res, forms, limit, total, page, cursorEnabled);
 });
 
 export const getContactMessages = asyncHandler(async (req: Request, res: Response) => {
-  const { q, cursor, limit } = getListOptions(req);
+  const { q, cursor, limit, page } = getListOptions(req);
   const like = q ? { [Op.iLike]: `%${q}%` } : null;
-  const messages = await ContactMessage.findAll({
-    where: {
-      ...(cursor ? { id: { [Op.lt]: cursor } } : {}),
-      ...(like
-        ? {
-            [Op.or]: [
-              { name: like },
-              { email: like },
-              { phone: like },
-              { message: like },
-            ],
-          }
-        : {}),
-    },
-    order: [['id', 'DESC']],
-    limit: limit + 1,
-  });
-  sendPaginated(res, messages, limit);
+  const { order, cursorEnabled } = safeOrder(req, { id: 'id', createdAt: 'createdAt', name: 'name', email: 'email' }, 'id');
+  const baseWhere: AdminWhere = { ...dateFilter(req), ...(like ? { [Op.or]: [{ name: like }, { email: like }, { phone: like }, { message: like }] } : {}) };
+  const where = { ...baseWhere, ...(!page && cursor && cursorEnabled ? { id: { [Op.lt]: cursor } } : {}) };
+  const [total, messages] = await Promise.all([ContactMessage.count({ where: baseWhere }), ContactMessage.findAll({ where, order, ...pageWindow(req, cursorEnabled) })]);
+  sendPaginated(res, messages, limit, total, page, cursorEnabled);
 });
 
 export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
@@ -1007,6 +1013,129 @@ export const searchLeads = asyncHandler(async (req: Request, res: Response) => {
     status: 'success',
     data: { users, courseForms, scholarshipForms, contactMessages },
   });
+});
+
+type ActivityRow = {
+  id: number;
+  activityId: string;
+  category: 'student' | 'course-form' | 'scholarship-form' | 'contact-message';
+  type: 'student' | 'course-form' | 'scholarship-form' | 'contact-message';
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  course: string | null;
+  program: string | null;
+  city: string | null;
+  createdAt: Date;
+};
+
+const ACTIVITY_SORT_COLUMNS: Record<string, string> = {
+  id: 'id', createdAt: 'createdAt', name: 'name', email: 'email',
+  course: 'course', program: 'program', city: 'city',
+};
+
+async function queryActivity(req: Request, paginate: boolean, categoryOverride?: string): Promise<{ rows: ActivityRow[]; total: number }> {
+  const { q, limit, page = 1, sortBy, sortDirection } = getListOptions(req);
+  const category = categoryOverride || String(req.query.category || req.query.type || '');
+  const course = String(req.query.course || '');
+  const program = String(req.query.program || '');
+  const city = String(req.query.city || '');
+  const studentClass = String(req.query.class || '');
+  const dateFrom = req.query.dateFrom ? new Date(String(req.query.dateFrom)) : null;
+  let dateTo = req.query.dateTo ? new Date(String(req.query.dateTo)) : null;
+  if (dateTo && /^\d{4}-\d{2}-\d{2}$/.test(String(req.query.dateTo))) {
+    dateTo.setUTCHours(23, 59, 59, 999);
+  }
+
+  const arms: string[] = [];
+  if (!category || category === 'student') arms.push(`
+    SELECT id, 'student:' || id AS "activityId", 'student' AS category, 'student' AS type,
+      TRIM(CONCAT_WS(' ', "firstName", "lastName")) AS name, email, "mobileNumber" AS phone,
+      NULL::text AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+    FROM users WHERE role = 'student'`);
+  if (!category || category === 'course-form') arms.push(`
+    SELECT id, 'course-form:' || id AS "activityId", 'course-form' AS category, 'course-form' AS type,
+      "studentName" AS name, "studentEmail" AS email, "studentPhone" AS phone,
+      "courseTitle" AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+    FROM course_registrations`);
+  if (!category || category === 'scholarship-form') arms.push(`
+    SELECT id, 'scholarship-form:' || id AS "activityId", 'scholarship-form' AS category, 'scholarship-form' AS type,
+      "studentName" AS name, "studentEmail" AS email, "studentPhone" AS phone,
+      "preferredCourse" AS course, "scholarshipProgram" AS program, city, "createdAt"
+    FROM scholarship_registrations
+    WHERE (:studentClass = '' OR "studentClass" ILIKE :studentClassExact)`);
+  if (!category || category === 'contact-message') arms.push(`
+    SELECT id, 'contact-message:' || id AS "activityId", 'contact-message' AS category, 'contact-message' AS type,
+      name, email, phone, NULL::text AS course, NULL::text AS program, NULL::text AS city, "createdAt"
+    FROM contact_messages`);
+
+  const union = arms.join(' UNION ALL ');
+  const filters = `
+    (:q = '' OR CONCAT_WS(' ', name, email, phone, course, program, city) ILIKE :search)
+    AND (:course = '' OR course ILIKE :courseExact)
+    AND (:program = '' OR program ILIKE :programExact)
+    AND (:city = '' OR city ILIKE :cityExact)
+    AND (CAST(:dateFrom AS timestamptz) IS NULL OR "createdAt" >= CAST(:dateFrom AS timestamptz))
+    AND (CAST(:dateTo AS timestamptz) IS NULL OR "createdAt" <= CAST(:dateTo AS timestamptz))`;
+  const replacements = {
+    q, search: `%${q}%`, course, courseExact: course, program, programExact: program,
+    city, cityExact: city, studentClass, studentClassExact: studentClass,
+    dateFrom, dateTo, limit, offset: (page - 1) * limit,
+  };
+  const sortColumn = ACTIVITY_SORT_COLUMNS[sortBy || 'createdAt'] || 'createdAt';
+  const direction = sortDirection === 'ASC' ? 'ASC' : 'DESC';
+  const pageSql = paginate ? ' LIMIT :limit OFFSET :offset' : '';
+  const [rows, countRows] = await Promise.all([
+    sequelize.query<ActivityRow>(
+      `SELECT * FROM (${union}) activity WHERE ${filters} ORDER BY "${sortColumn}" ${direction}, category ASC, id ${direction}${pageSql}`,
+      { replacements, type: QueryTypes.SELECT },
+    ),
+    sequelize.query<{ total: string }>(
+      `SELECT COUNT(*)::text AS total FROM (${union}) activity WHERE ${filters}`,
+      { replacements, type: QueryTypes.SELECT },
+    ),
+  ]);
+  return { rows, total: Number(countRows[0]?.total || 0) };
+}
+
+/** Numbered, cross-resource activity used by the dashboard. */
+export const getDashboardActivity = asyncHandler(async (req: Request, res: Response) => {
+  const { limit, page = 1 } = getListOptions(req);
+  const { rows, total } = await queryActivity(req, true);
+  res.status(200).json({
+    status: 'success',
+    data: rows,
+    pagination: {
+      page, limit, total, totalPages: Math.ceil(total / limit),
+      hasMore: page * limit < total,
+      nextCursor: null,
+    },
+  });
+});
+
+function csvCell(value: unknown): string {
+  let text = value == null ? '' : value instanceof Date ? value.toISOString() : String(value);
+  // Spreadsheet applications interpret these prefixes as formulae, even in quoted CSV cells.
+  if (/^[\s]*[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+/** Authenticated export of the same filtered lead/activity dataset, without page truncation. */
+export const exportLeadCsv = asyncHandler(async (req: Request, res: Response) => {
+  const resourceCategory: Record<string, ActivityRow['category'] | ''> = {
+    users: 'student', 'course-forms': 'course-form',
+    'scholarship-forms': 'scholarship-form', 'contact-messages': 'contact-message',
+    all: '', activity: '',
+  };
+  const requested = String(req.query.resource || 'all');
+  const { rows } = await queryActivity(req, false, !req.query.category && !req.query.type ? resourceCategory[requested] : undefined);
+  const headers = ['activityId', 'type', 'name', 'email', 'phone', 'course', 'program', 'city', 'createdAt'];
+  const csv = [headers, ...rows.map((row) => headers.map((header) => row[header as keyof ActivityRow]))]
+    .map((values) => values.map(csvCell).join(','))
+    .join('\r\n');
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="admin-leads-${new Date().toISOString().slice(0, 10)}.csv"`);
+  res.status(200).send(`\uFEFF${csv}`);
 });
 
 

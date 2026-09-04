@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Plus, Trash2, Search } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Download, Pencil, Plus, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   adminApiFetch,
   AdminApiError,
@@ -123,6 +123,8 @@ export default function AdminContentManager({
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [selectedItem, setSelectedItem] = useState<ResourceItem | null>(null);
   const [sort, setSort] = useState<{ key: string; direction: "asc" | "desc" | null }>({ key: "", direction: null });
+  const [pageSize, setPageSize] = useState<10 | 25 | 50>(10);
+  const [page, setPage] = useState(1);
   const toast = useToast();
 
   /*
@@ -169,12 +171,56 @@ export default function AdminContentManager({
     return filtered;
   }, [items, filterItems, searchTerm, sort, columns]);
 
+  const pageCount = Math.max(1, Math.ceil(displayedItems.length / pageSize));
+  const pageItems = displayedItems.slice((page - 1) * pageSize, page * pageSize);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, sort, pageSize]);
+
+  useEffect(() => {
+    setPage((current) => Math.min(current, pageCount));
+  }, [pageCount]);
+
+  function csvValue(value: unknown) {
+    const text = value === null || value === undefined ? "" : String(value);
+    const safe = /^[=+\-@]/.test(text) ? `'${text}` : text;
+    return `"${safe.replace(/"/g, '""')}"`;
+  }
+
+  function exportItems() {
+    if (displayedItems.length === 0) {
+      toast.info("There are no filtered records to export.");
+      return;
+    }
+    const rows = displayedItems.map((item) => columns.map((column) => csvValue(item[column.key])).join(","));
+    const csv = [columns.map((column) => csvValue(column.label)).join(","), ...rows].join("\r\n");
+    const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${resource}-export.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${displayedItems.length} ${itemName.toLowerCase()}${displayedItems.length === 1 ? "" : "s"}.`);
+  }
+
   const loadItems = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
       const response = await adminApiFetch<ResourceItem[]>(resource);
-      setItems(response.data);
+      const raw = response as unknown as ResourceItem[] | { data?: ResourceItem[] };
+      const envelopeItems = Array.isArray(raw) ? raw : Array.isArray(raw.data) ? raw.data : undefined;
+      // adminApiFetch envelopes JSON responses; if an older endpoint returns a
+      // bare array, its numeric entries survive the envelope spread.
+      const legacyItems = envelopeItems ?? Object.keys(response)
+        .filter((key) => /^\d+$/.test(key))
+        .sort((left, right) => Number(left) - Number(right))
+        .map((key) => (response as unknown as Record<string, unknown>)[key])
+        .filter((item): item is ResourceItem => Boolean(item) && typeof item === "object");
+      setItems(legacyItems);
       toast.success(`${title} loaded.`);
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : `Unable to load ${title}.`;
@@ -453,12 +499,15 @@ export default function AdminContentManager({
             aria-label={`Search ${title}`}
           />
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="admin-toolbar-actions">
           {historyType && isSuperAdmin && (
             <RevisionHistoryButton
               resourceType={historyType}
               itemName={itemName}
-              onRestored={loadItems}
+              onRestored={async () => {
+                await loadItems();
+                toast.success(`${itemName} restored.`);
+              }}
             />
           )}
           {headerAction}
@@ -468,6 +517,9 @@ export default function AdminContentManager({
               Add New Record
             </button>
           )}
+          <button className="admin-button secondary" type="button" onClick={exportItems}>
+            <Download size={17} /> Export CSV
+          </button>
         </div>
       </div>
 
@@ -497,6 +549,7 @@ export default function AdminContentManager({
             message={`Add the first ${itemName.toLowerCase()} to get started.`}
           />
         ) : (
+          <>
           <div className="admin-table-wrap">
             <table className="admin-table">
               <thead>
@@ -526,7 +579,7 @@ export default function AdminContentManager({
                 </tr>
               </thead>
               <tbody>
-                {displayedItems.map((item) => (
+                {pageItems.map((item) => (
                   <tr
                     key={item.id}
                     className={`is-clickable ${selectedItem?.id === item.id ? "is-selected" : ""}`}
@@ -606,6 +659,51 @@ export default function AdminContentManager({
               </tbody>
             </table>
           </div>
+          <div className="admin-mobile-record-list" aria-label={`${title} mobile list`}>
+            {pageItems.map((item) => {
+              const summaryColumns = columns.filter((column) => column.kind !== "image").slice(0, 3);
+              return (
+                <article
+                  key={item.id}
+                  className={`admin-mobile-record ${selectedItem?.id === item.id ? "is-selected" : ""}`}
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <div className="admin-mobile-record-heading">
+                    <strong>{String(item.title || item.name || item.heading || item.label || `${itemName} #${item.id}`)}</strong>
+                    <span>#{item.id}</span>
+                  </div>
+                  <div className="admin-mobile-record-details">
+                    {summaryColumns.map((column) => {
+                      const value = item[column.key];
+                      return (
+                        <div key={column.key}>
+                          <span>{column.label}</span>
+                          <b>{column.render ? column.render(item) : column.kind === "status" ? (value !== false ? "Active" : "Inactive") : column.key.endsWith("At") ? formatAdminDate(value) : String(value ?? "—")}</b>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <span className="admin-mobile-record-hint">Tap to view all details</span>
+                </article>
+              );
+            })}
+          </div>
+          </>
+        )}
+        {!loading && displayedItems.length > 0 && (
+          <footer className="admin-card-footer admin-pagination-footer">
+            <label className="admin-page-size-control">
+              <span>Rows per page</span>
+              <select value={pageSize} onChange={(event) => setPageSize(Number(event.target.value) as 10 | 25 | 50)} aria-label="Rows per page">
+                <option value={10}>10</option><option value={25}>25</option><option value={50}>50</option>
+              </select>
+            </label>
+            <span>Page {page} of {pageCount}</span>
+            <div className="admin-pagination-actions">
+              <button className="admin-button secondary" type="button" disabled={page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}><ChevronLeft size={16} /> Previous</button>
+              <button className="admin-button secondary" type="button" disabled={page >= pageCount} onClick={() => setPage((current) => Math.min(pageCount, current + 1))}>Next <ChevronRight size={16} /></button>
+            </div>
+          </footer>
         )}
       </section>
 

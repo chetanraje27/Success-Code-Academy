@@ -194,6 +194,42 @@ export const adminListQuerySchema = z
     q: z.string().trim().max(120).optional().default(''),
     cursor: z.coerce.number().int().positive().optional(),
     limit: z.coerce.number().int().min(1).max(100).default(50),
+    'page-size': z.coerce.number().int().min(1).max(100).optional(),
+    page: z.coerce.number().int().positive().optional(),
+    sortBy: z.enum([
+      'id', 'createdAt', 'updatedAt', 'name', 'firstName', 'email',
+      'courseTitle', 'preferredCourse', 'city', 'studentClass', 'title',
+      'category', 'type', 'isActive',
+    ]).optional(),
+    sortDirection: z.enum(['asc', 'desc', 'ASC', 'DESC']).optional(),
+    dateFrom: z.coerce.date().optional(),
+    dateTo: z.coerce.date().optional(),
+    course: z.string().trim().max(200).optional(),
+    program: z.string().trim().max(200).optional(),
+    class: z.string().trim().max(100).optional(),
+    city: z.string().trim().max(120).optional(),
+    isActive: z.enum(['true', 'false']).optional(),
+    type: z.string().trim().max(100).optional(),
+    year: z.coerce.number().int().min(2000).max(2100).optional(),
+  })
+  .strict();
+
+const activityType = z.enum(['student', 'course-form', 'scholarship-form', 'contact-message']);
+
+export const activityListQuerySchema = adminListQuerySchema
+  .omit({ cursor: true, isActive: true, year: true })
+  .extend({
+    category: activityType.optional(),
+    // `type` is retained as an alias for callers that name the category filter type.
+    type: activityType.optional(),
+    sortBy: z.enum(['id', 'createdAt', 'name', 'email', 'course', 'program', 'city']).optional(),
+  })
+  .strict();
+
+export const leadExportQuerySchema = activityListQuerySchema
+  .omit({ page: true, limit: true, 'page-size': true })
+  .extend({
+    resource: z.enum(['all', 'users', 'course-forms', 'scholarship-forms', 'contact-messages', 'activity']).default('all'),
   })
   .strict();
 

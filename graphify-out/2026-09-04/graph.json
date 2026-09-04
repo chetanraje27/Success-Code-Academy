@@ -212,19 +212,6 @@
       "norm_label": "faqsection"
     },
     {
-      "label": "LiveContentDialogProps",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_livecontentdialog_livecontentdialogprops",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "livecontentdialogprops"
-    },
-    {
       "label": "ApiEnvelope",
       "file_type": "code",
       "source_file": "client/src/lib/admin-api.ts",
@@ -444,6 +431,45 @@
       "community": 163,
       "community_name": "BannerEditor.tsx",
       "norm_label": "bannereditorprops"
+    },
+    {
+      "label": "LiveContentDialogProps",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
+      "source_location": "L9",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_livecontentdialog_livecontentdialogprops",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "livecontentdialogprops"
+    },
+    {
+      "label": "Notification",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L26",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor_notification",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "notification"
+    },
+    {
+      "label": "NotificationEditorProps",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor_notificationeditorprops",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "notificationeditorprops"
     },
     {
       "label": "Result",
@@ -719,6 +745,19 @@
       "norm_label": "editabletextprops"
     },
     {
+      "label": "LoginFailure",
+      "file_type": "code",
+      "source_file": "client/src/app/(main)/login/page.tsx",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_app_main_login_page_loginfailure",
+      "community": 184,
+      "community_name": "useToast",
+      "norm_label": "loginfailure"
+    },
+    {
       "label": "TokenState",
       "file_type": "code",
       "source_file": "client/src/app/(main)/reset-password/page.tsx",
@@ -728,34 +767,8 @@
       "_origin": "ast",
       "id": "client_src_app_main_reset_password_page_tokenstate",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "tokenstate"
-    },
-    {
-      "label": "Notification",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
-      "source_location": "L26",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor_notification",
-      "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "notification"
-    },
-    {
-      "label": "NotificationEditorProps",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
-      "source_location": "L35",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor_notificationeditorprops",
-      "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "notificationeditorprops"
     },
     {
       "label": "ToastApi",
@@ -767,7 +780,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_toastapi",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "toastapi"
     },
     {
@@ -780,7 +793,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_toastitem",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "toastitem"
     },
     {
@@ -793,7 +806,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_toasttone",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "toasttone"
     },
     {
@@ -860,58 +873,6 @@
       "community": 188,
       "community_name": "lib/roles.ts",
       "norm_label": "adminrole"
-    },
-    {
-      "label": "SiteSettings",
-      "file_type": "code",
-      "source_file": "client/src/app/admin/settings/page.tsx",
-      "source_location": "L15",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_app_admin_settings_page_sitesettings",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "sitesettings"
-    },
-    {
-      "label": "AdminApiError",
-      "file_type": "code",
-      "source_file": "client/src/lib/admin-api.ts",
-      "source_location": "L28",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_lib_admin_api_adminapierror",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "adminapierror"
-    },
-    {
-      "label": "PublicSiteSettings",
-      "file_type": "code",
-      "source_file": "client/src/lib/site-settings.ts",
-      "source_location": "L6",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_lib_site_settings_publicsitesettings",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "publicsitesettings"
-    },
-    {
-      "label": "LoginFailure",
-      "file_type": "code",
-      "source_file": "client/src/app/(main)/login/page.tsx",
-      "source_location": "L11",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_app_main_login_page_loginfailure",
-      "community": 190,
-      "community_name": "isAdminRole",
-      "norm_label": "loginfailure"
     },
     {
       "label": "ParsedResult",
@@ -1079,7 +1040,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_course",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "course"
     },
     {
@@ -1092,7 +1053,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_navlink",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "navlink"
     },
     {
@@ -1105,7 +1066,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_newsitem",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "newsitem"
     },
     {
@@ -1118,7 +1079,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_statistic",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "statistic"
     },
     {
@@ -1131,14 +1092,27 @@
       "_origin": "ast",
       "id": "client_src_data_home_testimonial",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "testimonial"
+    },
+    {
+      "label": "SiteSettings",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/settings/page.tsx",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_app_admin_settings_page_sitesettings",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "sitesettings"
     },
     {
       "label": "AdminContentColumn",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L51",
+      "source_location": "L52",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -1151,7 +1125,7 @@
       "label": "AdminContentField",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L28",
+      "source_location": "L29",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -1164,7 +1138,7 @@
       "label": "FieldValue",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L25",
+      "source_location": "L26",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -1177,7 +1151,7 @@
       "label": "ResourceItem",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L26",
+      "source_location": "L27",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -1250,6 +1224,19 @@
       "community": 20,
       "community_name": "AdminContentManager.tsx",
       "norm_label": "sortstate"
+    },
+    {
+      "label": "AdminApiError",
+      "file_type": "code",
+      "source_file": "client/src/lib/admin-api.ts",
+      "source_location": "L28",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_lib_admin_api_adminapierror",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "adminapierror"
     },
     {
       "label": "CourseRegistration",
@@ -1668,6 +1655,19 @@
       "norm_label": "academyvideocreationattributes"
     },
     {
+      "label": "EditableSectionProps",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/EditableSection.tsx",
+      "source_location": "L7",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_editablesection_editablesectionprops",
+      "community": 4,
+      "community_name": "ResultsClient.tsx",
+      "norm_label": "editablesectionprops"
+    },
+    {
       "label": "ButtonProps",
       "file_type": "code",
       "source_file": "client/src/components/ui/Button.tsx",
@@ -1837,6 +1837,19 @@
       "norm_label": "newsarticlecreationattributes"
     },
     {
+      "label": "PageBannerPage",
+      "file_type": "code",
+      "source_file": "client/src/lib/use-page-banner.ts",
+      "source_location": "L23",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "client_src_lib_use_page_banner_pagebannerpage",
+      "community": 52,
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "pagebannerpage"
+    },
+    {
       "label": "CardProps",
       "file_type": "code",
       "source_file": "client/src/components/ui/Card.tsx",
@@ -1859,34 +1872,21 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_contactclient_op",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "op"
     },
     {
-      "label": "EditableSectionProps",
+      "label": "PublicSiteSettings",
       "file_type": "code",
-      "source_file": "client/src/components/admin/EditableSection.tsx",
-      "source_location": "L7",
+      "source_file": "client/src/lib/site-settings.ts",
+      "source_location": "L6",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "client_src_components_admin_editablesection_editablesectionprops",
+      "id": "client_src_lib_site_settings_publicsitesettings",
       "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "editablesectionprops"
-    },
-    {
-      "label": "PageBannerPage",
-      "file_type": "code",
-      "source_file": "client/src/lib/use-page-banner.ts",
-      "source_location": "L23",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "client_src_lib_use_page_banner_pagebannerpage",
-      "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "pagebannerpage"
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "publicsitesettings"
     },
     {
       "label": "Course",
@@ -2249,18 +2249,6 @@
       "norm_label": "faqpage()"
     },
     {
-      "label": "AdminCoursesPage()",
-      "file_type": "code",
-      "source_file": "client/src/app/admin/content/courses/page.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_app_admin_content_courses_page_admincoursespage",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "admincoursespage()"
-    },
-    {
       "label": "AdminScholarshipProgramsPage()",
       "file_type": "code",
       "source_file": "client/src/app/admin/content/scholarships/page.tsx",
@@ -2379,54 +2367,6 @@
       "community": 11,
       "community_name": "adminApiFetch",
       "norm_label": "studenteditormodal()"
-    },
-    {
-      "label": "AdminModal()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/AdminModal.tsx",
-      "source_location": "L7",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_adminmodal_adminmodal",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "adminmodal()"
-    },
-    {
-      "label": "CourseEditor()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/CourseEditor.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_courseeditor_courseeditor",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "courseeditor()"
-    },
-    {
-      "label": "LiveContentDialog()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
-      "source_location": "L27",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_livecontentdialog_livecontentdialog",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "livecontentdialog()"
-    },
-    {
-      "label": "useToast()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/Toast.tsx",
-      "source_location": "L101",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_toast_usetoast",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "usetoast()"
     },
     {
       "label": "adminApiFetch()",
@@ -2609,16 +2549,16 @@
       "norm_label": "adminpagebannerspage()"
     },
     {
-      "label": "AdminEmptyState()",
+      "label": "AdminModal()",
       "file_type": "code",
-      "source_file": "client/src/components/admin/AdminUi.tsx",
-      "source_location": "L35",
+      "source_file": "client/src/components/admin/AdminModal.tsx",
+      "source_location": "L7",
       "_callable": true,
       "_origin": "ast",
-      "id": "client_src_components_admin_adminui_adminemptystate",
+      "id": "client_src_components_admin_adminmodal_adminmodal",
       "community": 163,
       "community_name": "BannerEditor.tsx",
-      "norm_label": "adminemptystate()"
+      "norm_label": "adminmodal()"
     },
     {
       "label": "AdminLoadingState()",
@@ -2655,6 +2595,42 @@
       "community": 163,
       "community_name": "BannerEditor.tsx",
       "norm_label": "useeditmode()"
+    },
+    {
+      "label": "LiveContentDialog()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
+      "source_location": "L27",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_livecontentdialog_livecontentdialog",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "livecontentdialog()"
+    },
+    {
+      "label": "NotificationEditor()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L60",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor_notificationeditor",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "notificationeditor()"
+    },
+    {
+      "label": "renderIconByKey()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor_rendericonbykey",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "rendericonbykey()"
     },
     {
       "label": "ResultEditor()",
@@ -3233,6 +3209,30 @@
       "norm_label": "userpasswordresetemail()"
     },
     {
+      "label": "AdminCoursesPage()",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/content/courses/page.tsx",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_app_admin_content_courses_page_admincoursespage",
+      "community": 184,
+      "community_name": "useToast",
+      "norm_label": "admincoursespage()"
+    },
+    {
+      "label": "StudentLoginPage()",
+      "file_type": "code",
+      "source_file": "client/src/app/(main)/login/page.tsx",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_app_main_login_page_studentloginpage",
+      "community": 184,
+      "community_name": "useToast",
+      "norm_label": "studentloginpage()"
+    },
+    {
       "label": "ResetPasswordForm()",
       "file_type": "code",
       "source_file": "client/src/app/(main)/reset-password/page.tsx",
@@ -3241,7 +3241,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_reset_password_page_resetpasswordform",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "resetpasswordform()"
     },
     {
@@ -3253,7 +3253,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_reset_password_page_studentresetpasswordpage",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "studentresetpasswordpage()"
     },
     {
@@ -3265,32 +3265,32 @@
       "_origin": "ast",
       "id": "client_src_app_main_signup_page_studentsignuppage",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "studentsignuppage()"
     },
     {
-      "label": "NotificationEditor()",
+      "label": "CourseEditor()",
       "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
-      "source_location": "L60",
+      "source_file": "client/src/components/admin/CourseEditor.tsx",
+      "source_location": "L9",
       "_callable": true,
       "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor_notificationeditor",
+      "id": "client_src_components_admin_courseeditor_courseeditor",
       "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "notificationeditor()"
+      "community_name": "useToast",
+      "norm_label": "courseeditor()"
     },
     {
-      "label": "renderIconByKey()",
+      "label": "useToast()",
       "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
-      "source_location": "L53",
+      "source_file": "client/src/components/admin/Toast.tsx",
+      "source_location": "L101",
       "_callable": true,
       "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor_rendericonbykey",
+      "id": "client_src_components_admin_toast_usetoast",
       "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "rendericonbykey()"
+      "community_name": "useToast",
+      "norm_label": "usetoast()"
     },
     {
       "label": "appBaseUrl()",
@@ -3605,54 +3605,6 @@
       "norm_label": "adminrolelabel()"
     },
     {
-      "label": "AdminSettingsPage()",
-      "file_type": "code",
-      "source_file": "client/src/app/admin/settings/page.tsx",
-      "source_location": "L34",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_app_admin_settings_page_adminsettingspage",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "adminsettingspage()"
-    },
-    {
-      "label": "useAdminSession()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/AdminSessionContext.tsx",
-      "source_location": "L57",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_adminsessioncontext_useadminsession",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "useadminsession()"
-    },
-    {
-      "label": "AdminNotice()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/AdminUi.tsx",
-      "source_location": "L51",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_adminui_adminnotice",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "adminnotice()"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "client/src/lib/admin-api.ts",
-      "source_location": "L32",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_lib_admin_api_adminapierror_constructor",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": ".constructor()"
-    },
-    {
       "label": "backendUrl()",
       "file_type": "code",
       "source_file": "client/src/app/api/admin/session/route.ts",
@@ -3735,18 +3687,6 @@
       "community": 190,
       "community_name": "isAdminRole",
       "norm_label": "put()"
-    },
-    {
-      "label": "StudentLoginPage()",
-      "file_type": "code",
-      "source_file": "client/src/app/(main)/login/page.tsx",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_app_main_login_page_studentloginpage",
-      "community": 190,
-      "community_name": "isAdminRole",
-      "norm_label": "studentloginpage()"
     },
     {
       "label": "isAdminRole()",
@@ -3845,18 +3785,6 @@
       "norm_label": "initnotification()"
     },
     {
-      "label": "Footer()",
-      "file_type": "code",
-      "source_file": "client/src/components/layout/Footer.tsx",
-      "source_location": "L23",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_layout_footer_footer",
-      "community": 2,
-      "community_name": "Footer.tsx",
-      "norm_label": "footer()"
-    },
-    {
       "label": "AdminBannersPage()",
       "file_type": "code",
       "source_file": "client/src/app/admin/banners/page.tsx",
@@ -3941,10 +3869,22 @@
       "norm_label": "adminresultspage()"
     },
     {
+      "label": "AdminSettingsPage()",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/settings/page.tsx",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_app_admin_settings_page_adminsettingspage",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "adminsettingspage()"
+    },
+    {
       "label": "AdminContentManager()",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L86",
+      "source_location": "L88",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -3956,7 +3896,7 @@
       "label": "initialValues()",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L59",
+      "source_location": "L61",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_components_admin_admincontentmanager_initialvalues",
@@ -3968,7 +3908,7 @@
       "label": "valueFromItem()",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L68",
+      "source_location": "L70",
       "_callable": true,
       "_origin": "ast",
       "id": "client_src_components_admin_admincontentmanager_valuefromitem",
@@ -4013,6 +3953,18 @@
       "norm_label": "csvcell()"
     },
     {
+      "label": "useAdminSession()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/AdminSessionContext.tsx",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_adminsessioncontext_useadminsession",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "useadminsession()"
+    },
+    {
       "label": "AdminCardsSkeleton()",
       "file_type": "code",
       "source_file": "client/src/components/admin/AdminUi.tsx",
@@ -4023,6 +3975,30 @@
       "community": 20,
       "community_name": "AdminContentManager.tsx",
       "norm_label": "admincardsskeleton()"
+    },
+    {
+      "label": "AdminEmptyState()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/AdminUi.tsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_adminui_adminemptystate",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "adminemptystate()"
+    },
+    {
+      "label": "AdminNotice()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/AdminUi.tsx",
+      "source_location": "L51",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_adminui_adminnotice",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "adminnotice()"
     },
     {
       "label": "AdminPageHeader()",
@@ -4071,6 +4047,18 @@
       "community": 20,
       "community_name": "AdminContentManager.tsx",
       "norm_label": "formatadmindate()"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "client/src/lib/admin-api.ts",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_lib_admin_api_adminapierror_constructor",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": ".constructor()"
     },
     {
       "label": "initCourseRegistration()",
@@ -4661,6 +4649,18 @@
       "norm_label": "notfound()"
     },
     {
+      "label": "EditableSection()",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/EditableSection.tsx",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_admin_editablesection_editablesection",
+      "community": 4,
+      "community_name": "ResultsClient.tsx",
+      "norm_label": "editablesection()"
+    },
+    {
       "label": "Button()",
       "file_type": "code",
       "source_file": "client/src/components/ui/Button.tsx",
@@ -4829,6 +4829,18 @@
       "norm_label": "cookieconsent()"
     },
     {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "client/src/components/layout/Footer.tsx",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_components_layout_footer_footer",
+      "community": 43,
+      "community_name": "EditModeContext.tsx",
+      "norm_label": "footer()"
+    },
+    {
       "label": "Header()",
       "file_type": "code",
       "source_file": "client/src/components/layout/Header.tsx",
@@ -4973,6 +4985,30 @@
       "norm_label": "initnewsarticle()"
     },
     {
+      "label": "AdmissionsClient()",
+      "file_type": "code",
+      "source_file": "client/src/app/(main)/admissions/AdmissionsClient.tsx",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_app_main_admissions_admissionsclient_admissionsclient",
+      "community": 52,
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "admissionsclient()"
+    },
+    {
+      "label": "usePageBanner()",
+      "file_type": "code",
+      "source_file": "client/src/lib/use-page-banner.ts",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "client_src_lib_use_page_banner_usepagebanner",
+      "community": 52,
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "usepagebanner()"
+    },
+    {
       "label": "Card()",
       "file_type": "code",
       "source_file": "client/src/components/ui/Card.tsx",
@@ -4985,18 +5021,6 @@
       "norm_label": "card()"
     },
     {
-      "label": "AdmissionsClient()",
-      "file_type": "code",
-      "source_file": "client/src/app/(main)/admissions/AdmissionsClient.tsx",
-      "source_location": "L11",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_app_main_admissions_admissionsclient_admissionsclient",
-      "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "admissionsclient()"
-    },
-    {
       "label": "ContactClient()",
       "file_type": "code",
       "source_file": "client/src/app/(main)/contact/ContactClient.tsx",
@@ -5005,7 +5029,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_contactclient_contactclient",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "contactclient()"
     },
     {
@@ -5017,7 +5041,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_contactclient_generatecaptcha",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "generatecaptcha()"
     },
     {
@@ -5029,20 +5053,8 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_page_contactpage",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "contactpage()"
-    },
-    {
-      "label": "EditableSection()",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/EditableSection.tsx",
-      "source_location": "L22",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_components_admin_editablesection_editablesection",
-      "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "editablesection()"
     },
     {
       "label": "SettingsEditor()",
@@ -5053,20 +5065,8 @@
       "_origin": "ast",
       "id": "client_src_components_admin_settingseditor_settingseditor",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "settingseditor()"
-    },
-    {
-      "label": "usePageBanner()",
-      "file_type": "code",
-      "source_file": "client/src/lib/use-page-banner.ts",
-      "source_location": "L30",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "client_src_lib_use_page_banner_usepagebanner",
-      "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "usepagebanner()"
     },
     {
       "label": "AdmissionsPage()",
@@ -6394,17 +6394,6 @@
       "norm_label": "server"
     },
     {
-      "label": "content/courses/page.tsx",
-      "file_type": "code",
-      "source_file": "client/src/app/admin/content/courses/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_app_admin_content_courses_page",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "content/courses/page.tsx"
-    },
-    {
       "label": "scholarships/page.tsx",
       "file_type": "code",
       "source_file": "client/src/app/admin/content/scholarships/page.tsx",
@@ -6513,39 +6502,6 @@
       "community": 11,
       "community_name": "adminApiFetch",
       "norm_label": "studenteditormodal.tsx"
-    },
-    {
-      "label": "AdminModal.tsx",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/AdminModal.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_components_admin_adminmodal",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "adminmodal.tsx"
-    },
-    {
-      "label": "CourseEditor.tsx",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/CourseEditor.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_components_admin_courseeditor",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "courseeditor.tsx"
-    },
-    {
-      "label": "LiveContentDialog.tsx",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_components_admin_livecontentdialog",
-      "community": 11,
-      "community_name": "adminApiFetch",
-      "norm_label": "livecontentdialog.tsx"
     },
     {
       "label": "admin-api.ts",
@@ -9056,6 +9012,17 @@
       "norm_label": "page_slots"
     },
     {
+      "label": "AdminModal.tsx",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/AdminModal.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_components_admin_adminmodal",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "adminmodal.tsx"
+    },
+    {
       "label": "BannerEditor.tsx",
       "file_type": "code",
       "source_file": "client/src/components/admin/BannerEditor.tsx",
@@ -9065,6 +9032,39 @@
       "community": 163,
       "community_name": "BannerEditor.tsx",
       "norm_label": "bannereditor.tsx"
+    },
+    {
+      "label": "LiveContentDialog.tsx",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/LiveContentDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_components_admin_livecontentdialog",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "livecontentdialog.tsx"
+    },
+    {
+      "label": "NotificationEditor.tsx",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "notificationeditor.tsx"
+    },
+    {
+      "label": "ICON_PRESETS",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "client_src_components_admin_notificationeditor_icon_presets",
+      "community": 163,
+      "community_name": "BannerEditor.tsx",
+      "norm_label": "icon_presets"
     },
     {
       "label": "ResultEditor.tsx",
@@ -9826,6 +9826,28 @@
       "norm_label": "20260904141109-create-scholarship-programs.js"
     },
     {
+      "label": "content/courses/page.tsx",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/content/courses/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_app_admin_content_courses_page",
+      "community": 184,
+      "community_name": "useToast",
+      "norm_label": "content/courses/page.tsx"
+    },
+    {
+      "label": "(main)/login/page.tsx",
+      "file_type": "code",
+      "source_file": "client/src/app/(main)/login/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_app_main_login_page",
+      "community": 184,
+      "community_name": "useToast",
+      "norm_label": "(main)/login/page.tsx"
+    },
+    {
       "label": "(main)/reset-password/page.tsx",
       "file_type": "code",
       "source_file": "client/src/app/(main)/reset-password/page.tsx",
@@ -9833,7 +9855,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_reset_password_page",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "(main)/reset-password/page.tsx"
     },
     {
@@ -9844,30 +9866,19 @@
       "_origin": "ast",
       "id": "client_src_app_main_signup_page",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "signup/page.tsx"
     },
     {
-      "label": "NotificationEditor.tsx",
+      "label": "CourseEditor.tsx",
       "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
+      "source_file": "client/src/components/admin/CourseEditor.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor",
+      "id": "client_src_components_admin_courseeditor",
       "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "notificationeditor.tsx"
-    },
-    {
-      "label": "ICON_PRESETS",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/NotificationEditor.tsx",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "client_src_components_admin_notificationeditor_icon_presets",
-      "community": 184,
-      "community_name": "Toast.tsx",
-      "norm_label": "icon_presets"
+      "community_name": "useToast",
+      "norm_label": "courseeditor.tsx"
     },
     {
       "label": "Toast.tsx",
@@ -9877,7 +9888,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "toast.tsx"
     },
     {
@@ -9888,7 +9899,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_toastcontext",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "toastcontext"
     },
     {
@@ -9899,7 +9910,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_tone_duration",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "tone_duration"
     },
     {
@@ -9910,7 +9921,7 @@
       "_origin": "ast",
       "id": "client_src_components_admin_toast_tone_icon",
       "community": 184,
-      "community_name": "Toast.tsx",
+      "community_name": "useToast",
       "norm_label": "tone_icon"
     },
     {
@@ -10233,59 +10244,26 @@
       "norm_label": "super_admin"
     },
     {
-      "label": "settings/page.tsx",
+      "label": "@types/jsonwebtoken",
       "file_type": "code",
-      "source_file": "client/src/app/admin/settings/page.tsx",
-      "source_location": "L1",
+      "source_file": "server/package.json",
+      "source_location": "L31",
       "_origin": "ast",
-      "id": "client_src_app_admin_settings_page",
+      "id": "server_package_dependencies_types_jsonwebtoken",
       "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "settings/page.tsx"
+      "community_name": "@types/jsonwebtoken",
+      "norm_label": "@types/jsonwebtoken"
     },
     {
-      "label": "initialSettings",
-      "file_type": "code",
-      "source_file": "client/src/app/admin/settings/page.tsx",
-      "source_location": "L30",
+      "label": "@types/jsonwebtoken",
+      "file_type": "concept",
+      "source_file": "server/package.json",
+      "source_location": "L31",
       "_origin": "ast",
-      "id": "client_src_app_admin_settings_page_initialsettings",
+      "id": "types_jsonwebtoken",
       "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "initialsettings"
-    },
-    {
-      "label": "SettingsEditor.tsx",
-      "file_type": "code",
-      "source_file": "client/src/components/admin/SettingsEditor.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_components_admin_settingseditor",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "settingseditor.tsx"
-    },
-    {
-      "label": "site-settings.ts",
-      "file_type": "code",
-      "source_file": "client/src/lib/site-settings.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_lib_site_settings",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "site-settings.ts"
-    },
-    {
-      "label": "defaultSiteSettings",
-      "file_type": "code",
-      "source_file": "client/src/lib/site-settings.ts",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "client_src_lib_site_settings_defaultsitesettings",
-      "community": 189,
-      "community_name": "SettingsEditor.tsx",
-      "norm_label": "defaultsitesettings"
+      "community_name": "@types/jsonwebtoken",
+      "norm_label": "@types/jsonwebtoken"
     },
     {
       "label": "client/tsconfig.json",
@@ -10618,17 +10596,6 @@
       "norm_label": "session/route.ts"
     },
     {
-      "label": "(main)/login/page.tsx",
-      "file_type": "code",
-      "source_file": "client/src/app/(main)/login/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_app_main_login_page",
-      "community": 190,
-      "community_name": "isAdminRole",
-      "norm_label": "(main)/login/page.tsx"
-    },
-    {
       "label": "ToppersCarousel.tsx",
       "file_type": "code",
       "source_file": "client/src/app/(main)/home/ToppersCarousel.tsx",
@@ -10728,17 +10695,6 @@
       "norm_label": "cors"
     },
     {
-      "label": "Footer.tsx",
-      "file_type": "code",
-      "source_file": "client/src/components/layout/Footer.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_components_layout_footer",
-      "community": 2,
-      "community_name": "Footer.tsx",
-      "norm_label": "footer.tsx"
-    },
-    {
       "label": "home.ts",
       "file_type": "code",
       "source_file": "client/src/data/home.ts",
@@ -10746,7 +10702,7 @@
       "_origin": "ast",
       "id": "client_src_data_home",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "home.ts"
     },
     {
@@ -10757,19 +10713,8 @@
       "_origin": "ast",
       "id": "client_src_data_home_courses",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "courses"
-    },
-    {
-      "label": "navLinks",
-      "file_type": "code",
-      "source_file": "client/src/data/home.ts",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "client_src_data_home_navlinks",
-      "community": 2,
-      "community_name": "Footer.tsx",
-      "norm_label": "navlinks"
     },
     {
       "label": "newsItems",
@@ -10779,7 +10724,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_newsitems",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "newsitems"
     },
     {
@@ -10790,19 +10735,8 @@
       "_origin": "ast",
       "id": "client_src_data_home_overviewfeatures",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "overviewfeatures"
-    },
-    {
-      "label": "siteConfig",
-      "file_type": "code",
-      "source_file": "client/src/data/home.ts",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "client_src_data_home_siteconfig",
-      "community": 2,
-      "community_name": "Footer.tsx",
-      "norm_label": "siteconfig"
     },
     {
       "label": "statistics",
@@ -10812,7 +10746,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_statistics",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "statistics"
     },
     {
@@ -10823,7 +10757,7 @@
       "_origin": "ast",
       "id": "client_src_data_home_testimonials",
       "community": 2,
-      "community_name": "Footer.tsx",
+      "community_name": "home.ts",
       "norm_label": "testimonials"
     },
     {
@@ -10902,6 +10836,28 @@
       "community": 20,
       "community_name": "AdminContentManager.tsx",
       "norm_label": "admin/results/page.tsx"
+    },
+    {
+      "label": "settings/page.tsx",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/settings/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_app_admin_settings_page",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "settings/page.tsx"
+    },
+    {
+      "label": "initialSettings",
+      "file_type": "code",
+      "source_file": "client/src/app/admin/settings/page.tsx",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "client_src_app_admin_settings_page_initialsettings",
+      "community": 20,
+      "community_name": "AdminContentManager.tsx",
+      "norm_label": "initialsettings"
     },
     {
       "label": "AdminContentManager.tsx",
@@ -11113,6 +11069,17 @@
       "norm_label": "dotenv"
     },
     {
+      "label": "express-rate-limit",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "server_package_dependencies_express_rate_limit",
+      "community": 23,
+      "community_name": "dependencies",
+      "norm_label": "express-rate-limit"
+    },
+    {
       "label": "sequelize",
       "file_type": "code",
       "source_file": "server/package.json",
@@ -11133,17 +11100,6 @@
       "community": 23,
       "community_name": "dependencies",
       "norm_label": "@types/bcrypt"
-    },
-    {
-      "label": "@types/jsonwebtoken",
-      "file_type": "code",
-      "source_file": "server/package.json",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "server_package_dependencies_types_jsonwebtoken",
-      "community": 23,
-      "community_name": "dependencies",
-      "norm_label": "@types/jsonwebtoken"
     },
     {
       "label": "typescript",
@@ -11201,6 +11157,17 @@
       "norm_label": "dotenv"
     },
     {
+      "label": "express-rate-limit",
+      "file_type": "concept",
+      "source_file": "server/package.json",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "express_rate_limit",
+      "community": 23,
+      "community_name": "dependencies",
+      "norm_label": "express-rate-limit"
+    },
+    {
       "label": "sequelize",
       "file_type": "concept",
       "source_file": "server/package.json",
@@ -11232,17 +11199,6 @@
       "community": 23,
       "community_name": "dependencies",
       "norm_label": "@types/bcrypt"
-    },
-    {
-      "label": "@types/jsonwebtoken",
-      "file_type": "concept",
-      "source_file": "server/package.json",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "types_jsonwebtoken",
-      "community": 23,
-      "community_name": "dependencies",
-      "norm_label": "@types/jsonwebtoken"
     },
     {
       "label": "winston",
@@ -12873,6 +12829,17 @@
       "norm_label": "app/not-found.tsx"
     },
     {
+      "label": "EditableSection.tsx",
+      "file_type": "code",
+      "source_file": "client/src/components/admin/EditableSection.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_components_admin_editablesection",
+      "community": 4,
+      "community_name": "ResultsClient.tsx",
+      "norm_label": "editablesection.tsx"
+    },
+    {
       "label": "Button.tsx",
       "file_type": "code",
       "source_file": "client/src/components/ui/Button.tsx",
@@ -13047,6 +13014,17 @@
       "community": 43,
       "community_name": "EditModeContext.tsx",
       "norm_label": "whatsappwidget.tsx"
+    },
+    {
+      "label": "navLinks",
+      "file_type": "code",
+      "source_file": "client/src/data/home.ts",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "client_src_data_home_navlinks",
+      "community": 43,
+      "community_name": "EditModeContext.tsx",
+      "norm_label": "navlinks"
     },
     {
       "label": "TopperResult.ts",
@@ -13478,26 +13456,37 @@
       "norm_label": "newsarticle.ts"
     },
     {
-      "label": "express-rate-limit",
+      "label": "AdmissionsClient.tsx",
       "file_type": "code",
-      "source_file": "server/package.json",
-      "source_location": "L37",
+      "source_file": "client/src/app/(main)/admissions/AdmissionsClient.tsx",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "server_package_dependencies_express_rate_limit",
+      "id": "client_src_app_main_admissions_admissionsclient",
       "community": 52,
-      "community_name": "express-rate-limit",
-      "norm_label": "express-rate-limit"
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "admissionsclient.tsx"
     },
     {
-      "label": "express-rate-limit",
-      "file_type": "concept",
-      "source_file": "server/package.json",
-      "source_location": "L37",
+      "label": "use-page-banner.ts",
+      "file_type": "code",
+      "source_file": "client/src/lib/use-page-banner.ts",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "express_rate_limit",
+      "id": "client_src_lib_use_page_banner",
       "community": 52,
-      "community_name": "express-rate-limit",
-      "norm_label": "express-rate-limit"
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "use-page-banner.ts"
+    },
+    {
+      "label": "PAGE_BANNER_MAP",
+      "file_type": "code",
+      "source_file": "client/src/lib/use-page-banner.ts",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "client_src_lib_use_page_banner_page_banner_map",
+      "community": 52,
+      "community_name": "AdmissionsClient.tsx",
+      "norm_label": "page_banner_map"
     },
     {
       "label": "test-render.js",
@@ -13577,17 +13566,6 @@
       "norm_label": "paddingclasses"
     },
     {
-      "label": "AdmissionsClient.tsx",
-      "file_type": "code",
-      "source_file": "client/src/app/(main)/admissions/AdmissionsClient.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "client_src_app_main_admissions_admissionsclient",
-      "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "admissionsclient.tsx"
-    },
-    {
       "label": "ContactClient.tsx",
       "file_type": "code",
       "source_file": "client/src/app/(main)/contact/ContactClient.tsx",
@@ -13595,7 +13573,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_contactclient",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "contactclient.tsx"
     },
     {
@@ -13606,7 +13584,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_contactclient_initial_captcha",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "initial_captcha"
     },
     {
@@ -13617,7 +13595,7 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_page",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "contact/page.tsx"
     },
     {
@@ -13628,41 +13606,63 @@
       "_origin": "ast",
       "id": "client_src_app_main_contact_page_metadata",
       "community": 55,
-      "community_name": "ContactClient.tsx",
+      "community_name": "SettingsEditor.tsx",
       "norm_label": "metadata"
     },
     {
-      "label": "EditableSection.tsx",
+      "label": "SettingsEditor.tsx",
       "file_type": "code",
-      "source_file": "client/src/components/admin/EditableSection.tsx",
+      "source_file": "client/src/components/admin/SettingsEditor.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "client_src_components_admin_editablesection",
+      "id": "client_src_components_admin_settingseditor",
       "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "editablesection.tsx"
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "settingseditor.tsx"
     },
     {
-      "label": "use-page-banner.ts",
+      "label": "Footer.tsx",
       "file_type": "code",
-      "source_file": "client/src/lib/use-page-banner.ts",
+      "source_file": "client/src/components/layout/Footer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "client_src_lib_use_page_banner",
+      "id": "client_src_components_layout_footer",
       "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "use-page-banner.ts"
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "footer.tsx"
     },
     {
-      "label": "PAGE_BANNER_MAP",
+      "label": "siteConfig",
       "file_type": "code",
-      "source_file": "client/src/lib/use-page-banner.ts",
-      "source_location": "L8",
+      "source_file": "client/src/data/home.ts",
+      "source_location": "L41",
       "_origin": "ast",
-      "id": "client_src_lib_use_page_banner_page_banner_map",
+      "id": "client_src_data_home_siteconfig",
       "community": 55,
-      "community_name": "ContactClient.tsx",
-      "norm_label": "page_banner_map"
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "siteconfig"
+    },
+    {
+      "label": "site-settings.ts",
+      "file_type": "code",
+      "source_file": "client/src/lib/site-settings.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "client_src_lib_site_settings",
+      "community": 55,
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "site-settings.ts"
+    },
+    {
+      "label": "defaultSiteSettings",
+      "file_type": "code",
+      "source_file": "client/src/lib/site-settings.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "client_src_lib_site_settings_defaultsitesettings",
+      "community": 55,
+      "community_name": "SettingsEditor.tsx",
+      "norm_label": "defaultsitesettings"
     },
     {
       "label": "admissions/page.tsx",
@@ -17259,7 +17259,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L117",
+      "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -17272,7 +17272,19 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L130",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
+      "target": "client_src_components_admin_toast_usetoast"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "client/src/components/admin/AdminContentManager.tsx",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -17283,7 +17295,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L201",
+      "source_location": "L220",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -17296,7 +17308,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L249",
+      "source_location": "L268",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -17308,7 +17320,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L275",
+      "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -17320,7 +17332,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L348",
+      "source_location": "L369",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager_admincontentmanager",
@@ -22832,6 +22844,18 @@
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
       "target": "client_src_components_admin_revisionhistorybutton_revisionhistorybutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "client/src/components/admin/AdminContentManager.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "client_src_components_admin_admincontentmanager",
+      "target": "client_src_components_admin_toast_usetoast",
       "confidence_score": 1.0
     },
     {
@@ -29607,6 +29631,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "client_src_components_admin_admincontentmanager",
+      "target": "client_src_components_admin_toast",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "client/src/components/admin/AdminContentManager.tsx",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
@@ -35299,7 +35335,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L25",
+      "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35310,7 +35346,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35321,7 +35357,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35332,7 +35368,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L51",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35343,7 +35379,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L59",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35354,7 +35390,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L68",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",
@@ -35365,7 +35401,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "client/src/components/admin/AdminContentManager.tsx",
-      "source_location": "L86",
+      "source_location": "L88",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_admin_admincontentmanager",

@@ -15,6 +15,7 @@ export default function AdminContactMessagesPage() {
     try {
       await adminApiFetch(`/api/v1/admin/database/contact-messages/${messageRecord.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Contact message deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete contact message");
     }

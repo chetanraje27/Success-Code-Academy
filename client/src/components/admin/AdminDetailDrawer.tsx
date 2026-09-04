@@ -227,7 +227,6 @@ export default function AdminDetailDrawer({
                 src={avatarImage}
                 alt=""
                 className="admin-drawer-avatar"
-                style={{ objectFit: "cover" }}
               />
             ) : avatarIcon ? (
               <div className="admin-drawer-avatar" aria-hidden="true">
@@ -362,19 +361,10 @@ export default function AdminDetailDrawer({
                             <a
                               href={`mailto:${emailVal}`}
                               className="admin-drawer-email-link"
-                              style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
-                              }}
                               title={`Send email to ${emailVal}`}
                             >
                               <Mail
                                 size={13}
-                                style={{
-                                  display: "inline-block",
-                                  flexShrink: 0,
-                                }}
                                 aria-hidden="true"
                               />
                               <span>{emailVal}</span>
@@ -530,10 +520,6 @@ export default function AdminDetailDrawer({
               <button
                 type="button"
                 className="admin-button secondary"
-                style={{
-                  color: "var(--admin-danger)",
-                  borderColor: "rgba(220, 38, 38, 0.2)",
-                }}
                 onClick={() => {
                   onClose();
                   onDelete();

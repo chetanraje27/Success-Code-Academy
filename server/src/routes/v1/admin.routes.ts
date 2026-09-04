@@ -7,6 +7,8 @@ import { ADMIN_ROLES, SUPER_ADMIN } from '../../config/roles';
 import { passwordResetLimiter } from '../../middlewares/rateLimiter';
 import {
   adminListQuerySchema,
+  activityListQuerySchema,
+  leadExportQuerySchema,
   bannerCreateSchema,
   bannerUpdateSchema,
   idParamsSchema,
@@ -309,6 +311,16 @@ router.get(
   '/leads',
   validate(adminListQuerySchema, 'query'),
   adminController.searchLeads,
+);
+router.get(
+  '/activity',
+  validate(activityListQuerySchema, 'query'),
+  adminController.getDashboardActivity,
+);
+router.get(
+  '/database/export.csv',
+  validate(leadExportQuerySchema, 'query'),
+  adminController.exportLeadCsv,
 );
 
 // Database Management mutations

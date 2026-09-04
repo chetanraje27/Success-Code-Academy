@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { Download, Search, Edit2, Trash2, ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { useAdminSession } from "./AdminSessionContext";
+import { useToast } from "./Toast";
 import AdminDetailDrawer, { AdminDrawerField } from "./AdminDetailDrawer";
 import {
   AdminEmptyState,
@@ -24,6 +25,13 @@ export type LeadColumn = {
 };
 
 type SortState = { key: string; direction: "asc" | "desc" } | null;
+
+export type LeadFilter = {
+  key: "course" | "program" | "class" | "city" | "dateFrom" | "dateTo" | "isActive" | "type" | "year";
+  label: string;
+  options?: Array<{ label: string; value: string }>;
+  type?: "select" | "date" | "number";
+};
 
 function csvCell(value: unknown): string {
   const text =
@@ -47,6 +55,7 @@ export default function AdminLeadTable({
   onEdit,
   onDelete,
   onAdd,
+  filters = [],
 }: {
   title: string;
   description: string;
@@ -58,16 +67,20 @@ export default function AdminLeadTable({
   onEdit?: (row: LeadRow) => void;
   onDelete?: (row: LeadRow) => void;
   onAdd?: () => void;
+  filters?: LeadFilter[];
 }) {
   const [rows, setRows] = useState<LeadRow[]>([]);
   const [query, setQuery] = useState("");
-  const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const [hasMore, setHasMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [selectedRow, setSelectedRow] = useState<LeadRow | null>(null);
   const [sort, setSort] = useState<SortState>(null);
+  const toast = useToast();
 
   /*
    * A standard administrator reads and edits records but never creates or
@@ -80,36 +93,29 @@ export default function AdminLeadTable({
   const canDelete = Boolean(onDelete) && isSuperAdmin;
   const showActions = Boolean(onEdit) || canDelete;
 
-  const loadRows = useCallback(
-    async (append = false, cursor?: number) => {
-      if (append) {
-        setLoadingMore(true);
-      } else {
-        setLoading(true);
-      }
+  const loadRows = useCallback(async () => {
+      setLoading(true);
       setError("");
-      const params = new URLSearchParams({ limit: "50" });
-      if (cursor) params.set("cursor", String(cursor));
+      const params = new URLSearchParams({ limit: String(pageSize), "page-size": String(pageSize), page: String(page) });
+      if (query.trim()) params.set("q", query.trim());
+      Object.entries(filterValues).forEach(([key, value]) => value && params.set(key, value));
+      if (sort) { params.set("sortBy", sort.key); params.set("sortDirection", sort.direction); }
 
       try {
-        const response = await adminApiFetch<LeadRow[]>(
-          `${endpoint}?${params.toString()}`,
-        );
-        setRows((current) =>
-          append ? [...current, ...response.data] : response.data,
-        );
-        setNextCursor(response.pagination?.nextCursor ?? null);
-        setHasMore(Boolean(response.pagination?.hasMore));
+        const response = await adminApiFetch<LeadRow[]>(`${endpoint}?${params.toString()}`);
+        setRows(response.data || []);
+        const pagination = response.pagination as (typeof response.pagination & { total?: number; totalPages?: number; page?: number; pageSize?: number }) | undefined;
+        setTotal(pagination?.total ?? response.data?.length ?? 0);
+        setTotalPages(Math.max(1, pagination?.totalPages ?? Math.ceil((pagination?.total ?? response.data?.length ?? 0) / pageSize)));
       } catch (caught) {
-        setError(
-          caught instanceof Error ? caught.message : `Unable to load ${title}.`,
-        );
+        const message = caught instanceof Error ? caught.message : `Unable to load ${title}.`;
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
-        setLoadingMore(false);
       }
     },
-    [endpoint, title],
+    [endpoint, title, page, pageSize, query, filterValues, sort, toast],
   );
 
   useEffect(() => {
@@ -118,37 +124,7 @@ export default function AdminLeadTable({
     void loadRows();
   }, [loadRows]);
 
-  const displayedRows = useMemo(() => {
-    const trimmed = query.trim();
-    const lower = trimmed.toLowerCase();
-    const filteredRows = !trimmed ? rows : rows.filter((row) =>
-      Object.values(row).some(
-        (val) => typeof val === "string" && val.toLowerCase().includes(lower)
-      )
-    );
-    if (!sort) return filteredRows;
-
-    const column = columns.find((item) => item.key === sort.key);
-    if (!column) return filteredRows;
-    return [...filteredRows].sort((a, b) => {
-      const aValue = column.sortValue
-        ? column.sortValue(a)
-        : (a[column.key] as string | number | null | undefined);
-      const bValue = column.sortValue
-        ? column.sortValue(b)
-        : (b[column.key] as string | number | null | undefined);
-      if (aValue == null && bValue == null) return 0;
-      if (aValue == null) return 1;
-      if (bValue == null) return -1;
-      const result = typeof aValue === "number" && typeof bValue === "number"
-        ? aValue - bValue
-        : String(aValue).localeCompare(String(bValue), undefined, {
-            numeric: true,
-            sensitivity: "base",
-          });
-      return sort.direction === "asc" ? result : -result;
-    });
-  }, [rows, query, sort, columns]);
+  const displayedRows = rows;
 
   function toggleSort(column: LeadColumn) {
     if (!column.sortable) return;
@@ -161,13 +137,30 @@ export default function AdminLeadTable({
       }
       return null;
     });
+    setPage(1);
   }
 
   function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setPage(1);
   }
 
-  function downloadCsv() {
+  async function downloadCsv() {
+    const params = new URLSearchParams({ resource: endpoint.split("/").pop() || endpoint });
+    if (query.trim()) params.set("q", query.trim());
+    Object.entries(filterValues).forEach(([key, value]) => value && params.set(key, value));
+    if (sort) { params.set("sortBy", sort.key); params.set("sortDirection", sort.direction); }
+    try {
+      const response = await fetch(`/api/admin/database/export.csv?${params.toString()}`, { credentials: "same-origin", cache: "no-store" });
+      if (!response.ok) throw new Error("Export endpoint unavailable");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = `${exportName}-${new Date().toISOString().slice(0, 10)}.csv`; anchor.click(); URL.revokeObjectURL(url);
+      toast.success("CSV export downloaded.");
+      return;
+    } catch {
+      // Older deployments may not have the export route; retain a safe loaded-row fallback.
+    }
     const header = columns.map((column) => csvCell(column.label)).join(",");
     const body = rows
       .map((row) =>
@@ -183,6 +176,7 @@ export default function AdminLeadTable({
     anchor.download = `${exportName}-${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
+    toast.success("Exported the currently loaded rows.");
   }
 
   const drawerData = useMemo(() => {
@@ -365,7 +359,7 @@ export default function AdminLeadTable({
             <Search size={17} />
             <input
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => { setQuery(event.target.value); setPage(1); }}
               placeholder={searchPlaceholder}
               aria-label={`Search ${title}`}
             />
@@ -374,7 +368,16 @@ export default function AdminLeadTable({
             Search
           </button>
         </form>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="admin-lead-filters">
+          {filters.map((filter) => (
+            <label key={filter.key}>
+              <span className="admin-table-subtitle">{filter.label}</span>
+              {filter.options ? <select value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }}><option value="">All</option>{filter.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={filter.type || "text"} value={filterValues[filter.key] || ""} onChange={(event) => { setFilterValues((current) => ({ ...current, [filter.key]: event.target.value })); setPage(1); }} />}
+            </label>
+          ))}
+          <label><span className="admin-table-subtitle">Page size</span><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }}>{[10, 25, 50].map((size) => <option key={size} value={size}>{size}</option>)}</select></label>
+        </div>
+        <div className="admin-toolbar-actions">
           {canAdd && (
             <button
               className="admin-button primary"
@@ -391,7 +394,7 @@ export default function AdminLeadTable({
             disabled={rows.length === 0}
           >
             <Download size={16} />
-            Export loaded rows
+            Export CSV
           </button>
         </div>
       </div>
@@ -400,7 +403,7 @@ export default function AdminLeadTable({
         <header className="admin-card-header">
           <div>
             <h2>{query.trim() ? `Results for “${query.trim()}”` : title}</h2>
-            <p>{displayedRows.length} records currently loaded</p>
+            <p>{total} records{total !== displayedRows.length ? ` · showing ${displayedRows.length}` : ""}</p>
           </div>
         </header>
 
@@ -542,18 +545,37 @@ export default function AdminLeadTable({
                 </tbody>
               </table>
             </div>
-            {hasMore && nextCursor && (
-              <div className="admin-card-body">
-                <button
-                  className="admin-button secondary"
-                  type="button"
-                  onClick={() => void loadRows(true, nextCursor)}
-                  disabled={loadingMore}
-                >
-                  {loadingMore ? "Loading…" : "Load 50 more"}
-                </button>
-              </div>
-            )}
+            <div className="admin-mobile-record-list" aria-label={`${title} mobile list`}>
+              {displayedRows.map((row) => {
+                const summaryColumns = columns.filter((column) => column.key !== "message").slice(0, 3);
+                return (
+                  <article
+                    key={row.id}
+                    className={`admin-mobile-record ${selectedRow?.id === row.id ? "is-selected" : ""}`}
+                    onClick={() => setSelectedRow(row)}
+                  >
+                    <div className="admin-mobile-record-heading">
+                      <strong>{String(row.name || row.studentName || row.title || row.firstName || `Record #${row.id}`)}</strong>
+                      <span>#{row.id}</span>
+                    </div>
+                    <div className="admin-mobile-record-details">
+                      {summaryColumns.map((column) => (
+                        <div key={column.key}>
+                          <span>{column.label}</span>
+                          <b>{column.render ? column.render(row) : column.key === "createdAt" ? formatAdminDate(row[column.key]) : String(row[column.key] ?? "—")}</b>
+                        </div>
+                      ))}
+                    </div>
+                    <span className="admin-mobile-record-hint">Tap to view all details</span>
+                  </article>
+                );
+              })}
+            </div>
+            <div className="admin-card-body admin-pagination" aria-label="Pagination">
+              <button className="admin-button secondary" type="button" disabled={page <= 1 || loading} onClick={() => setPage((current) => current - 1)}>Previous</button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => <button key={number} className={`admin-button ${number === page ? "primary" : "secondary"}`} type="button" onClick={() => setPage(number)} disabled={loading}>{number}</button>)}
+              <button className="admin-button secondary" type="button" disabled={page >= totalPages || loading} onClick={() => setPage((current) => current + 1)}>Next</button>
+            </div>
           </>
         )}
       </section>

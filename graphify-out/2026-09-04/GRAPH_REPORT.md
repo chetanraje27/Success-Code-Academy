@@ -1,11 +1,11 @@
 # Graph Report - Success-Code-Academy  (2026-09-04)
 
 ## Corpus Check
-- 262 files · ~3,748,193 words
+- 262 files · ~3,748,511 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1415 nodes · 2453 edges · 197 communities (136 shown, 61 thin omitted)
+- 1415 nodes · 2456 edges · 197 communities (136 shown, 61 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
@@ -17,7 +17,7 @@
 ## Community Hubs (Navigation)
 - admin.routes.ts
 - admin/page.tsx
-- Footer.tsx
+- home.ts
 - admin.controller.ts
 - ResultsClient.tsx
 - devDependencies
@@ -61,10 +61,10 @@
 - 11. Website Pages & Features
 - express
 - NewsArticle.ts
-- express-rate-limit
+- AdmissionsClient.tsx
 - test-render.js
 - Card.tsx
-- ContactClient.tsx
+- SettingsEditor.tsx
 - api.ts
 - IconButton.tsx
 - PageHeader.tsx
@@ -165,12 +165,12 @@
 - @types/express
 - emailTemplates.ts
 - @types/node
-- Toast.tsx
+- useToast
 - adminPasswordReset.ts
 - mailer.ts
 - form.controller.ts
 - lib/roles.ts
-- SettingsEditor.tsx
+- @types/jsonwebtoken
 - isAdminRole
 - ToppersCarousel.tsx
 - ContentBlock.ts
@@ -181,7 +181,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `adminApiFetch()` - 52 edges
-2. `useToast()` - 47 edges
+2. `useToast()` - 49 edges
 3. `Success Code Academy NEET Coaching Website - Project Master Context` - 32 edges
 4. `🏆 Success Code Academy — Master Project Documentation` - 22 edges
 5. `useEditModeOptional()` - 21 edges
@@ -192,16 +192,16 @@
 10. `compilerOptions` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `ResetPasswordForm()` --calls--> `useToast()`  [EXTRACTED]
-  client/src/app/(main)/reset-password/page.tsx → client/src/components/admin/Toast.tsx
-- `StudentSignupPage()` --calls--> `useToast()`  [EXTRACTED]
-  client/src/app/(main)/signup/page.tsx → client/src/components/admin/Toast.tsx
 - `isAdminUser()` --calls--> `isAdminRole()`  [EXTRACTED]
   client/src/lib/api.ts → client/src/lib/roles.ts
 - `AdmissionsClient()` --calls--> `useEditModeOptional()`  [EXTRACTED]
   client/src/app/(main)/admissions/AdmissionsClient.tsx → client/src/components/admin/EditModeContext.tsx
 - `AdmissionsClient()` --calls--> `useToast()`  [EXTRACTED]
   client/src/app/(main)/admissions/AdmissionsClient.tsx → client/src/components/admin/Toast.tsx
+- `AdmissionsPage()` --calls--> `getApiBase()`  [EXTRACTED]
+  client/src/app/(main)/admissions/page.tsx → client/src/lib/api.ts
+- `ContactClient()` --calls--> `useSiteSettings()`  [EXTRACTED]
+  client/src/app/(main)/contact/ContactClient.tsx → client/src/lib/site-settings.ts
 
 ## Import Cycles
 - None detected.
@@ -216,17 +216,17 @@ Nodes (55): ADMIN, ADMIN_ROLES, AdminRole, isAdminRole(), SUPER_ADMIN, ADMIN_ROL
 Cohesion: 0.13
 Nodes (17): ActivityType, AdminDashboardPage(), CourseBreakdownItem, DashboardStats, formatDate(), formatFullDateTime(), formatNumber(), getInitial() (+9 more)
 
-### Community 2 - "Footer.tsx"
-Cohesion: 0.15
-Nodes (13): Footer(), Course, courses, NavLink, navLinks, NewsItem, newsItems, overviewFeatures (+5 more)
+### Community 2 - "home.ts"
+Cohesion: 0.18
+Nodes (10): Course, courses, NavLink, NewsItem, newsItems, overviewFeatures, Statistic, statistics (+2 more)
 
 ### Community 3 - "admin.controller.ts"
 Cohesion: 0.05
 Nodes (43): ADMIN_PUBLIC_ATTRIBUTES, createAcademyVideo, createBanner, createContactMessage, createCourse, createCourseForm, createNewsArticle, createNotification (+35 more)
 
 ### Community 4 - "ResultsClient.tsx"
-Cohesion: 0.17
-Nodes (7): metadata, ResultsClient(), videoStories, Button(), ButtonProps, resultsData, StudentResult
+Cohesion: 0.14
+Nodes (9): metadata, ResultsClient(), videoStories, EditableSection(), EditableSectionProps, Button(), ButtonProps, resultsData (+1 more)
 
 ### Community 5 - "devDependencies"
 Cohesion: 0.22
@@ -253,8 +253,8 @@ Cohesion: 0.28
 Nodes (5): FaqItem, FaqSection, faqSections, FaqClient(), metadata
 
 ### Community 11 - "adminApiFetch"
-Cohesion: 0.17
-Nodes (19): AdminCoursesPage(), AdminScholarshipProgramsPage(), ScholarshipProgramEditor(), ContactMessageEditorModal(), AdminContactMessagesPage(), CourseFormEditorModal(), AdminCourseFormsPage(), AdminScholarshipFormsPage() (+11 more)
+Cohesion: 0.20
+Nodes (13): AdminScholarshipProgramsPage(), ScholarshipProgramEditor(), ContactMessageEditorModal(), AdminContactMessagesPage(), CourseFormEditorModal(), AdminCourseFormsPage(), AdminScholarshipFormsPage(), ScholarshipFormEditorModal() (+5 more)
 
 ### Community 12 - "authenticate.ts"
 Cohesion: 0.33
@@ -289,8 +289,8 @@ Cohesion: 0.07
 Nodes (28): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+20 more)
 
 ### Community 20 - "AdminContentManager.tsx"
-Cohesion: 0.09
-Nodes (22): AdminNotificationsPage(), ICON_PRESETS, renderNotificationIcon(), AdminContentColumn, AdminContentField, AdminContentManager(), FieldValue, initialValues() (+14 more)
+Cohesion: 0.08
+Nodes (29): AdminNotificationsPage(), ICON_PRESETS, renderNotificationIcon(), AdminSettingsPage(), initialSettings, SiteSettings, AdminContentColumn, AdminContentField (+21 more)
 
 ### Community 21 - "CourseRegistration.ts"
 Cohesion: 0.50
@@ -302,7 +302,7 @@ Nodes (8): app, configuredOrigins, corsOptions, defaultAllowedOrigins, notFound(
 
 ### Community 23 - "dependencies"
 Cohesion: 0.12
-Nodes (17): bcrypt, dotenv, sequelize, dependencies, bcrypt, dotenv, sequelize, @types/bcrypt (+9 more)
+Nodes (17): bcrypt, dotenv, express-rate-limit, sequelize, dependencies, bcrypt, dotenv, express-rate-limit (+9 more)
 
 ### Community 24 - "MediaRevision.ts"
 Cohesion: 0.19
@@ -365,8 +365,8 @@ Cohesion: 0.60
 Nodes (4): backendUrl(), GET(), latestContent, staleContentResponse()
 
 ### Community 43 - "EditModeContext.tsx"
-Cohesion: 0.17
-Nodes (17): metadata, EditModeContext, EditModeContextValue, EditModeProvider(), useEditModeOptional(), useLiveContent(), LiveEditorToolbar(), pageName() (+9 more)
+Cohesion: 0.15
+Nodes (19): metadata, EditModeContext, EditModeContextValue, EditModeProvider(), useEditModeOptional(), useLiveContent(), LiveEditorToolbar(), pageName() (+11 more)
 
 ### Community 44 - "TopperResult.ts"
 Cohesion: 0.50
@@ -388,13 +388,17 @@ Nodes (11): 11. Website Pages & Features, About Page (`/about`), Additional Page
 Cohesion: 0.50
 Nodes (4): initNewsArticle(), NewsArticle, NewsArticleAttributes, NewsArticleCreationAttributes
 
+### Community 52 - "AdmissionsClient.tsx"
+Cohesion: 0.47
+Nodes (4): AdmissionsClient(), PAGE_BANNER_MAP, PageBannerPage, usePageBanner()
+
 ### Community 53 - "test-render.js"
 Cohesion: 0.40
 Nodes (4): data, https, options, req
 
-### Community 55 - "ContactClient.tsx"
-Cohesion: 0.16
-Nodes (12): AdmissionsClient(), ContactClient(), generateCaptcha(), INITIAL_CAPTCHA, Op, metadata, EditableSection(), EditableSectionProps (+4 more)
+### Community 55 - "SettingsEditor.tsx"
+Cohesion: 0.22
+Nodes (9): ContactClient(), generateCaptcha(), INITIAL_CAPTCHA, Op, metadata, SettingsEditor(), siteConfig, defaultSiteSettings (+1 more)
 
 ### Community 56 - "api.ts"
 Cohesion: 0.11
@@ -533,8 +537,8 @@ Cohesion: 0.50
 Nodes (4): 6. Backend — `server/`, Entry Point & Startup, Error Handling Architecture, Utility Services
 
 ### Community 163 - "BannerEditor.tsx"
-Cohesion: 0.14
-Nodes (20): AdminPageBannersPage(), PAGE_SLOTS, PageBannerSlot, AdminEmptyState(), AdminLoadingState(), Banner, BannerEditor(), BannerEditorProps (+12 more)
+Cohesion: 0.10
+Nodes (27): AdminPageBannersPage(), PAGE_SLOTS, PageBannerSlot, AdminModal(), AdminLoadingState(), Banner, BannerEditor(), BannerEditorProps (+19 more)
 
 ### Community 165 - "recordMediaRevision"
 Cohesion: 0.18
@@ -568,9 +572,9 @@ Nodes (3): getSettings, loadSettingsMap(), updateSettings
 Cohesion: 0.38
 Nodes (19): adminLoginAlert(), adminPasswordResetEmail(), BRAND, contactFormReceipt(), contactFormStaffAlert(), courseRegistrationReceipt(), detailTable(), escapeHtml() (+11 more)
 
-### Community 184 - "Toast.tsx"
-Cohesion: 0.11
-Nodes (14): ResetPasswordForm(), TokenState, StudentSignupPage(), ICON_PRESETS, Notification, NotificationEditor(), NotificationEditorProps, renderIconByKey() (+6 more)
+### Community 184 - "useToast"
+Cohesion: 0.15
+Nodes (14): AdminCoursesPage(), LoginFailure, StudentLoginPage(), ResetPasswordForm(), TokenState, StudentSignupPage(), CourseEditor(), ToastApi (+6 more)
 
 ### Community 185 - "adminPasswordReset.ts"
 Cohesion: 0.20
@@ -588,13 +592,9 @@ Nodes (11): findExistingCourseRegistration(), getMyCourseRegistration, normalise
 Cohesion: 0.32
 Nodes (9): AdministratorEditorModal(), generatePassword(), ResetLink, AdminAdministratorsPage(), ADMIN, ADMIN_ROLES, AdminRole, adminRoleLabel() (+1 more)
 
-### Community 189 - "SettingsEditor.tsx"
-Cohesion: 0.26
-Nodes (8): AdminSettingsPage(), initialSettings, SiteSettings, useAdminSession(), AdminNotice(), AdminApiError, defaultSiteSettings, PublicSiteSettings
-
 ### Community 190 - "isAdminRole"
-Cohesion: 0.35
-Nodes (10): backendUrl(), DELETE(), GET(), isSameOrigin(), parseBackendResponse(), POST(), PUT(), LoginFailure (+2 more)
+Cohesion: 0.53
+Nodes (8): backendUrl(), DELETE(), GET(), isSameOrigin(), parseBackendResponse(), POST(), PUT(), isAdminRole()
 
 ### Community 191 - "ToppersCarousel.tsx"
 Cohesion: 0.38
@@ -624,10 +624,10 @@ Nodes (3): 17. Environment Variables Reference, Client (`client/.env.local`), Se
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `adminApiFetch()` connect `adminApiFetch` to `admin/page.tsx`, `BannerEditor.tsx`, `LiveContentContext.tsx`, `AdminContentManager.tsx`, `ContactClient.tsx`, `api.ts`, `lib/roles.ts`, `SettingsEditor.tsx`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `useToast()` connect `adminApiFetch` to `BannerEditor.tsx`, `admin/layout.tsx`, `Toast.tsx`, `ContactClient.tsx`, `api.ts`, `lib/roles.ts`, `SettingsEditor.tsx`, `isAdminRole`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+- **Why does `adminApiFetch()` connect `adminApiFetch` to `admin/page.tsx`, `BannerEditor.tsx`, `LiveContentContext.tsx`, `AdminContentManager.tsx`, `SettingsEditor.tsx`, `useToast`, `api.ts`, `lib/roles.ts`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `useToast()` connect `useToast` to `BannerEditor.tsx`, `adminApiFetch`, `admin/layout.tsx`, `AdminContentManager.tsx`, `AdmissionsClient.tsx`, `SettingsEditor.tsx`, `api.ts`, `lib/roles.ts`?**
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `Success Code Academy NEET Coaching Website - Project Master Context` connect `Success Code Academy NEET Coaching Website - Project Master Context` to `5.2 Courses Page`, `5.4 Test Series Page`, `9. Backend Modules & Data Models`, `17. Environment Variables`, `5.7 Blogs & Reviews`, `7. Student Login Portal`, `Success Code Academy Admin Guide`, `8. Admin / CMS Requirements`, `5.3 Scholarships Page`, `14. Implementation Phases`, `2.2 Core Technology Stack`, `5.5 Student Hub`, `12. Forms, Leads & Conversion Rules`, `13. Payment & Access Control`, `15. Development Standards`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `$schema`, `.opencode/plugins/graphify.js`, `eslintConfig` to the rest of the system?**

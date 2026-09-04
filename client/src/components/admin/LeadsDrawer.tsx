@@ -97,8 +97,8 @@ export default function LeadsDrawer() {
         </div>
 
         <div className="leads-content sca-admin-list">
-          {loading && <div style={{ padding: 16 }}>Loading...</div>}
-          {error && <div className="sca-admin-error" style={{ margin: 16 }}>{error}</div>}
+          {loading && <div className="leads-state">Loading...</div>}
+          {error && <div className="sca-admin-error leads-state">{error}</div>}
           
           {!loading && !error && (
             <>

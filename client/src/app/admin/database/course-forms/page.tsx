@@ -15,6 +15,7 @@ export default function AdminCourseFormsPage() {
     try {
       await adminApiFetch(`/api/v1/admin/database/course-forms/${formRecord.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Course enquiry deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete course form");
     }
@@ -29,6 +30,7 @@ export default function AdminCourseFormsPage() {
       endpoint="database/course-forms"
       searchPlaceholder="Search student, course, email, or phone"
       exportName="course-enquiries"
+      filters={[{ key: "course", label: "Course" }, { key: "dateFrom", label: "From", type: "date" }, { key: "dateTo", label: "To", type: "date" }]}
       columns={[
         {
           key: "studentName",

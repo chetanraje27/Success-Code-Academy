@@ -15,6 +15,7 @@ export default function AdminCoursesPage() {
     try {
       await adminApiFetch(`/api/v1/admin/courses/${course.id}`, { method: "DELETE" });
       setRefreshKey(prev => prev + 1);
+      toast.success("Course deleted.");
     } catch (e: any) {
       toast.error(e.message || "Failed to delete course");
     }
@@ -29,6 +30,7 @@ export default function AdminCoursesPage() {
         endpoint="courses"
         searchPlaceholder="Search courses..."
         exportName="course-catalog"
+        filters={[{ key: "isActive", label: "Status", options: [{ label: "Active", value: "true" }, { label: "Inactive", value: "false" }] }, { key: "type", label: "Type" }]}
         columns={[
           {
             key: "title",

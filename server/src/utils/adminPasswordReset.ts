@@ -18,7 +18,14 @@ export function hashResetToken(rawToken: string): string {
 /** The link an administrator follows to choose a new password. */
 export function buildResetUrl(rawToken: string): string {
   const base = appBaseUrl();
-  const path = `/admin/reset-password?token=${encodeURIComponent(rawToken)}`;
+  const tokenParam = encodeURIComponent(rawToken);
+
+  // In production, direct to console subdomain with clean path
+  if (base.includes('successcodeacademy.in') || env.NODE_ENV === 'production') {
+    return `https://console.successcodeacademy.in/reset-password?token=${tokenParam}`;
+  }
+
+  const path = `/admin/reset-password?token=${tokenParam}`;
   return base ? `${base}${path}` : path;
 }
 

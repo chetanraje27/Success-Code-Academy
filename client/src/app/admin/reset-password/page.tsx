@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { AdminNotice } from "@/components/admin/AdminUi";
 import { useToast } from "@/components/admin/Toast";
+import { getLiveWebsiteHref, isConsoleSubdomain } from "@/lib/admin-routing";
 
 type TokenState = "checking" | "valid" | "invalid" | "missing";
 
@@ -181,7 +182,9 @@ export default function AdminResetPasswordPage() {
                 <button
                   type="button"
                   className="app-login-submit"
-                  onClick={() => router.replace("/admin/login")}
+                  onClick={() =>
+                    router.replace(isConsoleSubdomain() ? "/login" : "/admin/login")
+                  }
                 >
                   <LogIn size={15} />
                   Go to sign in
@@ -322,7 +325,9 @@ export default function AdminResetPasswordPage() {
                 <button
                   type="button"
                   className="app-login-submit"
-                  onClick={() => router.replace("/admin/login")}
+                  onClick={() =>
+                    router.replace(isConsoleSubdomain() ? "/login" : "/admin/login")
+                  }
                 >
                   <ArrowLeft size={15} />
                   Back to sign in
@@ -330,7 +335,7 @@ export default function AdminResetPasswordPage() {
               </>
             )}
 
-            <Link href="/" className="app-login-back">
+            <Link href={getLiveWebsiteHref("/")} className="app-login-back">
               Return to the website
             </Link>
           </div>

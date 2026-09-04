@@ -15,7 +15,21 @@ function backendUrl(path: string): string {
 
 function isSameOrigin(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
-  return Boolean(origin && origin === request.nextUrl.origin);
+  if (!origin) return false;
+  if (origin === request.nextUrl.origin) return true;
+  try {
+    const originHost = new URL(origin).hostname;
+    const reqHost = request.nextUrl.hostname;
+    if (
+      (originHost.endsWith("successcodeacademy.in") || originHost.includes("localhost") || originHost.includes("127.0.0.1")) &&
+      (reqHost.endsWith("successcodeacademy.in") || reqHost.includes("localhost") || reqHost.includes("127.0.0.1"))
+    ) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
 }
 
 async function parseBackendResponse(response: Response) {
@@ -65,11 +79,17 @@ export async function POST(request: NextRequest) {
       status: "success",
       data: { user: data.user },
     });
+    const host = request.headers.get("host") || "";
+    const cookieDomain = host.includes("successcodeacademy.in")
+      ? ".successcodeacademy.in"
+      : undefined;
+
     result.cookies.set(COOKIE_NAME, data.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/",
+      domain: cookieDomain,
       maxAge: COOKIE_MAX_AGE,
       priority: "high",
     });
@@ -180,6 +200,18 @@ export async function DELETE(request: NextRequest) {
     );
   }
   const cookieStore = await cookies();
+  const host = request.headers.get("host") || "";
+  const cookieDomain = host.includes("successcodeacademy.in")
+    ? ".successcodeacademy.in"
+    : undefined;
+
+  if (cookieDomain) {
+    cookieStore.set(COOKIE_NAME, "", {
+      domain: cookieDomain,
+      path: "/",
+      maxAge: 0,
+    });
+  }
   cookieStore.delete(COOKIE_NAME);
   return NextResponse.json({ status: "success" });
 }

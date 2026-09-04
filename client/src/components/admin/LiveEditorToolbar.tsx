@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Eye, Gauge, Pencil, X } from "lucide-react";
 import { useEditModeOptional } from "./EditModeContext";
 import { useLiveContent } from "./LiveContentContext";
+import { getConsoleDashboardHref } from "@/lib/admin-routing";
 
 function pageName(pathname: string): string {
   if (pathname === "/") return "Home page";
@@ -39,7 +40,7 @@ export function LiveEditorToolbar() {
         </span>
       </div>
       <div className="live-editor-toolbar-actions">
-        <Link href="/admin" className="live-editor-toolbar-link">
+        <Link href={getConsoleDashboardHref()} className="live-editor-toolbar-link">
           <Gauge size={15} />
           Dashboard
         </Link>

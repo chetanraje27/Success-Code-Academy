@@ -36,6 +36,7 @@ import type { AdminUser } from "@/lib/admin-api";
 import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
 import { AdminSessionProvider } from "@/components/admin/AdminSessionContext";
 import { ToastProvider } from "@/components/admin/Toast";
+import { getAdminHref, getLiveWebsiteHref } from "@/lib/admin-routing";
 
 type SessionState = "loading" | "authenticated" | "guest";
 type AdminTheme = "light" | "dark";
@@ -127,9 +128,12 @@ export default function AdminLayout({
    * one, and so does the password reset page: whoever follows a reset link is
    * by definition locked out.
    */
+  const isSubdomain = !pathname.startsWith("/admin");
   const isPublicRoute =
     pathname === "/admin/login" ||
-    pathname.startsWith("/admin/reset-password");
+    pathname === "/login" ||
+    pathname.startsWith("/admin/reset-password") ||
+    pathname.startsWith("/reset-password");
   const [session, setSession] = useState<SessionState>(
     isPublicRoute ? "guest" : "loading",
   );
@@ -284,35 +288,40 @@ export default function AdminLayout({
     const expire = () => {
       setSession("guest");
       setUser(null);
-      router.replace("/admin/login");
+      router.replace(isSubdomain ? "/login" : "/admin/login");
     };
     window.addEventListener("admin-session-expired", expire);
     return () => window.removeEventListener("admin-session-expired", expire);
-  }, [router]);
+  }, [isSubdomain, router]);
 
   useEffect(() => {
     if (!isPublicRoute && session === "guest") {
-      router.replace("/admin/login");
+      router.replace(isSubdomain ? "/login" : "/admin/login");
     }
-  }, [isPublicRoute, router, session]);
+  }, [isPublicRoute, isSubdomain, router, session]);
+
+  const normalizedPath = useMemo(() => {
+    if (pathname.startsWith("/admin")) return pathname;
+    return pathname === "/" ? "/admin" : `/admin${pathname}`;
+  }, [pathname]);
 
   const currentNavItem = useMemo(() => {
-    const exact = allNavItems.find((item) => item.href === pathname);
+    const exact = allNavItems.find((item) => item.href === normalizedPath);
     if (exact) return exact;
 
     const prefixes = allNavItems.filter(
-      (item) => item.href !== "/admin" && pathname.startsWith(item.href),
+      (item) => item.href !== "/admin" && normalizedPath.startsWith(item.href),
     );
     if (prefixes.length > 0) {
       return prefixes.sort((a, b) => b.href.length - a.href.length)[0];
     }
 
-    if (pathname === "/admin") {
+    if (normalizedPath === "/admin") {
       return allNavItems.find((item) => item.href === "/admin") || null;
     }
 
     return null;
-  }, [pathname]);
+  }, [normalizedPath]);
 
   const CurrentPageIcon = currentNavItem?.icon || LayoutDashboard;
   const currentPageTitle = currentNavItem?.label || "Dashboard";
@@ -354,10 +363,13 @@ export default function AdminLayout({
    */
   useEffect(() => {
     if (session !== "authenticated" || isSuperAdmin) return;
-    if (pathname.startsWith("/admin/database/administrators")) {
-      router.replace("/admin");
+    if (
+      pathname.startsWith("/admin/database/administrators") ||
+      pathname.startsWith("/database/administrators")
+    ) {
+      router.replace(isSubdomain ? "/" : "/admin");
     }
-  }, [isSuperAdmin, pathname, router, session]);
+  }, [isSubdomain, isSuperAdmin, pathname, router, session]);
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -370,7 +382,7 @@ export default function AdminLayout({
       setUser(null);
       setSession("guest");
       setIsLoggingOut(false);
-      router.replace("/admin/login");
+      router.replace(isSubdomain ? "/login" : "/admin/login");
     }
   }
 
@@ -416,7 +428,7 @@ export default function AdminLayout({
           ) : (
             <>
               <Link
-                href="/admin"
+                href={isSubdomain ? "/" : "/admin"}
                 className="admin-brand-link"
                 aria-label="Admin dashboard"
                 onClick={() => setSidebarOpen(false)}
@@ -452,12 +464,16 @@ export default function AdminLayout({
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const active =
-                    pathname === item.href ||
-                    (item.href !== "/admin" && pathname.startsWith(item.href));
+                    normalizedPath === item.href ||
+                    (item.href !== "/admin" && normalizedPath.startsWith(item.href));
+                  const linkHref = getAdminHref(item.href, isSubdomain);
+                  const isExternal = item.href.startsWith("/?");
                   return (
                     <Link
                       key={item.href}
-                      href={item.href}
+                      href={linkHref}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noreferrer" : undefined}
                       onClick={() => setSidebarOpen(false)}
                       className={`admin-nav-link ${active ? "is-active" : ""}`}
                       aria-current={active ? "page" : undefined}
@@ -602,7 +618,7 @@ export default function AdminLayout({
 
                   <div className="admin-profile-links">
                     <Link
-                      href="/"
+                      href={getLiveWebsiteHref("/")}
                       target="_blank"
                       rel="noreferrer"
                       className="admin-profile-link-item"

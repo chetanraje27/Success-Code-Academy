@@ -30,6 +30,7 @@ import {
 import { adminApiFetch } from "@/lib/admin-api";
 import { AdminNotice } from "@/components/admin/AdminUi";
 import AdminDetailDrawer from "@/components/admin/AdminDetailDrawer";
+import { getAdminHref } from "@/lib/admin-routing";
 
 type RecentStudent = {
   id: number;
@@ -327,7 +328,7 @@ export default function AdminDashboardPage() {
       {/* 2. Key Performance Indicators (Genuine Database Counts) */}
       <section className="admin-dash-kpis" aria-label="Academy KPIs">
         {/* Student Accounts */}
-        <Link href="/admin/database/students" className="admin-dash-kpi is-students">
+        <Link href={getAdminHref("/admin/database/students")} className="admin-dash-kpi is-students">
           <div className="admin-dash-kpi-top">
             <span className="admin-dash-kpi-label">Students</span>
             <div className="admin-dash-kpi-icon">
@@ -341,7 +342,7 @@ export default function AdminDashboardPage() {
         </Link>
 
         {/* Course Enquiries */}
-        <Link href="/admin/database/course-forms" className="admin-dash-kpi is-courses">
+        <Link href={getAdminHref("/admin/database/course-forms")} className="admin-dash-kpi is-courses">
           <div className="admin-dash-kpi-top">
             <span className="admin-dash-kpi-label">Course Enquiries</span>
             <div className="admin-dash-kpi-icon">
@@ -355,7 +356,7 @@ export default function AdminDashboardPage() {
         </Link>
 
         {/* Scholarships */}
-        <Link href="/admin/database/scholarship-forms" className="admin-dash-kpi is-scholarships">
+        <Link href={getAdminHref("/admin/database/scholarship-forms")} className="admin-dash-kpi is-scholarships">
           <div className="admin-dash-kpi-top">
             <span className="admin-dash-kpi-label">Scholarships</span>
             <div className="admin-dash-kpi-icon">
@@ -369,7 +370,7 @@ export default function AdminDashboardPage() {
         </Link>
 
         {/* Inbound Messages */}
-        <Link href="/admin/database/contact-messages" className="admin-dash-kpi is-messages">
+        <Link href={getAdminHref("/admin/database/contact-messages")} className="admin-dash-kpi is-messages">
           <div className="admin-dash-kpi-top">
             <span className="admin-dash-kpi-label">Messages</span>
             <div className="admin-dash-kpi-icon">
@@ -383,7 +384,7 @@ export default function AdminDashboardPage() {
         </Link>
 
         {/* Courses */}
-        <Link href="/admin/content/courses" className="admin-dash-kpi is-catalog">
+        <Link href={getAdminHref("/admin/content/courses")} className="admin-dash-kpi is-catalog">
           <div className="admin-dash-kpi-top">
             <span className="admin-dash-kpi-label">Courses</span>
             <div className="admin-dash-kpi-icon">
@@ -457,7 +458,7 @@ export default function AdminDashboardPage() {
           </header>
 
           <div className="admin-dash-shortcuts">
-            <Link href="/?edit=1" target="_blank" className="admin-dash-shortcut">
+            <Link href={getAdminHref("/?edit=1")} target="_blank" className="admin-dash-shortcut">
               <div className="admin-dash-shortcut-icon">
                 <Pencil size={15} />
               </div>
@@ -470,7 +471,7 @@ export default function AdminDashboardPage() {
               <ArrowRight size={13} className="admin-dash-shortcut-arrow" />
             </Link>
 
-            <Link href="/admin/banners" className="admin-dash-shortcut">
+            <Link href={getAdminHref("/admin/banners")} className="admin-dash-shortcut">
               <div className="admin-dash-shortcut-icon">
                 <Images size={15} />
               </div>
@@ -483,7 +484,7 @@ export default function AdminDashboardPage() {
               <ArrowRight size={13} className="admin-dash-shortcut-arrow" />
             </Link>
 
-            <Link href="/admin/content/courses" className="admin-dash-shortcut">
+            <Link href={getAdminHref("/admin/content/courses")} className="admin-dash-shortcut">
               <div className="admin-dash-shortcut-icon">
                 <BookOpen size={15} />
               </div>
@@ -496,7 +497,7 @@ export default function AdminDashboardPage() {
               <ArrowRight size={13} className="admin-dash-shortcut-arrow" />
             </Link>
 
-            <Link href="/admin/notifications" className="admin-dash-shortcut">
+            <Link href={getAdminHref("/admin/notifications")} className="admin-dash-shortcut">
               <div className="admin-dash-shortcut-icon">
                 <Bell size={15} />
               </div>
@@ -509,7 +510,7 @@ export default function AdminDashboardPage() {
               <ArrowRight size={13} className="admin-dash-shortcut-arrow" />
             </Link>
 
-            <Link href="/admin/settings" className="admin-dash-shortcut">
+            <Link href={getAdminHref("/admin/settings")} className="admin-dash-shortcut">
               <div className="admin-dash-shortcut-icon">
                 <Settings size={15} />
               </div>
@@ -675,10 +676,10 @@ export default function AdminDashboardPage() {
             Showing {filteredActivities.length} of {unifiedActivities.length} database records
           </span>
           <div className="admin-dash-footer-links">
-            <Link href="/admin/database/students">Students &rarr;</Link>
-            <Link href="/admin/database/course-forms">Course Enquiries &rarr;</Link>
-            <Link href="/admin/database/scholarship-forms">Scholarships &rarr;</Link>
-            <Link href="/admin/database/contact-messages">Messages &rarr;</Link>
+            <Link href={getAdminHref("/admin/database/students")}>Students &rarr;</Link>
+            <Link href={getAdminHref("/admin/database/course-forms")}>Course Enquiries &rarr;</Link>
+            <Link href={getAdminHref("/admin/database/scholarship-forms")}>Scholarships &rarr;</Link>
+            <Link href={getAdminHref("/admin/database/contact-messages")}>Messages &rarr;</Link>
           </div>
         </footer>
       </section>
@@ -743,7 +744,7 @@ export default function AdminDashboardPage() {
           }
           databaseLink={{
             label: `Open in ${selectedActivity.typeLabel} Database`,
-            href: selectedActivity.link,
+            href: getAdminHref(selectedActivity.link),
           }}
         />
       )}

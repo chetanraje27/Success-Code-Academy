@@ -22,6 +22,42 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
+  const host = request.headers.get('host') || ''
+  const pathname = request.nextUrl.pathname
+
+  // Check if request is accessing via console subdomain (production or local test)
+  const isConsoleSubdomain =
+    host.startsWith('console.successcodeacademy.in') ||
+    host.startsWith('console.localhost') ||
+    host.startsWith('console.')
+
+  if (isConsoleSubdomain) {
+    // If on console subdomain and URL has redundant /admin prefix, redirect to clean path
+    if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+      const cleanPath = pathname.replace(/^\/admin/, '') || '/'
+      return NextResponse.redirect(
+        new URL(`${cleanPath}${request.nextUrl.search}`, request.url)
+      )
+    }
+
+    // Rewrite console subdomain routes to /admin internally while preserving clean browser URL
+    const rewriteUrl = request.nextUrl.clone()
+    rewriteUrl.pathname = pathname === '/' ? '/admin' : `/admin${pathname}`
+    return NextResponse.rewrite(rewriteUrl)
+  }
+
+  // If accessed on main domain (successcodeacademy.in or www.successcodeacademy.in)
+  // in production, redirect /admin to console.successcodeacademy.in
+  const isProduction =
+    process.env.NODE_ENV === 'production' ||
+    host.includes('successcodeacademy.in')
+
+  if (isProduction && (pathname === '/admin' || pathname.startsWith('/admin/'))) {
+    const cleanPath = pathname.replace(/^\/admin/, '') || '/'
+    const target = new URL(`https://console.successcodeacademy.in${cleanPath}${request.nextUrl.search}`)
+    return NextResponse.redirect(target, 307)
+  }
+
   return NextResponse.next()
 }
 

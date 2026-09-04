@@ -17,7 +17,21 @@ function backendBase(): string {
 
 function isSameOrigin(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
-  return Boolean(origin && origin === request.nextUrl.origin);
+  if (!origin) return false;
+  if (origin === request.nextUrl.origin) return true;
+  try {
+    const originHost = new URL(origin).hostname;
+    const reqHost = request.nextUrl.hostname;
+    if (
+      (originHost.endsWith("successcodeacademy.in") || originHost.includes("localhost") || originHost.includes("127.0.0.1")) &&
+      (reqHost.endsWith("successcodeacademy.in") || reqHost.includes("localhost") || reqHost.includes("127.0.0.1"))
+    ) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
 }
 
 async function forward(request: NextRequest, context: HandlerContext) {

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { isAdminRole } from "@/lib/roles";
 import { useToast } from "@/components/admin/Toast";
+import { getLiveWebsiteHref, isConsoleSubdomain } from "@/lib/admin-routing";
 
 type LoginFailure = {
   status?: string;
@@ -57,7 +58,7 @@ export default function AdminLoginPage() {
       .then((response) => (response.ok ? response.json() : null))
       .then((payload: { data?: { user?: { role?: string } } } | null) => {
         if (isAdminRole(payload?.data?.user?.role)) {
-          window.location.replace("/admin");
+          window.location.replace(isConsoleSubdomain() ? "/" : "/admin");
         } else {
           setIsCheckingSession(false);
         }
@@ -85,7 +86,7 @@ export default function AdminLoginPage() {
         const firstIssue = payload.errors?.[0]?.message;
         throw new Error(firstIssue || payload.message || "Unable to sign in.");
       }
-      window.location.replace("/admin");
+      window.location.replace(isConsoleSubdomain() ? "/" : "/admin");
       // Do NOT setSubmitting(false) here. Keep it loading while the browser navigates.
     } catch (caught) {
       toast.error(
@@ -270,7 +271,7 @@ export default function AdminLoginPage() {
                   </button>
                 </form>
 
-                <Link href="/" className="app-login-back">
+                <Link href={getLiveWebsiteHref("/")} className="app-login-back">
                   Return to the website
                 </Link>
               </>

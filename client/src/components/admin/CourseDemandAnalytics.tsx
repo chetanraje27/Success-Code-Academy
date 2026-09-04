@@ -143,12 +143,14 @@ export default function CourseDemandAnalytics({
 
       <div className="admin-analytics-body">
         {items.length === 0 ? (
-          <div className="admin-dash-empty" style={{ padding: "36px 16px" }}>
-            <Target size={28} style={{ opacity: 0.4, marginBottom: "8px" }} />
-            <p style={{ margin: 0, fontWeight: 500 }}>No course enquiries recorded yet.</p>
-            <small style={{ color: "var(--admin-muted)" }}>
+          <div className="admin-analytics-empty">
+            <div className="admin-analytics-empty-icon">
+              <Target size={22} strokeWidth={1.75} />
+            </div>
+            <p className="admin-analytics-empty-title">No course enquiries recorded yet.</p>
+            <p className="admin-analytics-empty-desc">
               Student submissions from course registration forms will generate interactive analytics here.
-            </small>
+            </p>
           </div>
         ) : (
           <>

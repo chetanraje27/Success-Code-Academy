@@ -342,6 +342,45 @@
       "norm_label": "livecontentcontextvalue"
     },
     {
+      "label": "SiteSetting",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L14",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_sitesetting",
+      "community": 163,
+      "community_name": "SiteSetting.ts",
+      "norm_label": "sitesetting"
+    },
+    {
+      "label": "SiteSettingAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_sitesettingattributes",
+      "community": 163,
+      "community_name": "SiteSetting.ts",
+      "norm_label": "sitesettingattributes"
+    },
+    {
+      "label": "SiteSettingCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_sitesettingcreationattributes",
+      "community": 163,
+      "community_name": "SiteSetting.ts",
+      "norm_label": "sitesettingcreationattributes"
+    },
+    {
       "label": "VideoItem",
       "file_type": "code",
       "source_file": "client/src/app/(main)/gallery/page.tsx",
@@ -485,82 +524,43 @@
       "norm_label": "starstudent"
     },
     {
-      "label": "NewsArticle",
+      "label": "AcademyVideo",
       "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L24",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticle",
-      "community": 2,
-      "community_name": "content.routes.ts",
-      "norm_label": "newsarticle"
-    },
-    {
-      "label": "NewsArticleAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticleattributes",
-      "community": 2,
-      "community_name": "content.routes.ts",
-      "norm_label": "newsarticleattributes"
-    },
-    {
-      "label": "NewsArticleCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
+      "source_file": "server/src/models/AcademyVideo.ts",
       "source_location": "L21",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_newsarticle_newsarticlecreationattributes",
+      "id": "server_src_models_academyvideo_academyvideo",
       "community": 2,
       "community_name": "content.routes.ts",
-      "norm_label": "newsarticlecreationattributes"
+      "norm_label": "academyvideo"
     },
     {
-      "label": "Notification",
+      "label": "AcademyVideoAttributes",
       "file_type": "code",
-      "source_file": "server/src/models/Notification.ts",
-      "source_location": "L17",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_notification_notification",
-      "community": 2,
-      "community_name": "content.routes.ts",
-      "norm_label": "notification"
-    },
-    {
-      "label": "NotificationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/Notification.ts",
+      "source_file": "server/src/models/AcademyVideo.ts",
       "source_location": "L3",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_notification_notificationattributes",
+      "id": "server_src_models_academyvideo_academyvideoattributes",
       "community": 2,
       "community_name": "content.routes.ts",
-      "norm_label": "notificationattributes"
+      "norm_label": "academyvideoattributes"
     },
     {
-      "label": "NotificationCreationAttributes",
+      "label": "AcademyVideoCreationAttributes",
       "file_type": "code",
-      "source_file": "server/src/models/Notification.ts",
-      "source_location": "L14",
+      "source_file": "server/src/models/AcademyVideo.ts",
+      "source_location": "L18",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_notification_notificationcreationattributes",
+      "id": "server_src_models_academyvideo_academyvideocreationattributes",
       "community": 2,
       "community_name": "content.routes.ts",
-      "norm_label": "notificationcreationattributes"
+      "norm_label": "academyvideocreationattributes"
     },
     {
       "label": "AdminContentColumn",
@@ -1096,6 +1096,45 @@
       "norm_label": "apienvelope"
     },
     {
+      "label": "CourseRegistration",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L18",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_courseregistration",
+      "community": 47,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistration"
+    },
+    {
+      "label": "CourseRegistrationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_courseregistrationattributes",
+      "community": 47,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistrationattributes"
+    },
+    {
+      "label": "CourseRegistrationCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_courseregistrationcreationattributes",
+      "community": 47,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistrationcreationattributes"
+    },
+    {
       "label": "DashboardStats",
       "file_type": "code",
       "source_file": "client/src/app/admin/page.tsx",
@@ -1278,6 +1317,45 @@
       "norm_label": "starstudenteditorprops"
     },
     {
+      "label": "NewsArticle",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L24",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_newsarticle",
+      "community": 51,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticle"
+    },
+    {
+      "label": "NewsArticleAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_newsarticleattributes",
+      "community": 51,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticleattributes"
+    },
+    {
+      "label": "NewsArticleCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L21",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_newsarticlecreationattributes",
+      "community": 51,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticlecreationattributes"
+    },
+    {
       "label": "Banner",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -1328,6 +1406,45 @@
       "community": 54,
       "community_name": "Card.tsx",
       "norm_label": "cardprops"
+    },
+    {
+      "label": "NewsletterSubscriber",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L13",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_newslettersubscriber",
+      "community": 55,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriber"
+    },
+    {
+      "label": "NewsletterSubscriberAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_newslettersubscriberattributes",
+      "community": 55,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriberattributes"
+    },
+    {
+      "label": "NewsletterSubscriberCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L10",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_newslettersubscribercreationattributes",
+      "community": 55,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscribercreationattributes"
     },
     {
       "label": "Op",
@@ -1408,45 +1525,6 @@
       "norm_label": "sectionheadingprops"
     },
     {
-      "label": "AcademyVideo",
-      "file_type": "code",
-      "source_file": "server/src/models/AcademyVideo.ts",
-      "source_location": "L21",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_academyvideo_academyvideo",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "academyvideo"
-    },
-    {
-      "label": "AcademyVideoAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/AcademyVideo.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_academyvideo_academyvideoattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "academyvideoattributes"
-    },
-    {
-      "label": "AcademyVideoCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/AcademyVideo.ts",
-      "source_location": "L18",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_academyvideo_academyvideocreationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "academyvideocreationattributes"
-    },
-    {
       "label": "AdminPasswordReset",
       "file_type": "code",
       "source_file": "server/src/models/AdminPasswordReset.ts",
@@ -1499,160 +1577,43 @@
       "norm_label": "course"
     },
     {
-      "label": "CourseRegistration",
+      "label": "Notification",
       "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L18",
+      "source_file": "server/src/models/Notification.ts",
+      "source_location": "L17",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistration",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistration"
+      "id": "server_src_models_notification_notification",
+      "community": 63,
+      "community_name": "Notification",
+      "norm_label": "notification"
     },
     {
-      "label": "CourseRegistrationAttributes",
+      "label": "NotificationAttributes",
       "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_file": "server/src/models/Notification.ts",
       "source_location": "L3",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistrationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistrationattributes"
+      "id": "server_src_models_notification_notificationattributes",
+      "community": 63,
+      "community_name": "Notification",
+      "norm_label": "notificationattributes"
     },
     {
-      "label": "CourseRegistrationCreationAttributes",
+      "label": "NotificationCreationAttributes",
       "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L15",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_courseregistrationcreationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistrationcreationattributes"
-    },
-    {
-      "label": "NewsletterSubscriber",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L13",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscriber",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriber"
-    },
-    {
-      "label": "NewsletterSubscriberAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscriberattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriberattributes"
-    },
-    {
-      "label": "NewsletterSubscriberCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L10",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_newslettersubscribercreationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscribercreationattributes"
-    },
-    {
-      "label": "OtpVerification",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L15",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverification",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "otpverification"
-    },
-    {
-      "label": "OtpVerificationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverificationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "otpverificationattributes"
-    },
-    {
-      "label": "OtpVerificationCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L12",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_otpverificationcreationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "otpverificationcreationattributes"
-    },
-    {
-      "label": "SiteSetting",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
+      "source_file": "server/src/models/Notification.ts",
       "source_location": "L14",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesetting",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "sitesetting"
-    },
-    {
-      "label": "SiteSettingAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesettingattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "sitesettingattributes"
-    },
-    {
-      "label": "SiteSettingCreationAttributes",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L11",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_sitesettingcreationattributes",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "sitesettingcreationattributes"
+      "id": "server_src_models_notification_notificationcreationattributes",
+      "community": 63,
+      "community_name": "Notification",
+      "norm_label": "notificationcreationattributes"
     },
     {
       "label": "ProcessEnv",
@@ -1835,6 +1796,45 @@
       "community": 8,
       "community_name": "auth.controller.ts",
       "norm_label": "mailresult"
+    },
+    {
+      "label": "OtpVerification",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverification",
+      "community": 88,
+      "community_name": "OtpVerification.ts",
+      "norm_label": "otpverification"
+    },
+    {
+      "label": "OtpVerificationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverificationattributes",
+      "community": 88,
+      "community_name": "OtpVerification.ts",
+      "norm_label": "otpverificationattributes"
+    },
+    {
+      "label": "OtpVerificationCreationAttributes",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L12",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_otpverificationcreationattributes",
+      "community": 88,
+      "community_name": "OtpVerification.ts",
+      "norm_label": "otpverificationcreationattributes"
     },
     {
       "label": "isAdminRole()",
@@ -2317,6 +2317,54 @@
       "norm_label": "cookieconsent()"
     },
     {
+      "label": "initSiteSetting()",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting_initsitesetting",
+      "community": 163,
+      "community_name": "SiteSetting.ts",
+      "norm_label": "initsitesetting()"
+    },
+    {
+      "label": "getSupabase()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_getsupabase",
+      "community": 165,
+      "community_name": "getSupabase",
+      "norm_label": "getsupabase()"
+    },
+    {
+      "label": "publicStudent()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L973",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_publicstudent",
+      "community": 166,
+      "community_name": "publicStudent",
+      "norm_label": "publicstudent()"
+    },
+    {
+      "label": "loadSettingsMap()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L655",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_loadsettingsmap",
+      "community": 167,
+      "community_name": "loadSettingsMap",
+      "norm_label": "loadsettingsmap()"
+    },
+    {
       "label": "GalleryPage()",
       "file_type": "code",
       "source_file": "client/src/app/(main)/gallery/page.tsx",
@@ -2545,28 +2593,16 @@
       "norm_label": "useeditmodeoptional()"
     },
     {
-      "label": "initNewsArticle()",
+      "label": "initAcademyVideo()",
       "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
-      "source_location": "L46",
+      "source_file": "server/src/models/AcademyVideo.ts",
+      "source_location": "L40",
       "_callable": true,
       "_origin": "ast",
-      "id": "server_src_models_newsarticle_initnewsarticle",
+      "id": "server_src_models_academyvideo_initacademyvideo",
       "community": 2,
       "community_name": "content.routes.ts",
-      "norm_label": "initnewsarticle()"
-    },
-    {
-      "label": "initNotification()",
-      "file_type": "code",
-      "source_file": "server/src/models/Notification.ts",
-      "source_location": "L32",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_notification_initnotification",
-      "community": 2,
-      "community_name": "content.routes.ts",
-      "norm_label": "initnotification()"
+      "norm_label": "initacademyvideo()"
     },
     {
       "label": "isTransientDatabaseError()",
@@ -3109,78 +3145,6 @@
       "norm_label": "issameorigin()"
     },
     {
-      "label": "assertNotLastSuperAdmin()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1051",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_assertnotlastsuperadmin",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "assertnotlastsuperadmin()"
-    },
-    {
-      "label": "countSuperAdmins()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1039",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_countsuperadmins",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "countsuperadmins()"
-    },
-    {
-      "label": "getSupabase()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L47",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_getsupabase",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "getsupabase()"
-    },
-    {
-      "label": "loadSettingsMap()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L655",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_loadsettingsmap",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "loadsettingsmap()"
-    },
-    {
-      "label": "publicStudent()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L973",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_publicstudent",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "publicstudent()"
-    },
-    {
-      "label": "recordMediaRevision()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L115",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_recordmediarevision",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "recordmediarevision()"
-    },
-    {
       "label": "serializeContentBlocks()",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -3217,18 +3181,6 @@
       "norm_label": "initscholarshipregistration()"
     },
     {
-      "label": "assertAdminIdentityIsFree()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1074",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_assertadminidentityisfree",
-      "community": 32,
-      "community_name": "getListOptions",
-      "norm_label": "assertadminidentityisfree()"
-    },
-    {
       "label": "getListOptions()",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -3239,18 +3191,6 @@
       "community": 32,
       "community_name": "getListOptions",
       "norm_label": "getlistoptions()"
-    },
-    {
-      "label": "publicAdminAccount()",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1023",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_publicadminaccount",
-      "community": 32,
-      "community_name": "getListOptions",
-      "norm_label": "publicadminaccount()"
     },
     {
       "label": "sendPaginated()",
@@ -3661,6 +3601,78 @@
       "norm_label": "adminpath()"
     },
     {
+      "label": "recordMediaRevision()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L115",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_recordmediarevision",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "recordmediarevision()"
+    },
+    {
+      "label": "assertAdminIdentityIsFree()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1074",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_assertadminidentityisfree",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "assertadminidentityisfree()"
+    },
+    {
+      "label": "assertNotLastSuperAdmin()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1051",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_assertnotlastsuperadmin",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "assertnotlastsuperadmin()"
+    },
+    {
+      "label": "countSuperAdmins()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1039",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_countsuperadmins",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "countsuperadmins()"
+    },
+    {
+      "label": "publicAdminAccount()",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1023",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_publicadminaccount",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "publicadminaccount()"
+    },
+    {
+      "label": "initCourseRegistration()",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration_initcourseregistration",
+      "community": 47,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "initcourseregistration()"
+    },
+    {
       "label": "AdminDashboardPage()",
       "file_type": "code",
       "source_file": "client/src/app/admin/page.tsx",
@@ -3997,6 +4009,18 @@
       "norm_label": "uploadadminimage()"
     },
     {
+      "label": "initNewsArticle()",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L46",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle_initnewsarticle",
+      "community": 51,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "initnewsarticle()"
+    },
+    {
       "label": "initBanner()",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -4019,6 +4043,18 @@
       "community": 54,
       "community_name": "Card.tsx",
       "norm_label": "card()"
+    },
+    {
+      "label": "initNewsletterSubscriber()",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber_initnewslettersubscriber",
+      "community": 55,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "initnewslettersubscriber()"
     },
     {
       "label": "ContactClient()",
@@ -4165,18 +4201,6 @@
       "norm_label": "sectionheading()"
     },
     {
-      "label": "initAcademyVideo()",
-      "file_type": "code",
-      "source_file": "server/src/models/AcademyVideo.ts",
-      "source_location": "L40",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_academyvideo_initacademyvideo",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "initacademyvideo()"
-    },
-    {
       "label": "initAdminPasswordReset()",
       "file_type": "code",
       "source_file": "server/src/models/AdminPasswordReset.ts",
@@ -4199,54 +4223,6 @@
       "community": 6,
       "community_name": "models/index.ts",
       "norm_label": "initcourse()"
-    },
-    {
-      "label": "initCourseRegistration()",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L34",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration_initcourseregistration",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "initcourseregistration()"
-    },
-    {
-      "label": "initNewsletterSubscriber()",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L24",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber_initnewslettersubscriber",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "initnewslettersubscriber()"
-    },
-    {
-      "label": "initOtpVerification()",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L28",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_otpverification_initotpverification",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "initotpverification()"
-    },
-    {
-      "label": "initSiteSetting()",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L26",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting_initsitesetting",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "initsitesetting()"
     },
     {
       "label": "cn()",
@@ -4295,6 +4271,18 @@
       "community": 62,
       "community_name": "graphify.js",
       "norm_label": "graphifyplugin()"
+    },
+    {
+      "label": "initNotification()",
+      "file_type": "code",
+      "source_file": "server/src/models/Notification.ts",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_notification_initnotification",
+      "community": 63,
+      "community_name": "Notification",
+      "norm_label": "initnotification()"
     },
     {
       "label": "down()",
@@ -4883,6 +4871,18 @@
       "community": 8,
       "community_name": "auth.controller.ts",
       "norm_label": "sleep()"
+    },
+    {
+      "label": "initOtpVerification()",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "server_src_models_otpverification_initotpverification",
+      "community": 88,
+      "community_name": "OtpVerification.ts",
+      "norm_label": "initotpverification()"
     },
     {
       "label": "config/roles.ts",
@@ -8350,6 +8350,17 @@
       "norm_label": "utility services"
     },
     {
+      "label": "SiteSetting.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/SiteSetting.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_sitesetting",
+      "community": 163,
+      "community_name": "SiteSetting.ts",
+      "norm_label": "sitesetting.ts"
+    },
+    {
       "label": "20260901000000-repair-missing-cms-columns.js",
       "file_type": "code",
       "source_file": "server/src/database/migrations/20260901000000-repair-missing-cms-columns.js",
@@ -8359,6 +8370,83 @@
       "community": 164,
       "community_name": "20260901000000-repair-missing-cms-columns.js",
       "norm_label": "20260901000000-repair-missing-cms-columns.js"
+    },
+    {
+      "label": "getSignedUploadUrl",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L189",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_getsigneduploadurl",
+      "community": 165,
+      "community_name": "getSupabase",
+      "norm_label": "getsigneduploadurl"
+    },
+    {
+      "label": "upload",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_upload",
+      "community": 165,
+      "community_name": "getSupabase",
+      "norm_label": "upload"
+    },
+    {
+      "label": "uploadImage",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L135",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_uploadimage",
+      "community": 165,
+      "community_name": "getSupabase",
+      "norm_label": "uploadimage"
+    },
+    {
+      "label": "createUser",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L986",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_createuser",
+      "community": 166,
+      "community_name": "publicStudent",
+      "norm_label": "createuser"
+    },
+    {
+      "label": "updateUser",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L994",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updateuser",
+      "community": 166,
+      "community_name": "publicStudent",
+      "norm_label": "updateuser"
+    },
+    {
+      "label": "getSettings",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L664",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_getsettings",
+      "community": 167,
+      "community_name": "loadSettingsMap",
+      "norm_label": "getsettings"
+    },
+    {
+      "label": "updateSettings",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L669",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updatesettings",
+      "community": 167,
+      "community_name": "loadSettingsMap",
+      "norm_label": "updatesettings"
     },
     {
       "label": "gallery/page.tsx",
@@ -8845,26 +8933,15 @@
       "norm_label": "**/*.tsx"
     },
     {
-      "label": "NewsArticle.ts",
+      "label": "AcademyVideo.ts",
       "file_type": "code",
-      "source_file": "server/src/models/NewsArticle.ts",
+      "source_file": "server/src/models/AcademyVideo.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_models_newsarticle",
+      "id": "server_src_models_academyvideo",
       "community": 2,
       "community_name": "content.routes.ts",
-      "norm_label": "newsarticle.ts"
-    },
-    {
-      "label": "Notification.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/Notification.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_notification",
-      "community": 2,
-      "community_name": "content.routes.ts",
-      "norm_label": "notification.ts"
+      "norm_label": "academyvideo.ts"
     },
     {
       "label": "content.routes.ts",
@@ -8876,6 +8953,17 @@
       "community": 2,
       "community_name": "content.routes.ts",
       "norm_label": "content.routes.ts"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/v1/content.routes.ts",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "server_src_routes_v1_content_routes_router",
+      "community": 2,
+      "community_name": "content.routes.ts",
+      "norm_label": "router"
     },
     {
       "label": "databaseRead.ts",
@@ -9142,28 +9230,6 @@
       "norm_label": "corsoptions"
     },
     {
-      "label": "database.ts",
-      "file_type": "code",
-      "source_file": "server/src/config/database.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_config_database",
-      "community": 22,
-      "community_name": "seedDatabase.ts",
-      "norm_label": "database.ts"
-    },
-    {
-      "label": "dbConfig",
-      "file_type": "code",
-      "source_file": "server/src/config/database.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "server_src_config_database_dbconfig",
-      "community": 22,
-      "community_name": "seedDatabase.ts",
-      "norm_label": "dbconfig"
-    },
-    {
       "label": "environment.ts",
       "file_type": "code",
       "source_file": "server/src/config/environment.ts",
@@ -9283,6 +9349,17 @@
       "community": 22,
       "community_name": "seedDatabase.ts",
       "norm_label": "sequelize"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "server/src/routes/index.ts",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "server_src_routes_index_router",
+      "community": 22,
+      "community_name": "seedDatabase.ts",
+      "norm_label": "router"
     },
     {
       "label": "seedDatabase.ts",
@@ -10385,50 +10462,6 @@
       "norm_label": "createstarstudent"
     },
     {
-      "label": "createUser",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L986",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_createuser",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "createuser"
-    },
-    {
-      "label": "deleteAcademyVideo",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L507",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deleteacademyvideo",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deleteacademyvideo"
-    },
-    {
-      "label": "deleteAdminAccount",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1172",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deleteadminaccount",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deleteadminaccount"
-    },
-    {
-      "label": "deleteBanner",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L285",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deletebanner",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deletebanner"
-    },
-    {
       "label": "deleteContactMessage",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10473,17 +10506,6 @@
       "norm_label": "deletecourseform"
     },
     {
-      "label": "deleteNewsArticle",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L461",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deletenewsarticle",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deletenewsarticle"
-    },
-    {
       "label": "deleteNotification",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10495,17 +10517,6 @@
       "norm_label": "deletenotification"
     },
     {
-      "label": "deleteResult",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L415",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deleteresult",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deleteresult"
-    },
-    {
       "label": "deleteScholarshipForm",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10515,17 +10526,6 @@
       "community": 3,
       "community_name": "admin.controller.ts",
       "norm_label": "deletescholarshipform"
-    },
-    {
-      "label": "deleteStarStudent",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L358",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_deletestarstudent",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "deletestarstudent"
     },
     {
       "label": "deleteUser",
@@ -10627,28 +10627,6 @@
       "norm_label": "getresults"
     },
     {
-      "label": "getSettings",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L664",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_getsettings",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "getsettings"
-    },
-    {
-      "label": "getSignedUploadUrl",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L189",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_getsigneduploadurl",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "getsigneduploadurl"
-    },
-    {
       "label": "getStarStudents",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10704,28 +10682,6 @@
       "norm_label": "storage"
     },
     {
-      "label": "updateAcademyVideo",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L493",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updateacademyvideo",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updateacademyvideo"
-    },
-    {
-      "label": "updateBanner",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L271",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updatebanner",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updatebanner"
-    },
-    {
       "label": "updateContactMessage",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10770,17 +10726,6 @@
       "norm_label": "updatecourseform"
     },
     {
-      "label": "updateNewsArticle",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L447",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updatenewsarticle",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updatenewsarticle"
-    },
-    {
       "label": "updateNotification",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10792,17 +10737,6 @@
       "norm_label": "updatenotification"
     },
     {
-      "label": "updateResult",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L401",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updateresult",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updateresult"
-    },
-    {
       "label": "updateScholarshipForm",
       "file_type": "code",
       "source_file": "server/src/controllers/admin.controller.ts",
@@ -10812,61 +10746,6 @@
       "community": 3,
       "community_name": "admin.controller.ts",
       "norm_label": "updatescholarshipform"
-    },
-    {
-      "label": "updateSettings",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L669",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updatesettings",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updatesettings"
-    },
-    {
-      "label": "updateStarStudent",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L344",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updatestarstudent",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updatestarstudent"
-    },
-    {
-      "label": "updateUser",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L994",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updateuser",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "updateuser"
-    },
-    {
-      "label": "upload",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_upload",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "upload"
-    },
-    {
-      "label": "uploadImage",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L135",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_uploadimage",
-      "community": 3,
-      "community_name": "admin.controller.ts",
-      "norm_label": "uploadimage"
     },
     {
       "label": "User.ts",
@@ -10889,28 +10768,6 @@
       "community": 31,
       "community_name": "ScholarshipRegistration.ts",
       "norm_label": "scholarshipregistration.ts"
-    },
-    {
-      "label": "createAdminAccount",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1121",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_createadminaccount",
-      "community": 32,
-      "community_name": "getListOptions",
-      "norm_label": "createadminaccount"
-    },
-    {
-      "label": "getAdminAccounts",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1102",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_getadminaccounts",
-      "community": 32,
-      "community_name": "getListOptions",
-      "norm_label": "getadminaccounts"
     },
     {
       "label": "getContactMessages",
@@ -10977,17 +10834,6 @@
       "community": 32,
       "community_name": "getListOptions",
       "norm_label": "searchleads"
-    },
-    {
-      "label": "updateAdminAccount",
-      "file_type": "code",
-      "source_file": "server/src/controllers/admin.controller.ts",
-      "source_location": "L1143",
-      "_origin": "ast",
-      "id": "server_src_controllers_admin_controller_updateadminaccount",
-      "community": 32,
-      "community_name": "getListOptions",
-      "norm_label": "updateadminaccount"
     },
     {
       "label": "20260903000000-create-newsletter-subscribers.js",
@@ -11661,6 +11507,160 @@
       "norm_label": "server (`server/.env`)"
     },
     {
+      "label": "deleteAcademyVideo",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L507",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deleteacademyvideo",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "deleteacademyvideo"
+    },
+    {
+      "label": "deleteBanner",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L285",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deletebanner",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "deletebanner"
+    },
+    {
+      "label": "deleteNewsArticle",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L461",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deletenewsarticle",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "deletenewsarticle"
+    },
+    {
+      "label": "deleteResult",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L415",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deleteresult",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "deleteresult"
+    },
+    {
+      "label": "deleteStarStudent",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L358",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deletestarstudent",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "deletestarstudent"
+    },
+    {
+      "label": "updateAcademyVideo",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L493",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updateacademyvideo",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "updateacademyvideo"
+    },
+    {
+      "label": "updateBanner",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L271",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updatebanner",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "updatebanner"
+    },
+    {
+      "label": "updateNewsArticle",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L447",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updatenewsarticle",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "updatenewsarticle"
+    },
+    {
+      "label": "updateResult",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L401",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updateresult",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "updateresult"
+    },
+    {
+      "label": "updateStarStudent",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L344",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updatestarstudent",
+      "community": 44,
+      "community_name": "recordMediaRevision",
+      "norm_label": "updatestarstudent"
+    },
+    {
+      "label": "createAdminAccount",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1121",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_createadminaccount",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "createadminaccount"
+    },
+    {
+      "label": "deleteAdminAccount",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1172",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_deleteadminaccount",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "deleteadminaccount"
+    },
+    {
+      "label": "getAdminAccounts",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1102",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_getadminaccounts",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "getadminaccounts"
+    },
+    {
+      "label": "updateAdminAccount",
+      "file_type": "code",
+      "source_file": "server/src/controllers/admin.controller.ts",
+      "source_location": "L1143",
+      "_origin": "ast",
+      "id": "server_src_controllers_admin_controller_updateadminaccount",
+      "community": 45,
+      "community_name": "assertNotLastSuperAdmin",
+      "norm_label": "updateadminaccount"
+    },
+    {
       "label": "Master_README.md",
       "file_type": "document",
       "source_file": "Master_README.md",
@@ -11791,6 +11791,17 @@
       "community": 46,
       "community_name": "\ud83c\udfc6 Success Code Academy \u2014 Master Project Documentation",
       "norm_label": "target audience"
+    },
+    {
+      "label": "CourseRegistration.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/CourseRegistration.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_courseregistration",
+      "community": 47,
+      "community_name": "CourseRegistration.ts",
+      "norm_label": "courseregistration.ts"
     },
     {
       "label": "admin/page.tsx",
@@ -12387,6 +12398,17 @@
       "norm_label": "api.ts"
     },
     {
+      "label": "NewsArticle.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsArticle.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_newsarticle",
+      "community": 51,
+      "community_name": "NewsArticle.ts",
+      "norm_label": "newsarticle.ts"
+    },
+    {
       "label": "Banner.ts",
       "file_type": "code",
       "source_file": "server/src/models/Banner.ts",
@@ -12473,6 +12495,17 @@
       "community": 54,
       "community_name": "Card.tsx",
       "norm_label": "paddingclasses"
+    },
+    {
+      "label": "NewsletterSubscriber.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/NewsletterSubscriber.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_newslettersubscriber",
+      "community": 55,
+      "community_name": "NewsletterSubscriber.ts",
+      "norm_label": "newslettersubscriber.ts"
     },
     {
       "label": "ContactClient.tsx",
@@ -12629,15 +12662,26 @@
       "norm_label": "sectionheading.tsx"
     },
     {
-      "label": "AcademyVideo.ts",
+      "label": "database.ts",
       "file_type": "code",
-      "source_file": "server/src/models/AcademyVideo.ts",
+      "source_file": "server/src/config/database.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "server_src_models_academyvideo",
+      "id": "server_src_config_database",
       "community": 6,
       "community_name": "models/index.ts",
-      "norm_label": "academyvideo.ts"
+      "norm_label": "database.ts"
+    },
+    {
+      "label": "dbConfig",
+      "file_type": "code",
+      "source_file": "server/src/config/database.ts",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "server_src_config_database_dbconfig",
+      "community": 6,
+      "community_name": "models/index.ts",
+      "norm_label": "dbconfig"
     },
     {
       "label": "AdminPasswordReset.ts",
@@ -12662,17 +12706,6 @@
       "norm_label": "course.ts"
     },
     {
-      "label": "CourseRegistration.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/CourseRegistration.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_courseregistration",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "courseregistration.ts"
-    },
-    {
       "label": "models/index.ts",
       "file_type": "code",
       "source_file": "server/src/models/index.ts",
@@ -12682,39 +12715,6 @@
       "community": 6,
       "community_name": "models/index.ts",
       "norm_label": "models/index.ts"
-    },
-    {
-      "label": "NewsletterSubscriber.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/NewsletterSubscriber.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_newslettersubscriber",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "newslettersubscriber.ts"
-    },
-    {
-      "label": "OtpVerification.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/OtpVerification.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_otpverification",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "otpverification.ts"
-    },
-    {
-      "label": "SiteSetting.ts",
-      "file_type": "code",
-      "source_file": "server/src/models/SiteSetting.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "server_src_models_sitesetting",
-      "community": 6,
-      "community_name": "models/index.ts",
-      "norm_label": "sitesetting.ts"
     },
     {
       "label": "utils.ts",
@@ -12770,6 +12770,17 @@
       "community": 62,
       "community_name": "graphify.js",
       "norm_label": "important: keep the reminder string free of backticks and $(...) constructs."
+    },
+    {
+      "label": "Notification.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/Notification.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_notification",
+      "community": 63,
+      "community_name": "Notification",
+      "norm_label": "notification.ts"
     },
     {
       "label": "5. Frontend \u2014 `client/`",
@@ -13566,17 +13577,6 @@
     {
       "label": "router",
       "file_type": "code",
-      "source_file": "server/src/routes/index.ts",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "server_src_routes_index_router",
-      "community": 8,
-      "community_name": "auth.controller.ts",
-      "norm_label": "router"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
       "source_file": "server/src/routes/v1/admin.routes.ts",
       "source_location": "L45",
       "_origin": "ast",
@@ -13683,17 +13683,6 @@
       "community": 8,
       "community_name": "auth.controller.ts",
       "norm_label": "verifyotpschema"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "server/src/routes/v1/content.routes.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "server_src_routes_v1_content_routes_router",
-      "community": 8,
-      "community_name": "auth.controller.ts",
-      "norm_label": "router"
     },
     {
       "label": "form.routes.ts",
@@ -14431,6 +14420,17 @@
       "community": 87,
       "community_name": "check.js",
       "norm_label": "{ sequelize }"
+    },
+    {
+      "label": "OtpVerification.ts",
+      "file_type": "code",
+      "source_file": "server/src/models/OtpVerification.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_src_models_otpverification",
+      "community": 88,
+      "community_name": "OtpVerification.ts",
+      "norm_label": "otpverification.ts"
     },
     {
       "label": "client/README.md",
@@ -15279,7 +15279,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/app/admin/layout.tsx",
-      "source_location": "L223",
+      "source_location": "L259",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_admin_layout_adminlayout",
@@ -15291,11 +15291,23 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/app/admin/layout.tsx",
-      "source_location": "L283",
+      "source_location": "L319",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_app_admin_layout_adminlayout",
       "target": "client_src_lib_roles_issuperadminrole"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "client/src/app/admin/layout.tsx",
+      "source_location": "L336",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "client_src_app_admin_layout_adminlayout",
+      "target": "client_src_lib_roles_adminrolelabel"
     },
     {
       "relation": "calls",
@@ -16347,7 +16359,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/src/components/layout/Header.tsx",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "client_src_components_layout_header_header",
@@ -39906,5 +39918,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cebb02b23213d05c675398620e7b7b1f682a54a5"
+  "built_at_commit": "656c1ddcddff35a34ab59f01976e0a093cdabc4a"
 }

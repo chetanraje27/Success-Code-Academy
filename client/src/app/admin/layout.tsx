@@ -159,10 +159,11 @@ export default function AdminLayout({
     return () => root.removeAttribute("data-admin-theme");
   }, []);
 
-  const toggleTheme = useCallback(() => {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  const setThemeMode = useCallback((next: AdminTheme) => {
     const root = document.documentElement;
-    const next: AdminTheme =
-      root.getAttribute("data-admin-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-admin-theme", next);
     setTheme(next);
     try {
@@ -171,6 +172,40 @@ export default function AdminLayout({
       /* Private mode blocks writes; the theme still applies for this session. */
     }
   }, []);
+
+  const toggleTheme = useCallback(() => {
+    const root = document.documentElement;
+    const next: AdminTheme =
+      root.getAttribute("data-admin-theme") === "dark" ? "light" : "dark";
+    setThemeMode(next);
+  }, [setThemeMode]);
+
+  useEffect(() => {
+    if (!isProfileOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isProfileOpen]);
+
+  useEffect(() => {
+    setIsProfileOpen(false);
+  }, [pathname]);
 
   const showTooltip = (label: string, element: HTMLElement) => {
     if (!isSidebarCollapsed) return;
@@ -282,6 +317,24 @@ export default function AdminLayout({
   const currentPageTitle = currentNavItem?.label || "Dashboard";
 
   const isSuperAdmin = isSuperAdminRole(user?.role);
+
+  const userDisplayName = useMemo(() => {
+    if (user?.firstName) {
+      return `${user.firstName}${user.lastName ? ` ${user.lastName}` : ""}`.trim();
+    }
+    if (user?.email) {
+      return user.email.split("@")[0];
+    }
+    return "Administrator";
+  }, [user]);
+
+  const userInitial = useMemo(() => {
+    return (user?.firstName?.[0] || user?.email?.[0] || "A").toUpperCase();
+  }, [user]);
+
+  const userRoleLabel = useMemo(() => {
+    return adminRoleLabel(user?.role);
+  }, [user?.role]);
 
   const visibleNavigation = useMemo(
     () =>
@@ -472,29 +525,110 @@ export default function AdminLayout({
             </div>
           </div>
           <div className="admin-topbar-actions">
-            {/*
-              Both icons are always in the DOM and CSS shows one based on the
-              <html> attribute, so the correct glyph paints immediately instead
-              of flipping once React hydrates.
-            */}
-            <button
-              type="button"
-              className="admin-theme-toggle"
-              onClick={toggleTheme}
-              aria-label={
-                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-              }
-              title={
-                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-              }
-            >
-              <Moon size={17} className="admin-theme-icon-dark" aria-hidden="true" />
-              <Sun size={17} className="admin-theme-icon-light" aria-hidden="true" />
-            </button>
-            <button className="admin-logout-button" onClick={handleLogout} disabled={isLoggingOut}>
-              <LogOut size={17} />
-              <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
-            </button>
+            <div className="admin-profile-container" ref={profileMenuRef}>
+              <button
+                type="button"
+                className={`admin-profile-trigger ${isProfileOpen ? "is-active" : ""}`}
+                onClick={() => setIsProfileOpen((prev) => !prev)}
+                aria-expanded={isProfileOpen}
+                aria-haspopup="true"
+                aria-label="User profile and settings"
+              >
+                <span className="admin-profile-trigger-avatar" aria-hidden="true">
+                  {userInitial}
+                </span>
+                <span className="admin-profile-trigger-name">
+                  {userDisplayName}
+                </span>
+                <ChevronDown
+                  size={14}
+                  className={`admin-profile-trigger-chevron ${isProfileOpen ? "is-open" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {isProfileOpen && (
+                <div className="admin-profile-dropdown" role="menu" aria-label="User profile menu">
+                  <div className="admin-profile-header">
+                    <div className="admin-profile-header-avatar" aria-hidden="true">
+                      {userInitial}
+                    </div>
+                    <div className="admin-profile-header-meta">
+                      <strong className="admin-profile-name">{userDisplayName}</strong>
+                      <span className="admin-profile-email">{user?.email || "No email provided"}</span>
+                      <div className="admin-profile-badges">
+                        <span className="admin-profile-role-badge">
+                          <ShieldCheck size={11} aria-hidden="true" />
+                          <span>{userRoleLabel}</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="admin-profile-divider" />
+
+                  <div className="admin-profile-section">
+                    <div className="admin-profile-section-row">
+                      <span className="admin-profile-section-title">Theme</span>
+                      <div className="admin-profile-segmented" role="radiogroup" aria-label="Theme selection">
+                        <button
+                          type="button"
+                          className={`admin-profile-segment-btn ${theme === "light" ? "is-active" : ""}`}
+                          onClick={() => setThemeMode("light")}
+                          role="radio"
+                          aria-checked={theme === "light"}
+                          title="Switch to light theme"
+                        >
+                          <Sun size={13} aria-hidden="true" />
+                          <span>Light</span>
+                        </button>
+                        <button
+                          type="button"
+                          className={`admin-profile-segment-btn ${theme === "dark" ? "is-active" : ""}`}
+                          onClick={() => setThemeMode("dark")}
+                          role="radio"
+                          aria-checked={theme === "dark"}
+                          title="Switch to dark theme"
+                        >
+                          <Moon size={13} aria-hidden="true" />
+                          <span>Dark</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="admin-profile-divider" />
+
+                  <div className="admin-profile-links">
+                    <Link
+                      href="/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="admin-profile-link-item"
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      <Globe2 size={15} className="admin-profile-link-icon" aria-hidden="true" />
+                      <span>View live website</span>
+                      <ExternalLink size={12} className="admin-profile-link-ext" aria-hidden="true" />
+                    </Link>
+                  </div>
+
+                  <div className="admin-profile-divider" />
+
+                  <div className="admin-profile-footer">
+                    <button
+                      type="button"
+                      className="admin-profile-logout-btn"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                    >
+                      <LogOut size={15} aria-hidden="true" />
+                      <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </header>
         <main className="admin-content">{children}</main>

@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
 import { AdminNotice } from "@/components/admin/AdminUi";
+import { useToast } from "@/components/admin/Toast";
 
 type TokenState = "checking" | "valid" | "invalid" | "missing";
 
 export default function AdminResetPasswordPage() {
   const router = useRouter();
+  const toast = useToast();
   const [token, setToken] = useState("");
   const [tokenState, setTokenState] = useState<TokenState>("checking");
   const [password, setPassword] = useState("");
@@ -83,13 +85,15 @@ export default function AdminResetPasswordPage() {
       if (!response.ok) {
         throw new Error(payload.message || "Unable to update your password.");
       }
+      toast.success("Password updated successfully! Please sign in.");
       setDone(true);
     } catch (caught) {
-      setError(
+      const msg =
         caught instanceof Error
           ? caught.message
-          : "Unable to update your password. Please try again.",
-      );
+          : "Unable to update your password. Please try again.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }

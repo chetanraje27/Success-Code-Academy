@@ -291,9 +291,9 @@ export default function AdminDashboardPage() {
               <Users size={14} />
             </div>
           </div>
-          <strong className="admin-dash-kpi-val">
+          <span className="admin-dash-kpi-val">
             {stats ? formatNumber(stats.totalStudents) : "—"}
-          </strong>
+          </span>
           <span className="admin-dash-kpi-desc">Registered portal accounts</span>
         </Link>
 
@@ -305,9 +305,9 @@ export default function AdminDashboardPage() {
               <ClipboardList size={14} />
             </div>
           </div>
-          <strong className="admin-dash-kpi-val">
+          <span className="admin-dash-kpi-val">
             {stats ? formatNumber(stats.totalCourseForms) : "—"}
-          </strong>
+          </span>
           <span className="admin-dash-kpi-desc">Admissions enquiry forms</span>
         </Link>
 
@@ -319,9 +319,9 @@ export default function AdminDashboardPage() {
               <GraduationCap size={14} />
             </div>
           </div>
-          <strong className="admin-dash-kpi-val">
+          <span className="admin-dash-kpi-val">
             {stats ? formatNumber(stats.totalScholarshipForms) : "—"}
-          </strong>
+          </span>
           <span className="admin-dash-kpi-desc">Entrance test candidates</span>
         </Link>
 
@@ -333,9 +333,9 @@ export default function AdminDashboardPage() {
               <MessageSquareText size={14} />
             </div>
           </div>
-          <strong className="admin-dash-kpi-val">
+          <span className="admin-dash-kpi-val">
             {stats ? formatNumber(stats.totalContactMessages) : "—"}
-          </strong>
+          </span>
           <span className="admin-dash-kpi-desc">Website contact messages</span>
         </Link>
 
@@ -347,9 +347,9 @@ export default function AdminDashboardPage() {
               <BookOpen size={14} />
             </div>
           </div>
-          <strong className="admin-dash-kpi-val">
+          <span className="admin-dash-kpi-val">
             {stats ? formatNumber(stats.totalCourses) : "—"}
-          </strong>
+          </span>
           <span className="admin-dash-kpi-desc">Active published programs</span>
         </Link>
       </section>

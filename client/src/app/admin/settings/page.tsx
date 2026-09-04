@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { KeyRound, Save } from "lucide-react";
+import { CheckCircle2, Clock, KeyRound, Mail, RefreshCw, Save, Send } from "lucide-react";
 import { adminApiFetch, AdminApiError } from "@/lib/admin-api";
+import { useAdminSession } from "@/components/admin/AdminSessionContext";
+import { useToast } from "@/components/admin/Toast";
 import {
   AdminLoadingState,
   AdminNotice,
@@ -36,12 +38,13 @@ export default function AdminSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [passwords, setPasswords] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-  const [passwordSaving, setPasswordSaving] = useState(false);
+  const { user } = useAdminSession();
+  const toast = useToast();
+
+  const [resetSending, setResetSending] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
     adminApiFetch<Record<string, string>>("settings")
@@ -72,6 +75,7 @@ export default function AdminSettingsPage() {
         body: JSON.stringify(settings),
       });
       setMessage("Website contact and social details were saved.");
+      toast.success("Website contact and social details were saved.");
       window.dispatchEvent(new Event("admin-content-changed"));
     } catch (caught) {
       if (caught instanceof AdminApiError && caught.fields.length > 0) {
@@ -86,46 +90,42 @@ export default function AdminSettingsPage() {
     }
   }
 
-  async function changePassword(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError("");
-    setMessage("");
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      setError("The new password and confirmation do not match.");
-      return;
-    }
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
-    setPasswordSaving(true);
+  async function handleSendResetLink() {
+    if (cooldown > 0 || resetSending) return;
+    setResetSending(true);
+    setError("");
+
     try {
-      const response = await fetch("/api/admin/session", {
-        method: "PUT",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentPassword: passwords.currentPassword,
-          newPassword: passwords.newPassword,
-        }),
+      const response = await adminApiFetch<{
+        emailed: boolean;
+        email: string;
+        ttlMinutes: number;
+        resetUrl?: string;
+      }>("request-password-reset", {
+        method: "POST",
       });
-      const payload = (await response.json()) as {
-        message?: string;
-        errors?: Array<{ message: string }>;
-      };
-      if (!response.ok) {
-        throw new Error(
-          payload.errors?.map((item) => item.message).join(" ") ||
-            payload.message ||
-            "Unable to change the password.",
-        );
-      }
-      router.replace("/admin/login");
+
+      const emailAddress = response.data?.email || user?.email || "your email address";
+      setResetEmail(emailAddress);
+      setResetSent(true);
+      setCooldown(60);
+
+      toast.success(`Password reset link sent to ${emailAddress}.`);
     } catch (caught) {
-      setError(
-        caught instanceof Error
-          ? caught.message
-          : "Unable to change the password.",
-      );
+      const errMsg =
+        caught instanceof Error ? caught.message : "Unable to send password reset link.";
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
-      setPasswordSaving(false);
+      setResetSending(false);
     }
   }
 
@@ -262,81 +262,71 @@ export default function AdminSettingsPage() {
       <section className="admin-card">
         <header className="admin-card-header">
           <div>
-            <h2>Admin password</h2>
+            <h2>Password &amp; Security</h2>
             <p>
-              Changing the password signs this browser out immediately.
+              Request a secure, single-use link to reset your administrator password.
             </p>
           </div>
           <KeyRound size={20} aria-hidden="true" />
         </header>
         <div className="admin-card-body">
-          <form className="admin-form" onSubmit={changePassword}>
-            <div className="admin-form-grid">
-              <div className="admin-field full">
-                <label htmlFor="current-password">Current password</label>
-                <input
-                  id="current-password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={passwords.currentPassword}
-                  onChange={(event) =>
-                    setPasswords((current) => ({
-                      ...current,
-                      currentPassword: event.target.value,
-                    }))
-                  }
-                  required
-                />
+          <div className="admin-reset-box">
+            <div className="admin-reset-info">
+              <div className="admin-reset-icon" aria-hidden="true">
+                <Mail size={18} />
               </div>
-              <div className="admin-field">
-                <label htmlFor="new-password">New password</label>
-                <input
-                  id="new-password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={passwords.newPassword}
-                  onChange={(event) =>
-                    setPasswords((current) => ({
-                      ...current,
-                      newPassword: event.target.value,
-                    }))
-                  }
-                  minLength={12}
-                  required
-                />
-                <small>
-                  At least 12 characters with uppercase, lowercase, number, and
-                  symbol.
-                </small>
-              </div>
-              <div className="admin-field">
-                <label htmlFor="confirm-password">Confirm new password</label>
-                <input
-                  id="confirm-password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={passwords.confirmPassword}
-                  onChange={(event) =>
-                    setPasswords((current) => ({
-                      ...current,
-                      confirmPassword: event.target.value,
-                    }))
-                  }
-                  minLength={12}
-                  required
-                />
+              <div className="admin-reset-meta">
+                <span className="admin-reset-meta-label">Signed-in Account</span>
+                <span className="admin-reset-meta-email">{user?.email || "Administrator"}</span>
+                <p className="admin-reset-meta-desc">
+                  Password updates are handled securely through an email verification link sent directly to your registered inbox. Links expire automatically in 60 minutes.
+                </p>
               </div>
             </div>
-            <div className="admin-form-actions">
+
+            {resetSent && (
+              <div className="admin-reset-status-card">
+                <CheckCircle2 size={16} className="admin-reset-status-icon" />
+                <div className="admin-reset-status-content">
+                  <p className="admin-reset-status-title">Reset link dispatched</p>
+                  <p className="admin-reset-status-desc">
+                    A password reset email has been sent to <strong>{resetEmail}</strong>. Please check your inbox and follow the link to choose your new password.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="admin-reset-actions">
               <button
-                className="admin-button secondary"
-                type="submit"
-                disabled={passwordSaving}
+                type="button"
+                className="admin-button"
+                onClick={handleSendResetLink}
+                disabled={resetSending || cooldown > 0}
               >
-                {passwordSaving ? "Changing…" : "Change password"}
+                {resetSending ? (
+                  <>
+                    <span className="admin-spinner" aria-hidden="true" />
+                    Sending reset link...
+                  </>
+                ) : cooldown > 0 ? (
+                  <>
+                    <Clock size={15} aria-hidden="true" />
+                    Resend link in {cooldown}s
+                  </>
+                ) : resetSent ? (
+                  <>
+                    <RefreshCw size={15} aria-hidden="true" />
+                    Resend password reset link
+                  </>
+                ) : (
+                  <>
+                    <Send size={15} aria-hidden="true" />
+                    Send password reset link
+                  </>
+                )}
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </section>
     </div>

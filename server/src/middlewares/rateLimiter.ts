@@ -52,3 +52,21 @@ export const adminLoginLimiter = rateLimit({
     errors: [],
   },
 });
+
+/**
+ * Password reset request limiter.
+ * Restricts reset emails to max 5 attempts per 15 minutes per IP to avoid inbox flooding.
+ */
+export const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 'fail',
+    statusCode: 429,
+    message: 'Too many password reset requests. Please wait 15 minutes before trying again.',
+    errors: [],
+  },
+});
+

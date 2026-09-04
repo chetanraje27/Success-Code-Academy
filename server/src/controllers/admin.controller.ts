@@ -37,6 +37,7 @@ import { adminPasswordResetEmail, contactFormStaffAlert } from '../utils/emailTe
 import {
   buildResetUrl,
   issueAdminPasswordReset,
+  checkResetCooldown,
 } from '../utils/adminPasswordReset';
 import multer from 'multer';
 import { createClient } from '@supabase/supabase-js';
@@ -1292,6 +1293,58 @@ export const sendAdminPasswordReset = asyncHandler(
         resetUrl,
         expiresAt,
         ttlMinutes,
+      },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/admin/request-password-reset
+ *
+ * Lets the signed-in administrator request a password reset email for their own account from Settings.
+ */
+export const requestSelfPasswordReset = asyncHandler(
+  async (req: Request, res: Response) => {
+    const admin = await Admin.findByPk(req.user?.id);
+    if (!admin) throw new AppError('Administrator not found', 404);
+
+    await checkResetCooldown(admin.id, 60);
+
+    const { rawToken, expiresAt, ttlMinutes } = await issueAdminPasswordReset({
+      adminId: admin.id,
+      requestedByAdminId: admin.id,
+    });
+    const resetUrl = buildResetUrl(rawToken);
+
+    const template = adminPasswordResetEmail({
+      name: admin.name || 'Administrator',
+      resetUrl,
+      ttlMinutes,
+    });
+    const mail = await sendMail({
+      to: admin.email,
+      subject: 'Reset your Success Code Academy admin password',
+      text: template.text,
+      html: template.html,
+    });
+
+    logger.info('[Admin] Self-requested password reset link', {
+      adminId: admin.id,
+      email: admin.email,
+      delivered: mail.delivered,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: mail.delivered
+        ? `A reset link was emailed to ${admin.email}.`
+        : 'A reset link was created.',
+      data: {
+        emailed: mail.delivered,
+        email: admin.email,
+        ttlMinutes,
+        expiresAt,
+        ...(process.env.NODE_ENV !== 'production' && !mail.delivered ? { resetUrl } : {}),
       },
     });
   },

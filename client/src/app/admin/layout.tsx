@@ -554,7 +554,7 @@ export default function AdminLayout({
                       {userInitial}
                     </div>
                     <div className="admin-profile-header-meta">
-                      <strong className="admin-profile-name">{userDisplayName}</strong>
+                      <span className="admin-profile-name">{userDisplayName}</span>
                       <span className="admin-profile-email">{user?.email || "No email provided"}</span>
                       <div className="admin-profile-badges">
                         <span className="admin-profile-role-badge">

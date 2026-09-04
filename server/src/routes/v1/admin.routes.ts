@@ -4,6 +4,7 @@ import { authenticate } from '../../middlewares/authenticate';
 import { authorize } from '../../middlewares/authorize';
 import { validate } from '../../middlewares/validate';
 import { ADMIN_ROLES, SUPER_ADMIN } from '../../config/roles';
+import { passwordResetLimiter } from '../../middlewares/rateLimiter';
 import {
   adminListQuerySchema,
   bannerCreateSchema,
@@ -327,6 +328,11 @@ router.post(
   superAdminOnly,
   validate(idParamsSchema, 'params'),
   adminController.sendAdminPasswordReset,
+);
+router.post(
+  '/request-password-reset',
+  passwordResetLimiter,
+  adminController.requestSelfPasswordReset,
 );
 
 router.post('/database/course-forms', superAdminOnly, validate(adminCreateCourseFormSchema), adminController.createCourseForm);

@@ -4,7 +4,21 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Globe2, LayoutGrid, Lock, LogIn, Mail, MessageSquareText } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Clock,
+  Eye,
+  EyeOff,
+  Globe2,
+  LayoutGrid,
+  Lock,
+  LogIn,
+  Mail,
+  MessageSquareText,
+  RefreshCw,
+  Send,
+} from "lucide-react";
 import { isAdminRole } from "@/lib/roles";
 import { useToast } from "@/components/admin/Toast";
 
@@ -17,11 +31,26 @@ type LoginFailure = {
 export default function AdminLoginPage() {
   const router = useRouter();
   const toast = useToast();
+  const [mode, setMode] = useState<"login" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  // Forgot password states
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotSubmitting, setForgotSubmitting] = useState(false);
+  const [forgotSuccess, setForgotSuccess] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   useEffect(() => {
     fetch("/api/admin/session", { cache: "no-store" })
@@ -65,6 +94,45 @@ export default function AdminLoginPage() {
           : "Unable to sign in. Please try again.",
       );
       setSubmitting(false); // Only clear on error
+    }
+  }
+
+  async function handleForgotSubmit(event?: React.FormEvent<HTMLFormElement>) {
+    if (event) event.preventDefault();
+    if (cooldown > 0 || forgotSubmitting) return;
+
+    const targetEmail = forgotEmail.trim().toLowerCase();
+    if (!targetEmail || !targetEmail.includes("@")) {
+      toast.error("Please enter a valid administrator email address.");
+      return;
+    }
+
+    setForgotSubmitting(true);
+    try {
+      const response = await fetch("/api/public/auth/admin/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: targetEmail }),
+      });
+
+      const payload = (await response.json().catch(() => ({}))) as {
+        status?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.message || "Unable to send reset link.");
+      }
+
+      setForgotSuccess(true);
+      setCooldown(60);
+      toast.success(`Password reset link sent to ${targetEmail}.`);
+    } catch (caught) {
+      const errMsg =
+        caught instanceof Error ? caught.message : "Unable to send reset link.";
+      toast.error(errMsg);
+    } finally {
+      setForgotSubmitting(false);
     }
   }
 
@@ -124,71 +192,183 @@ export default function AdminLoginPage() {
               />
             </div>
 
-            <p className="app-login-frame-label">Admin sign in</p>
-            <form className="app-login-form" onSubmit={handleSubmit} noValidate>
-              <div className="app-login-field">
-                <label className="sr-only" htmlFor="admin-email">Email address</label>
-                <div className="app-login-control">
-                  <Mail size={15} className="app-login-control-icon" aria-hidden="true" />
-                  <input
-                    id="admin-email"
-                    type="email"
-                    autoComplete="username"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="Email address"
-                    required
-                  />
-                </div>
-              </div>
+            {mode === "login" ? (
+              <>
+                <p className="app-login-frame-label">Admin sign in</p>
+                <form className="app-login-form" onSubmit={handleSubmit} noValidate>
+                  <div className="app-login-field">
+                    <label className="sr-only" htmlFor="admin-email">Email address</label>
+                    <div className="app-login-control">
+                      <Mail size={15} className="app-login-control-icon" aria-hidden="true" />
+                      <input
+                        id="admin-email"
+                        type="email"
+                        autoComplete="username"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="Email address"
+                        required
+                      />
+                    </div>
+                  </div>
 
-              <div className="app-login-field">
-                <label className="sr-only" htmlFor="admin-password">Password</label>
-                <div className="app-login-control">
-                  <Lock size={15} className="app-login-control-icon" aria-hidden="true" />
-                  <input
-                    id="admin-password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Password"
-                    required
-                  />
+                  <div className="app-login-field">
+                    <label className="sr-only" htmlFor="admin-password">Password</label>
+                    <div className="app-login-control">
+                      <Lock size={15} className="app-login-control-icon" aria-hidden="true" />
+                      <input
+                        id="admin-password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        placeholder="Password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="app-login-password-toggle"
+                        onClick={() => setShowPassword((open) => !open)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-pressed={showPassword}
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="app-login-forgot-row">
+                    <button
+                      type="button"
+                      className="app-login-forgot-link"
+                      onClick={() => {
+                        setMode("forgot");
+                        setForgotEmail(email);
+                        setForgotSuccess(false);
+                      }}
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+
                   <button
-                    type="button"
-                    className="app-login-password-toggle"
-                    onClick={() => setShowPassword((open) => !open)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                    aria-pressed={showPassword}
+                    className="app-login-submit"
+                    type="submit"
+                    disabled={submitting}
                   >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {submitting ? (
+                      <>
+                        <span className="app-login-spinner" aria-hidden="true" />
+                        Signing in
+                      </>
+                    ) : (
+                      <>
+                        Sign in
+                        <LogIn size={15} />
+                      </>
+                    )}
                   </button>
-                </div>
-              </div>
+                </form>
 
-              <button
-                className="app-login-submit"
-                type="submit"
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <>
-                    <span className="app-login-spinner" aria-hidden="true" />
-                    Signing in
-                  </>
-                ) : (
-                  <>
-                    Sign in
-                    <LogIn size={15} />
-                  </>
-                )}
-              </button>
-            </form>
+                <Link href="/" className="app-login-back">
+                  Return to the website
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="app-login-frame-label">Reset your password</p>
+                <p className="app-login-frame-desc">
+                  Enter your administrator email address. We&apos;ll send you a secure link to choose a new password.
+                </p>
 
-            <Link href="/" className="app-login-back">
-              Return to the website
-            </Link>
+                <form className="app-login-form" onSubmit={handleForgotSubmit} noValidate>
+                  <div className="app-login-field">
+                    <label className="sr-only" htmlFor="forgot-email">Email address</label>
+                    <div className="app-login-control">
+                      <Mail size={15} className="app-login-control-icon" aria-hidden="true" />
+                      <input
+                        id="forgot-email"
+                        type="email"
+                        autoComplete="email"
+                        value={forgotEmail}
+                        onChange={(event) => setForgotEmail(event.target.value)}
+                        placeholder="Administrator email address"
+                        required
+                        disabled={forgotSubmitting || forgotSuccess}
+                      />
+                    </div>
+                  </div>
+
+                  {forgotSuccess && (
+                    <div className="app-login-success-box">
+                      <div className="app-login-success-header">
+                        <CheckCircle2 size={16} className="app-login-success-icon" />
+                        <span>Link sent</span>
+                      </div>
+                      <p>
+                        A password reset link was sent to <strong>{forgotEmail}</strong>. It expires automatically in 60 minutes.
+                      </p>
+                    </div>
+                  )}
+
+                  {forgotSuccess ? (
+                    <button
+                      type="button"
+                      className="app-login-submit secondary"
+                      onClick={() => handleForgotSubmit()}
+                      disabled={forgotSubmitting || cooldown > 0}
+                    >
+                      {forgotSubmitting ? (
+                        <>
+                          <span className="app-login-spinner" aria-hidden="true" />
+                          Sending link...
+                        </>
+                      ) : cooldown > 0 ? (
+                        <>
+                          <Clock size={14} aria-hidden="true" />
+                          Resend link in {cooldown}s
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw size={14} aria-hidden="true" />
+                          Resend reset link
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      className="app-login-submit"
+                      type="submit"
+                      disabled={forgotSubmitting || cooldown > 0}
+                    >
+                      {forgotSubmitting ? (
+                        <>
+                          <span className="app-login-spinner" aria-hidden="true" />
+                          Sending link...
+                        </>
+                      ) : (
+                        <>
+                          Send reset link
+                          <Send size={15} />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </form>
+
+                <button
+                  type="button"
+                  className="app-login-back-btn"
+                  onClick={() => {
+                    setMode("login");
+                    setForgotSuccess(false);
+                  }}
+                >
+                  <ArrowLeft size={14} />
+                  Back to sign in
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

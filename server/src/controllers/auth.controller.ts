@@ -6,10 +6,19 @@ import { User, Admin, AdminPasswordReset, sequelize } from '../models';
 import { env } from '../config/environment';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
-import { hashResetToken } from '../utils/adminPasswordReset';
+import {
+  hashResetToken,
+  buildResetUrl,
+  issueAdminPasswordReset,
+  checkResetCooldown,
+} from '../utils/adminPasswordReset';
 import logger from '../utils/logger';
 import { sendMail } from '../utils/mailer';
-import { studentWelcome, adminLoginAlert } from '../utils/emailTemplates';
+import {
+  studentWelcome,
+  adminLoginAlert,
+  adminPasswordResetEmail,
+} from '../utils/emailTemplates';
 
 type AuthPurpose = 'student' | 'admin';
 
@@ -458,3 +467,135 @@ export const resetAdminPassword = asyncHandler(
     });
   },
 );
+
+/**
+ * POST /api/v1/auth/admin/forgot-password
+ *
+ * Public endpoint for administrators who forgot their password.
+ * Checks if the email belongs to an administrator, enforces a 60s cooldown,
+ * and sends an email with a single-use reset link.
+ */
+export const forgotAdminPassword = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const email = String(req.body.email || '').trim().toLowerCase();
+    if (!email) {
+      throw new AppError('Enter a valid email address.', 400);
+    }
+
+    const admin = await Admin.findOne({
+      where: { email },
+    });
+
+    // If admin is not found, return generic success to avoid email enumeration
+    if (!admin) {
+      logger.info('[Auth] Password reset requested for unknown admin email', { email });
+      res.status(200).json({
+        status: 'success',
+        message: 'If an administrator account with this email exists, a password reset link has been sent.',
+        data: { emailed: true, ttlMinutes: env.ADMIN_RESET_TTL_MINUTES },
+      });
+      return;
+    }
+
+    // Enforce 60-second cooldown per account
+    await checkResetCooldown(admin.id, 60);
+
+    const { rawToken, expiresAt, ttlMinutes } = await issueAdminPasswordReset({
+      adminId: admin.id,
+      requestedByAdminId: null,
+    });
+
+    const resetUrl = buildResetUrl(rawToken);
+
+    const template = adminPasswordResetEmail({
+      name: admin.name || 'Administrator',
+      resetUrl,
+      ttlMinutes,
+    });
+
+    const mail = await sendMail({
+      to: admin.email,
+      subject: 'Reset your Success Code Academy admin password',
+      text: template.text,
+      html: template.html,
+    });
+
+    logger.info('[Auth] Password reset link issued via forgot-password', {
+      adminId: admin.id,
+      email: admin.email,
+      delivered: mail.delivered,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: mail.delivered
+        ? `A password reset link was sent to ${admin.email}.`
+        : 'A password reset link was generated.',
+      data: {
+        emailed: mail.delivered,
+        ttlMinutes,
+        expiresAt,
+        ...(process.env.NODE_ENV !== 'production' && !mail.delivered ? { resetUrl } : {}),
+      },
+    });
+  },
+);
+
+/**
+ * POST /api/v1/auth/admin/request-password-reset
+ *
+ * Authenticated endpoint for the signed-in administrator on the settings page.
+ * Issues a single-use reset link and dispatches it directly to the logged-in email.
+ */
+export const requestAdminPasswordReset = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const admin = await Admin.findByPk(req.user?.id);
+    if (!admin) {
+      throw new AppError('A verified admin account is required.', 403);
+    }
+
+    // Enforce 60-second cooldown per account
+    await checkResetCooldown(admin.id, 60);
+
+    const { rawToken, expiresAt, ttlMinutes } = await issueAdminPasswordReset({
+      adminId: admin.id,
+      requestedByAdminId: admin.id,
+    });
+
+    const resetUrl = buildResetUrl(rawToken);
+
+    const template = adminPasswordResetEmail({
+      name: admin.name || 'Administrator',
+      resetUrl,
+      ttlMinutes,
+    });
+
+    const mail = await sendMail({
+      to: admin.email,
+      subject: 'Reset your Success Code Academy admin password',
+      text: template.text,
+      html: template.html,
+    });
+
+    logger.info('[Auth] Signed-in admin requested password reset link', {
+      adminId: admin.id,
+      email: admin.email,
+      delivered: mail.delivered,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: mail.delivered
+        ? `A password reset link was sent to ${admin.email}.`
+        : 'A password reset link was generated.',
+      data: {
+        emailed: mail.delivered,
+        email: admin.email,
+        ttlMinutes,
+        expiresAt,
+        ...(process.env.NODE_ENV !== 'production' && !mail.delivered ? { resetUrl } : {}),
+      },
+    });
+  },
+);
+

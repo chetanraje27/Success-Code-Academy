@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { Op } from 'sequelize';
 import { AdminPasswordReset } from '../models';
 import { appBaseUrl, env } from '../config/environment';
+import { AppError } from './AppError';
 
 /**
  * Shared rules for administrator password reset tokens, used by both the
@@ -19,6 +20,28 @@ export function buildResetUrl(rawToken: string): string {
   const base = appBaseUrl();
   const path = `/admin/reset-password?token=${encodeURIComponent(rawToken)}`;
   return base ? `${base}${path}` : path;
+}
+
+/**
+ * Checks if a reset token was already issued recently for this administrator.
+ * Throws a 429 AppError if the cooldown window has not elapsed yet.
+ */
+export async function checkResetCooldown(adminId: number, cooldownSeconds = 60): Promise<void> {
+  const lastReset = await AdminPasswordReset.findOne({
+    where: { adminId },
+    order: [['createdAt', 'DESC']],
+  });
+
+  if (lastReset && lastReset.createdAt) {
+    const elapsedSeconds = (Date.now() - new Date(lastReset.createdAt).getTime()) / 1000;
+    if (elapsedSeconds < cooldownSeconds) {
+      const remainingSeconds = Math.max(1, Math.ceil(cooldownSeconds - elapsedSeconds));
+      throw new AppError(
+        `Please wait ${remainingSeconds} second${remainingSeconds === 1 ? '' : 's'} before requesting another reset link.`,
+        429,
+      );
+    }
+  }
 }
 
 /**
@@ -59,3 +82,4 @@ export async function issueAdminPasswordReset(options: {
 
   return { rawToken, expiresAt, ttlMinutes };
 }
+

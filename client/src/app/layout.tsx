@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
 import StyledJsxRegistry from "./registry";
@@ -8,6 +8,13 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-admin",
+  weight: ["400", "500", "600"],
 });
 
 /*
@@ -33,7 +40,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={inter.variable}
+      className={`${inter.variable} ${plusJakarta.variable}`}
       suppressHydrationWarning
     >
       <head>

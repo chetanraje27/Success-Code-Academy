@@ -3,9 +3,11 @@ import { z } from 'zod';
 import {
   changeAdminPassword,
   checkMobileOrLogin,
+  forgotAdminPassword,
   getCurrentUser,
   loginAdmin,
   registerUser,
+  requestAdminPasswordReset,
   resetAdminPassword,
   updateProfile,
   verifyAdminPasswordReset,
@@ -14,6 +16,7 @@ import { validate } from '../../middlewares/validate';
 import { authenticate } from '../../middlewares/authenticate';
 import {
   adminLoginLimiter,
+  passwordResetLimiter,
   submissionLimiter,
 } from '../../middlewares/rateLimiter';
 import { authorize } from '../../middlewares/authorize';
@@ -85,10 +88,23 @@ const adminResetPasswordSchema = z
   })
   .strict();
 
+const adminForgotPasswordSchema = z
+  .object({
+    email: z.string().trim().toLowerCase().email('Enter a valid email address'),
+  })
+  .strict();
+
 router.post('/send-otp', submissionLimiter, validate(sendOtpSchema), checkMobileOrLogin);
 router.post('/verify-otp', submissionLimiter, validate(verifyOtpSchema), registerUser);
 router.put('/profile', authenticate, validate(updateProfileSchema), updateProfile);
 router.post('/admin/login', adminLoginLimiter, validate(adminLoginSchema), loginAdmin);
+// Public forgot-password endpoint for admins
+router.post(
+  '/admin/forgot-password',
+  passwordResetLimiter,
+  validate(adminForgotPasswordSchema),
+  forgotAdminPassword,
+);
 // Public, token-gated password reset. Rate limited like sign-in because a
 // reset token is a credential and these are the endpoints that test one.
 router.get(
@@ -110,6 +126,14 @@ router.put(
   authorize(...ADMIN_ROLES),
   validate(adminPasswordSchema),
   changeAdminPassword,
+);
+// Authenticated request for logged-in admin to receive a password reset email
+router.post(
+  '/admin/request-password-reset',
+  authenticate,
+  authorize(...ADMIN_ROLES),
+  passwordResetLimiter,
+  requestAdminPasswordReset,
 );
 
 export default router;

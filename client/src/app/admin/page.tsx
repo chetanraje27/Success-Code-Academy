@@ -18,6 +18,7 @@ import {
   Search,
   Settings,
   Users,
+  X,
 } from "lucide-react";
 import { adminApiFetch } from "@/lib/admin-api";
 import { AdminNotice } from "@/components/admin/AdminUi";
@@ -510,14 +511,26 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="admin-dash-search-box">
-            <Search size={13} className="admin-dash-search-icon" />
+            <Search size={14} className="admin-dash-search-icon" aria-hidden="true" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search enquiries, name, phone..."
               className="admin-dash-search-input"
+              aria-label="Search enquiries, name, or phone"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="admin-dash-search-clear"
+                aria-label="Clear search"
+                title="Clear search"
+              >
+                <X size={11} />
+              </button>
+            )}
           </div>
         </header>
 

@@ -1420,7 +1420,9 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
 
 .admin-dash-search-box {
   position: relative;
-  width: 220px;
+  width: min(280px, 100%);
+  display: flex;
+  align-items: center;
 }
 
 .admin-dash-search-icon {
@@ -1430,23 +1432,70 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
   transform: translateY(-50%);
   color: var(--admin-faint);
   pointer-events: none;
+  transition: color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-dash-search-box:focus-within .admin-dash-search-icon {
+  color: var(--admin-brand);
 }
 
 .admin-dash-search-input {
   width: 100%;
+  min-height: 34px;
   box-sizing: border-box;
-  padding: 5px 10px 5px 30px;
-  border-radius: 999px;
-  border: 1px solid var(--admin-border);
+  padding: 0 30px 0 32px;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--admin-radius-sm);
   background: var(--admin-surface);
   color: var(--admin-text);
-  font-size: 0.75rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 400;
   outline: none;
-  transition: border-color var(--admin-dur-fast) var(--admin-ease);
+  transition:
+    border-color var(--admin-dur-fast) var(--admin-ease),
+    box-shadow var(--admin-dur-fast) var(--admin-ease),
+    background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-dash-search-input::placeholder {
+  color: var(--admin-faint);
+  font-size: 0.78rem;
+}
+
+.admin-dash-search-input:hover {
+  border-color: var(--admin-muted);
 }
 
 .admin-dash-search-input:focus {
   border-color: var(--admin-brand);
+  box-shadow: 0 0 0 3px var(--admin-focus-ring);
+}
+
+.admin-dash-search-clear {
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--admin-surface-sunken);
+  color: var(--admin-muted);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background var(--admin-dur-fast) var(--admin-ease),
+    color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-dash-search-clear:hover {
+  background: var(--admin-border);
+  color: var(--admin-text);
 }
 
 .admin-dash-table {
@@ -1915,13 +1964,18 @@ html[data-admin-theme="dark"] .admin-dash-pill.is-messages {
   color: var(--admin-faint);
   transform: translateY(-50%);
   pointer-events: none;
+  transition: color var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-search-box:focus-within svg {
+  color: var(--admin-brand);
 }
 
 .admin-search-box input {
   width: 100%;
   min-height: 34px;
   padding: 0 11px 0 32px;
-  border: 1px solid var(--admin-border);
+  border: 1px solid var(--admin-border-strong);
   border-radius: var(--admin-radius-sm);
   background: var(--admin-surface);
   color: var(--admin-text);
@@ -1935,6 +1989,10 @@ html[data-admin-theme="dark"] .admin-dash-pill.is-messages {
 
 .admin-search-box input::placeholder {
   color: var(--admin-faint);
+}
+
+.admin-search-box input:hover {
+  border-color: var(--admin-muted);
 }
 
 .admin-search-box input:focus {

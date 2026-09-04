@@ -378,11 +378,14 @@ export default function AdminLayout({
         method: "DELETE",
         credentials: "same-origin",
       });
+    } catch {
+      // Ignore network errors so the user is still navigated out
     } finally {
       setUser(null);
       setSession("guest");
       setIsLoggingOut(false);
-      router.replace(isSubdomain ? "/login" : "/admin/login");
+      window.dispatchEvent(new Event("admin-session-expired"));
+      window.location.replace(isSubdomain ? "/login" : "/admin/login");
     }
   }
 

@@ -14,14 +14,35 @@ function backendUrl(path: string): string {
 }
 
 function isSameOrigin(request: NextRequest): boolean {
+  const secFetchSite = request.headers.get("sec-fetch-site");
+  if (secFetchSite === "same-origin") {
+    return true;
+  }
+
   const origin = request.headers.get("origin");
-  if (!origin) return false;
-  if (origin === request.nextUrl.origin) return true;
+  const referer = request.headers.get("referer");
+  const candidate = origin || referer;
+
+  if (!candidate) {
+    if (secFetchSite === "none" || !secFetchSite) {
+      return true;
+    }
+    return false;
+  }
+
+  if (origin && origin === request.nextUrl.origin) {
+    return true;
+  }
+
   try {
-    const originHost = new URL(origin).hostname;
+    const candidateUrl = new URL(candidate);
+    if (candidateUrl.origin === request.nextUrl.origin) {
+      return true;
+    }
+    const candHost = candidateUrl.hostname;
     const reqHost = request.nextUrl.hostname;
     if (
-      (originHost.endsWith("successcodeacademy.in") || originHost.includes("localhost") || originHost.includes("127.0.0.1")) &&
+      (candHost.endsWith("successcodeacademy.in") || candHost.includes("localhost") || candHost.includes("127.0.0.1")) &&
       (reqHost.endsWith("successcodeacademy.in") || reqHost.includes("localhost") || reqHost.includes("127.0.0.1"))
     ) {
       return true;
@@ -199,12 +220,40 @@ export async function DELETE(request: NextRequest) {
       { status: 403 },
     );
   }
-  const cookieStore = await cookies();
+
   const host = request.headers.get("host") || "";
   const cookieDomain = host.includes("successcodeacademy.in")
     ? ".successcodeacademy.in"
     : undefined;
 
+  const response = NextResponse.json({ status: "success" });
+
+  // 1. Clear domain-level cookie
+  if (cookieDomain) {
+    response.cookies.set(COOKIE_NAME, "", {
+      domain: cookieDomain,
+      path: "/",
+      maxAge: 0,
+      expires: new Date(0),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+  }
+
+  // 2. Clear host-only cookie
+  response.cookies.set(COOKIE_NAME, "", {
+    path: "/",
+    maxAge: 0,
+    expires: new Date(0),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+  response.cookies.delete(COOKIE_NAME);
+
+  // 3. Clear via cookies() store as well
+  const cookieStore = await cookies();
   if (cookieDomain) {
     cookieStore.set(COOKIE_NAME, "", {
       domain: cookieDomain,
@@ -213,5 +262,6 @@ export async function DELETE(request: NextRequest) {
     });
   }
   cookieStore.delete(COOKIE_NAME);
-  return NextResponse.json({ status: "success" });
+
+  return response;
 }

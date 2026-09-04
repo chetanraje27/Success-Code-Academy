@@ -16,14 +16,35 @@ function backendBase(): string {
 }
 
 function isSameOrigin(request: NextRequest): boolean {
+  const secFetchSite = request.headers.get("sec-fetch-site");
+  if (secFetchSite === "same-origin") {
+    return true;
+  }
+
   const origin = request.headers.get("origin");
-  if (!origin) return false;
-  if (origin === request.nextUrl.origin) return true;
+  const referer = request.headers.get("referer");
+  const candidate = origin || referer;
+
+  if (!candidate) {
+    if (secFetchSite === "none" || !secFetchSite) {
+      return true;
+    }
+    return false;
+  }
+
+  if (origin && origin === request.nextUrl.origin) {
+    return true;
+  }
+
   try {
-    const originHost = new URL(origin).hostname;
+    const candidateUrl = new URL(candidate);
+    if (candidateUrl.origin === request.nextUrl.origin) {
+      return true;
+    }
+    const candHost = candidateUrl.hostname;
     const reqHost = request.nextUrl.hostname;
     if (
-      (originHost.endsWith("successcodeacademy.in") || originHost.includes("localhost") || originHost.includes("127.0.0.1")) &&
+      (candHost.endsWith("successcodeacademy.in") || candHost.includes("localhost") || candHost.includes("127.0.0.1")) &&
       (reqHost.endsWith("successcodeacademy.in") || reqHost.includes("localhost") || reqHost.includes("127.0.0.1"))
     ) {
       return true;

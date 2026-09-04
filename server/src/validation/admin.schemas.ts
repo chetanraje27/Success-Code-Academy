@@ -174,6 +174,9 @@ export const settingsUpdateSchema = z
     email: z.union([z.literal(''), z.string().trim().email()]).optional(),
     address1: z.string().trim().max(500).optional(),
     address2: z.string().trim().max(500).optional(),
+    // Keep accepting the legacy combined address setting used by existing
+    // admin clients and stored settings payloads.
+    address: z.string().trim().max(1000).optional(),
     whatsapp: z.string().trim().max(2048).optional(),
     facebook: optionalLink,
     instagram: optionalLink,

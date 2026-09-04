@@ -688,6 +688,7 @@ const SETTINGS_KEYS = [
   'email',
   'address1',
   'address2',
+  'address',
   'whatsapp',
   'facebook',
   'instagram',

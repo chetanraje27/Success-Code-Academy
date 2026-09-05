@@ -25,6 +25,27 @@ function adminCookieOptions(domain: string | undefined) {
   };
 }
 
+function expireAdminCookies(response: NextResponse, request: NextRequest) {
+  const cookieDomain = cookieDomainFor(request);
+  const expired = {
+    maxAge: 0,
+    expires: new Date(0),
+  };
+
+  // Keep these as separate Set-Cookie values. Domain and host-only cookies
+  // with the same name are distinct browser cookies and both must be expired.
+  if (cookieDomain) {
+    response.cookies.set(COOKIE_NAME, "", {
+      ...adminCookieOptions(cookieDomain),
+      ...expired,
+    });
+  }
+  response.cookies.set(COOKIE_NAME, "", {
+    ...adminCookieOptions(undefined),
+    ...expired,
+  });
+}
+
 function backendUrl(path: string): string {
   const base =
     process.env.API_URL ||
@@ -166,7 +187,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) {
@@ -185,13 +206,17 @@ export async function GET() {
     const user = (payload.data as { user?: { role?: string } } | undefined)?.user;
 
     if (!response.ok || !isAdminRole(user?.role)) {
-      cookieStore.delete(COOKIE_NAME);
+      // GET cannot know whether an older deployment created a parent-domain
+      // or host-only cookie, so expire both variants rather than deleting only
+      // the request's default cookie scope.
+      const result = NextResponse.json(
+        { status: "success", data: { user: null } },
+        { headers: { "Cache-Control": "no-store" } },
+      );
+      expireAdminCookies(result, request);
 
       if (response.status === 401 || response.status === 403 || response.ok) {
-        return NextResponse.json(
-          { status: "success", data: { user: null } },
-          { headers: { "Cache-Control": "no-store" } },
-        );
+        return result;
       }
 
       return NextResponse.json(
@@ -264,26 +289,8 @@ export async function DELETE(request: NextRequest) {
     );
   }
 
-  const cookieDomain = cookieDomainFor(request);
-
   const response = NextResponse.json({ status: "success" });
-
-  // Clear every cookie that could have been created by this app. A browser
-  // only removes a cookie when name, domain and path all match the original.
-  if (cookieDomain) {
-    response.cookies.set(COOKIE_NAME, "", {
-      ...adminCookieOptions(cookieDomain),
-      maxAge: 0,
-      expires: new Date(0),
-    });
-  }
-
-  // Also clear a host-only copy left by an older deployment or a local login.
-  response.cookies.set(COOKIE_NAME, "", {
-    ...adminCookieOptions(undefined),
-    maxAge: 0,
-    expires: new Date(0),
-  });
+  expireAdminCookies(response, request);
 
   return response;
 }

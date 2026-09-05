@@ -293,10 +293,20 @@ export default function AdminLayout({
 
   useEffect(() => {
     const expire = () => {
+      const alreadyLoggingOut = logoutStartedRef.current;
       logoutStartedRef.current = true;
       setSession("guest");
       setUser(null);
-      router.replace(isSubdomain ? "/login" : "/admin/login");
+      try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("sca_edit_mode");
+      } catch {
+        /* Browser storage is optional. */
+      }
+      if (!alreadyLoggingOut) {
+        router.replace(isSubdomain ? "/login" : "/admin/login");
+      }
     };
     window.addEventListener("admin-session-expired", expire);
     return () => window.removeEventListener("admin-session-expired", expire);

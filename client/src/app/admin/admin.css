@@ -914,20 +914,29 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
 .admin-notification-center { position: relative; }
 .admin-notification-trigger { position: relative; border-radius: 50%; }
 .admin-notification-count { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px; border: 2px solid var(--admin-topbar-bg); border-radius: 999px; background: var(--admin-danger); color: #fff; font-size: 9px; font-weight: 700; line-height: 12px; text-align: center; }
-.admin-notification-popover { position: absolute; top: calc(100% + 9px); right: 0; z-index: 100; width: min(360px, calc(100vw - 32px)); overflow: hidden; border: 1px solid var(--admin-border-strong); border-radius: 14px; background: var(--admin-surface); box-shadow: var(--admin-shadow-lg); }
+.admin-notification-popover { position: absolute; top: calc(100% + 9px); right: 0; z-index: 100; display: flex; width: min(380px, calc(100vw - 32px)); max-height: min(620px, calc(100vh - 80px)); flex-direction: column; overflow: hidden; border: 1px solid var(--admin-border-strong); border-radius: 14px; background: var(--admin-surface); box-shadow: var(--admin-shadow-lg); }
 .admin-notification-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--admin-divider); }
 .admin-notification-popover-head div { display: grid; gap: 2px; }
 .admin-notification-popover-head strong { color: var(--admin-text); font-size: .86rem; }
 .admin-notification-popover-head span { color: var(--admin-muted); font-size: .7rem; }
 .admin-notification-popover-head button { display: grid; place-items: center; border: 0; background: transparent; color: var(--admin-muted); cursor: pointer; }
-.admin-notification-list { max-height: 360px; overflow-y: auto; }
+.admin-notification-list { min-height: 72px; max-height: 390px; overflow-y: auto; }
 .admin-notification-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 16px; color: inherit; text-decoration: none; border-bottom: 1px solid var(--admin-divider); transition: background var(--admin-dur-fast) var(--admin-ease); }
 .admin-notification-item:hover, .admin-notification-item.is-unread { background: var(--admin-brand-softer); }
 .admin-notification-item > span { display: grid; gap: 4px; min-width: 0; }
 .admin-notification-item strong { overflow: hidden; color: var(--admin-text); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
 .admin-notification-item span span { color: var(--admin-text-secondary); font-size: .74rem; line-height: 1.4; }
 .admin-notification-item svg { flex: 0 0 auto; color: var(--admin-success); }
-.admin-notification-empty { margin: 0; padding: 28px 18px; color: var(--admin-muted); font-size: .78rem; text-align: center; }
+.admin-notification-empty { display: grid; justify-items: center; gap: 6px; margin: 0; padding: 30px 18px; color: var(--admin-muted); font-size: .78rem; text-align: center; }
+.admin-notification-empty svg { color: var(--admin-accent); }
+.admin-notification-empty strong { color: var(--admin-text); font-size: .82rem; }
+.admin-notification-empty span { line-height: 1.4; }
+.admin-notification-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 12px 9px 16px; border-top: 1px solid var(--admin-divider); background: var(--admin-surface-sunken); color: var(--admin-muted); font-size: .7rem; }
+.admin-notification-footer > div { display: flex; gap: 4px; }
+.admin-notification-footer button { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid var(--admin-border); border-radius: var(--admin-radius-xs); background: var(--admin-surface); color: var(--admin-text-secondary); cursor: pointer; }
+.admin-notification-footer button:hover:not(:disabled) { border-color: var(--admin-border-strong); background: var(--admin-surface-hover); color: var(--admin-text); }
+.admin-notification-footer button:disabled { cursor: not-allowed; opacity: .4; }
+.admin-notification-footer button:focus-visible { outline: 2px solid var(--admin-brand); outline-offset: 1px; }
 .admin-notification-settings-copy p { margin: 0; color: var(--admin-muted); font-size: .78rem; line-height: 1.5; }
 .admin-notification-spin { animation: admin-notification-spin 800ms linear infinite; }
 @keyframes admin-notification-spin { to { transform: rotate(360deg); } }
@@ -1065,14 +1074,25 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
 }
 
 .admin-notification-recipient-copy strong,
-.admin-notification-recipient-copy span {
+.admin-notification-recipient-email,
+.admin-notification-recipient-role {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .admin-notification-recipient-copy strong { color: var(--admin-text); font-size: .78rem; }
-.admin-notification-recipient-copy span { color: var(--admin-muted); font-size: .69rem; text-transform: capitalize; }
+.admin-notification-recipient-email {
+  color: var(--admin-muted);
+  font-size: .69rem;
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+.admin-notification-recipient-role {
+  color: var(--admin-muted);
+  font-size: .69rem;
+  text-transform: capitalize;
+}
 
 .admin-notification-switch {
   display: inline-flex;
@@ -1110,11 +1130,18 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
 
 @media (max-width: 600px) {
   .admin-notification-popover { position: fixed; top: 64px; right: 16px; left: 16px; width: auto; }
+  .admin-notification-footer button { width: 40px; height: 40px; }
   .admin-card-header:has(.admin-button) { align-items: flex-start; flex-direction: column; }
   .admin-card-header:has(.admin-button) .admin-button { width: 100%; }
   .admin-notification-global-row { align-items: stretch; flex-direction: column; }
   .admin-notification-global-row .admin-button { width: 100%; }
   .admin-notification-recipients { grid-template-columns: 1fr; }
+  .admin-notification-recipient-email {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* Shared confirmation surface. Keep the same restrained, layered treatment as

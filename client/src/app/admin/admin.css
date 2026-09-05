@@ -3191,6 +3191,20 @@ html[data-admin-theme="dark"] .admin-dash-pill.is-messages {
   font-size: 0.71rem;
 }
 
+/* Long-form cell preview (e.g. contact message text): muted, single line,
+   clamped with an ellipsis so row height never grows with content length.
+   The full text is available in the detail drawer and the cell tooltip. */
+.admin-table-message {
+  display: block;
+  max-width: 420px;
+  overflow: hidden;
+  color: var(--admin-text-secondary);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Cell primitives: icon + stacked text, inline link tags, and empty markers.
    These replace per-page inline styles so table cells stay theme-aware. */
 .admin-cell-media {

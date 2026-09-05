@@ -49,12 +49,17 @@ export default function AdminContactMessagesPage() {
         {
           key: "message",
           label: "Message",
-          render: (row) => (
-            <span title={String(row.message || "")}>
-              {String(row.message || "—").slice(0, 120)}
-              {String(row.message || "").length > 120 ? "…" : ""}
-            </span>
-          ),
+          render: (row) => {
+            // Compact preview only — the full text lives in the detail
+            // drawer's message card and the cell tooltip.
+            const text = String(row.message || "—");
+            return (
+              <span className="admin-table-message" title={text}>
+                {text.slice(0, 60)}
+                {text.length > 60 ? "…" : ""}
+              </span>
+            );
+          },
         },
         { key: "createdAt", label: "Submitted", sortable: true },
       ]}

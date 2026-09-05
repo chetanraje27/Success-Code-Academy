@@ -1,11 +1,11 @@
 # Graph Report - Success-Code-Academy  (2026-09-05)
 
 ## Corpus Check
-- 279 files · ~3,762,637 words
+- 279 files · ~3,762,856 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1591 nodes · 2932 edges · 196 communities (133 shown, 63 thin omitted)
+- 1591 nodes · 2932 edges · 196 communities (134 shown, 62 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
@@ -71,7 +71,7 @@
 - SectionHeading.tsx
 - middleware.ts
 - graphify.js
-- AdminNotificationPreference
+- Notification
 - 5. Frontend — `client/`
 - environment.d.ts
 - express.d.ts
@@ -148,7 +148,7 @@
 - 6. Backend — `server/`
 - AcademyVideo.ts
 - recordMediaRevision
-- helmet
+- @types/jsonwebtoken
 - jsonwebtoken
 - assertNotLastSuperAdmin
 - logout/route.ts
@@ -165,7 +165,7 @@
 - cors
 - @types/node
 - form.routes.ts
-- exportLeadCsv
+- queryActivity
 - auth.controller.ts
 - express-rate-limit
 - User
@@ -203,7 +203,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (196 total, 63 thin omitted)
+## Communities (196 total, 62 thin omitted)
 
 ### Community 0 - "admin.routes.ts"
 Cohesion: 0.08
@@ -299,7 +299,7 @@ Nodes (12): app, configuredOrigins, corsOptions, defaultAllowedOrigins, dbConfig
 
 ### Community 23 - "dependencies"
 Cohesion: 0.11
-Nodes (19): bcrypt, dotenv, multer, sequelize, dependencies, bcrypt, dotenv, multer (+11 more)
+Nodes (19): bcrypt, dotenv, helmet, multer, sequelize, dependencies, bcrypt, dotenv (+11 more)
 
 ### Community 24 - "MediaRevision.ts"
 Cohesion: 0.19
@@ -307,7 +307,7 @@ Nodes (10): restoreMediaRevision, initMediaRevision(), MediaResourceType, MediaR
 
 ### Community 25 - "content.routes.ts"
 Cohesion: 0.17
-Nodes (11): initNotification(), Notification, NotificationAttributes, NotificationCreationAttributes, initSiteSetting(), SiteSetting, SiteSettingAttributes, SiteSettingCreationAttributes (+3 more)
+Nodes (11): Banner, BannerAttributes, BannerCreationAttributes, initBanner(), initSiteSetting(), SiteSetting, SiteSettingAttributes, SiteSettingCreationAttributes (+3 more)
 
 ### Community 26 - "authenticate.ts"
 Cohesion: 0.20
@@ -327,11 +327,11 @@ Nodes (11): main(), reconcileSchema(), scheduleDatabaseReconnect(), startServer(
 
 ### Community 31 - "models/index.ts"
 Cohesion: 0.08
-Nodes (29): AdminNotification, AdminNotificationAttributes, AdminNotificationCreationAttributes, initAdminNotification(), AdminPasswordReset, AdminPasswordResetAttributes, AdminPasswordResetCreationAttributes, initAdminPasswordReset() (+21 more)
+Nodes (29): AdminNotification, AdminNotificationAttributes, AdminNotificationCreationAttributes, initAdminNotification(), AdminNotificationPreference, AdminNotificationPreferenceAttributes, AdminNotificationPreferenceCreationAttributes, initAdminNotificationPreference() (+21 more)
 
 ### Community 32 - "getListOptions"
-Cohesion: 0.30
-Nodes (15): dateFilter(), getContactMessages, getCourseForms, getCourses, getDashboardActivity, getListOptions(), getScholarshipForms, getScholarshipPrograms (+7 more)
+Cohesion: 0.34
+Nodes (14): dateFilter(), getAdminAccounts, getContactMessages, getCourseForms, getCourses, getListOptions(), getScholarshipForms, getScholarshipPrograms (+6 more)
 
 ### Community 34 - "opencode.json"
 Cohesion: 0.50
@@ -401,9 +401,9 @@ Nodes (4): initTopperResult(), TopperResult, TopperResultAttributes, TopperResul
 Cohesion: 0.12
 Nodes (16): Course, CoursesClient(), classroomFeatures, CourseDetailClient(), CourseDetailClientProps, courseVisuals, timeSlots, CourseDetailPage() (+8 more)
 
-### Community 63 - "AdminNotificationPreference"
+### Community 63 - "Notification"
 Cohesion: 0.50
-Nodes (4): AdminNotificationPreference, AdminNotificationPreferenceAttributes, AdminNotificationPreferenceCreationAttributes, initAdminNotificationPreference()
+Nodes (4): initNotification(), Notification, NotificationAttributes, NotificationCreationAttributes
 
 ### Community 64 - "5. Frontend — `client/`"
 Cohesion: 0.25
@@ -542,8 +542,8 @@ Cohesion: 0.18
 Nodes (11): deleteAcademyVideo, deleteBanner, deleteNewsArticle, deleteResult, deleteStarStudent, recordMediaRevision(), updateAcademyVideo, updateBanner (+3 more)
 
 ### Community 168 - "assertNotLastSuperAdmin"
-Cohesion: 0.29
-Nodes (8): assertAdminIdentityIsFree(), assertNotLastSuperAdmin(), countSuperAdmins(), createAdminAccount, deleteAdminAccount, getAdminAccounts, publicAdminAccount(), updateAdminAccount
+Cohesion: 0.33
+Nodes (7): assertAdminIdentityIsFree(), assertNotLastSuperAdmin(), countSuperAdmins(), createAdminAccount, deleteAdminAccount, publicAdminAccount(), updateAdminAccount
 
 ### Community 169 - "logout/route.ts"
 Cohesion: 0.08
@@ -581,6 +581,10 @@ Nodes (3): 17. Environment Variables Reference, Client (`client/.env.local`), Se
 Cohesion: 0.13
 Nodes (16): getMyRegistration, updateMyRegistration, adminLoginLimiter, defaultLimiter, passwordResetLimiter, submissionLimiter, validate(), ValidationTarget (+8 more)
 
+### Community 188 - "queryActivity"
+Cohesion: 0.50
+Nodes (4): csvCell(), exportLeadCsv, getDashboardActivity, queryActivity()
+
 ### Community 189 - "auth.controller.ts"
 Cohesion: 0.06
 Nodes (79): appBaseUrl(), requestSelfPasswordReset, sendAdminPasswordReset, AuthPurpose, changeAdminPassword, createToken(), forgotAdminPassword, forgotUserPassword (+71 more)
@@ -596,7 +600,7 @@ Nodes (5): ContentBlock, ContentBlockAttributes, ContentBlockCreationAttributes,
 ## Knowledge Gaps
 - **616 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `eslintConfig`, `nextConfig`, `name` (+611 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **63 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

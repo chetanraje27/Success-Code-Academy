@@ -30,6 +30,20 @@ type EditModeContextValue = {
 const EditModeContext = createContext<EditModeContextValue | null>(null);
 const EDIT_MODE_KEY = "sca_edit_mode";
 
+function clearClientAuthStorage() {
+  try {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  } catch {
+    /* Browser storage is optional. */
+  }
+  try {
+    sessionStorage.removeItem(EDIT_MODE_KEY);
+  } catch {
+    /* Browser storage is optional. */
+  }
+}
+
 export function EditModeProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [editMode, setEditModeState] = useState(false);
@@ -69,7 +83,6 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refreshAuth();
     // Logout is already authoritative locally. Do not re-verify here: the
     // request can race navigation and briefly restore the just-expired user.
     const onExpired = () => {
@@ -77,15 +90,12 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setEditModeState(false);
       setLeadsOpen(false);
-      try {
-        sessionStorage.removeItem(EDIT_MODE_KEY);
-      } catch {
-        /* Session storage is optional. */
-      }
+      clearClientAuthStorage();
     };
     const onContent = () => setRefreshKey((key) => key + 1);
     window.addEventListener("admin-session-expired", onExpired);
     window.addEventListener("admin-content-changed", onContent);
+    refreshAuth();
     return () => {
       window.removeEventListener("admin-session-expired", onExpired);
       window.removeEventListener("admin-content-changed", onContent);

@@ -37,13 +37,41 @@ import type { AdminUser } from "@/lib/admin-api";
 import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
 import { AdminSessionProvider } from "@/components/admin/AdminSessionContext";
 import { ToastProvider } from "@/components/admin/Toast";
-import { getAdminHref, getLiveWebsiteHref } from "@/lib/admin-routing";
+import {
+  getAdminHref,
+  getAdminLogoutHref,
+  getLiveWebsiteHref,
+} from "@/lib/admin-routing";
 import AdminNotifications from "@/components/admin/AdminNotifications";
 
 type SessionState = "loading" | "authenticated" | "guest";
 type AdminTheme = "light" | "dark";
 
 const THEME_STORAGE_KEY = "sca-admin-theme";
+const EDIT_MODE_STORAGE_KEY = "sca_edit_mode";
+const ADMIN_LOGOUT_PENDING_KEY = "sca_admin_logout_pending";
+
+function clearClientAuthStorage() {
+  try {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  } catch {
+    /* Browser storage is optional. */
+  }
+  try {
+    sessionStorage.removeItem(EDIT_MODE_STORAGE_KEY);
+  } catch {
+    /* Browser storage is optional. */
+  }
+}
+
+function markAdminLogoutPending() {
+  try {
+    sessionStorage.setItem(ADMIN_LOGOUT_PENDING_KEY, "1");
+  } catch {
+    /* Browser storage is optional. */
+  }
+}
 
 const navigation = [
   {
@@ -148,6 +176,17 @@ export default function AdminLayout({
   const [theme, setTheme] = useState<AdminTheme | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const logoutStartedRef = useRef(false);
+  const verificationVersionRef = useRef(0);
+
+  const invalidateLocalSession = useCallback(() => {
+    logoutStartedRef.current = true;
+    verificationVersionRef.current += 1;
+    setSession("guest");
+    setUser(null);
+    setIsLoggingOut(true);
+    clearClientAuthStorage();
+    markAdminLogoutPending();
+  }, []);
 
   /*
    * The attribute lives on <html> because admin.css is shared with the public
@@ -253,12 +292,18 @@ export default function AdminLayout({
 
   const verifySession = useCallback(async () => {
     if (logoutStartedRef.current) return false;
+    const requestVersion = ++verificationVersionRef.current;
     try {
       const response = await fetch("/api/admin/session", {
         credentials: "same-origin",
         cache: "no-store",
       });
-      if (logoutStartedRef.current) return false;
+      if (
+        logoutStartedRef.current ||
+        requestVersion !== verificationVersionRef.current
+      ) {
+        return false;
+      }
       if (!response.ok) {
         setUser(null);
         setSession("guest");
@@ -267,7 +312,12 @@ export default function AdminLayout({
       const payload = (await response.json()) as {
         data?: { user?: AdminUser };
       };
-      if (logoutStartedRef.current) return false;
+      if (
+        logoutStartedRef.current ||
+        requestVersion !== verificationVersionRef.current
+      ) {
+        return false;
+      }
       if (!payload.data?.user || !isAdminRole(payload.data.user.role)) {
         setUser(null);
         setSession("guest");
@@ -277,6 +327,12 @@ export default function AdminLayout({
       setSession("authenticated");
       return true;
     } catch {
+      if (
+        logoutStartedRef.current ||
+        requestVersion !== verificationVersionRef.current
+      ) {
+        return false;
+      }
       setUser(null);
       setSession("guest");
       return false;
@@ -293,27 +349,27 @@ export default function AdminLayout({
 
   useEffect(() => {
     const expire = () => {
-      const alreadyLoggingOut = logoutStartedRef.current;
-      logoutStartedRef.current = true;
-      setSession("guest");
-      setUser(null);
-      try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("sca_edit_mode");
-      } catch {
-        /* Browser storage is optional. */
-      }
-      if (!alreadyLoggingOut) {
-        router.replace(isSubdomain ? "/login" : "/admin/login");
-      }
+      // A click handler may have dispatched the same event synchronously.
+      // It already performed the invalidation and owns the one redirect.
+      if (logoutStartedRef.current) return;
+      invalidateLocalSession();
+      if (isPublicRoute) return;
+
+      window.dispatchEvent(new Event("auth-changed"));
+      window.location.replace(
+        getAdminLogoutHref(isSubdomain ? "/login" : "/admin/login"),
+      );
     };
     window.addEventListener("admin-session-expired", expire);
     return () => window.removeEventListener("admin-session-expired", expire);
-  }, [isSubdomain, router]);
+  }, [invalidateLocalSession, isPublicRoute, isSubdomain]);
 
   useEffect(() => {
-    if (!isPublicRoute && session === "guest") {
+    if (
+      !isPublicRoute &&
+      session === "guest" &&
+      !logoutStartedRef.current
+    ) {
       router.replace(isSubdomain ? "/login" : "/admin/login");
     }
   }, [isPublicRoute, isSubdomain, router, session]);
@@ -389,32 +445,18 @@ export default function AdminLayout({
     }
   }, [isSubdomain, isSuperAdmin, pathname, router, session]);
 
-  async function handleLogout() {
+  function handleLogout() {
     if (logoutStartedRef.current) return;
-    logoutStartedRef.current = true;
-    setIsLoggingOut(true);
-    try {
-      await fetch("/api/admin/session", {
-        method: "DELETE",
-        credentials: "same-origin",
-      });
-    } catch {
-      // Ignore network errors so the user is still navigated out
-    } finally {
-      try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("sca_edit_mode");
-      } catch {
-        /* Browser storage is optional. */
-      }
-      setUser(null);
-      setSession("guest");
-      setIsLoggingOut(false);
-      window.dispatchEvent(new Event("auth-changed"));
-      window.dispatchEvent(new Event("admin-session-expired"));
-      window.location.replace(isSubdomain ? "/login" : "/admin/login");
-    }
+    // Invalidate before dispatching or navigating so a pending verification
+    // cannot restore the administrator during the logout transition.
+    invalidateLocalSession();
+    // This is a one-way invalidation signal. Consumers clear their own state;
+    // none of them should start a fresh session verification during logout.
+    window.dispatchEvent(new Event("admin-session-expired"));
+    window.dispatchEvent(new Event("auth-changed"));
+    window.location.replace(
+      getAdminLogoutHref(isSubdomain ? "/login" : "/admin/login"),
+    );
   }
 
   if (isPublicRoute) {

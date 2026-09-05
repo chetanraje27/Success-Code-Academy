@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/data/home";
 import Button from "@/components/ui/Button";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
+import { isAdminRole } from "@/lib/roles";
 import { FaPen, FaDatabase } from "react-icons/fa6";
 import {
   Award,
@@ -22,7 +23,10 @@ import {
   Trophy,
   X,
 } from "lucide-react";
-import { getConsoleDashboardHref } from "@/lib/admin-routing";
+import {
+  getAdminLogoutHref,
+  getConsoleDashboardHref,
+} from "@/lib/admin-routing";
 
 type HeaderUser = {
   firstName?: string;
@@ -32,6 +36,34 @@ type HeaderUser = {
   age?: number;
   role?: string;
 };
+
+const EDIT_MODE_STORAGE_KEY = "sca_edit_mode";
+
+function getStoredUser(): HeaderUser | null {
+  try {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? (JSON.parse(savedUser) as HeaderUser) : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearLocalAuthStorage(clearEditMode: boolean) {
+  try {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  } catch {
+    /* Browser storage is optional. */
+  }
+
+  if (clearEditMode) {
+    try {
+      sessionStorage.removeItem(EDIT_MODE_STORAGE_KEY);
+    } catch {
+      /* Browser storage is optional. */
+    }
+  }
+}
 
 const mobileNavIcons = {
   "/": Home,
@@ -53,7 +85,14 @@ export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
-  const { isAdmin, editMode, toggleEditMode, setEditMode, setLeadsOpen } = useEditModeOptional();
+  const logoutStartedRef = useRef(false);
+  const {
+    isAdmin,
+    editMode,
+    toggleEditMode,
+    setEditMode,
+    setLeadsOpen,
+  } = useEditModeOptional();
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
@@ -76,18 +115,14 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     
     const syncStoredUser = () => {
-      const savedUser = localStorage.getItem("user");
+      const savedUser = getStoredUser();
       if (!savedUser) {
         setCurrentUser(null);
         return;
       }
-      try {
-        setCurrentUser(JSON.parse(savedUser) as HeaderUser);
-      } catch {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        setCurrentUser(null);
-      }
+      logoutStartedRef.current = false;
+      setIsLoggingOut(false);
+      setCurrentUser(savedUser);
     };
     const storageTimer = window.setTimeout(syncStoredUser, 0);
 
@@ -177,41 +212,44 @@ export default function Header() {
     setIsDropdownOpen(false);
   }, [pathname]);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    if (logoutStartedRef.current) return;
+    logoutStartedRef.current = true;
     setIsLoggingOut(true);
-    const wasAdmin = isAdmin;
-    try {
-      if (isAdmin) {
-        await fetch("/api/admin/session", {
-          method: "DELETE",
-          credentials: "same-origin",
-        });
-      }
-    } catch {
-      // Ignore network errors
-    } finally {
-      try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("sca_edit_mode");
-      } catch {
-        /* Browser storage is optional. */
-      }
+    // The context can be one render behind localStorage, so use both signals
+    // before deciding whether the console cookie must be cleared remotely.
+    const storedUser = getStoredUser();
+    const wasAdmin =
+      isAdmin ||
+      isAdminRole(currentUser?.role) ||
+      isAdminRole(storedUser?.role);
+
+    if (wasAdmin) {
       setLeadsOpen(false);
-      // setEditMode also updates the context state synchronously and prevents
-      // editor controls from surviving the auth state transition.
-      if (wasAdmin) {
-        setEditMode(false);
-      }
-      setCurrentUser(null);
+      setEditMode(false);
+    }
+    setCurrentUser(null);
+    setIsDropdownOpen(false);
+    setIsMenuOpen(false);
+
+    // Remove browser credentials before publishing the state transition. For
+    // administrators, also remove the editor preference and leave a marker so
+    // the console login page can ignore a stale session response from before
+    // the logout redirect completed.
+    clearLocalAuthStorage(wasAdmin);
+
+    // Each event is emitted once, after local state has been invalidated. The
+    // expiration event is intentionally not followed by a refresh request.
+    if (wasAdmin) {
+      window.dispatchEvent(new Event("admin-session-expired"));
+    }
+    window.dispatchEvent(new Event("auth-changed"));
+    if (wasAdmin) {
+      window.location.replace(
+        getAdminLogoutHref("/"),
+      );
+    } else {
       setIsLoggingOut(false);
-      setIsDropdownOpen(false);
-      setIsMenuOpen(false);
-      window.dispatchEvent(new Event("auth-changed"));
-      if (wasAdmin) {
-        window.dispatchEvent(new Event("admin-session-expired"));
-        window.location.replace("/");
-      }
     }
   };
 

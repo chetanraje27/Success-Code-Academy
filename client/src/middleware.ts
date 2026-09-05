@@ -2,6 +2,15 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // API handlers own their response status, cookies, and redirects. In
+  // particular, the public-to-console logout chain must never be rewritten to
+  // an /admin page by the clean console URL rules below.
+  if (pathname === '/api' || pathname.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
   // Check if maintenance mode is enabled in the environment
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true'
 
@@ -23,13 +32,14 @@ export function middleware(request: NextRequest) {
   }
 
   const host = request.headers.get('host') || ''
-  const pathname = request.nextUrl.pathname
-
+  const hostname =
+    request.nextUrl.hostname.toLowerCase().replace(/\.$/, '') ||
+    host.split(':')[0].toLowerCase()
   // Check if request is accessing via console subdomain (production or local test)
   const isConsoleSubdomain =
-    host.startsWith('console.successcodeacademy.in') ||
-    host.startsWith('console.localhost') ||
-    host.startsWith('console.')
+    hostname === 'console.successcodeacademy.in' ||
+    hostname === 'console.localhost' ||
+    hostname.startsWith('console.')
 
   if (isConsoleSubdomain) {
     // If on console subdomain and URL has redundant /admin prefix, redirect to clean path
@@ -50,7 +60,7 @@ export function middleware(request: NextRequest) {
   // in production, redirect /admin to console.successcodeacademy.in
   const isProduction =
     process.env.NODE_ENV === 'production' ||
-    host.includes('successcodeacademy.in')
+    hostname.includes('successcodeacademy.in')
 
   if (isProduction && (pathname === '/admin' || pathname.startsWith('/admin/'))) {
     const cleanPath = pathname.replace(/^\/admin/, '') || '/'

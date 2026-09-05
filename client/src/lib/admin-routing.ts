@@ -6,11 +6,7 @@
 
 export function isConsoleSubdomain(): boolean {
   if (typeof window === "undefined") return false;
-  const hostname = window.location.hostname;
-  return (
-    hostname.startsWith("console.") ||
-    !window.location.pathname.startsWith("/admin")
-  );
+  return window.location.hostname.toLowerCase().startsWith("console.");
 }
 
 /**
@@ -44,6 +40,37 @@ export function getConsoleDashboardHref(): string {
     }
   }
   return "/admin";
+}
+
+/**
+ * Build the browser-level admin logout URL. Production public pages start on
+ * their own origin so that the public exact-host and host-only cookie scopes
+ * are cleared before the route chains through the console.
+ */
+export function getAdminLogoutHref(returnTo?: string): string {
+  if (typeof window === "undefined") {
+    const target = returnTo || "/admin/login";
+    return `/api/admin/logout?returnTo=${encodeURIComponent(target)}`;
+  }
+
+  const hostname = window.location.hostname.toLowerCase();
+  const isProductionConsole = hostname === "console.successcodeacademy.in";
+  const isProductionPublic =
+    hostname === "successcodeacademy.in" ||
+    hostname === "www.successcodeacademy.in";
+
+  if (isProductionPublic) {
+    return `/api/admin/logout?returnTo=${encodeURIComponent("/")}`;
+  }
+
+  if (isProductionConsole) {
+    const target = returnTo || "/login";
+    return `/api/admin/logout?returnTo=${encodeURIComponent(target)}`;
+  }
+
+  const target = returnTo || "/admin/login";
+  const encodedTarget = encodeURIComponent(target);
+  return `/api/admin/logout?returnTo=${encodedTarget}`;
 }
 
 /**

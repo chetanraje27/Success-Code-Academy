@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -29,8 +28,9 @@ type LoginFailure = {
   errors?: Array<{ field?: string; message?: string }>;
 };
 
+const ADMIN_LOGOUT_PENDING_KEY = "sca_admin_logout_pending";
+
 export default function AdminLoginPage() {
-  const router = useRouter();
   const toast = useToast();
   const [mode, setMode] = useState<"login" | "forgot">("login");
   const [email, setEmail] = useState("");
@@ -44,6 +44,8 @@ export default function AdminLoginPage() {
   const [forgotSubmitting, setForgotSubmitting] = useState(false);
   const [forgotSuccess, setForgotSuccess] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  const logoutPendingRef = useRef<boolean | null>(null);
+  const redirectStartedRef = useRef(false);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -54,19 +56,45 @@ export default function AdminLoginPage() {
   }, [cooldown]);
 
   useEffect(() => {
+    // A session check can outlive the click that started logout. Consume the
+    // one-shot marker before fetching so a stale authenticated response cannot
+    // send the newly logged-out user back to the console root.
+    if (logoutPendingRef.current === null) {
+      let pending = false;
+      try {
+        pending = sessionStorage.getItem(ADMIN_LOGOUT_PENDING_KEY) === "1";
+        if (pending) sessionStorage.removeItem(ADMIN_LOGOUT_PENDING_KEY);
+      } catch {
+        /* Browser storage is optional. */
+      }
+      logoutPendingRef.current = pending;
+    }
+    const logoutWasPending = logoutPendingRef.current;
+    let active = true;
+
     fetch("/api/admin/session", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((payload: { data?: { user?: { role?: string } } } | null) => {
-        if (isAdminRole(payload?.data?.user?.role)) {
+        if (!active) return;
+        if (
+          !logoutWasPending &&
+          !redirectStartedRef.current &&
+          isAdminRole(payload?.data?.user?.role)
+        ) {
+          redirectStartedRef.current = true;
           window.location.replace(isConsoleSubdomain() ? "/" : "/admin");
         } else {
           setIsCheckingSession(false);
         }
       })
       .catch(() => {
-        setIsCheckingSession(false);
+        if (active) setIsCheckingSession(false);
       });
-  }, [router]);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,6 +113,11 @@ export default function AdminLoginPage() {
         // "Password is required") instead of the generic "Validation failed".
         const firstIssue = payload.errors?.[0]?.message;
         throw new Error(firstIssue || payload.message || "Unable to sign in.");
+      }
+      try {
+        sessionStorage.removeItem(ADMIN_LOGOUT_PENDING_KEY);
+      } catch {
+        /* Browser storage is optional. */
       }
       window.location.replace(isConsoleSubdomain() ? "/" : "/admin");
       // Do NOT setSubmitting(false) here. Keep it loading while the browser navigates.

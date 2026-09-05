@@ -1,49 +1,23 @@
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAdminRole } from "@/lib/roles";
+import {
+  ADMIN_LOGOUT_MARKER_COOKIE,
+  ADMIN_SESSION_COOKIE,
+  appendAdminLogoutMarkerCookie,
+  appendExpiredAdminLogoutMarkerCookies,
+  appendExpiredAdminSessionCookies,
+  getAdminSessionCookieOptions,
+} from "@/lib/admin-session-cookies";
 
-const COOKIE_NAME = "sca_admin_session";
+const COOKIE_NAME = ADMIN_SESSION_COOKIE;
 const COOKIE_MAX_AGE = 8 * 60 * 60;
 
-function cookieDomainFor(request: NextRequest): string | undefined {
-  // Use the same parent-domain cookie for the production console and public
-  // site, while keeping local development host-only. Strip the port before
-  // checking so localhost:3000 is never treated as a domain value.
-  const hostname = request.nextUrl.hostname.toLowerCase();
-  return hostname === "successcodeacademy.in" || hostname.endsWith(".successcodeacademy.in")
-    ? ".successcodeacademy.in"
-    : undefined;
-}
-
-function adminCookieOptions(domain: string | undefined) {
-  return {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    path: "/",
-    ...(domain ? { domain } : {}),
-  };
-}
-
 function expireAdminCookies(response: NextResponse, request: NextRequest) {
-  const cookieDomain = cookieDomainFor(request);
-  const expired = {
-    maxAge: 0,
-    expires: new Date(0),
-  };
-
-  // Keep these as separate Set-Cookie values. Domain and host-only cookies
-  // with the same name are distinct browser cookies and both must be expired.
-  if (cookieDomain) {
-    response.cookies.set(COOKIE_NAME, "", {
-      ...adminCookieOptions(cookieDomain),
-      ...expired,
-    });
-  }
-  response.cookies.set(COOKIE_NAME, "", {
-    ...adminCookieOptions(undefined),
-    ...expired,
-  });
+  appendExpiredAdminSessionCookies(
+    response.headers,
+    request.nextUrl.hostname,
+  );
 }
 
 function backendUrl(path: string): string {
@@ -171,10 +145,16 @@ export async function POST(request: NextRequest) {
       status: "success",
       data: { user: data.user },
     });
-    const cookieDomain = cookieDomainFor(request);
+
+    // A successful login consumes the short-lived cross-host logout marker so
+    // a previous sign-out never blocks a deliberate new sign-in.
+    appendExpiredAdminLogoutMarkerCookies(
+      result.headers,
+      request.nextUrl.hostname,
+    );
 
     result.cookies.set(COOKIE_NAME, data.token, {
-      ...adminCookieOptions(cookieDomain),
+      ...getAdminSessionCookieOptions(request.nextUrl.hostname),
       maxAge: COOKIE_MAX_AGE,
       priority: "high",
     });
@@ -189,6 +169,25 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
+
+  // The cross-host logout marker makes sign-out authoritative. The browser
+  // logout route sets it before redirecting between the public and console
+  // hosts, where a legacy host-only cookie can be impossible to remove from
+  // the other host. While the marker is present, no admin session is reported
+  // and every remaining session cookie scope is expired again.
+  if (cookieStore.get(ADMIN_LOGOUT_MARKER_COOKIE)?.value === "1") {
+    const result = NextResponse.json(
+      { status: "success", data: { user: null } },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+    expireAdminCookies(result, request);
+    appendExpiredAdminLogoutMarkerCookies(
+      result.headers,
+      request.nextUrl.hostname,
+    );
+    return result;
+  }
+
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) {
     return NextResponse.json(
@@ -219,7 +218,7 @@ export async function GET(request: NextRequest) {
         return result;
       }
 
-      return NextResponse.json(
+      const errorResult = NextResponse.json(
         {
           status: "error",
           message:
@@ -227,11 +226,15 @@ export async function GET(request: NextRequest) {
               ? payload.message
               : "Admin session is no longer valid.",
         },
-        { status: response.status },
+        { status: response.status, headers: { "Cache-Control": "no-store" } },
       );
+      expireAdminCookies(errorResult, request);
+      return errorResult;
     }
 
-    return NextResponse.json(payload);
+    return NextResponse.json(payload, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch {
     return NextResponse.json(
       { status: "error", message: "Unable to verify the admin session." },
@@ -270,7 +273,9 @@ export async function PUT(request: NextRequest) {
     });
     const payload = await parseBackendResponse(response);
     if (response.ok) {
-      cookieStore.delete(COOKIE_NAME);
+      const result = NextResponse.json(payload, { status: response.status });
+      expireAdminCookies(result, request);
+      return result;
     }
     return NextResponse.json(payload, { status: response.status });
   } catch {
@@ -291,6 +296,11 @@ export async function DELETE(request: NextRequest) {
 
   const response = NextResponse.json({ status: "success" });
   expireAdminCookies(response, request);
+  appendAdminLogoutMarkerCookie(
+    response.headers,
+    request.nextUrl.hostname,
+  );
+  response.headers.set("Cache-Control", "no-store");
 
   return response;
 }

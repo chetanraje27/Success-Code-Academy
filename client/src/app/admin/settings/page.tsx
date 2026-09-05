@@ -208,7 +208,7 @@ export default function AdminSettingsPage() {
           </div>
           <NotificationPermissionButton />
         </header>
-        <div className="admin-card-body admin-notification-settings-copy">
+        {/* <div className="admin-card-body admin-notification-settings-copy">
           <div className="admin-notification-summary">
             <div className="admin-notification-summary-icon"><Bell size={18} /></div>
             <div>
@@ -216,7 +216,7 @@ export default function AdminSettingsPage() {
               <p>Notifications are private to this browser and can be disabled at any time. Nothing sensitive is shown in a browser alert.</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
 
       {isSuperAdmin && (

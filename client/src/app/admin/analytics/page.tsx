@@ -54,13 +54,16 @@ type AnalyticsData = {
   devices: DimensionRow[];
   browsers: DimensionRow[];
   events: EventsRow[];
+  /** True when the Vercel plan does not include custom events (Hobby). */
+  eventsPlanRequired?: boolean;
 };
 
-type RangeKey = "7d" | "30d" | "90d";
+type RangeKey = "7d" | "30d";
+// 90d is not offered: the Hobby plan only keeps 31 days of analytics data,
+// and daily grouping is capped at 62 days even on higher plans.
 const RANGES: Array<{ key: RangeKey; label: string }> = [
   { key: "7d", label: "7 days" },
   { key: "30d", label: "30 days" },
-  { key: "90d", label: "90 days" },
 ];
 
 /* ── Formatting helpers ──────────────────────────────────────────── */
@@ -456,7 +459,7 @@ export default function AdminAnalyticsPage() {
       <AdminPageHeader
         eyebrow="Observability"
         title="Web analytics"
-        description="Visitor traffic, top content, audience, and conversion events for the public website — powered by Vercel Web Analytics."
+        description="Visitor traffic, top content, audience, and conversion events for the public website."
       />
 
       {error && !setupNeeded && <AdminNotice>{error}</AdminNotice>}
@@ -564,10 +567,10 @@ export default function AdminAnalyticsPage() {
             />
             <KpiCard
               label="Tracked events"
-              value={formatNumber(totals?.eventsTotal ?? 0)}
+              value={data.eventsPlanRequired ? "—" : formatNumber(totals?.eventsTotal ?? 0)}
               icon={Activity}
               tone="is-amber"
-              footer="form actions"
+              footer={data.eventsPlanRequired ? "needs Vercel Pro" : "form actions"}
             />
           </section>
 
@@ -646,7 +649,13 @@ export default function AdminAnalyticsPage() {
               </div>
             </header>
             <div className="analytics-panel-body analytics-events-body">
-              {data.events.length === 0 ? (
+              {data.eventsPlanRequired ? (
+                <p className="analytics-empty">
+                  Custom event tracking is a Vercel Pro plan feature. Traffic
+                  analytics above work on every plan; the form-event reports
+                  activate automatically if the Vercel project is upgraded.
+                </p>
+              ) : data.events.length === 0 ? (
                 <p className="analytics-empty">
                   No custom events yet. Form submissions on the public site
                   (course enquiries, scholarship registrations, contact

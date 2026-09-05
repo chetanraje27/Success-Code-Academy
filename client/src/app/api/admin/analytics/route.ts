@@ -14,7 +14,10 @@ const COOKIE_NAME = "sca_admin_session";
 
 const VERCEL_API_BASE = "https://api.vercel.com/v1/query/web-analytics";
 
-const RANGES: Record<string, number> = { "7d": 7, "30d": 30, "90d": 90 };
+// 90d is intentionally unsupported: the Hobby plan only serves the latest 31
+// days, and by=day grouping is capped at 62 days even on higher plans. A
+// longer view would need weekly granularity.
+const RANGES: Record<string, number> = { "7d": 7, "30d": 30 };
 
 type TimeseriesRow = { timestamp: string; pageviews: number; visitors: number };
 type DimensionRow = Record<string, string | number>;
@@ -60,25 +63,57 @@ function toDateOnly(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/** Marker so GET() can surface token problems as actionable setup guidance. */
+class AnalyticsAuthError extends Error {}
+
 async function vercelQuery(
   token: string,
+  endpoint: "visits/aggregate" | "events/aggregate",
   params: Record<string, string>,
 ): Promise<unknown> {
   const search = new URLSearchParams(params);
-  const response = await fetch(`${VERCEL_API_BASE}?${search.toString()}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: "no-store",
-    signal: AbortSignal.timeout(15_000),
-  });
+  // The endpoint path is required — the dataset segment (visits/events) plus
+  // the query style (aggregate) select the resource; without it Vercel
+  // answers 404 "Not Found".
+  const response = await fetch(
+    `${VERCEL_API_BASE}/${endpoint}?${search.toString()}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    },
+  );
   const payload = (await response.json().catch(() => null)) as {
     data?: unknown;
-    error?: { message?: string };
+    error?: {
+      message?: string;
+      code?: string;
+      invalidToken?: boolean;
+      missingToken?: boolean;
+    };
   } | null;
+
   if (!response.ok) {
-    throw new Error(
+    // Vercel answers an unknown/revoked token exactly like a bogus one, so
+    // translate it into instructions the admin can act on.
+    if (payload?.error?.invalidToken || payload?.error?.missingToken) {
+      throw new AnalyticsAuthError(
+        "Your Vercel access token was rejected (it is invalid, revoked, or was copied incompletely). Create a fresh token at vercel.com/account/settings/tokens and update VERCEL_ANALYTICS_TOKEN, then restart the dev server or redeploy.",
+      );
+    }
+    if (response.status === 403 || response.status === 401) {
+      throw new AnalyticsAuthError(
+        "Vercel refused this request. If the project belongs to a team, add VERCEL_ANALYTICS_TEAM_ID (found in the Vercel dashboard URL) and redeploy. Otherwise re-create the access token with access to this project.",
+      );
+    }
+    const message =
       payload?.error?.message ||
-        `Vercel Analytics request failed (${response.status}).`,
-    );
+      `Vercel Analytics request failed (${response.status}).`;
+    // Attach the status so callers can distinguish plan limits (402) and
+    // window limits (400) from real failures.
+    const failure = new Error(message) as Error & { status?: number };
+    failure.status = response.status;
+    throw failure;
   }
   return payload?.data ?? null;
 }
@@ -159,64 +194,81 @@ export async function GET(request: NextRequest) {
   try {
     const [
       timeseries,
-      prevTimeseries,
       topPaths,
       topReferrers,
       countries,
       devices,
       browsers,
-      events,
     ] = await Promise.all([
-      vercelQuery(vercelToken, { ...common, since, until, by: "day" }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
-        since: prevSince,
-        until: prevUntil,
+        since,
+        until,
         by: "day",
       }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "requestPath",
         limit: "8",
       }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "referrerHostname",
         limit: "8",
       }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "country",
         limit: "8",
       }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "deviceType",
         limit: "5",
       }),
-      vercelQuery(vercelToken, {
+      vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "browserName",
         limit: "5",
       }),
-      vercelQuery(vercelToken, {
-        ...common,
-        since,
-        until,
-        by: "eventName",
-        limit: "10",
-      }),
     ]);
+
+    // The previous-period comparison reaches `days` further back than the
+    // current window. The Hobby plan only serves the latest 31 days, so for
+    // the 30-day view (60 days back) Vercel rejects this query. Degrade to
+    // "no prior data" instead of failing the whole dashboard.
+    const prevTimeseries = (await vercelQuery(vercelToken, "visits/aggregate", {
+      ...common,
+      since: prevSince,
+      until: prevUntil,
+      by: "day",
+    }).catch(() => null)) as TimeseriesRow[] | null;
+
+    // Custom events are a separate dataset gated behind the Pro plan (402 on
+    // Hobby); a failure here must not take the traffic dashboard down.
+    let eventsPlanRequired = false;
+    const events = (await vercelQuery(vercelToken, "events/aggregate", {
+      ...common,
+      since,
+      until,
+      by: "eventName",
+      limit: "10",
+    }).catch((error: unknown) => {
+      if ((error as { status?: number }).status === 402) {
+        eventsPlanRequired = true;
+      }
+      return null;
+    })) as EventsRow[] | null;
 
     const series = (Array.isArray(timeseries) ? timeseries : []) as TimeseriesRow[];
     const prevSeries = (Array.isArray(prevTimeseries) ? prevTimeseries : []) as TimeseriesRow[];
@@ -231,6 +283,8 @@ export async function GET(request: NextRequest) {
     const delta = (current: number, previous: number) =>
       previous === 0 ? null : Math.round(((current - previous) / previous) * 100);
 
+    const eventRows: EventsRow[] = Array.isArray(events) ? events : [];
+
     return NextResponse.json(
       {
         status: "success",
@@ -243,7 +297,7 @@ export async function GET(request: NextRequest) {
             visitors,
             deltaPageviews: delta(pageviews, prevPageviews),
             deltaVisitors: delta(visitors, prevVisitors),
-            eventsTotal: ((events as EventsRow[]) || []).reduce(
+            eventsTotal: eventRows.reduce(
               (total, row) => total + (Number(row?.count) || 0),
               0,
             ),
@@ -254,12 +308,22 @@ export async function GET(request: NextRequest) {
           countries: (Array.isArray(countries) ? countries : []) as DimensionRow[],
           devices: (Array.isArray(devices) ? devices : []) as DimensionRow[],
           browsers: (Array.isArray(browsers) ? browsers : []) as DimensionRow[],
-          events: (Array.isArray(events) ? events : []) as EventsRow[],
+          events: eventRows,
+          eventsPlanRequired,
         },
       },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {
+    // Token and permission problems are configuration issues, not outages:
+    // answer 503 so the dashboard shows its setup card with these steps
+    // instead of a bare error banner.
+    if (error instanceof AnalyticsAuthError) {
+      return NextResponse.json(
+        { status: "fail", message: error.message },
+        { status: 503, headers: { "Cache-Control": "no-store" } },
+      );
+    }
     return NextResponse.json(
       {
         status: "error",
@@ -268,7 +332,7 @@ export async function GET(request: NextRequest) {
             ? error.message
             : "Unable to load Web Analytics data.",
       },
-      { status: 502 },
+      { status: 502, headers: { "Cache-Control": "no-store" } },
     );
   }
 }

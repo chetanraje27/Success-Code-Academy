@@ -16,11 +16,15 @@ import {
   Laptop,
   Link2,
   MapPin,
+  Monitor,
   MonitorSmartphone,
   MousePointerClick,
   RefreshCw,
+  Route,
+  Server,
   Smartphone,
   TabletSmartphone,
+  Tag,
   Users,
   Zap,
 } from "lucide-react";
@@ -49,10 +53,14 @@ type AnalyticsData = {
   };
   timeseries: TimeseriesRow[];
   topPaths: DimensionRow[];
+  routes: DimensionRow[];
   topReferrers: DimensionRow[];
+  utmSources: DimensionRow[];
   countries: DimensionRow[];
   devices: DimensionRow[];
   browsers: DimensionRow[];
+  hostnames: DimensionRow[];
+  operatingSystems: DimensionRow[];
   events: EventsRow[];
   /** True when the Vercel plan does not include custom events (Hobby). */
   eventsPlanRequired?: boolean;
@@ -100,6 +108,16 @@ function deviceIcon(label: string) {
   if (value.includes("mobile")) return Smartphone;
   if (value.includes("tablet")) return TabletSmartphone;
   if (value.includes("desktop") || value.includes("pc")) return Laptop;
+  return MonitorSmartphone;
+}
+
+function osIcon(label: string) {
+  const value = label.toLowerCase();
+  if (value.includes("windows")) return Monitor;
+  if (value.includes("mac") || value.includes("macos") || value.includes("os x")) return Laptop;
+  if (value.includes("ios") || value.includes("iphone") || value.includes("ipad")) return Smartphone;
+  if (value.includes("android")) return Smartphone;
+  if (value.includes("linux") || value.includes("ubuntu") || value.includes("chrome os")) return MonitorSmartphone;
   return MonitorSmartphone;
 }
 
@@ -181,7 +199,6 @@ function TrafficChart({ rows }: { rows: TimeseriesRow[] }) {
       ...rows.map((row) => Math.max(row.pageviews || 0, row.visitors || 0)),
       1,
     );
-    // Round the axis maximum up to a clean value so labels stay readable.
     const magnitude = 10 ** Math.floor(Math.log10(maxValue));
     const axisMax = Math.ceil(maxValue / magnitude) * magnitude;
 
@@ -335,7 +352,55 @@ function TrafficChart({ rows }: { rows: TimeseriesRow[] }) {
   );
 }
 
-/* ── Bar list (top pages / referrers / countries / devices) ──────── */
+/* ── Bar list with percentage or absolute values ──────────────────── */
+
+type BarEntry = {
+  label: string;
+  value: number;
+  icon?: React.ComponentType<{ size?: number }>;
+};
+
+function BarRows({
+  entries,
+  max,
+  total,
+  showPercent,
+  formatLabel,
+}: {
+  entries: BarEntry[];
+  max: number;
+  total: number;
+  showPercent: boolean;
+  formatLabel?: (label: string) => React.ReactNode;
+}) {
+  if (entries.length === 0) return null;
+  return (
+    <>
+      {entries.map((entry) => (
+        <div className="analytics-bar-row" key={`${entry.label}-${entry.value}`}>
+          <div className="analytics-bar-meta">
+            <span className="analytics-bar-label" title={entry.label}>
+              {formatLabel ? formatLabel(entry.label) : entry.label}
+            </span>
+            <span className="analytics-bar-value">
+              {showPercent && total > 0
+                ? `${Math.round((entry.value / total) * 100)}%`
+                : formatNumber(entry.value)}
+            </span>
+          </div>
+          <div className="analytics-bar-track" role="presentation">
+            <span
+              className="analytics-bar-fill"
+              style={{ width: `${Math.max((entry.value / max) * 100, 2)}%` }}
+            />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
+/* ── Simple single-tab bar list panel ────────────────────────────── */
 
 function BarList({
   title,
@@ -345,6 +410,7 @@ function BarList({
   valueKey = "visitors",
   emptyLabel,
   formatLabel,
+  showPercent = false,
 }: {
   title: string;
   icon: typeof Users;
@@ -352,16 +418,17 @@ function BarList({
   labelKey: string;
   valueKey?: string;
   emptyLabel: string;
-  formatLabel?: (label: string) => string;
+  formatLabel?: (label: string) => React.ReactNode;
+  showPercent?: boolean;
 }) {
   const entries = rows
     .map((row) => ({
       label: String(row[labelKey] ?? "—"),
       value: Number(row[valueKey] ?? 0),
-      secondary: Number(row.visitors ?? 0),
     }))
     .filter((entry) => entry.label !== "—" || entry.value > 0);
   const max = Math.max(...entries.map((entry) => entry.value), 1);
+  const total = entries.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
     <section className="admin-card analytics-panel">
@@ -372,32 +439,88 @@ function BarList({
             {title}
           </h2>
         </div>
+        <span className="analytics-col-label">VISITORS</span>
       </header>
       <div className="analytics-panel-body">
         {entries.length === 0 ? (
           <p className="analytics-empty">{emptyLabel}</p>
         ) : (
-          entries.map((entry) => (
-            <div className="analytics-bar-row" key={`${entry.label}-${entry.value}`}>
-              <div className="analytics-bar-meta">
-                <span className="analytics-bar-label" title={entry.label}>
-                  {formatLabel ? formatLabel(entry.label) : entry.label}
-                </span>
-                <span className="analytics-bar-value">
-                  {formatNumber(entry.value)}
-                </span>
-              </div>
-              <div
-                className="analytics-bar-track"
-                role="presentation"
-              >
-                <span
-                  className="analytics-bar-fill"
-                  style={{ width: `${Math.max((entry.value / max) * 100, 2)}%` }}
-                />
-              </div>
-            </div>
-          ))
+          <BarRows
+            entries={entries}
+            max={max}
+            total={total}
+            showPercent={showPercent}
+            formatLabel={formatLabel}
+          />
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ── Tabbed bar list panel ────────────────────────────────────────── */
+
+type TabConfig = {
+  key: string;
+  label: string;
+  rows: DimensionRow[];
+  labelKey: string;
+  valueKey?: string;
+  emptyLabel: string;
+  formatLabel?: (label: string) => React.ReactNode;
+  showPercent?: boolean;
+};
+
+function TabbedBarList({
+  icon: Icon,
+  tabs,
+  colLabel = "VISITORS",
+}: {
+  icon: typeof Users;
+  tabs: TabConfig[];
+  colLabel?: string;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = tabs[activeIndex] ?? tabs[0];
+
+  const entries = active.rows
+    .map((row) => ({
+      label: String(row[active.labelKey] ?? "—"),
+      value: Number(row[active.valueKey ?? "visitors"] ?? 0),
+    }))
+    .filter((entry) => entry.label !== "—" || entry.value > 0);
+  const max = Math.max(...entries.map((entry) => entry.value), 1);
+  const total = entries.reduce((sum, entry) => sum + entry.value, 0);
+
+  return (
+    <section className="admin-card analytics-panel">
+      <header className="admin-card-header analytics-panel-head analytics-panel-head--tabbed">
+        <div className="analytics-panel-tabs-row">
+          <Icon size={15} aria-hidden="true" className="analytics-panel-tab-icon" />
+          {tabs.map((tab, index) => (
+            <button
+              key={tab.key}
+              type="button"
+              className={`analytics-panel-tab ${activeIndex === index ? "is-active" : ""}`}
+              onClick={() => setActiveIndex(index)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <span className="analytics-col-label">{colLabel}</span>
+      </header>
+      <div className="analytics-panel-body">
+        {entries.length === 0 ? (
+          <p className="analytics-empty">{active.emptyLabel}</p>
+        ) : (
+          <BarRows
+            entries={entries}
+            max={max}
+            total={total}
+            showPercent={active.showPercent ?? false}
+            formatLabel={active.formatLabel}
+          />
         )}
       </div>
     </section>
@@ -541,6 +664,7 @@ export default function AdminAnalyticsPage() {
         </div>
       ) : data ? (
         <>
+          {/* ── KPI row ─────────────────────────────────────── */}
           <section className="analytics-kpis" aria-label="Traffic summary">
             <KpiCard
               label="Visitors"
@@ -574,6 +698,7 @@ export default function AdminAnalyticsPage() {
             />
           </section>
 
+          {/* ── Traffic chart ────────────────────────────────── */}
           <section className="admin-card analytics-chart-card">
             <header className="admin-card-header analytics-panel-head">
               <div>
@@ -589,23 +714,56 @@ export default function AdminAnalyticsPage() {
             </div>
           </section>
 
+          {/* ── Pages / Routes / Hostnames  +  Referrers / UTM ── */}
           <div className="analytics-grid">
-            <BarList
-              title="Top pages"
+            <TabbedBarList
               icon={Eye}
-              rows={data.topPaths}
-              labelKey="requestPath"
-              emptyLabel="No page views recorded yet."
+              tabs={[
+                {
+                  key: "pages",
+                  label: "Pages",
+                  rows: data.topPaths,
+                  labelKey: "requestPath",
+                  emptyLabel: "No page views recorded yet.",
+                },
+                {
+                  key: "routes",
+                  label: "Routes",
+                  rows: data.routes,
+                  labelKey: "requestPath",
+                  emptyLabel: "No route data available yet.",
+                },
+                {
+                  key: "environments",
+                  label: "Environments",
+                  rows: data.hostnames,
+                  labelKey: "environment",
+                  emptyLabel: "No environment data recorded yet.",
+                },
+              ]}
             />
-            <BarList
-              title="Referrers"
+            <TabbedBarList
               icon={Link2}
-              rows={data.topReferrers}
-              labelKey="referrerHostname"
-              emptyLabel="No referrer traffic recorded yet."
+              tabs={[
+                {
+                  key: "referrers",
+                  label: "Referrers",
+                  rows: data.topReferrers,
+                  labelKey: "referrerHostname",
+                  emptyLabel: "No referrer traffic recorded yet.",
+                },
+                {
+                  key: "utm",
+                  label: "UTM Parameters",
+                  rows: data.utmSources,
+                  labelKey: "utm_source",
+                  emptyLabel: "No UTM source data recorded yet.",
+                },
+              ]}
             />
           </div>
 
+          {/* ── Countries  +  Devices/Browsers  +  Operating Systems ── */}
           <div className="analytics-grid analytics-grid-triple">
             <BarList
               title="Countries"
@@ -614,30 +772,78 @@ export default function AdminAnalyticsPage() {
               labelKey="country"
               valueKey="visitors"
               emptyLabel="No country data recorded yet."
+              showPercent={true}
               formatLabel={(label) =>
-                /^[A-Z]{2}$/.test(label)
-                  ? `${countryFlag(label)} ${label}`
-                  : label
+                /^[A-Z]{2}$/.test(label) ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <span>{countryFlag(label)}</span>
+                    <span>{label}</span>
+                  </span>
+                ) : (
+                  label
+                )
               }
             />
-            <BarList
-              title="Devices"
+            <TabbedBarList
               icon={Laptop}
-              rows={data.devices}
-              labelKey="deviceType"
-              valueKey="visitors"
-              emptyLabel="No device data recorded yet."
+              colLabel="VISITORS"
+              tabs={[
+                {
+                  key: "devices",
+                  label: "Devices",
+                  rows: data.devices,
+                  labelKey: "deviceType",
+                  valueKey: "visitors",
+                  emptyLabel: "No device data recorded yet.",
+                  showPercent: true,
+                  formatLabel: (label) => {
+                    const Icon = deviceIcon(label);
+                    return (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                        <Icon size={13} />
+                        <span>{label}</span>
+                      </span>
+                    );
+                  },
+                },
+                {
+                  key: "browsers",
+                  label: "Browsers",
+                  rows: data.browsers,
+                  labelKey: "browserName",
+                  valueKey: "visitors",
+                  emptyLabel: "No browser data recorded yet.",
+                  showPercent: true,
+                  formatLabel: (label) => (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                      <Globe2 size={13} />
+                      <span>{label}</span>
+                    </span>
+                  ),
+                },
+              ]}
             />
             <BarList
-              title="Browsers"
-              icon={Globe2}
-              rows={data.browsers}
-              labelKey="browserName"
+              title="Operating Systems"
+              icon={Server}
+              rows={data.operatingSystems}
+              labelKey="osName"
               valueKey="visitors"
-              emptyLabel="No browser data recorded yet."
+              emptyLabel="No OS data recorded yet."
+              showPercent={true}
+              formatLabel={(label) => {
+                const Icon = osIcon(label);
+                return (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <Icon size={13} />
+                    <span>{label}</span>
+                  </span>
+                );
+              }}
             />
           </div>
 
+          {/* ── Conversion events ────────────────────────────── */}
           <section className="admin-card analytics-panel">
             <header className="admin-card-header analytics-panel-head">
               <div>

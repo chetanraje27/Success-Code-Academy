@@ -6314,6 +6314,54 @@ html[data-admin-theme]::-webkit-scrollbar-track {
   color: var(--admin-faint);
   font-size: 0.7rem;
 }
+
+/* ── Tabbed panel head ── */
+.analytics-panel-head--tabbed {
+  align-items: center;
+}
+.analytics-panel-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.analytics-panel-tab-icon {
+  color: var(--admin-muted);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.analytics-panel-tab {
+  padding: 3px 10px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--admin-muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--admin-dur-fast) var(--admin-ease),
+    border-color var(--admin-dur-fast) var(--admin-ease);
+  white-space: nowrap;
+}
+.analytics-panel-tab:hover {
+  color: var(--admin-text);
+}
+.analytics-panel-tab.is-active {
+  color: var(--admin-text);
+  border-bottom-color: var(--admin-brand);
+}
+.analytics-col-label {
+  color: var(--admin-faint);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .analytics-panel-body {
   display: flex;
   flex-direction: column;

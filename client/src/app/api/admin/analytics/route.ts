@@ -63,6 +63,58 @@ function toDateOnly(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/**
+ * Normalize a request path to a route pattern by replacing dynamic segments.
+ * e.g. /courses/neet-repeater-2024 → /courses/[slug]
+ *      /results/64a1b2c3d4e5f6a7b8c9d0e1 → /results/[id]
+ */
+function normalizePath(path: string): string {
+  return path
+    .split("/")
+    .map((seg) => {
+      if (!seg) return seg;
+      // UUID pattern
+      if (
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(seg)
+      )
+        return "[id]";
+      // Pure numeric
+      if (/^\d+$/.test(seg)) return "[id]";
+      // MongoDB ObjectId (24 hex chars)
+      if (/^[0-9a-f]{24}$/i.test(seg)) return "[id]";
+      // Long alphanumeric token / hash (> 20 chars, no spaces)
+      if (seg.length > 24 && /^[a-zA-Z0-9_-]+$/.test(seg)) return "[slug]";
+      return seg;
+    })
+    .join("/");
+}
+
+/** Collapse individual page paths into normalized route patterns. */
+function deriveRoutes(paths: DimensionRow[]): DimensionRow[] {
+  const map = new Map<
+    string,
+    { requestPath: string; visitors: number; pageviews: number }
+  >();
+  for (const row of paths) {
+    const rawPath = String(row.requestPath ?? row.path ?? "");
+    const route = normalizePath(rawPath);
+    const existing = map.get(route);
+    if (existing) {
+      existing.visitors += Number(row.visitors ?? 0);
+      existing.pageviews += Number(row.pageviews ?? 0);
+    } else {
+      map.set(route, {
+        requestPath: route,
+        visitors: Number(row.visitors ?? 0),
+        pageviews: Number(row.pageviews ?? 0),
+      });
+    }
+  }
+  return Array.from(map.values())
+    .sort((a, b) => b.visitors - a.visitors)
+    .slice(0, 10);
+}
+
 /** Marker so GET() can surface token problems as actionable setup guidance. */
 class AnalyticsAuthError extends Error {}
 
@@ -72,9 +124,6 @@ async function vercelQuery(
   params: Record<string, string>,
 ): Promise<unknown> {
   const search = new URLSearchParams(params);
-  // The endpoint path is required — the dataset segment (visits/events) plus
-  // the query style (aggregate) select the resource; without it Vercel
-  // answers 404 "Not Found".
   const response = await fetch(
     `${VERCEL_API_BASE}/${endpoint}?${search.toString()}`,
     {
@@ -94,8 +143,6 @@ async function vercelQuery(
   } | null;
 
   if (!response.ok) {
-    // Vercel answers an unknown/revoked token exactly like a bogus one, so
-    // translate it into instructions the admin can act on.
     if (payload?.error?.invalidToken || payload?.error?.missingToken) {
       throw new AnalyticsAuthError(
         "Your Vercel access token was rejected (it is invalid, revoked, or was copied incompletely). Create a fresh token at vercel.com/account/settings/tokens and update VERCEL_ANALYTICS_TOKEN, then restart the dev server or redeploy.",
@@ -109,8 +156,6 @@ async function vercelQuery(
     const message =
       payload?.error?.message ||
       `Vercel Analytics request failed (${response.status}).`;
-    // Attach the status so callers can distinguish plan limits (402) and
-    // window limits (400) from real failures.
     const failure = new Error(message) as Error & { status?: number };
     failure.status = response.status;
     throw failure;
@@ -192,6 +237,7 @@ export async function GET(request: NextRequest) {
   if (teamId) common.teamId = teamId;
 
   try {
+    // Core queries — all must succeed for the dashboard to render.
     const [
       timeseries,
       topPaths,
@@ -199,6 +245,9 @@ export async function GET(request: NextRequest) {
       countries,
       devices,
       browsers,
+      // Extended queries — fail gracefully (return [] instead of throwing).
+      hostnames,
+      operatingSystems,
     ] = await Promise.all([
       vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
@@ -211,36 +260,52 @@ export async function GET(request: NextRequest) {
         since,
         until,
         by: "requestPath",
-        limit: "8",
+        limit: "10",
       }),
       vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "referrerHostname",
-        limit: "8",
+        limit: "10",
       }),
       vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "country",
-        limit: "8",
+        limit: "10",
       }),
       vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "deviceType",
-        limit: "5",
+        limit: "6",
       }),
       vercelQuery(vercelToken, "visits/aggregate", {
         ...common,
         since,
         until,
         by: "browserName",
-        limit: "5",
+        limit: "8",
       }),
+      // Hostnames — which domain/subdomain was accessed
+      vercelQuery(vercelToken, "visits/aggregate", {
+        ...common,
+        since,
+        until,
+        by: "environment",
+        limit: "8",
+      }).catch(() => []),
+      // Operating Systems
+      vercelQuery(vercelToken, "visits/aggregate", {
+        ...common,
+        since,
+        until,
+        by: "osName",
+        limit: "8",
+      }).catch(() => []),
     ]);
 
     // The previous-period comparison reaches `days` further back than the
@@ -253,6 +318,15 @@ export async function GET(request: NextRequest) {
       until: prevUntil,
       by: "day",
     }).catch(() => null)) as TimeseriesRow[] | null;
+
+    // UTM sources — may not be available on all plans / versions; degrade gracefully.
+    const utmSources = (await vercelQuery(vercelToken, "visits/aggregate", {
+      ...common,
+      since,
+      until,
+      by: "utm_source",
+      limit: "10",
+    }).catch(() => null)) as DimensionRow[] | null;
 
     // Custom events are a separate dataset gated behind the Pro plan (402 on
     // Hobby); a failure here must not take the traffic dashboard down.
@@ -283,6 +357,7 @@ export async function GET(request: NextRequest) {
     const delta = (current: number, previous: number) =>
       previous === 0 ? null : Math.round(((current - previous) / previous) * 100);
 
+    const pathsData = (Array.isArray(topPaths) ? topPaths : []) as DimensionRow[];
     const eventRows: EventsRow[] = Array.isArray(events) ? events : [];
 
     return NextResponse.json(
@@ -303,11 +378,20 @@ export async function GET(request: NextRequest) {
             ),
           },
           timeseries: series,
-          topPaths: (Array.isArray(topPaths) ? topPaths : []) as DimensionRow[],
+          // Pages: individual request paths
+          topPaths: pathsData,
+          // Routes: normalized path patterns (dynamic segments collapsed)
+          routes: deriveRoutes(pathsData),
           topReferrers: (Array.isArray(topReferrers) ? topReferrers : []) as DimensionRow[],
+          // UTM sources (null = unsupported by plan/API)
+          utmSources: Array.isArray(utmSources) ? utmSources : [],
           countries: (Array.isArray(countries) ? countries : []) as DimensionRow[],
           devices: (Array.isArray(devices) ? devices : []) as DimensionRow[],
           browsers: (Array.isArray(browsers) ? browsers : []) as DimensionRow[],
+          // Hostnames: which domain/subdomain was visited
+          hostnames: (Array.isArray(hostnames) ? hostnames : []) as DimensionRow[],
+          // Operating systems
+          operatingSystems: (Array.isArray(operatingSystems) ? operatingSystems : []) as DimensionRow[],
           events: eventRows,
           eventsPlanRequired,
         },

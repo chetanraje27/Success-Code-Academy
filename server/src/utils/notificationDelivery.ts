@@ -19,7 +19,10 @@ export async function deliverAdminNotification(notification: AdminNotification):
     if (preference && !preference.enabled) return;
     const subscriptions = await AdminPushSubscription.findAll({ where: { adminId: notification.adminId } });
     // Deliberately omit notification metadata from the browser payload.
-    const payload = JSON.stringify({ id: notification.id, eventType: notification.eventType, title: notification.title, body: notification.body, targetUrl: notification.targetUrl });
+    // The service worker consumes `url` for both the notification click target
+    // and the postMessage shape. Keep the persisted model's targetUrl internal
+    // while exposing the same destination under the worker contract.
+    const payload = JSON.stringify({ id: String(notification.id), eventType: notification.eventType, title: notification.title, body: notification.body, url: notification.targetUrl || '/admin' });
     await Promise.all(subscriptions.map(async (sub) => {
       try {
         await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, payload);

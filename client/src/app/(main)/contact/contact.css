@@ -230,6 +230,15 @@
     line-height: 1.5 !important;
   }
 
+  .public-shell .contact-page .success-countdown {
+    padding: 0.55rem 0.7rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .public-shell .contact-page .dark-form-error {
+    font-size: 0.67rem !important;
+  }
+
   .public-shell .contact-page .map-frame iframe {
     height: 240px !important;
   }

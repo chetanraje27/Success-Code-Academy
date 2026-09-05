@@ -1073,6 +1073,8 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
   gap: 2px;
 }
 
+.admin-notification-recipient-details { display: flex; min-width: 0; align-items: center; flex-wrap: wrap; gap: 6px; }
+
 .admin-notification-recipient-copy strong,
 .admin-notification-recipient-email,
 .admin-notification-recipient-role {
@@ -1082,17 +1084,8 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
 }
 
 .admin-notification-recipient-copy strong { color: var(--admin-text); font-size: .78rem; }
-.admin-notification-recipient-email {
-  color: var(--admin-muted);
-  font-size: .69rem;
-  text-transform: none;
-  overflow-wrap: anywhere;
-}
-.admin-notification-recipient-role {
-  color: var(--admin-muted);
-  font-size: .69rem;
-  text-transform: capitalize;
-}
+.admin-notification-recipient-email { min-width: 0; color: var(--admin-muted); font: inherit; letter-spacing: inherit; text-transform: none; overflow-wrap: anywhere; }
+.admin-notification-recipient-role { display: inline-flex; flex: 0 0 auto; padding: 2px 7px; color: var(--admin-brand); border: 1px solid color-mix(in srgb, var(--admin-brand) 20%, var(--admin-border)); border-radius: 999px; background: var(--admin-brand-soft); font: 500 .68rem/1.2 var(--admin-font); letter-spacing: 0; text-transform: none; white-space: nowrap; }
 
 .admin-notification-switch {
   display: inline-flex;

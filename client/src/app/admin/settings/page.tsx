@@ -11,6 +11,7 @@ import {
   AdminPageHeader,
 } from "@/components/admin/AdminUi";
 import NotificationPermissionButton from "@/components/admin/NotificationPermissionButton";
+import { adminRoleLabel } from "@/lib/roles";
 
 type SiteSettings = {
   phone: string;
@@ -242,7 +243,7 @@ export default function AdminSettingsPage() {
             <div className="admin-notification-recipients-head"><span><Users size={15} /> Alert recipients</span><small>{recipients.filter((recipient) => recipient.enabled).length} enabled</small></div>
             {recipientsLoading ? <AdminLoadingState label="Loading administrators…" /> : recipients.length === 0 ? <p className="admin-notification-empty">No other administrators are available.</p> : <div className="admin-notification-recipients">
               {recipients.map((recipient) => <div className="admin-notification-recipient" key={recipient.id}>
-                <div className="admin-notification-recipient-copy"><strong>{recipient.name}</strong><span>{recipient.email} · {recipient.role}</span></div>
+                <div className="admin-notification-recipient-copy"><strong>{recipient.name}</strong><div className="admin-notification-recipient-details"><span className="admin-notification-recipient-email">{recipient.email}</span><span className="admin-notification-recipient-role">{adminRoleLabel(recipient.role)}</span></div></div>
                 <button type="button" className={`admin-notification-switch ${recipient.enabled ? "is-on" : ""}`} onClick={() => toggleRecipient(recipient.id, recipient.enabled)} disabled={recipientSaving !== null} aria-pressed={recipient.enabled} aria-label={`${recipient.enabled ? "Disable" : "Enable"} alerts for ${recipient.name}`}>
                   <span />{recipientSaving === recipient.id ? "Saving…" : recipient.enabled ? "On" : "Off"}
                 </button>

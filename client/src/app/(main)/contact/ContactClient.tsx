@@ -8,6 +8,7 @@ import { usePageBanner } from "@/lib/use-page-banner";
 import { EditableText } from "@/components/admin/EditableText";
 import EditableSection from "@/components/admin/EditableSection";
 import SettingsEditor from "@/components/admin/SettingsEditor";
+import { useToast } from "@/components/admin/Toast";
 
 const CAMPUS_NAME = "Success Code Academy, NEET Specialist, Baramati.";
 const DEFAULT_ADDRESS =
@@ -36,15 +37,19 @@ function generateCaptcha(): { question: string; answer: number } {
 }
 
 const INITIAL_CAPTCHA = { question: "1 + 1 = ?", answer: 2 };
+const SUCCESS_COOLDOWN_SECONDS = 30;
 
 export default function ContactClient() {
   const settings = useSiteSettings();
   const { src: contactBanner, isLoading: isBannerLoading } = usePageBanner("contact");
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [captcha, setCaptcha] = useState(INITIAL_CAPTCHA);
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
+  const [formError, setFormError] = useState("");
   const [editSettings, setEditSettings] = useState(false);
+  const toast = useToast();
 
   const refreshCaptcha = useCallback(() => {
     setCaptcha(generateCaptcha());
@@ -57,12 +62,31 @@ export default function ContactClient() {
     return () => window.clearTimeout(timer);
   }, [refreshCaptcha]);
 
+  useEffect(() => {
+    if (formStatus !== "success") return;
+    setCooldownSeconds(SUCCESS_COOLDOWN_SECONDS);
+    const timer = window.setInterval(() => {
+      setCooldownSeconds((remaining) => {
+        if (remaining <= 1) {
+          window.clearInterval(timer);
+          refreshCaptcha();
+          setFormStatus("idle");
+          return 0;
+        }
+        return remaining - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [formStatus, refreshCaptcha]);
+
   const mapQuery = `${CAMPUS_NAME} ${settings.address1 || DEFAULT_ADDRESS}`;
   const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=m&z=17&ie=UTF8&iwloc=near&output=embed`;
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (formStatus !== "idle") return;
     setCaptchaError("");
+    setFormError("");
     const val = parseInt(captchaInput.trim(), 10);
     if (isNaN(val) || val !== captcha.answer) {
       setCaptchaError("Wrong answer — please try again.");
@@ -89,15 +113,18 @@ export default function ContactClient() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send message");
+        const errorBody = await response.json().catch(() => null);
+        throw new Error(errorBody?.message || "Failed to send message");
       }
 
       setFormStatus("success");
+      toast.success("Your message was submitted successfully.");
     } catch (error) {
       console.error(error);
-      setCaptchaError("Failed to send message. Please try again.");
+      const message = error instanceof Error ? error.message : "Failed to send message. Please try again.";
+      setFormError(message);
+      toast.error(message);
       setFormStatus("idle");
-    } finally {
       refreshCaptcha();
     }
   }
@@ -281,10 +308,10 @@ export default function ContactClient() {
                   <div className="dark-success-view">
                     <div className="success-icon-wrap">✓</div>
                     <h3 className="success-heading">Message Sent!</h3>
-                    <p className="success-desc">Our academic support team will get in touch with you shortly.</p>
-                    <button className="dark-reset-btn" onClick={() => setFormStatus("idle")}>
-                      Send Another Message
-                    </button>
+                    <p className="success-desc">Your message was submitted. Our team will contact you using the email address and phone number you provided.</p>
+                    <p className="success-countdown" role="status" aria-live="polite">
+                      You can send another message in <strong>{cooldownSeconds} seconds</strong>.
+                    </p>
                   </div>
                 ) : (
                   <form onSubmit={handleFormSubmit} className="dark-form-element">
@@ -407,6 +434,8 @@ export default function ContactClient() {
                         </p>
                       )}
                     </div>
+
+                    {formError && <p className="dark-form-error" role="alert">⚠ {formError}</p>}
 
                     <button
                       type="submit"
@@ -917,6 +946,28 @@ export default function ContactClient() {
           color: #64748b;
           line-height: 1.6;
           margin: 0 0 24px;
+        }
+
+        .success-countdown {
+          margin: 0;
+          padding: 10px 14px;
+          border: 1px solid #bfdbfe;
+          border-radius: 8px;
+          background: #eff6ff;
+          color: #1e40af;
+          font-size: 0.84rem;
+          line-height: 1.45;
+        }
+        .success-countdown strong {
+          color: #102f5e;
+          font-variant-numeric: tabular-nums;
+        }
+        .dark-form-error {
+          margin: -4px 0 0;
+          color: #a21f2d;
+          font-size: 0.82rem;
+          font-weight: 600;
+          line-height: 1.45;
         }
 
         .dark-reset-btn {

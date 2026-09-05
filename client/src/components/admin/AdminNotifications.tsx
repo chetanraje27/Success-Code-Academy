@@ -64,6 +64,16 @@ function fromServer(input: unknown): InboxItem | null {
   return safeItem({ ...item, url: item.targetUrl, read: Boolean(item.readAt) });
 }
 
+function mergeItems(current: InboxItem[], incoming: InboxItem[]): InboxItem[] {
+  const merged = [...current];
+  for (const item of incoming) {
+    const index = merged.findIndex((existing) => existing.id === item.id || (existing.title === item.title && existing.body === item.body && Math.abs(existing.createdAt - item.createdAt) < 120000));
+    if (index < 0) merged.push(item);
+    else merged[index] = item.id === merged[index].id ? item : { ...merged[index], ...item };
+  }
+  return merged.sort((a, b) => b.createdAt - a.createdAt);
+}
+
 function readPayload(response: { data?: unknown; pagination?: unknown }): { items: InboxItem[]; pagination?: ListPayload["pagination"]; unreadCount?: number } {
   const data = response.data && typeof response.data === "object" ? response.data as ListPayload : {};
   const rawItems = Array.isArray(data.items) ? data.items : Array.isArray(response.data) ? response.data : [];
@@ -93,12 +103,12 @@ export default function AdminNotifications() {
       const total = typeof serverPagination.total === "number" ? serverPagination.total : payload.items.length;
       const pageSize = typeof serverPagination.pageSize === "number" ? serverPagination.pageSize : PAGE_SIZE;
       const totalPages = typeof serverPagination.totalPages === "number" ? Math.max(1, serverPagination.totalPages) : (serverPagination.hasMore ? nextPage + 1 : Math.max(1, Math.ceil(total / pageSize)));
-      setItems(payload.items);
+      setItems((current) => mergeItems(current, payload.items));
       setPage(nextPage);
       setPageInfo({ page: nextPage, pageSize, total, totalPages });
       if (payload.unreadCount !== undefined) setUnreadCount(payload.unreadCount);
       else setUnreadCount(payload.items.filter((item) => !item.read).length);
-      localStorage.setItem(STORAGE, JSON.stringify(payload.items));
+      setItems((current) => { localStorage.setItem(STORAGE, JSON.stringify(current)); return current; });
     } catch {
       if (nextPage === 1) {
         try { setItems(JSON.parse(localStorage.getItem(STORAGE) || "[]").map(safeItem).filter(Boolean) as InboxItem[]); } catch { setItems([]); }
@@ -109,7 +119,14 @@ export default function AdminNotifications() {
   useEffect(() => {
     void navigator.serviceWorker?.register("/sw.js", { scope: "/" }).catch(() => undefined);
     void loadPage(1);
-    const onMessage = () => { void loadPage(1); };
+    const onMessage = (event: MessageEvent) => {
+      const received = safeItem(event.data);
+      if (received) {
+        setItems((current) => mergeItems(current, [received]));
+        setUnreadCount((count) => count + 1);
+      }
+      void loadPage(1);
+    };
     navigator.serviceWorker?.addEventListener("message", onMessage);
     return () => navigator.serviceWorker?.removeEventListener("message", onMessage);
   }, [loadPage]);
@@ -135,14 +152,17 @@ export default function AdminNotifications() {
     };
   }, [open]);
 
-  const unread = useMemo(() => Math.max(unreadCount, items.filter((item) => !item.read).length), [items, unreadCount]);
+  // The API count is authoritative across sessions and devices. Items are
+  // still merged locally so a just-delivered push remains visible while a
+  // refresh is in flight, but the badge must not derive a competing count.
+  const unread = useMemo(() => unreadCount, [unreadCount]);
   const first = pageInfo.total === 0 ? 0 : (page - 1) * pageInfo.pageSize + 1;
   const last = Math.min(page * pageInfo.pageSize, pageInfo.total);
 
   function markRead(id: string) {
     setItems((current) => current.map((item) => item.id === id ? { ...item, read: true } : item));
     setUnreadCount((count) => Math.max(0, count - 1));
-    void adminApiFetch(adminNotificationPaths.read(Number(id)), { method: "PATCH" }).catch(() => undefined);
+    void adminApiFetch(adminNotificationPaths.read(Number(id)), { method: "PATCH" }).then(() => loadPage(page)).catch(() => loadPage(page));
   }
 
   return <div ref={notificationCenterRef} className="admin-notification-center">

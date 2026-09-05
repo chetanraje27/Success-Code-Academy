@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import "../styles/tokens.css";
 import "./globals.css";
 import StyledJsxRegistry from "./registry";
@@ -51,6 +52,7 @@ export default function RootLayout({
         <StyledJsxRegistry>
           {children}
         </StyledJsxRegistry>
+        <AnalyticsTracker />
       </body>
     </html>
   );

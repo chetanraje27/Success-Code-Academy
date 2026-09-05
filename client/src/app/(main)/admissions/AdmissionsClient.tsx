@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { track } from "@vercel/analytics";
 import { EditableText } from "@/components/admin/EditableText";
 import { usePageBanner } from "@/lib/use-page-banner";
 import { useEditModeOptional } from "@/components/admin/EditModeContext";
@@ -173,6 +174,7 @@ export default function AdmissionsClient({ courses = [], scholarshipPrograms = [
       setSavedRegistration(formData);
       setIsEditing(false);
       if (hasExistingRegistration) toast.success("Your scholarship registration was updated.");
+      else track("scholarship_registration_submitted");
     } catch (err: unknown) {
       setErrorMessage(
         err instanceof Error

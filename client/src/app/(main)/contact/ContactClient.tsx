@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { track } from "@vercel/analytics";
 import { useSiteSettings } from "@/lib/site-settings";
 import { usePageBanner } from "@/lib/use-page-banner";
 import { EditableText } from "@/components/admin/EditableText";
@@ -119,6 +120,7 @@ export default function ContactClient() {
 
       setFormStatus("success");
       toast.success("Your message was submitted successfully.");
+      track("contact_form_submitted");
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : "Failed to send message. Please try again.";

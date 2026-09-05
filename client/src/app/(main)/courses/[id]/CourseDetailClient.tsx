@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { track } from "@vercel/analytics";
 import {
   FaArrowLeft,
   FaCalendarDays,
@@ -313,6 +314,7 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
       setFormData(submittedData);
       setIsEditing(false);
       if (hasSaved) toast.success("Your course enquiry was updated.");
+      else track("course_enquiry_submitted");
     } catch (error) {
       console.error(error);
       setSubmissionError(error instanceof Error ? error.message : "Failed to save the course enquiry.");

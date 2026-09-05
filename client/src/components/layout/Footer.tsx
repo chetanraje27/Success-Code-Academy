@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { track } from "@vercel/analytics";
 import { siteConfig, navLinks } from "@/data/home";
 import Button from "@/components/ui/Button";
 import EditableSection from "@/components/admin/EditableSection";
@@ -57,6 +58,7 @@ export default function Footer() {
       if (response.ok && result.status === "success") {
         setNewsletterMessage(result.message || "Subscribed successfully!");
         form.reset();
+        track("newsletter_subscribed");
       } else {
         setNewsletterMessage(
           result.message || "Subscription failed. Please try again.",

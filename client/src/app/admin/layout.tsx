@@ -27,6 +27,7 @@ import {
   Star,
   Sun,
   Trophy,
+  TrendingUp,
   Users,
   Video,
   Award,
@@ -78,6 +79,7 @@ const navigation = [
     label: "Overview",
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+      { label: "Web analytics", href: "/admin/analytics", icon: TrendingUp },
       { label: "Visual website editor", href: "/?edit=1", icon: Globe2 },
     ],
   },

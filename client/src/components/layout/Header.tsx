@@ -53,7 +53,7 @@ export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
-  const { isAdmin, editMode, toggleEditMode, setLeadsOpen } = useEditModeOptional();
+  const { isAdmin, editMode, toggleEditMode, setEditMode, setLeadsOpen } = useEditModeOptional();
   const isActivePath = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
@@ -179,6 +179,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
+    const wasAdmin = isAdmin;
     try {
       if (isAdmin) {
         await fetch("/api/admin/session", {
@@ -191,12 +192,25 @@ export default function Header() {
     } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      setLeadsOpen(false);
+      // setEditMode also updates the context state synchronously and prevents
+      // editor controls from surviving the auth state transition.
+      if (wasAdmin) {
+        setEditMode(false);
+        try {
+          sessionStorage.removeItem("sca_edit_mode");
+        } catch {
+          /* Session storage is optional. */
+        }
+      }
       setCurrentUser(null);
       setIsLoggingOut(false);
       setIsDropdownOpen(false);
       setIsMenuOpen(false);
       window.dispatchEvent(new Event("auth-changed"));
-      window.dispatchEvent(new Event("admin-session-expired"));
+      if (wasAdmin) {
+        window.dispatchEvent(new Event("admin-session-expired"));
+      }
     }
   };
 

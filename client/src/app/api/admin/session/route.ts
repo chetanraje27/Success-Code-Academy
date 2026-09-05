@@ -5,6 +5,26 @@ import { isAdminRole } from "@/lib/roles";
 const COOKIE_NAME = "sca_admin_session";
 const COOKIE_MAX_AGE = 8 * 60 * 60;
 
+function cookieDomainFor(request: NextRequest): string | undefined {
+  // Use the same parent-domain cookie for the production console and public
+  // site, while keeping local development host-only. Strip the port before
+  // checking so localhost:3000 is never treated as a domain value.
+  const hostname = request.nextUrl.hostname.toLowerCase();
+  return hostname === "successcodeacademy.in" || hostname.endsWith(".successcodeacademy.in")
+    ? ".successcodeacademy.in"
+    : undefined;
+}
+
+function adminCookieOptions(domain: string | undefined) {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+    ...(domain ? { domain } : {}),
+  };
+}
+
 function backendUrl(path: string): string {
   const base =
     process.env.API_URL ||
@@ -130,17 +150,10 @@ export async function POST(request: NextRequest) {
       status: "success",
       data: { user: data.user },
     });
-    const host = request.headers.get("host") || "";
-    const cookieDomain = host.includes("successcodeacademy.in")
-      ? ".successcodeacademy.in"
-      : undefined;
+    const cookieDomain = cookieDomainFor(request);
 
     result.cookies.set(COOKIE_NAME, data.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      domain: cookieDomain,
+      ...adminCookieOptions(cookieDomain),
       maxAge: COOKIE_MAX_AGE,
       priority: "high",
     });
@@ -251,47 +264,26 @@ export async function DELETE(request: NextRequest) {
     );
   }
 
-  const host = request.headers.get("host") || "";
-  const cookieDomain = host.includes("successcodeacademy.in")
-    ? ".successcodeacademy.in"
-    : undefined;
+  const cookieDomain = cookieDomainFor(request);
 
   const response = NextResponse.json({ status: "success" });
 
-  // 1. Clear domain-level cookie
+  // Clear every cookie that could have been created by this app. A browser
+  // only removes a cookie when name, domain and path all match the original.
   if (cookieDomain) {
     response.cookies.set(COOKIE_NAME, "", {
-      domain: cookieDomain,
-      path: "/",
+      ...adminCookieOptions(cookieDomain),
       maxAge: 0,
       expires: new Date(0),
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
     });
   }
 
-  // 2. Clear host-only cookie
+  // Also clear a host-only copy left by an older deployment or a local login.
   response.cookies.set(COOKIE_NAME, "", {
-    path: "/",
+    ...adminCookieOptions(undefined),
     maxAge: 0,
     expires: new Date(0),
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
   });
-  response.cookies.delete(COOKIE_NAME);
-
-  // 3. Clear via cookies() store as well
-  const cookieStore = await cookies();
-  if (cookieDomain) {
-    cookieStore.set(COOKIE_NAME, "", {
-      domain: cookieDomain,
-      path: "/",
-      maxAge: 0,
-    });
-  }
-  cookieStore.delete(COOKIE_NAME);
 
   return response;
 }

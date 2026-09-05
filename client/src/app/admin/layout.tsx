@@ -147,6 +147,7 @@ export default function AdminLayout({
   const [scrollHint, setScrollHint] = useState({ visible: false, hasMoreBelow: false });
   const [theme, setTheme] = useState<AdminTheme | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const logoutStartedRef = useRef(false);
 
   /*
    * The attribute lives on <html> because admin.css is shared with the public
@@ -251,11 +252,13 @@ export default function AdminLayout({
   }, [isSidebarCollapsed, updateScrollThumb]);
 
   const verifySession = useCallback(async () => {
+    if (logoutStartedRef.current) return false;
     try {
       const response = await fetch("/api/admin/session", {
         credentials: "same-origin",
         cache: "no-store",
       });
+      if (logoutStartedRef.current) return false;
       if (!response.ok) {
         setUser(null);
         setSession("guest");
@@ -264,6 +267,7 @@ export default function AdminLayout({
       const payload = (await response.json()) as {
         data?: { user?: AdminUser };
       };
+      if (logoutStartedRef.current) return false;
       if (!payload.data?.user || !isAdminRole(payload.data.user.role)) {
         setUser(null);
         setSession("guest");
@@ -289,6 +293,7 @@ export default function AdminLayout({
 
   useEffect(() => {
     const expire = () => {
+      logoutStartedRef.current = true;
       setSession("guest");
       setUser(null);
       router.replace(isSubdomain ? "/login" : "/admin/login");
@@ -375,6 +380,8 @@ export default function AdminLayout({
   }, [isSubdomain, isSuperAdmin, pathname, router, session]);
 
   async function handleLogout() {
+    if (logoutStartedRef.current) return;
+    logoutStartedRef.current = true;
     setIsLoggingOut(true);
     try {
       await fetch("/api/admin/session", {
@@ -384,9 +391,17 @@ export default function AdminLayout({
     } catch {
       // Ignore network errors so the user is still navigated out
     } finally {
+      try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("sca_edit_mode");
+      } catch {
+        /* Browser storage is optional. */
+      }
       setUser(null);
       setSession("guest");
       setIsLoggingOut(false);
+      window.dispatchEvent(new Event("auth-changed"));
       window.dispatchEvent(new Event("admin-session-expired"));
       window.location.replace(isSubdomain ? "/login" : "/admin/login");
     }

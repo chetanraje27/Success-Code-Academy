@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type { AdminUser } from "@/lib/admin-api";
@@ -34,8 +35,10 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
   const [editMode, setEditModeState] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [leadsOpen, setLeadsOpen] = useState(false);
+  const authRequestVersion = useRef(0);
 
   const refreshAuth = useCallback(() => {
+    const requestVersion = ++authRequestVersion.current;
     fetch("/api/admin/session", {
       credentials: "same-origin",
       cache: "no-store",
@@ -50,6 +53,7 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
           : null;
       })
       .then((nextUser) => {
+        if (requestVersion !== authRequestVersion.current) return;
         setUser(nextUser);
         if (!nextUser) {
           setEditModeState(false);
@@ -57,6 +61,7 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
         }
       })
       .catch(() => {
+        if (requestVersion !== authRequestVersion.current) return;
         setUser(null);
         setEditModeState(false);
         setLeadsOpen(false);
@@ -65,12 +70,24 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     refreshAuth();
-    const onAuth = () => refreshAuth();
+    // Logout is already authoritative locally. Do not re-verify here: the
+    // request can race navigation and briefly restore the just-expired user.
+    const onExpired = () => {
+      authRequestVersion.current += 1;
+      setUser(null);
+      setEditModeState(false);
+      setLeadsOpen(false);
+      try {
+        sessionStorage.removeItem(EDIT_MODE_KEY);
+      } catch {
+        /* Session storage is optional. */
+      }
+    };
     const onContent = () => setRefreshKey((key) => key + 1);
-    window.addEventListener("admin-session-expired", onAuth);
+    window.addEventListener("admin-session-expired", onExpired);
     window.addEventListener("admin-content-changed", onContent);
     return () => {
-      window.removeEventListener("admin-session-expired", onAuth);
+      window.removeEventListener("admin-session-expired", onExpired);
       window.removeEventListener("admin-content-changed", onContent);
     };
   }, [refreshAuth]);

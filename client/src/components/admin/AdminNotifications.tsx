@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Bell, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { adminApiFetch, adminNotificationPaths } from "@/lib/admin-api";
@@ -82,6 +82,7 @@ export default function AdminNotifications() {
   const [pageInfo, setPageInfo] = useState<PageInfo>({ page: 1, pageSize: PAGE_SIZE, total: 0, totalPages: 1 });
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const notificationCenterRef = useRef<HTMLDivElement>(null);
 
   const loadPage = useCallback(async (nextPage: number) => {
     setLoading(true);
@@ -113,6 +114,27 @@ export default function AdminNotifications() {
     return () => navigator.serviceWorker?.removeEventListener("message", onMessage);
   }, [loadPage]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || !notificationCenterRef.current?.contains(target)) {
+        setOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
   const unread = useMemo(() => Math.max(unreadCount, items.filter((item) => !item.read).length), [items, unreadCount]);
   const first = pageInfo.total === 0 ? 0 : (page - 1) * pageInfo.pageSize + 1;
   const last = Math.min(page * pageInfo.pageSize, pageInfo.total);
@@ -123,7 +145,7 @@ export default function AdminNotifications() {
     void adminApiFetch(adminNotificationPaths.read(Number(id)), { method: "PATCH" }).catch(() => undefined);
   }
 
-  return <div className="admin-notification-center">
+  return <div ref={notificationCenterRef} className="admin-notification-center">
     <button type="button" className="admin-icon-button admin-notification-trigger" onClick={() => setOpen((value) => !value)} aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`} aria-expanded={open}>
       <Bell size={17} />{unread > 0 && <span className="admin-notification-count">{unread > 99 ? "99+" : unread}</span>}
     </button>

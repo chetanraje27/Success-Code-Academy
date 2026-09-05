@@ -30,6 +30,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.0.0",
+    "@types/web-push": "^3.6.4",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -43,6 +44,7 @@
     "resend": "^6.25.0",
     "sequelize": "^6.37.8",
     "typescript": "^6.0.3",
+    "web-push": "^3.6.7",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   }

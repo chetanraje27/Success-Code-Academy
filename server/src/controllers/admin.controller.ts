@@ -45,6 +45,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Op } from 'sequelize';
 import { QueryTypes } from 'sequelize';
 import type { Transaction } from 'sequelize';
+import { publishAdminNotification } from '../utils/notificationPublisher';
 
 let supabase: ReturnType<typeof createClient> | null = null;
 const getSupabase = () => {
@@ -1170,6 +1171,13 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
   // accepted or stored here. `role` is pinned rather than taken from input:
   // administrators are managed through /database/admins.
   const user = await User.create({ ...req.body, role: 'student' });
+  void publishAdminNotification({
+    eventType: 'student_registration.created',
+    title: 'New student registration',
+    body: `${user.firstName} ${user.lastName} was added as a student.`,
+    targetUrl: '/admin/database/students',
+    metadata: { recordId: user.id, recordType: 'student' },
+  }).catch((error: unknown) => logger.warn('[Admin] Notification publish failed', { error }));
   res.status(201).json({ status: 'success', data: { user: publicStudent(user) } });
 });
 
@@ -1489,6 +1497,13 @@ export const requestSelfPasswordReset = asyncHandler(
 
 export const createCourseForm = asyncHandler(async (req: Request, res: Response) => {
   const form = await CourseRegistration.create(req.body);
+  void publishAdminNotification({
+    eventType: 'course_enquiry.created',
+    title: 'New course enquiry',
+    body: `A new enquiry was submitted for ${form.courseTitle}.`,
+    targetUrl: '/admin/database/course-forms',
+    metadata: { recordId: form.id, recordType: 'course-form' },
+  }).catch((error: unknown) => logger.warn('[Admin] Notification publish failed', { error }));
   res.status(201).json({ status: 'success', data: { form } });
 });
 
@@ -1510,6 +1525,13 @@ export const deleteCourseForm = asyncHandler(async (req: Request, res: Response)
 
 export const createScholarshipForm = asyncHandler(async (req: Request, res: Response) => {
   const form = await ScholarshipRegistration.create(req.body);
+  void publishAdminNotification({
+    eventType: 'scholarship_form.created',
+    title: 'New scholarship form',
+    body: 'A new scholarship application is waiting for review.',
+    targetUrl: '/admin/database/scholarship-forms',
+    metadata: { recordId: form.id, recordType: 'scholarship-form' },
+  }).catch((error: unknown) => logger.warn('[Admin] Notification publish failed', { error }));
   res.status(201).json({ status: 'success', data: { form } });
 });
 
@@ -1531,6 +1553,13 @@ export const deleteScholarshipForm = asyncHandler(async (req: Request, res: Resp
 
 export const createContactMessage = asyncHandler(async (req: Request, res: Response) => {
   const msg = await ContactMessage.create(req.body);
+  void publishAdminNotification({
+    eventType: 'contact_message.created',
+    title: 'New contact message',
+    body: 'A new contact enquiry is waiting for review.',
+    targetUrl: '/admin/database/contact-messages',
+    metadata: { recordId: msg.id, recordType: 'contact-message' },
+  }).catch((error: unknown) => logger.warn('[Admin] Notification publish failed', { error }));
   res.status(201).json({ status: 'success', data: { message: msg } });
 });
 

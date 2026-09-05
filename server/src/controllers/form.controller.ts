@@ -10,6 +10,7 @@ import {
   courseRegistrationReceipt,
 } from '../utils/emailTemplates';
 import { AppError } from '../utils/AppError';
+import { publishAdminNotification } from '../utils/notificationPublisher';
 
 const normaliseEmail = (value: string): string => value.trim().toLowerCase();
 const normalisePhone = (value: string): string => value.replace(/\D/g, '');
@@ -84,6 +85,14 @@ export const submitContactForm = asyncHandler(
       message,
     });
 
+    void publishAdminNotification({
+      eventType: 'contact_message.created',
+      title: 'New contact message',
+      body: 'A new contact enquiry is waiting for review.',
+      targetUrl: '/admin/database/contact-messages',
+      metadata: { recordId: newMessage.id, recordType: 'contact-message' },
+    }).catch((error: unknown) => logger.warn('[Contact Form] Notification publish failed', { error }));
+
     logger.info(`📧 [Contact Form] New message received from ${name} (${email})`);
 
     // Receipt to the sender, best-effort.
@@ -146,6 +155,14 @@ export const submitCourseRegistration = asyncHandler(
       visitingDate,
       visitingTime,
     });
+
+    void publishAdminNotification({
+      eventType: 'course_enquiry.created',
+      title: 'New course enquiry',
+      body: `A new enquiry was submitted for ${courseTitle}.`,
+      targetUrl: '/admin/database/course-forms',
+      metadata: { recordId: newRegistration.id, recordType: 'course-form' },
+    }).catch((error: unknown) => logger.warn('[Course Registration] Notification publish failed', { error }));
 
     logger.info(`🎓 [Course Registration] New registration for ${courseTitle} by ${studentName}`);
 

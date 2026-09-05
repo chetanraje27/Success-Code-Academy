@@ -910,6 +910,213 @@ html[data-admin-theme="dark"] .admin-profile-segment-btn.is-active {
   overflow: hidden;
 }
 
+/* Browser notification center */
+.admin-notification-center { position: relative; }
+.admin-notification-trigger { position: relative; border-radius: 50%; }
+.admin-notification-count { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px; border: 2px solid var(--admin-topbar-bg); border-radius: 999px; background: var(--admin-danger); color: #fff; font-size: 9px; font-weight: 700; line-height: 12px; text-align: center; }
+.admin-notification-popover { position: absolute; top: calc(100% + 9px); right: 0; z-index: 100; width: min(360px, calc(100vw - 32px)); overflow: hidden; border: 1px solid var(--admin-border-strong); border-radius: 14px; background: var(--admin-surface); box-shadow: var(--admin-shadow-lg); }
+.admin-notification-popover-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--admin-divider); }
+.admin-notification-popover-head div { display: grid; gap: 2px; }
+.admin-notification-popover-head strong { color: var(--admin-text); font-size: .86rem; }
+.admin-notification-popover-head span { color: var(--admin-muted); font-size: .7rem; }
+.admin-notification-popover-head button { display: grid; place-items: center; border: 0; background: transparent; color: var(--admin-muted); cursor: pointer; }
+.admin-notification-list { max-height: 360px; overflow-y: auto; }
+.admin-notification-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 16px; color: inherit; text-decoration: none; border-bottom: 1px solid var(--admin-divider); transition: background var(--admin-dur-fast) var(--admin-ease); }
+.admin-notification-item:hover, .admin-notification-item.is-unread { background: var(--admin-brand-softer); }
+.admin-notification-item > span { display: grid; gap: 4px; min-width: 0; }
+.admin-notification-item strong { overflow: hidden; color: var(--admin-text); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+.admin-notification-item span span { color: var(--admin-text-secondary); font-size: .74rem; line-height: 1.4; }
+.admin-notification-item svg { flex: 0 0 auto; color: var(--admin-success); }
+.admin-notification-empty { margin: 0; padding: 28px 18px; color: var(--admin-muted); font-size: .78rem; text-align: center; }
+.admin-notification-settings-copy p { margin: 0; color: var(--admin-muted); font-size: .78rem; line-height: 1.5; }
+.admin-notification-spin { animation: admin-notification-spin 800ms linear infinite; }
+@keyframes admin-notification-spin { to { transform: rotate(360deg); } }
+
+/* Settings: notification delivery controls */
+.admin-notification-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-notification-summary-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  color: var(--admin-brand);
+  border: 1px solid color-mix(in srgb, var(--admin-brand) 18%, var(--admin-border));
+  border-radius: var(--admin-radius-md);
+  background: linear-gradient(145deg, var(--admin-brand-soft), var(--admin-surface));
+}
+
+.admin-notification-summary strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--admin-text);
+  font-size: .8rem;
+}
+
+.admin-notification-admin-card {
+  position: relative;
+}
+
+.admin-notification-admin-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(var(--admin-brand), var(--admin-accent));
+  content: "";
+}
+
+.admin-notification-admin-body {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-notification-global-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  background:
+    radial-gradient(circle at 100% 0, var(--admin-brand-soft), transparent 44%),
+    var(--admin-surface-sunken);
+}
+
+.admin-notification-global-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-notification-global-copy > span:last-child {
+  color: var(--admin-muted);
+  font-size: .75rem;
+  line-height: 1.45;
+}
+
+.admin-notification-label {
+  color: var(--admin-text);
+  font-size: .84rem;
+  font-weight: 600;
+}
+
+.admin-notification-recipients-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--admin-divider);
+}
+
+.admin-notification-recipients-head > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--admin-text-secondary);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.admin-notification-recipients-head small {
+  padding: 2px 8px;
+  color: var(--admin-success);
+  border: 1px solid var(--admin-success-border);
+  border-radius: 999px;
+  background: var(--admin-success-soft);
+  font-size: .68rem;
+}
+
+.admin-notification-recipients {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.admin-notification-recipient {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-surface);
+  transition: border-color var(--admin-dur-fast) var(--admin-ease), background var(--admin-dur-fast) var(--admin-ease);
+}
+
+.admin-notification-recipient:hover {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-hover);
+}
+
+.admin-notification-recipient-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.admin-notification-recipient-copy strong,
+.admin-notification-recipient-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-notification-recipient-copy strong { color: var(--admin-text); font-size: .78rem; }
+.admin-notification-recipient-copy span { color: var(--admin-muted); font-size: .69rem; text-transform: capitalize; }
+
+.admin-notification-switch {
+  display: inline-flex;
+  min-width: 66px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 4px 8px 4px 5px;
+  color: var(--admin-muted);
+  border: 1px solid var(--admin-border-strong);
+  border-radius: 999px;
+  background: var(--admin-surface-sunken);
+  font: 600 .68rem/1 var(--admin-font);
+  cursor: pointer;
+  transition: color var(--admin-dur-fast), border-color var(--admin-dur-fast), background var(--admin-dur-fast);
+}
+
+.admin-notification-switch > span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--admin-faint);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+}
+
+.admin-notification-switch.is-on {
+  color: var(--admin-success);
+  border-color: var(--admin-success-border);
+  background: var(--admin-success-soft);
+}
+
+.admin-notification-switch.is-on > span { background: var(--admin-success); }
+.admin-notification-switch:disabled { cursor: not-allowed; opacity: .55; }
+.admin-notification-switch:focus-visible { outline: 2px solid var(--admin-brand); outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .admin-notification-popover { position: fixed; top: 64px; right: 16px; left: 16px; width: auto; }
+  .admin-card-header:has(.admin-button) { align-items: flex-start; flex-direction: column; }
+  .admin-card-header:has(.admin-button) .admin-button { width: 100%; }
+  .admin-notification-global-row { align-items: stretch; flex-direction: column; }
+  .admin-notification-global-row .admin-button { width: 100%; }
+  .admin-notification-recipients { grid-template-columns: 1fr; }
+}
+
 /* Shared confirmation surface. Keep the same restrained, layered treatment as
    the rest of the admin UI while letting the active theme set its atmosphere. */
 .admin-confirm-overlay {

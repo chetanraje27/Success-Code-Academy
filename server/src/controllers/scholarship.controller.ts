@@ -5,6 +5,7 @@ import logger from '../utils/logger';
 import { sendMail, brand } from '../utils/mailer';
 import { scholarshipRegistrationReceipt, scholarshipRegistrationStaffAlert } from '../utils/emailTemplates';
 import { AppError } from '../utils/AppError';
+import { publishAdminNotification } from '../utils/notificationPublisher';
 
 /**
  * GET /api/v1/scholarships/me
@@ -151,6 +152,14 @@ export const createRegistration = asyncHandler(
     logger.info(
       `🎓 [Scholarship] New SCST registration: ${studentName} (${studentClass}, ${city})`
     );
+
+    void publishAdminNotification({
+      eventType: 'scholarship_form.created',
+      title: 'New scholarship form',
+      body: 'A new scholarship application is waiting for review.',
+      targetUrl: '/admin/database/scholarship-forms',
+      metadata: { recordId: registration.id, recordType: 'scholarship-form' },
+    }).catch((error: unknown) => logger.warn('[Scholarship] Notification publish failed', { error }));
 
     if (studentEmail) {
       const template = scholarshipRegistrationReceipt({

@@ -12,6 +12,33 @@ export type AdminUser = {
   role: AdminRole;
 };
 
+/** Contract shared by the admin notification inbox and settings consumers. */
+export type AdminNotification = {
+  id: number;
+  eventType: string;
+  title: string;
+  body: string;
+  targetUrl: string | null;
+  adminId: number;
+  readAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminNotificationStatus = {
+  enabled: boolean;
+  recipientEnabled: boolean;
+  vapidConfigured: boolean;
+};
+
+export type AdminNotificationRecipient = {
+  id: number;
+  name: string;
+  email: string;
+  role: AdminRole;
+  enabled: boolean;
+};
+
 export type ApiEnvelope<T> = {
   status: "success" | "fail" | "error";
   data: T;
@@ -48,6 +75,18 @@ function adminPath(path: string): string {
     .replace(/^\/+/, "");
   return `/api/admin/${clean}`;
 }
+
+export const adminNotificationPaths = {
+  list: "notifications",
+  read: (id: number | string) => `notifications/${id}/read`,
+  readAll: "notifications/read-all",
+  subscriptions: "notifications/subscriptions",
+  status: "notifications/status",
+  vapidPublicKey: "notifications/vapid-public-key",
+  settings: "notifications/settings",
+  recipients: "notifications/recipients",
+  recipient: (id: number | string) => `notifications/recipients/${id}`,
+} as const;
 
 export async function adminApiFetch<T>(
   path: string,
@@ -96,6 +135,28 @@ export async function adminApiFetch<T>(
     ...(payload as Omit<ApiEnvelope<T>, "success">),
     success: payload.status ? payload.status === "success" : true,
   } as ApiEnvelope<T>;
+}
+
+export function getAdminNotificationStatus() {
+  return adminApiFetch<AdminNotificationStatus>(adminNotificationPaths.status);
+}
+
+export function updateAdminNotificationSettings(enabled: boolean) {
+  return adminApiFetch<AdminNotificationStatus>(adminNotificationPaths.settings, {
+    method: "PUT",
+    body: JSON.stringify({ enabled }),
+  });
+}
+
+export function getAdminNotificationRecipients() {
+  return adminApiFetch<AdminNotificationRecipient[]>(adminNotificationPaths.recipients);
+}
+
+export function updateAdminNotificationRecipient(id: number, enabled: boolean) {
+  return adminApiFetch<AdminNotificationRecipient>(adminNotificationPaths.recipient(id), {
+    method: "PUT",
+    body: JSON.stringify({ enabled }),
+  });
 }
 
 export async function uploadAdminImage(

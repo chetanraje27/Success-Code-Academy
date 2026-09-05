@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { CheckCircle2, Clock, KeyRound, Mail, RefreshCw, Save, Send } from "lucide-react";
-import { adminApiFetch, AdminApiError } from "@/lib/admin-api";
+import { Bell, CheckCircle2, Clock, KeyRound, Mail, RefreshCw, Save, Send, ShieldCheck, Users } from "lucide-react";
+import { adminApiFetch, AdminApiError, getAdminNotificationRecipients, getAdminNotificationStatus, updateAdminNotificationRecipient, updateAdminNotificationSettings, type AdminNotificationRecipient, type AdminNotificationStatus } from "@/lib/admin-api";
 import { useAdminSession } from "@/components/admin/AdminSessionContext";
 import { useToast } from "@/components/admin/Toast";
 import {
@@ -11,6 +10,7 @@ import {
   AdminNotice,
   AdminPageHeader,
 } from "@/components/admin/AdminUi";
+import NotificationPermissionButton from "@/components/admin/NotificationPermissionButton";
 
 type SiteSettings = {
   phone: string;
@@ -32,14 +32,20 @@ const initialSettings: SiteSettings = {
 };
 
 export default function AdminSettingsPage() {
-  const router = useRouter();
   const [settings, setSettings] = useState(initialSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const { user } = useAdminSession();
+  const { user, isSuperAdmin } = useAdminSession();
   const toast = useToast();
+
+  const [notificationStatus, setNotificationStatus] = useState<AdminNotificationStatus | null>(null);
+  const [recipients, setRecipients] = useState<AdminNotificationRecipient[]>([]);
+  const [notificationLoading, setNotificationLoading] = useState(true);
+  const [recipientsLoading, setRecipientsLoading] = useState(false);
+  const [notificationSaving, setNotificationSaving] = useState(false);
+  const [recipientSaving, setRecipientSaving] = useState<number | null>(null);
 
   const [resetSending, setResetSending] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -58,6 +64,56 @@ export default function AdminSettingsPage() {
       )
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    let active = true;
+    setNotificationLoading(true);
+    void getAdminNotificationStatus()
+      .then((response) => {
+        if (active) setNotificationStatus(response.data);
+      })
+      .catch(() => {
+        // Notification controls are optional; contact settings must remain usable.
+        if (active) toast.info("Notification status is temporarily unavailable.");
+      })
+      .finally(() => { if (active) setNotificationLoading(false); });
+
+    if (isSuperAdmin) {
+      setRecipientsLoading(true);
+      void getAdminNotificationRecipients()
+        .then((response) => {
+          if (active) setRecipients(Array.isArray(response.data) ? response.data.filter((recipient) => recipient.id !== user?.id) : []);
+        })
+        .catch(() => { if (active) toast.info("Administrator notification recipients could not be loaded."); })
+        .finally(() => { if (active) setRecipientsLoading(false); });
+    }
+    return () => { active = false; };
+  }, [isSuperAdmin, toast, user?.id]);
+
+  async function toggleGlobalNotifications() {
+    if (!notificationStatus || notificationSaving) return;
+    const enabled = !notificationStatus.enabled;
+    setNotificationSaving(true);
+    try {
+      await updateAdminNotificationSettings(enabled);
+      setNotificationStatus((current) => current ? { ...current, enabled } : current);
+      toast[enabled ? "success" : "info"](`Global admin notifications ${enabled ? "enabled" : "disabled"}.`);
+    } catch (caught) {
+      toast.error(caught instanceof Error ? caught.message : "Unable to update global notifications.");
+    } finally { setNotificationSaving(false); }
+  }
+
+  async function toggleRecipient(id: number, enabled: boolean) {
+    if (recipientSaving !== null) return;
+    setRecipientSaving(id);
+    try {
+      await updateAdminNotificationRecipient(id, !enabled);
+      setRecipients((current) => current.map((recipient) => recipient.id === id ? { ...recipient, enabled: !enabled } : recipient));
+      toast[!enabled ? "success" : "info"](`${recipients.find((recipient) => recipient.id === id)?.name || "Administrator"} will ${!enabled ? "now" : "no longer"} receive alerts.`);
+    } catch (caught) {
+      toast.error(caught instanceof Error ? caught.message : "Unable to update notification recipient.");
+    } finally { setRecipientSaving(null); }
+  }
 
   function updateSetting(key: keyof SiteSettings, value: string) {
     setSettings((current) => ({ ...current, [key]: value }));
@@ -85,6 +141,7 @@ export default function AdminSettingsPage() {
           caught instanceof Error ? caught.message : "Unable to save settings.",
         );
       }
+      toast.error(caught instanceof Error ? caught.message : "Unable to save settings.");
     } finally {
       setSaving(false);
     }
@@ -141,6 +198,58 @@ export default function AdminSettingsPage() {
       )}
       {message && (
         <AdminNotice tone="success">{message}</AdminNotice>
+      )}
+
+      <section className="admin-card">
+        <header className="admin-card-header">
+          <div>
+            <h2>Browser notifications</h2>
+            <p>Opt in to timely admin alerts on this device. Your browser will only ask after you choose enable.</p>
+          </div>
+          <NotificationPermissionButton />
+        </header>
+        <div className="admin-card-body admin-notification-settings-copy">
+          <div className="admin-notification-summary">
+            <div className="admin-notification-summary-icon"><Bell size={18} /></div>
+            <div>
+              <strong>{notificationLoading ? "Checking notification service…" : !notificationStatus?.vapidConfigured ? "Notification service needs setup" : !notificationStatus.enabled ? "Notifications are paused globally" : !notificationStatus.recipientEnabled ? "Alerts are disabled for your account" : "Notification service ready"}</strong>
+              <p>Notifications are private to this browser and can be disabled at any time. Nothing sensitive is shown in a browser alert.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {isSuperAdmin && (
+        <section className="admin-card admin-notification-admin-card">
+          <header className="admin-card-header">
+            <div>
+              <h2>Admin notification routing</h2>
+              <p>Choose whether alerts are active globally and which administrators receive them.</p>
+            </div>
+            <ShieldCheck size={20} aria-hidden="true" />
+          </header>
+          <div className="admin-card-body admin-notification-admin-body">
+            <div className="admin-notification-global-row">
+              <div className="admin-notification-global-copy">
+                <span className="admin-notification-label">Global notifications</span>
+                <span>{notificationStatus?.enabled ? "Alerts are being delivered to enabled administrators." : "Alerts are paused for every administrator."}</span>
+              </div>
+              <button type="button" className={`admin-button ${notificationStatus?.enabled ? "secondary" : ""}`} onClick={toggleGlobalNotifications} disabled={notificationLoading || notificationSaving || !notificationStatus} aria-pressed={notificationStatus?.enabled}>
+                {notificationSaving ? <span className="admin-spinner" aria-hidden="true" /> : <Bell size={16} />}
+                {notificationStatus?.enabled ? "Disable globally" : "Enable globally"}
+              </button>
+            </div>
+            <div className="admin-notification-recipients-head"><span><Users size={15} /> Alert recipients</span><small>{recipients.filter((recipient) => recipient.enabled).length} enabled</small></div>
+            {recipientsLoading ? <AdminLoadingState label="Loading administrators…" /> : recipients.length === 0 ? <p className="admin-notification-empty">No other administrators are available.</p> : <div className="admin-notification-recipients">
+              {recipients.map((recipient) => <div className="admin-notification-recipient" key={recipient.id}>
+                <div className="admin-notification-recipient-copy"><strong>{recipient.name}</strong><span>{recipient.email} · {recipient.role}</span></div>
+                <button type="button" className={`admin-notification-switch ${recipient.enabled ? "is-on" : ""}`} onClick={() => toggleRecipient(recipient.id, recipient.enabled)} disabled={recipientSaving !== null} aria-pressed={recipient.enabled} aria-label={`${recipient.enabled ? "Disable" : "Enable"} alerts for ${recipient.name}`}>
+                  <span />{recipientSaving === recipient.id ? "Saving…" : recipient.enabled ? "On" : "Off"}
+                </button>
+              </div>)}
+            </div>}
+          </div>
+        </section>
       )}
 
       <section className="admin-card">

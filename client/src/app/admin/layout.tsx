@@ -38,6 +38,7 @@ import { isAdminRole, isSuperAdminRole, adminRoleLabel } from "@/lib/roles";
 import { AdminSessionProvider } from "@/components/admin/AdminSessionContext";
 import { ToastProvider } from "@/components/admin/Toast";
 import { getAdminHref, getLiveWebsiteHref } from "@/lib/admin-routing";
+import AdminNotifications from "@/components/admin/AdminNotifications";
 
 type SessionState = "loading" | "authenticated" | "guest";
 type AdminTheme = "light" | "dark";
@@ -410,6 +411,7 @@ export default function AdminLayout({
   return (
     <ToastProvider>
     <AdminSessionProvider user={user}>
+    <link rel="manifest" href="/manifest.webmanifest" />
     <div className={`admin-shell ${isSidebarCollapsed ? "is-collapsed" : ""}`}>
       <button
         className={`admin-sidebar-backdrop ${sidebarOpen ? "is-open" : ""}`}
@@ -547,6 +549,7 @@ export default function AdminLayout({
             </div>
           </div>
           <div className="admin-topbar-actions">
+            <AdminNotifications />
             <div className="admin-profile-container" ref={profileMenuRef}>
               <button
                 type="button"

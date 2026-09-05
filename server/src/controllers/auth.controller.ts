@@ -20,6 +20,7 @@ import {
 } from '../utils/userPasswordReset';
 import logger from '../utils/logger';
 import { sendMail } from '../utils/mailer';
+import { publishAdminNotification } from '../utils/notificationPublisher';
 import {
   studentWelcome,
   adminLoginAlert,
@@ -182,6 +183,14 @@ export const registerUser = asyncHandler(
     await otpRecord.destroy();
 
     logger.info(`👤 [Auth] New user registered successfully: ${email}`);
+
+    void publishAdminNotification({
+      eventType: 'student_registration.created',
+      title: 'New student registration',
+      body: `${firstName} ${lastName} created a student account.`,
+      targetUrl: '/admin/database/students',
+      metadata: { recordId: user.id, recordType: 'student' },
+    }).catch((error: unknown) => logger.warn('[Auth] Notification publish failed', { error }));
 
     // Welcome email, best-effort: a failed send never blocks registration.
     if (email) {

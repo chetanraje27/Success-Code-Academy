@@ -1,0 +1,9 @@
+{
+  "name": "Success Code Academy Admin",
+  "short_name": "SCA Admin",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#f2f5f9",
+  "theme_color": "#102f5e",
+  "description": "Success Code Academy administration console"
+}

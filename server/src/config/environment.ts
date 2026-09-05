@@ -62,6 +62,9 @@ const envSchema = z.object({
   LOG_LEVEL: z
     .enum(['error', 'warn', 'info', 'http', 'debug'])
     .default('debug'),
+  VAPID_PUBLIC_KEY: z.string().default(''),
+  VAPID_PRIVATE_KEY: z.string().default(''),
+  VAPID_SUBJECT: z.string().url().default('mailto:admin@example.com'),
 });
 
 const parsed = envSchema.safeParse(process.env);

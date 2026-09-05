@@ -1,0 +1,12 @@
+'use strict';
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    const tables = new Set((await queryInterface.showAllTables()).map((t) => typeof t === 'string' ? t : t.tableName || String(t)));
+    const timestamps = { createdAt: { allowNull: false, type: Sequelize.DATE }, updatedAt: { allowNull: false, type: Sequelize.DATE } };
+    if (!tables.has('admin_notifications')) await queryInterface.createTable('admin_notifications', { id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true }, eventType: { type: Sequelize.STRING(80), allowNull: false }, title: { type: Sequelize.STRING(160), allowNull: false }, body: { type: Sequelize.STRING(500), allowNull: false }, targetUrl: { type: Sequelize.STRING(500), allowNull: true }, adminId: { type: Sequelize.INTEGER, allowNull: false, references: { model: 'admins', key: 'id' }, onDelete: 'CASCADE' }, readAt: { type: Sequelize.DATE, allowNull: true }, ...timestamps });
+    if (!tables.has('admin_push_subscriptions')) await queryInterface.createTable('admin_push_subscriptions', { id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true }, adminId: { type: Sequelize.INTEGER, allowNull: false, references: { model: 'admins', key: 'id' }, onDelete: 'CASCADE' }, endpoint: { type: Sequelize.TEXT, allowNull: false, unique: true }, p256dh: { type: Sequelize.STRING, allowNull: false }, auth: { type: Sequelize.STRING, allowNull: false }, userAgent: { type: Sequelize.STRING, allowNull: true }, deviceName: { type: Sequelize.STRING, allowNull: true }, ...timestamps });
+    if (!tables.has('admin_notification_preferences')) await queryInterface.createTable('admin_notification_preferences', { id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true }, adminId: { type: Sequelize.INTEGER, allowNull: false, unique: true, references: { model: 'admins', key: 'id' }, onDelete: 'CASCADE' }, enabled: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true }, ...timestamps });
+    await queryInterface.sequelize.query("INSERT INTO site_settings (key, value, \"createdAt\", \"updatedAt\") VALUES ('admin_notifications_enabled', 'true', NOW(), NOW()) ON CONFLICT (key) DO NOTHING;");
+  },
+  async down(queryInterface) { await queryInterface.dropTable('admin_notification_preferences'); await queryInterface.dropTable('admin_push_subscriptions'); await queryInterface.dropTable('admin_notifications'); },
+};

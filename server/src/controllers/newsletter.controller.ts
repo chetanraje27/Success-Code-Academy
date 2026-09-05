@@ -4,6 +4,7 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { sendMail, isMailerConfigured } from '../utils/mailer';
 import { newsletterWelcome } from '../utils/emailTemplates';
 import logger from '../utils/logger';
+import { publishAdminNotification } from '../utils/notificationPublisher';
 
 /**
  * POST /api/v1/newsletter/subscribe
@@ -25,8 +26,16 @@ export const subscribeNewsletter = asyncHandler(
       return;
     }
 
-    await NewsletterSubscriber.create({ email });
+    const subscriber = await NewsletterSubscriber.create({ email });
     logger.info(`📬 [Newsletter] New subscriber: ${email}`);
+
+    void publishAdminNotification({
+      eventType: 'newsletter_subscriber.created',
+      title: 'New newsletter subscriber',
+      body: 'A new subscriber joined the newsletter list.',
+      targetUrl: '/admin',
+      metadata: { recordId: subscriber.id, recordType: 'newsletter-subscriber' },
+    }).catch((error: unknown) => logger.warn('[Newsletter] Notification publish failed', { error }));
 
     let emailSent = false;
     if (isMailerConfigured()) {

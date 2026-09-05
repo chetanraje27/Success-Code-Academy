@@ -1,16 +1,16 @@
 # Graph Report - Success-Code-Academy  (2026-09-05)
 
 ## Corpus Check
-- 263 files · ~3,752,530 words
+- 263 files · ~3,752,551 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1443 nodes · 2565 edges · 194 communities (132 shown, 62 thin omitted)
+- 1443 nodes · 2565 edges · 195 communities (133 shown, 62 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.67)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `da96d3cb`
+- Built from commit: `c0b25d30`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -170,8 +170,9 @@
 - mailer.ts
 - form.controller.ts
 - queryActivity
-- @types/jsonwebtoken
+- sendMail
 - express-rate-limit
+- cors
 - ContentBlock.ts
 - AdminPasswordReset.ts
 - Notification
@@ -203,7 +204,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (194 total, 62 thin omitted)
+## Communities (195 total, 62 thin omitted)
 
 ### Community 0 - "admin.routes.ts"
 Cohesion: 0.06
@@ -234,8 +235,8 @@ Cohesion: 0.22
 Nodes (8): author, description, keywords, license, main, name, type, version
 
 ### Community 7 - "scholarship.controller.ts"
-Cohesion: 0.09
-Nodes (24): getHealth, getMyRegistration, updateMyRegistration, authenticate, adminLoginLimiter, defaultLimiter, passwordResetLimiter, submissionLimiter (+16 more)
+Cohesion: 0.12
+Nodes (17): getHealth, getMyRegistration, updateMyRegistration, authenticate, router, router, router, router (+9 more)
 
 ### Community 8 - "scripts"
 Cohesion: 0.22
@@ -294,12 +295,12 @@ Cohesion: 0.50
 Nodes (4): ContactMessage, ContactMessageAttributes, ContactMessageCreationAttributes, initContactMessage()
 
 ### Community 22 - "environment.ts"
-Cohesion: 0.13
-Nodes (18): app, configuredOrigins, corsOptions, defaultAllowedOrigins, appBaseUrl(), Env, envSchema, parsed (+10 more)
+Cohesion: 0.18
+Nodes (11): app, configuredOrigins, corsOptions, defaultAllowedOrigins, Env, envSchema, parsed, errorHandler() (+3 more)
 
 ### Community 23 - "dependencies"
 Cohesion: 0.12
-Nodes (17): bcrypt, cors, dotenv, sequelize, dependencies, bcrypt, cors, dotenv (+9 more)
+Nodes (17): bcrypt, dotenv, sequelize, dependencies, bcrypt, dotenv, sequelize, @types/bcrypt (+9 more)
 
 ### Community 24 - "MediaRevision.ts"
 Cohesion: 0.19
@@ -571,19 +572,23 @@ Nodes (20): createRegistration, adminLoginAlert(), adminPasswordResetEmail(), BR
 
 ### Community 185 - "auth.controller.ts"
 Cohesion: 0.11
-Nodes (37): requestSelfPasswordReset, sendAdminPasswordReset, AuthPurpose, changeAdminPassword, createToken(), forgotAdminPassword, getCurrentUser, loginAdmin (+29 more)
+Nodes (31): appBaseUrl(), AuthPurpose, changeAdminPassword, createToken(), forgotUserPassword, getCurrentUser, loginAdmin, loginStudent (+23 more)
 
 ### Community 186 - "mailer.ts"
 Cohesion: 0.29
 Nodes (10): deliver(), deliverOnce(), getClient(), isRetryable(), logoAttachment(), mailFrom(), MailMessage, MailResult (+2 more)
 
 ### Community 187 - "form.controller.ts"
-Cohesion: 0.33
-Nodes (10): findExistingCourseRegistration(), getMyCourseRegistration, normaliseEmail(), normalisePhone(), submitContactForm, submitCourseRegistration, updateMyCourseRegistration, contactFormSchema (+2 more)
+Cohesion: 0.15
+Nodes (18): findExistingCourseRegistration(), getMyCourseRegistration, normaliseEmail(), normalisePhone(), submitContactForm, submitCourseRegistration, updateMyCourseRegistration, adminLoginLimiter (+10 more)
 
 ### Community 188 - "queryActivity"
 Cohesion: 0.50
 Nodes (4): csvCell(), exportLeadCsv, getDashboardActivity, queryActivity()
+
+### Community 189 - "sendMail"
+Cohesion: 0.31
+Nodes (12): requestSelfPasswordReset, sendAdminPasswordReset, forgotAdminPassword, requestAdminPasswordReset, sendEmailOtp, subscribeNewsletter, buildResetUrl(), checkResetCooldown() (+4 more)
 
 ### Community 192 - "ContentBlock.ts"
 Cohesion: 0.40

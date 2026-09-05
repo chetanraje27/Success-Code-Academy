@@ -28,6 +28,9 @@ import {
   NewsletterSubscriber,
   initNewsletterSubscriber,
 } from './NewsletterSubscriber';
+import AdminNotification, { initAdminNotification } from './AdminNotification';
+import AdminPushSubscription, { initAdminPushSubscription } from './AdminPushSubscription';
+import AdminNotificationPreference, { initAdminNotificationPreference } from './AdminNotificationPreference';
 
 initAdmin(sequelize);
 initAdminPasswordReset(sequelize);
@@ -49,6 +52,9 @@ initAcademyVideo(sequelize);
 initCourse(sequelize);
 initScholarshipProgram(sequelize);
 initNewsletterSubscriber(sequelize);
+initAdminNotification(sequelize);
+initAdminPushSubscription(sequelize);
+initAdminNotificationPreference(sequelize);
 
 export async function testConnection(): Promise<boolean> {
   try {
@@ -94,5 +100,8 @@ export {
   Course,
   ScholarshipProgram,
   NewsletterSubscriber,
+  AdminNotification,
+  AdminPushSubscription,
+  AdminNotificationPreference,
 };
 export default sequelize;
